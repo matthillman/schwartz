@@ -1,0 +1,84 @@
+// Variables
+@import "variables";
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+html, body {
+  color: #636b6f;
+  font-family: $font-family-sans-serif;
+  font-weight: 100;
+  height: 100vh;
+  margin: 0;
+
+  background-color: #084170;
+  background: url(/images/main.jpg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.navbar-laravel {
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  position: -webkit-sticky;
+  top: 0;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+.flex-center {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  width: 110ex;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 32px;
+
+  h1:first-child {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 1149px) {
+  .content {
+      padding-top: 74px;
+  }
+}
+
+.center {
+  text-align: center;
+}
+
+.title {
+  font-size: 84px;
+}
+
+.links > a {
+  color: #636b6f;
+  padding: 0 25px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.m-b-md {
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: 200px;
+  height: 42px;
+
+  svg {
+    width: 100%;
+    fill: #636b6f;
+  }
+}
