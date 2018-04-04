@@ -1,0 +1,122 @@
+@import url(https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700);body {
+  font-family: "Nanum Gothic", sans-serif;
+}
+
+.logo.hero {
+  width: 500px;
+  fill: #fce34d;
+}
+
+.description {
+  margin-top: 16px;
+  color: #fce34d;
+  width: 500px;
+}
+
+.description a {
+  color: #fce34d;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.description a:hover {
+  text-decoration: underline;
+}
+
+.nav-links {
+  margin-top: 16px;
+  width: 500px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+.nav-links a {
+  color: white;
+  font-weight: bold;
+  background: #fce34d;
+  border-radius: 12px;
+  text-decoration: none;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  -ms-flex-preferred-size: 50%;
+      flex-basis: 50%;
+  padding: 16px;
+  margin: 0 8px;
+  font-size: 24px;
+}
+
+.nav-links a:hover {
+  opacity: 0.8;
+}
+
+.guild-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.guild-list .guild:nth-child(1),
+.guild-list.test.test .guild.guild:nth-child(1) {
+  -webkit-transform: translate3d(0, 0px, 0);
+          transform: translate3d(0, 0px, 0);
+  z-index: 6;
+  background-color: white;
+}
+
+.guild-list .guild:nth-child(2),
+.guild-list.test.test .guild.guild:nth-child(2) {
+  -webkit-transform: translate3d(0, -91px, 0);
+          transform: translate3d(0, -91px, 0);
+  z-index: 5;
+  background-color: white;
+}
+
+.guild-list .guild:nth-child(3),
+.guild-list.test.test .guild.guild:nth-child(3) {
+  -webkit-transform: translate3d(0, -182px, 0);
+          transform: translate3d(0, -182px, 0);
+  z-index: 4;
+  background-color: white;
+}
+
+.guild-list .guild:nth-child(4),
+.guild-list.test.test .guild.guild:nth-child(4) {
+  -webkit-transform: translate3d(0, -273px, 0);
+          transform: translate3d(0, -273px, 0);
+  z-index: 3;
+  background-color: white;
+}
+
+.guild-list .guild:nth-child(5),
+.guild-list.test.test .guild.guild:nth-child(5) {
+  -webkit-transform: translate3d(0, -364px, 0);
+          transform: translate3d(0, -364px, 0);
+  z-index: 2;
+  background-color: white;
+}
+
+.guild-list .guild:nth-child(6),
+.guild-list.test.test .guild.guild:nth-child(6) {
+  -webkit-transform: translate3d(0, -455px, 0);
+          transform: translate3d(0, -455px, 0);
+  z-index: 1;
+  background-color: white;
+}
+
