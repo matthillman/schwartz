@@ -38,11 +38,19 @@ html, body {
 
 .content {
   width: 110ex;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 32px;
 
   h1:first-child {
     margin-top: 0;
+  }
+
+  .markdown {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 32px;
+
+    li {
+      list-style-type: disc;
+      margin-left: 24px;
+    }
   }
 }
 

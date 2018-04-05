@@ -10034,12 +10034,20 @@ body {
 
 .content {
   width: 110ex;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 32px;
 }
 
 .content h1:first-child {
   margin-top: 0;
+}
+
+.content .markdown {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 32px;
+}
+
+.content .markdown li {
+  list-style-type: disc;
+  margin-left: 24px;
 }
 
 @media (max-width: 1149px) {
