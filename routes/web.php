@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/page/{page}', 'MarkdownController');
+Route::get('/page/{page}', 'MarkdownController')->name('guide');
 
 Auth::routes();
 
