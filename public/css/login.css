@@ -1,0 +1,18 @@
+@import url(https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700);.login.container > div {
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding-bottom: 20%;
+}
+
+.login.container > div .card {
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.login.container > div .card .card-header {
+  background-color: #ffffff;
+}
+

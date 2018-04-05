@@ -2,6 +2,7 @@
 
 @push('styles')
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/login.css') }}" rel="stylesheet">
 @endpush
 
 @section('body')
@@ -9,9 +10,7 @@
         @include('shared.nav')
 
         <main class="flex-center outer">
-            <div class="content">
-                @yield('content')
-            </div>
+            @yield('content')
         </main>
     </div>
 @endsection

@@ -14,5 +14,6 @@ let mix = require('laravel-mix');
 mix.js('resources/assets/js/app.js', 'public/js')
     .extract(['jquery', 'popper.js', 'lodash', 'axios'])
     .sass('resources/assets/sass/app.scss', 'public/css')
+    .sass('resources/assets/sass/login.scss', 'public/css')
     .sass('resources/assets/sass/welcome.scss', 'public/css')
     ;

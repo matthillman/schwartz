@@ -436,7 +436,8 @@ module.exports = function normalizeComponent (
 
 __webpack_require__(17);
 __webpack_require__(53);
-module.exports = __webpack_require__(54);
+__webpack_require__(54);
+module.exports = __webpack_require__(55);
 
 
 /***/ }),
@@ -16108,6 +16109,12 @@ if (false) {
 
 /***/ }),
 /* 54 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 55 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

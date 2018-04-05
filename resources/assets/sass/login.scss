@@ -1,0 +1,16 @@
+// Variables
+@import "variables";
+
+.login.container > div {
+    align-items: center;
+    display: flex;
+    padding-bottom: 20%;
+
+    .card {
+        background-color: rgba($color: #ffffff, $alpha: 0.95);
+
+        .card-header {
+            background-color: #ffffff;
+        }
+    }
+}
