@@ -24,8 +24,9 @@
                 <div class="card-header">User Requests</div>
 
                 <div class="card-body">
-
-                    Users that have registered will show card-header
+                    @foreach($userRequests as $user)
+                        <div>{{ $user->name }} ({{ $user->discord }})</div>
+                    @endforeach
                 </div>
             </div>
 
@@ -33,8 +34,7 @@
                 <div class="card-header">Recruiting</div>
 
                 <div class="card-body">
-
-                    Users that have registered will show card-header
+                    Front end form users show here
                 </div>
             </div>
 @endauth

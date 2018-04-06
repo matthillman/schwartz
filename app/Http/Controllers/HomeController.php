@@ -23,6 +23,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        if (Auth::guard('admin')->check()) {
+            $users = App\User::where('active', false)->get();
+        } else {
+            $users = [];
+        }
+        return view('home', [
+            'userRequests' => $users,
+        ]);
     }
 }
