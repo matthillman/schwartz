@@ -24,9 +24,17 @@
                 <div class="card-header">User Requests</div>
 
                 <div class="card-body">
-                    @foreach($userRequests as $user)
+                    @if (session('user-status'))
+                        <div class="alert alert-success">
+                            {{ session('user-status') }}
+                        </div>
+                    @endif
+
+                    @forelse($userRequests as $user)
                         <div>{{ $user->name }} ({{ $user->discord }})</div>
-                    @endforeach
+                    @empty
+                        <div>No pending users</div>
+                    @endforelse
                 </div>
             </div>
 
@@ -34,7 +42,11 @@
                 <div class="card-header">Recruiting</div>
 
                 <div class="card-body">
-                    Front end form users show here
+                    @forelse($userRequests as $user)
+                        <div>{{ $user->name }} ({{ $user->discord }})</div>
+                    @empty
+                        <div>No information requests</div>
+                    @endforelse
                 </div>
             </div>
 @endauth

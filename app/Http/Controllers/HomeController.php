@@ -34,4 +34,14 @@ class HomeController extends Controller
             'userRequests' => $users,
         ]);
     }
+
+    /**
+     * Show the waiting for approval page
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function waiting()
+    {
+        return view('waiting');
+    }
 }

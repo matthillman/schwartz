@@ -21,4 +21,5 @@ Auth::routes();
 Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::get('/page/{page}', 'MarkdownController')->name('guide');
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/waiting', 'HomeController@waiting')->name('waiting');
 });
