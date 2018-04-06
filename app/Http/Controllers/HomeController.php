@@ -44,4 +44,22 @@ class HomeController extends Controller
     {
         return view('waiting');
     }
+
+    public function approveUser(Request $request, $id) {
+        $user = User::firstOrFail($id);
+        $user->active = true;
+
+        $user->save();
+
+        return redirect()->route('home')->with('userStatus', "{$user->name} approved");
+    }
+    public function approveAdmin(Request $request, $id) {
+        $user = User::firstOrFail($id);
+        $user->active = true;
+        $user->admin = true;
+
+        $user->save();
+
+        return redirect()->route('home')->with('userStatus', "{$user->name} approved as admin");
+    }
 }

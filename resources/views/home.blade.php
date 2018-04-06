@@ -24,14 +24,26 @@
                 <div class="card-header">User Requests</div>
 
                 <div class="card-body">
-                    @if (session('user-status'))
+                    @if (session('userStatus'))
                         <div class="alert alert-success">
-                            {{ session('user-status') }}
+                            {{ session('userStatus') }}
                         </div>
                     @endif
 
                     @forelse($userRequests as $user)
-                        <div>{{ $user->name }} ({{ $user->discord }})</div>
+                        <div class="prospective-user">
+                            <div>{{ $user->name }} ({{ $user->discord }})</div>
+                            <form method="POST" action="{{ route('approve.user', ['id' => $user->id]) }}">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-primary">{{ __('Approve') }}</button>
+                            </form>
+                            <form method="POST" action="{{ route('approve.admin', ['id' => $user->id]) }}">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-warning">{{ __('Approve as Admin') }}</button>
+                            </form>
+                        </div>
                     @empty
                         <div>No pending users</div>
                     @endforelse

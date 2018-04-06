@@ -15,13 +15,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Auth::routes();
 
 Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::group(['middleware' => ['active']], function() {
         Route::get('/page/{page}', 'MarkdownController')->name('guide');
         Route::get('/home', 'HomeController@index')->name('home');
+    });
+
+    Route::group(['middleware' => ['auth:admin']], function() {
+        Route::put('/approve/{id}', 'HomeController@approveUser')->name('approve.user');
+        Route::put('/approve/admin/{id}', 'HomeController@approveAdmin')->name('approve.admin');
     });
 
     Route::get('/waiting', 'HomeController@waiting')->name('waiting');
