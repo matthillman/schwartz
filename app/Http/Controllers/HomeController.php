@@ -46,7 +46,7 @@ class HomeController extends Controller
     }
 
     public function approveUser(Request $request, $id) {
-        $user = User::firstOrFail($id);
+        $user = User::findOrFail($id);
         $user->active = true;
 
         $user->save();
@@ -54,7 +54,7 @@ class HomeController extends Controller
         return redirect()->route('home')->with('userStatus', "{$user->name} approved");
     }
     public function approveAdmin(Request $request, $id) {
-        $user = User::firstOrFail($id);
+        $user = User::findOrFail($id);
         $user->active = true;
         $user->admin = true;
 
