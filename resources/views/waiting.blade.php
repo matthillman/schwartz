@@ -5,10 +5,14 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Waiting</div>
+                <div class="card-header">Waiting on Approval</div>
 
                 <div class="card-body">
-                    You have registered and are awaiting approval.
+                @if (Auth::user()->active)
+                    <a href="{{ route('home') }}">You have been approved! Click to continue</a>
+                @else
+                    You have registered and are awaiting approval. Please contact an admin.
+                @endif
                 </div>
             </div>
         </div>
