@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -45,5 +46,20 @@ class LoginController extends Controller
     public function username()
     {
         return 'discord';
+    }
+
+    protected function attemptingUserIsAdmin() {
+        $user = User::where($this->username(), request($this->username()))->first();
+        return $user && $user->admin;
+    }
+
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\StatefulGuard
+     */
+    protected function guard()
+    {
+        return Auth::guard($this->attemptingUserIsAdmin() ? 'admin' : null);
     }
 }
