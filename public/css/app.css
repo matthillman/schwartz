@@ -10088,6 +10088,10 @@ body {
   fill: #636b6f;
 }
 
+.card {
+  margin-top: 16px;
+}
+
 .prospective-user {
   display: -webkit-box;
   display: -ms-flexbox;
