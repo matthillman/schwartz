@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,7 +26,7 @@ class HomeController extends Controller
     public function index()
     {
         if (Auth::guard('admin')->check()) {
-            $users = App\User::where('active', false)->get();
+            $users = User::where('active', false)->get();
         } else {
             $users = [];
         }
