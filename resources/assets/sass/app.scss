@@ -96,8 +96,9 @@ html, body {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  transition: background-color, 300ms, ease-in-out;
 
   &:hover {
-    background-color: #636b6f;
+    background-color: rgba($color: #636b6f, $alpha: 0.95);
   }
 }
