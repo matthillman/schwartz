@@ -16,22 +16,22 @@ class HandbookController extends Controller
         $handbook = collect(explode("\n", $raw));
 
         $sections = $handbook->reduce(function($sections, $line) use ($dropbox) {
-            if (starts_with($line, '#')) {
-                $sections[] = [
-                    'title' => trim(str_replace_first('#', '', $line)),
-                    'content' => [],
-                ];
-            } else if (count($line) > 0) {
-                \Log::debug("Fetching file", [$line]);
-                $file = $dropbox->get(str_finish($line, '.md'));
-                $converted = Markdown::convertToHtml($file);
-
-                last($sections)['content'][] = $converted;
+            if (starts_with($line, '@')) {
+                $file = $dropbox->get(str_finish(trim(str_replace_first('@', '', $line)), '.md'));
+                $sections[] = $file;
+                $sections[] = [];
+            } else {
+                $sections[count($sections) - 1] = implode("\n", [last($sections), $line]);
             }
 
             return $sections;
-        }, []);
+        }, [[]])->filter(function($section) {
+            return count($section) > 0;
+        })->map(function($section) {
+            return Markdown::convertToHtml($section);
+        });
 
         return view('handbook', ['sections' => $sections]);
     }
 }
+;
