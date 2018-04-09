@@ -15,7 +15,8 @@
                     @endif
 
                     <div class="guides">
-                        <a href="{{ guide('territory-wars-guide')}}">Territory Wars Guide</a>
+                        <a href="{{ guide('territory-wars-guide') }}">Territory Wars Guide</a>
+                        <a href="{{ handbook('rots') }}">ROTS Handbook</a>
                     </div>
                 </div>
             </div>
