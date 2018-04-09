@@ -10081,6 +10081,10 @@ body {
   margin-left: 24px;
 }
 
+.content .markdown img {
+  width: 100%;
+}
+
 @media (max-width: 1149px) {
   .content {
     padding-top: 74px;
