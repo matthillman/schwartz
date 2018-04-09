@@ -10040,6 +10040,15 @@ body {
   margin-top: 0;
 }
 
+.content b,
+.content strong {
+  font-weight: 700;
+}
+
+.content em {
+  font-style: italic;
+}
+
 .content .markdown {
   background: rgba(255, 255, 255, 0.9);
 }

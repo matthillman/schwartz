@@ -43,6 +43,14 @@ html, body {
     margin-top: 0;
   }
 
+  b, strong {
+    font-weight: 700;
+  }
+
+  em {
+    font-style: italic;
+  }
+
   .markdown {
     background: rgba(255, 255, 255, 0.9);
     $margin: 32px;
