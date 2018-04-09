@@ -15,9 +15,7 @@ class HandbookController extends Controller
 
         $handbook = collect(explode("\n", $raw));
 
-        $sections = [];
-
-        $handbook->each(function($line) use ($dropbox) {
+        $sections = $handbook->reduce(function($sections, $line) use ($dropbox) {
             if (starts_with($line, '#')) {
                 $sections[] = [
                     'title' => str_replace_first('#', '', $line),
@@ -29,7 +27,9 @@ class HandbookController extends Controller
 
                 last($sections)['content'][] = $converted;
             }
-        });
+
+            return $sections;
+        }, []);
 
         return view('handbook', ['sections' => $sections]);
     }
