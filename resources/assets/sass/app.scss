@@ -45,7 +45,25 @@ html, body {
 
   .markdown {
     background: rgba(255, 255, 255, 0.9);
-    padding: 32px;
+    $margin: 32px;
+
+    h1, h2, h3, h4 {
+      padding-right: $margin;
+      padding-left: $margin;
+    }
+
+    h2 {
+      background-color: #a9a9a9;
+    }
+
+    h3 {
+      background-color: #c0c0c0;
+    }
+
+    p {
+      margin-right: $margin;
+      margin-left: $margin;
+    }
 
     li {
       list-style-type: disc;

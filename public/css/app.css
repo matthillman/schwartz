@@ -10042,7 +10042,27 @@ body {
 
 .content .markdown {
   background: rgba(255, 255, 255, 0.9);
-  padding: 32px;
+}
+
+.content .markdown h1,
+.content .markdown h2,
+.content .markdown h3,
+.content .markdown h4 {
+  padding-right: 32px;
+  padding-left: 32px;
+}
+
+.content .markdown h2 {
+  background-color: #a9a9a9;
+}
+
+.content .markdown h3 {
+  background-color: #c0c0c0;
+}
+
+.content .markdown p {
+  margin-right: 32px;
+  margin-left: 32px;
 }
 
 .content .markdown li {
