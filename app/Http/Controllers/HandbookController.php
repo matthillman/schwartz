@@ -13,11 +13,11 @@ class HandbookController extends Controller
 
         $raw = $dropbox->get('guides/' . str_finish($name, '.guide.md'));
 
-        $guide = collect(explode("\n", $guide));
+        $handbook = collect(explode("\n", $raw));
 
         $sections = [];
 
-        $guide->each(function($line) use ($dropbox) {
+        $handbook->each(function($line) use ($dropbox) {
             if (starts_with($line, '#')) {
                 $sections[] = [
                     'title' => str_replace_first('#', '', $line),
