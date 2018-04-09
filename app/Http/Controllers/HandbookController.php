@@ -18,10 +18,11 @@ class HandbookController extends Controller
         $sections = $handbook->reduce(function($sections, $line) use ($dropbox) {
             if (starts_with($line, '#')) {
                 $sections[] = [
-                    'title' => str_replace_first('#', '', $line),
+                    'title' => trim(str_replace_first('#', '', $line)),
                     'content' => [],
                 ];
             } else if (count($line) > 0) {
+                \Log::debug("Fetching file", [$line]);
                 $file = $dropbox->get(str_finish($line, '.md'));
                 $converted = Markdown::convertToHtml($file);
 
