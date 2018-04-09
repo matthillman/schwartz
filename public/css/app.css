@@ -10060,7 +10060,9 @@ body {
   background-color: #c0c0c0;
 }
 
-.content .markdown p {
+.content .markdown p,
+.content .markdown ul,
+.content .markdown ol {
   margin-right: 32px;
   margin-left: 32px;
 }
