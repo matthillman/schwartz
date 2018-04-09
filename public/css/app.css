@@ -10047,9 +10047,9 @@ body {
 .content .markdown h1,
 .content .markdown h2,
 .content .markdown h3,
-.content .markdown h4 {
-  padding-right: 32px;
-  padding-left: 32px;
+.content .markdown h4,
+.content .markdown h5 {
+  padding: 0.15em 32px;
 }
 
 .content .markdown h2 {

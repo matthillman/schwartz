@@ -47,9 +47,8 @@ html, body {
     background: rgba(255, 255, 255, 0.9);
     $margin: 32px;
 
-    h1, h2, h3, h4 {
-      padding-right: $margin;
-      padding-left: $margin;
+    h1, h2, h3, h4, h5 {
+      padding: .15em $margin;
     }
 
     h2 {
