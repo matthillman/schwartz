@@ -19,7 +19,8 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::group(['middleware' => ['active']], function() {
-        Route::get('/page/{page}', 'MarkdownController')->name('guide');
+        Route::get('/handbook/{name}', 'HandbookController')->name('handbook');
+        Route::get('/guide/{name}', 'GuideController')->name('guide');
         Route::get('/home', 'HomeController@index')->name('home');
     });
 

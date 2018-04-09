@@ -2,6 +2,6 @@
 
 @section('content')
     <div class="markdown">
-        {!! $markdown !!}
+        {!! $content !!}
     </div>
 @endsection
