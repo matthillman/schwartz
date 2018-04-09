@@ -19,14 +19,14 @@ class HandbookController extends Controller
             if (starts_with($line, '@')) {
                 $file = $dropbox->get(str_finish(trim(str_replace_first('@', '', $line)), '.md'));
                 $sections[] = $file;
-                $sections[] = [];
+                $sections[] = "";
             } else {
                 $sections[count($sections) - 1] = implode("\n", [last($sections), $line]);
             }
 
             return $sections;
-        }, [[]])->filter(function($section) {
-            return count($section) > 0;
+        }, [""])->filter(function($section) {
+            return strlen($section) > 0;
         })->map(function($section) {
             return Markdown::convertToHtml($section);
         });
