@@ -23,7 +23,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
         Route::get('/home', 'HomeController@index')->name('home');
     });
 
-    Route::name('approve.')->group(['middleware' => ['auth:admin']], function() {
+    Route::name('approve.')->middleware(['auth:admin'])->group(function() {
         Route::put('/approve/{id}', 'HomeController@approveUser')->name('user');
         Route::put('/approve/admin/{id}', 'HomeController@approveAdmin')->name('admin');
     });
