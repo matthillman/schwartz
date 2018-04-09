@@ -25,7 +25,9 @@ class HandbookController extends Controller
             }
 
             return $sections;
-        }, [""])->filter(function($section) {
+        }, [""]);
+
+        $sections = collect($sections)->filter(function($section) {
             return strlen($section) > 0;
         })->map(function($section) {
             return Markdown::convertToHtml($section);
