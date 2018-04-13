@@ -21,7 +21,7 @@
                     <input type="text" v-model="set.destination" size="15" placeholder="Destination">
                     <div>
                         <div v-for="shape in shapes" :key="shape">
-                            <img :src="'/images/mods/' + shape + '_empty.png'" width="16"> {{ locationFor(shape, set) }}
+                            <img :src="'/images/mods/' + shape + '_' + setFor(shape, set) + '.png'" width="16"> {{ locationFor(shape, set) }}
                         </div>
                     </div>
                 </div>
@@ -226,12 +226,17 @@
                     speed += +arrow.primary.value
                 }
 
-                return speed + (set.speedSet >= 4 ? " (+15%)" : "");
+                return speed + (set.speedSet >= 4 ? " (+10%)" : "");
             },
             locationFor: function(shape, set) {
                 let mod = this.mods[set[shape]];
                 if (!mod) { return "N/A"; }
                 return mod.location;
+            },
+            setFor: function(shape, set) {
+                let mod = this.mods[set[shape]];
+                if (!mod) { return "empty"; }
+                return mod.set;
             }
         }
     }

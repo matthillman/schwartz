@@ -162,12 +162,27 @@ html, body {
   &::before {
     content: attr(mod-set);
     position: absolute;
-    bottom: 12px;
-    left: 12px;
-    background: rgba(255,255,255,0.3);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    background: rgba($color: #000, $alpha: 0.8);
     padding: 1px 4px;
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 24px;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    z-index: 1000;
+    text-align: center;
+    transition: opacity, 300ms, ease-in-out;
+    opacity: 1;
+
+    &:hover {
+      opacity: 0;
+      cursor: pointer;
+    }
   }
 }
 
@@ -179,6 +194,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     cursor: pointer;
+    margin-bottom: 16px;
 }
 
 .set, [mod-set] {

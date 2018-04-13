@@ -16494,7 +16494,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 speed += +arrow.primary.value;
             }
 
-            return speed + (set.speedSet >= 4 ? " (+15%)" : "");
+            return speed + (set.speedSet >= 4 ? " (+10%)" : "");
         },
         locationFor: function locationFor(shape, set) {
             var mod = this.mods[set[shape]];
@@ -16502,6 +16502,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return "N/A";
             }
             return mod.location;
+        },
+        setFor: function setFor(shape, set) {
+            var mod = this.mods[set[shape]];
+            if (!mod) {
+                return "empty";
+            }
+            return mod.set;
         }
     }
 });
@@ -16615,7 +16622,12 @@ var render = function() {
                     return _c("div", { key: shape }, [
                       _c("img", {
                         attrs: {
-                          src: "/images/mods/" + shape + "_empty.png",
+                          src:
+                            "/images/mods/" +
+                            shape +
+                            "_" +
+                            _vm.setFor(shape, set) +
+                            ".png",
                           width: "16"
                         }
                       }),

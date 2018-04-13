@@ -10170,12 +10170,34 @@ body {
 [mod-set]::before {
   content: attr(mod-set);
   position: absolute;
-  bottom: 12px;
-  left: 12px;
-  background: rgba(255, 255, 255, 0.3);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.8);
   padding: 1px 4px;
   border-radius: 4px;
-  font-size: 10px;
+  font-size: 24px;
+  color: white;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  z-index: 1000;
+  text-align: center;
+  -webkit-transition: opacity, 300ms, ease-in-out;
+  transition: opacity, 300ms, ease-in-out;
+  opacity: 1;
+}
+
+[mod-set]::before:hover {
+  opacity: 0;
+  cursor: pointer;
 }
 
 .set {
@@ -10193,6 +10215,7 @@ body {
       -ms-flex-align: center;
           align-items: center;
   cursor: pointer;
+  margin-bottom: 16px;
 }
 
 .set.active,
