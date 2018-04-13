@@ -10,7 +10,11 @@
             </div>
             <div class="data">
                 <span class="primary">{{ mod.primary.value }} {{ mod.primary.type }}</span>
-                <span class="secondary" v-for="(value, type) in mod.secondaries" :key="type">{{ value }} {{ type }}</span>
+                <span class="secondary"
+                    v-for="(value, type) in mod.secondaries"
+                    :key="type"
+                    :class="{good: isStatGood(value, type)}"
+                >{{ value }} {{ type }}</span>
             </div>
         </div>
         <div class="character">{{ mod.location }}</div>
@@ -24,6 +28,13 @@
             imgSrcFor: function(set, slot) {
                 return "/images/mods/" + slot + "_" + set + ".png";
             },
+            isStatGood(value, type) {
+                return (type == "offense" && +value >= 50)
+                    || (type == "health" && +value >= 1000)
+                    || (type == "defense" && +value >= 25)
+                    || (type == "speed" && +value >= 15)
+                ;
+            }
         },
     }
 </script>

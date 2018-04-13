@@ -16796,12 +16796,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['mod'],
     methods: {
         imgSrcFor: function imgSrcFor(set, slot) {
             return "/images/mods/" + slot + "_" + set + ".png";
+        },
+        isStatGood: function isStatGood(value, type) {
+            return type == "offense" && +value >= 50 || type == "health" && +value >= 1000 || type == "defense" && +value >= 25 || type == "speed" && +value >= 15;
         }
     }
 });
@@ -16849,9 +16856,15 @@ var render = function() {
           ]),
           _vm._v(" "),
           _vm._l(_vm.mod.secondaries, function(value, type) {
-            return _c("span", { key: type, staticClass: "secondary" }, [
-              _vm._v(_vm._s(value) + " " + _vm._s(type))
-            ])
+            return _c(
+              "span",
+              {
+                key: type,
+                staticClass: "secondary",
+                class: { good: _vm.isStatGood(value, type) }
+              },
+              [_vm._v(_vm._s(value) + " " + _vm._s(type))]
+            )
           })
         ],
         2

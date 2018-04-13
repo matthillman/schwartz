@@ -10286,6 +10286,11 @@ body {
   font-size: 9px;
 }
 
+.mod .secondary.good {
+  font-weight: 700;
+  color: black;
+}
+
 .mod .character {
   font-size: 10px;
   text-align: center;

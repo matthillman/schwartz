@@ -244,6 +244,11 @@ html, body {
   }
   .secondary {
       font-size: 9px;
+
+      &.good {
+        font-weight: 700;
+        color: black;
+      }
   }
   .character {
       font-size: 10px;
