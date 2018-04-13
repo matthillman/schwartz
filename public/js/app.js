@@ -16214,7 +16214,7 @@ exports = module.exports = __webpack_require__(13)(false);
 
 
 // module
-exports.push([module.i, "\nh2[data-v-7568cc30] {\n  font-size: 16px;\n  font-weight: 700;\n  text-transform: capitalize;\n}\n.shapes[data-v-7568cc30] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  margin-top: 16px;\n}\n.shapes .mod-list[data-v-7568cc30] {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -ms-flex-preferred-size: 20%;\n        flex-basis: 20%;\n}\n.arrows[data-v-7568cc30], .sets[data-v-7568cc30] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  margin: 16px;\n}\n.arrows > div[data-v-7568cc30]:not(:last-of-type), .sets > div[data-v-7568cc30]:not(:last-of-type) {\n    margin-right: 16px;\n}\n", ""]);
+exports.push([module.i, "\nh2[data-v-7568cc30] {\n  font-size: 16px;\n  font-weight: 700;\n  text-transform: capitalize;\n}\n.top[data-v-7568cc30] {\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n  -ms-flex-pack: distribute;\n      justify-content: space-around;\n}\n.top .instructions[data-v-7568cc30] {\n    width: 600px;\n    text-align: justify;\n}\n.shapes[data-v-7568cc30] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  margin-top: 16px;\n}\n.shapes .mod-list[data-v-7568cc30] {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -ms-flex-preferred-size: 20%;\n        flex-basis: 20%;\n}\n.arrows[data-v-7568cc30], .sets[data-v-7568cc30] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  margin: 16px;\n}\n.arrows > div[data-v-7568cc30]:not(:last-of-type), .sets > div[data-v-7568cc30]:not(:last-of-type) {\n    margin-right: 16px;\n}\n", ""]);
 
 // exports
 
@@ -16225,6 +16225,12 @@ exports.push([module.i, "\nh2[data-v-7568cc30] {\n  font-size: 16px;\n  font-wei
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -16509,13 +16515,17 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mods" }, [
-    _c("label", { staticClass: "file-label" }, [
-      _c("input", {
-        attrs: { type: "file", id: "mods-json" },
-        on: { change: _vm.filePicked }
-      }),
+    _c("div", { staticClass: "row top" }, [
+      _c("label", { staticClass: "file-label" }, [
+        _c("input", {
+          attrs: { type: "file", id: "mods-json" },
+          on: { change: _vm.filePicked }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Load Mods Export File")])
+      ]),
       _vm._v(" "),
-      _c("span", [_vm._v("Load Mods Export File")])
+      _vm._m(0)
     ]),
     _vm._v(" "),
     _c(
@@ -16659,7 +16669,30 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "instructions" }, [
+      _vm._v("\n            Download a copy of "),
+      _c(
+        "a",
+        {
+          attrs: {
+            href:
+              "https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy",
+            target: "_gdocs"
+          }
+        },
+        [_vm._v("this spreadsheet")]
+      ),
+      _vm._v(
+        " and follow\n            the instructions to export a json file containing your mod information. Then press the button to the left and select that file.\n        "
+      )
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

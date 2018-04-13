@@ -1,6 +1,12 @@
 <template>
     <div class="mods">
-        <label class="file-label"><input type="file" id="mods-json" v-on:change="filePicked"> <span>Load Mods Export File</span></label>
+        <div class="row top">
+            <label class="file-label"><input type="file" id="mods-json" v-on:change="filePicked"> <span>Load Mods Export File</span></label>
+            <p class="instructions">
+                Download a copy of <a href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy" target="_gdocs">this spreadsheet</a> and follow
+                the instructions to export a json file containing your mod information. Then press the button to the left and select that file.
+            </p>
+        </div>
         <div v-show="modsArray.length">
             <h2>5* Speed Arrows</h2>
             <div class="arrows">
@@ -236,6 +242,14 @@ h2 {
     font-size: 16px;
     font-weight: 700;
     text-transform: capitalize;
+}
+.top {
+    align-items: center;
+    justify-content: space-around;
+    .instructions {
+        width: 600px;
+        text-align: justify;
+    }
 }
 .shapes {
     display: flex;
