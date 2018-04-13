@@ -10165,6 +10165,7 @@ body {
 
 [mod-set] {
   position: relative;
+  cursor: pointer;
 }
 
 [mod-set]::before {
@@ -10176,7 +10177,7 @@ body {
   top: 0;
   background: rgba(0, 0, 0, 0.8);
   padding: 1px 4px;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 24px;
   color: white;
   -webkit-box-pack: center;
@@ -10195,7 +10196,7 @@ body {
   opacity: 1;
 }
 
-[mod-set]:hover [mod-set]::before {
+[mod-set]:hover::before {
   opacity: 0;
   cursor: pointer;
 }

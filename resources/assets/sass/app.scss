@@ -159,6 +159,7 @@ html, body {
 
 [mod-set] {
   position: relative;
+  cursor: pointer;
   &::before {
     content: attr(mod-set);
     position: absolute;
@@ -168,7 +169,7 @@ html, body {
     top: 0;
     background: rgba($color: #000, $alpha: 0.8);
     padding: 1px 4px;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 24px;
     color: white;
     justify-content: center;
@@ -178,11 +179,11 @@ html, body {
     text-align: center;
     transition: opacity, 300ms, ease-in-out;
     opacity: 1;
+  }
 
-    [mod-set]:hover & {
-      opacity: 0;
-      cursor: pointer;
-    }
+  &:hover::before {
+    opacity: 0;
+    cursor: pointer;
   }
 }
 

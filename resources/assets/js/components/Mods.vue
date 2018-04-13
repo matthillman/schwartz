@@ -190,6 +190,7 @@
                     cross: null,
                     arrow: null,
                     speedSet: 0,
+                    destination: "",
                 });
                 this.activateSet(this.sets.length);
             },
@@ -240,7 +241,8 @@
             },
             setDescriptionFor: function(mod) {
                 if (!mod.modSet) { return null; }
-                return mod.modSet + (this.sets[mod.modSet].destination ? ' (' + this.sets[mod.modSet].destination + ')' : '')
+                let set = this.sets[mod.modSet - 1];
+                return mod.modSet + (set.destination.length ? ' (' + set.destination + ')' : '');
             }
         }
     }

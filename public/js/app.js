@@ -16451,7 +16451,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 circle: null,
                 cross: null,
                 arrow: null,
-                speedSet: 0
+                speedSet: 0,
+                destination: ""
             });
             this.activateSet(this.sets.length);
         },
@@ -16514,7 +16515,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (!mod.modSet) {
                 return null;
             }
-            return mod.modSet + (this.sets[mod.modSet].destination ? ' (' + this.sets[mod.modSet].destination + ')' : '');
+            var set = this.sets[mod.modSet - 1];
+            return mod.modSet + (set.destination.length ? ' (' + set.destination + ')' : '');
         }
     }
 });
