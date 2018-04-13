@@ -466,6 +466,7 @@ Vue.component("content-wrapper", {
     }
 });
 
+Vue.component('mods', __webpack_require__(62));
 Vue.component('guild', __webpack_require__(42));
 Vue.component('welcome-parallax', __webpack_require__(48));
 
@@ -15975,6 +15976,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -16080,6 +16082,7 @@ var render = function() {
       return _c(
         "section",
         {
+          key: index,
           class: {
             "down-scroll": _vm.currentSlide > index,
             "up-scroll": _vm.maxSeenSlide > index && _vm.currentSlide <= index
@@ -16118,6 +16121,702 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(63)
+}
+var normalizeComponent = __webpack_require__(15)
+/* script */
+var __vue_script__ = __webpack_require__(65)
+/* template */
+var __vue_template__ = __webpack_require__(66)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-7568cc30"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/Mods.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-7568cc30", Component.options)
+  } else {
+    hotAPI.reload("data-v-7568cc30", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(64);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(14)("432105c0", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7568cc30\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Mods.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-7568cc30\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Mods.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(13)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nh2[data-v-7568cc30] {\n  font-size: 16px;\n  font-weight: 700;\n  text-transform: capitalize;\n}\n.shapes[data-v-7568cc30] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  margin-top: 16px;\n}\n.shapes .mod-list[data-v-7568cc30] {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    -ms-flex-preferred-size: 20%;\n        flex-basis: 20%;\n}\n.arrows[data-v-7568cc30], .sets[data-v-7568cc30] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  margin: 16px;\n}\n.arrows > div[data-v-7568cc30]:not(:last-of-type), .sets > div[data-v-7568cc30]:not(:last-of-type) {\n    margin-right: 16px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    components: {
+        'mod': __webpack_require__(67)
+    },
+    data: function data() {
+        return {
+            mods: {},
+            sets: [],
+            currentSet: 0,
+            only: 'speed',
+            shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"]
+        };
+    },
+
+    computed: {
+        modsArray: function modsArray() {
+            return Object.values(this.mods);
+        },
+        squares: function squares() {
+            return this.modsArray.filter(function (mod) {
+                return mod.slot === "square";
+            });
+        },
+        arrows: function arrows() {
+            return this.modsArray.filter(function (mod) {
+                return mod.slot === "arrow";
+            });
+        },
+        diamonds: function diamonds() {
+            return this.modsArray.filter(function (mod) {
+                return mod.slot === "diamond";
+            });
+        },
+        triangles: function triangles() {
+            return this.modsArray.filter(function (mod) {
+                return mod.slot === "triangle";
+            });
+        },
+        circles: function circles() {
+            return this.modsArray.filter(function (mod) {
+                return mod.slot === "circle";
+            });
+        },
+        crosses: function crosses() {
+            return this.modsArray.filter(function (mod) {
+                return mod.slot === "cross";
+            });
+        },
+        speedArrows: function speedArrows() {
+            return this.modsArray.filter(function (mod) {
+                return mod.slot === "arrow";
+            }).filter(function (mod) {
+                return mod.primary.type === "speed";
+            }).sort(function (a, b) {
+                if (+a.primary.value < +b.primary.value) {
+                    return -1;
+                }
+                if (+a.primary.value > +b.primary.value) {
+                    return 1;
+                }
+                if (a.set == "speed" && b.set != "speed") {
+                    return 1;
+                }
+                return 0;
+            }).reverse();
+        },
+        speedArrowCounts: function speedArrowCounts() {
+            return this.speedArrows.reduce(function (counts, mod) {
+                if (mod.pips == 5) {
+                    counts[mod.set] += 1;
+                }
+                return counts;
+            }, {
+                critchance: 0,
+                critdamage: 0,
+                health: 0,
+                offense: 0,
+                potency: 0,
+                speed: 0,
+                tenacity: 0,
+                defense: 0
+            });
+        }
+    },
+
+    methods: {
+        hasAttribute: function hasAttribute(shape) {
+            var _this = this;
+
+            if (shape === "arrow") {
+                return this.speedArrows;
+            }
+            var mods = this.modsArray.filter(function (mod) {
+                return mod.slot === shape;
+            });
+            if (this.only === null) {
+                return mods;
+            }
+            return mods.filter(function (mod) {
+                return mod.has[_this.only];
+            }).sort(function (a, b) {
+                if (+a.secondaries[_this.only] < +b.secondaries[_this.only]) {
+                    return -1;
+                }
+                if (+a.secondaries[_this.only] > +b.secondaries[_this.only]) {
+                    return 1;
+                }
+                return 0;
+            }).reverse();
+        },
+        filePicked: function filePicked(evt) {
+            var _this2 = this;
+
+            var jsonFile = evt.target.files[0];
+            if (!jsonFile) {
+                console.warn('no file seleted', evt);return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function (loadEvt) {
+                console.warn('Loaded', loadEvt);
+                var mods = JSON.parse(loadEvt.target.result);
+                _this2.mods = mods.reduce(function (all, mod) {
+                    var fixed = {
+                        id: mod.mod_uid,
+                        slot: mod.slot,
+                        set: mod.set,
+                        level: mod.level,
+                        pips: mod.pips,
+                        location: mod.characterName,
+                        primary: {
+                            type: mod.primaryBonusType.toLowerCase(),
+                            value: mod.primaryBonusValue
+                        },
+                        secondaries: {},
+                        has: {
+                            speed: false,
+                            offense: false,
+                            defense: false,
+                            health: false,
+                            protection: false
+                        },
+                        modSet: null
+                    };
+
+                    for (var index = 1; index <= 4; index++) {
+                        var type = mod['secondaryType_' + index];
+                        if (!type) {
+                            break;
+                        }
+
+                        fixed.secondaries[type.toLowerCase()] = mod['secondaryValue_' + index];
+
+                        fixed.has.speed = fixed.has.speed || type === "Speed";
+                        fixed.has.offense = fixed.has.offense || type === "Offense";
+                        fixed.has.defense = fixed.has.defense || type === "Defense";
+                        fixed.has.health = fixed.has.health || type === "Health";
+                        fixed.has.protection = fixed.has.protection || type === "Protection";
+                    }
+
+                    all[fixed.id] = fixed;
+
+                    return all;
+                }, {});
+            };
+            reader.onerror = function (loadEvt) {
+                console.warn("Failed to load file", evt, loadEvt);
+            };
+            reader.onprogress = function (progressEvt) {
+                console.warn('Progress', progressEvt);
+            };
+            reader.readAsText(jsonFile, 'UTF-8');
+        },
+        addSet: function addSet(evt) {
+            this.sets.push({
+                square: null,
+                diamond: null,
+                triangle: null,
+                circle: null,
+                cross: null,
+                arrow: null,
+                speedSet: 0
+            });
+            this.activateSet(this.sets.length);
+        },
+        activateSet: function activateSet(set) {
+            this.currentSet = set;
+        },
+        addToActiveSet: function addToActiveSet(mod) {
+            if (this.currentSet == 0) {
+                return;
+            }
+            var prev = this.sets[this.currentSet - 1][mod.slot];
+            if (prev) {
+                this.mods[prev].modSet = null;
+                if (this.mods[prev].set == "speed") {
+                    this.sets[this.currentSet - 1].speedSet -= 1;
+                }
+            }
+            mod.modSet = this.currentSet;
+            this.sets[this.currentSet - 1][mod.slot] = mod.id;
+            if (mod.set == "speed") {
+                this.sets[this.currentSet - 1].speedSet += 1;
+            }
+        },
+        formatSet: function formatSet(set) {
+            var _this3 = this;
+
+            var speed = 0;
+            var shapes = ["square", "diamond", "triangle", "circle", "cross"];
+
+            shapes.forEach(function (shape) {
+                var mod = _this3.mods[set[shape]];
+                if (!mod) {
+                    return;
+                }
+                speed += +mod.secondaries.speed || 0;
+            });
+
+            var arrow = this.mods[set.arrow];
+            if (arrow && arrow.primary.type == "speed") {
+                speed += +arrow.primary.value;
+            }
+
+            return speed + (set.speedSet >= 4 ? " (+15%)" : "");
+        },
+        locationFor: function locationFor(shape, set) {
+            var mod = this.mods[set[shape]];
+            if (!mod) {
+                return "N/A";
+            }
+            return mod.location;
+        }
+    }
+});
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "mods" }, [
+    _c("label", { staticClass: "file-label" }, [
+      _c("input", {
+        attrs: { type: "file", id: "mods-json" },
+        on: { change: _vm.filePicked }
+      }),
+      _vm._v(" "),
+      _c("span", [_vm._v("Load Mods Export File")])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.modsArray.length,
+            expression: "modsArray.length"
+          }
+        ]
+      },
+      [
+        _c("h2", [_vm._v("5* Speed Arrows")]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "arrows" },
+          _vm._l(_vm.speedArrowCounts, function(count, set) {
+            return _c("div", { key: set }, [
+              _c("img", {
+                attrs: {
+                  src: "/images/mods/arrow_" + set + ".png",
+                  width: "46"
+                }
+              }),
+              _vm._v(" " + _vm._s(count) + "\n            ")
+            ])
+          })
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", on: { click: _vm.addSet } },
+          [_vm._v("Add Mod Set")]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "sets row" },
+          _vm._l(_vm.sets, function(set, index) {
+            return _c(
+              "div",
+              {
+                key: index,
+                staticClass: "set",
+                class: { active: index + 1 == _vm.currentSet },
+                on: {
+                  click: function($event) {
+                    _vm.activateSet(index + 1)
+                  }
+                }
+              },
+              [
+                _c("span", [_vm._v("Speed: " + _vm._s(_vm.formatSet(set)))]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: set.destination,
+                      expression: "set.destination"
+                    }
+                  ],
+                  attrs: {
+                    type: "text",
+                    size: "15",
+                    placeholder: "Destination"
+                  },
+                  domProps: { value: set.destination },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(set, "destination", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  _vm._l(_vm.shapes, function(shape) {
+                    return _c("div", { key: shape }, [
+                      _c("img", {
+                        attrs: {
+                          src: "/images/mods/" + shape + "_empty.png",
+                          width: "16"
+                        }
+                      }),
+                      _vm._v(
+                        " " +
+                          _vm._s(_vm.locationFor(shape, set)) +
+                          "\n                    "
+                      )
+                    ])
+                  })
+                )
+              ]
+            )
+          })
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "shapes" },
+          _vm._l(_vm.shapes, function(shape) {
+            return _c(
+              "div",
+              { key: shape, staticClass: "mod-list" },
+              [
+                _c("h2", [_vm._v(_vm._s(shape))]),
+                _vm._v(" "),
+                _vm._l(_vm.hasAttribute(shape), function(mod) {
+                  return _c(
+                    "div",
+                    {
+                      key: mod.id,
+                      staticClass: "mod-wrapper",
+                      class: { active: mod.modSet == _vm.currentSet },
+                      attrs: { "mod-set": mod.modSet },
+                      on: {
+                        click: function($event) {
+                          _vm.addToActiveSet(mod)
+                        }
+                      }
+                    },
+                    [_c("mod", { attrs: { mod: mod } })],
+                    1
+                  )
+                })
+              ],
+              2
+            )
+          })
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7568cc30", module.exports)
+  }
+}
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(15)
+/* script */
+var __vue_script__ = __webpack_require__(70)
+/* template */
+var __vue_template__ = __webpack_require__(72)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/Mod.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-37cb5a9b", Component.options)
+  } else {
+    hotAPI.reload("data-v-37cb5a9b", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 68 */,
+/* 69 */,
+/* 70 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['mod'],
+    methods: {
+        imgSrcFor: function imgSrcFor(set, slot) {
+            return "/images/mods/" + slot + "_" + set + ".png";
+        }
+    }
+});
+
+/***/ }),
+/* 71 */,
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "mod" }, [
+    _c("div", { staticClass: "info" }, [
+      _c("div", { staticClass: "description" }, [
+        _c(
+          "span",
+          { staticClass: "pips" },
+          _vm._l(_vm.mod.pips, function(n) {
+            return _c("span", { key: n, staticClass: "pip" })
+          })
+        ),
+        _vm._v(" "),
+        _c("img", {
+          staticClass: "image",
+          attrs: { src: _vm.imgSrcFor(_vm.mod.set, _vm.mod.slot), width: "46" }
+        }),
+        _vm._v(" "),
+        _c(
+          "span",
+          { staticClass: "level", class: { max: _vm.mod.level == 15 } },
+          [_vm._v(_vm._s(_vm.mod.level))]
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "data" },
+        [
+          _c("span", { staticClass: "primary" }, [
+            _vm._v(
+              _vm._s(_vm.mod.primary.value) + " " + _vm._s(_vm.mod.primary.type)
+            )
+          ]),
+          _vm._v(" "),
+          _vm._l(_vm.mod.secondaries, function(value, type) {
+            return _c("span", { key: type, staticClass: "secondary" }, [
+              _vm._v(_vm._s(value) + " " + _vm._s(type))
+            ])
+          })
+        ],
+        2
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "character" }, [_vm._v(_vm._s(_vm.mod.location))])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-37cb5a9b", module.exports)
+  }
+}
 
 /***/ })
 ],[16]);

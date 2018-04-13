@@ -37,7 +37,9 @@ html, body {
 }
 
 .content {
-  width: 110ex;
+  .container {
+    width: 110ex;
+  }
 
   h1:first-child {
     margin-top: 0;
@@ -133,5 +135,140 @@ html, body {
 
   &:hover {
     background-color: rgba($color: #636b6f, $alpha: 0.3);
+  }
+}
+
+.file-label {
+  input {
+    display: none;
+  }
+
+  display: inline-block;
+  color: white;
+  padding: 8px;
+  background: $primary;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.container.mods {
+  width: 1300px;
+  max-width: 1300px;
+}
+
+
+[mod-set] {
+  position: relative;
+  &::before {
+    content: attr(mod-set);
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(255,255,255,0.3);
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-size: 10px;
+  }
+}
+
+.set {
+    padding: 8px;
+    background: #dedede;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.set, [mod-set] {
+  &.active {
+    box-shadow: 0px 0px 15px $secondary;
+  }
+}
+
+.mod-wrapper {
+  margin: 8px;
+}
+
+.mod {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px;
+  box-sizing: content-box;
+  height: 90px;
+  background: #dedede;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: #636b6f;
+    color: white;
+  }
+
+  .info {
+      display: flex;
+  }
+
+  .description, .data {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+  }
+
+  .primary, .secondary {
+      white-space: nowrap;
+      text-transform: capitalize;
+  }
+
+  .primary {
+      font-size: 12px;
+  }
+  .secondary {
+      font-size: 9px;
+  }
+  .character {
+      font-size: 10px;
+      text-align: center;
+  }
+
+  .level {
+      position: absolute;
+      right: 10px;
+      font-size: 12px;
+      background: #495057;
+      color: #17a2b8;
+      padding: 0 2px;
+      border-radius: 4px;
+      top: 40px;
+
+      &.max {
+          color: $sw-yellow;
+      }
+  }
+
+  .pips {
+      display: inline-block;
+      background-color: #000;
+      width: 53px;
+      height: 10px;
+      border-radius: 8px;
+      line-height: 10px;
+      padding: 1px 2px;
+      margin-right: 6px;
+      color: #fff;
+
+      .pip {
+          display: inline-block;
+          width: 5px;
+          height: 5px;
+          background-color: $sw-yellow;
+          border-radius: 6px;
+          vertical-align: middle;
+          margin-left: 1px;
+          margin-right: 1px;
+          margin-bottom: 4px;
+      }
   }
 }

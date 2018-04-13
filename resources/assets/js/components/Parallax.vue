@@ -2,6 +2,7 @@
     <div class="parallax-container" v-scroll="handleScroll">
         <section
             v-for="(item, index) in $slots.sections"
+            :key="index"
             v-bind:class="{'down-scroll': currentSlide > index, 'up-scroll': maxSeenSlide > index && currentSlide <= index}"
         ><content-wrapper :node="item" /></section>
     </div>

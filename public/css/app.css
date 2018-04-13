@@ -10032,7 +10032,7 @@ body {
           justify-content: center;
 }
 
-.content {
+.content .container {
   width: 110ex;
 }
 
@@ -10143,5 +10143,166 @@ body {
 
 .prospective-user:hover {
   background-color: rgba(99, 107, 111, 0.3);
+}
+
+.file-label {
+  display: inline-block;
+  color: white;
+  padding: 8px;
+  background: #0483B4;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.file-label input {
+  display: none;
+}
+
+.container.mods {
+  width: 1300px;
+  max-width: 1300px;
+}
+
+[mod-set] {
+  position: relative;
+}
+
+[mod-set]::before {
+  content: attr(mod-set);
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 10px;
+}
+
+.set {
+  padding: 8px;
+  background: #dedede;
+  border-radius: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+}
+
+.set.active,
+[mod-set].active {
+  -webkit-box-shadow: 0px 0px 15px #FFCA47;
+          box-shadow: 0px 0px 15px #FFCA47;
+}
+
+.mod-wrapper {
+  margin: 8px;
+}
+
+.mod {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 8px;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+  height: 90px;
+  background: #dedede;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.mod:hover {
+  background: #636b6f;
+  color: white;
+}
+
+.mod .info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.mod .description,
+.mod .data {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: relative;
+}
+
+.mod .primary,
+.mod .secondary {
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+
+.mod .primary {
+  font-size: 12px;
+}
+
+.mod .secondary {
+  font-size: 9px;
+}
+
+.mod .character {
+  font-size: 10px;
+  text-align: center;
+}
+
+.mod .level {
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  background: #495057;
+  color: #17a2b8;
+  padding: 0 2px;
+  border-radius: 4px;
+  top: 40px;
+}
+
+.mod .level.max {
+  color: #fce34d;
+}
+
+.mod .pips {
+  display: inline-block;
+  background-color: #000;
+  width: 53px;
+  height: 10px;
+  border-radius: 8px;
+  line-height: 10px;
+  padding: 1px 2px;
+  margin-right: 6px;
+  color: #fff;
+}
+
+.mod .pips .pip {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  background-color: #fce34d;
+  border-radius: 6px;
+  vertical-align: middle;
+  margin-left: 1px;
+  margin-right: 1px;
+  margin-bottom: 4px;
 }
 

@@ -17,6 +17,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/mods', 'ModsController@index')->name('mods');
+
 Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::group(['middleware' => ['active']], function() {
         Route::get('/handbook/{name}', 'HandbookController')->name('handbook');
