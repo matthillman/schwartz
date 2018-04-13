@@ -16457,7 +16457,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.activateSet(this.sets.length);
         },
         activateSet: function activateSet(set) {
-            this.currentSet = set;
+            this.currentSet = this.currentSet == set ? null : set;
         },
         addToActiveSet: function addToActiveSet(mod) {
             if (this.currentSet == 0) {
@@ -16468,6 +16468,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.mods[prev].modSet = null;
                 if (this.mods[prev].set == "speed") {
                     this.sets[this.currentSet - 1].speedSet -= 1;
+                }
+                if (this.mods[prev].id == mod.id) {
+                    this.sets[this.currentSet - 1][mod.slot] = null;
+                    return;
                 }
             }
             mod.modSet = this.currentSet;

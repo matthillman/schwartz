@@ -195,7 +195,7 @@
                 this.activateSet(this.sets.length);
             },
             activateSet: function(set) {
-                this.currentSet = set;
+                this.currentSet = this.currentSet == set ? null : set;
             },
             addToActiveSet: function(mod) {
                 if (this.currentSet == 0) { return; }
@@ -204,6 +204,10 @@
                     this.mods[prev].modSet = null;
                     if (this.mods[prev].set == "speed") {
                         this.sets[this.currentSet - 1].speedSet -= 1;
+                    }
+                    if (this.mods[prev].id == mod.id) {
+                        this.sets[this.currentSet - 1][mod.slot] = null;
+                        return;
                     }
                 }
                 mod.modSet = this.currentSet;
