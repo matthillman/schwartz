@@ -31,7 +31,7 @@
             isStatGood(value, type) {
                 return (type == "offense" && +value >= 50)
                     || (type == "health" && +value >= 1000)
-                    || (type == "defense" && +value >= 25)
+                    || (type == "defense" && +value >= 20)
                     || (type == "speed" && +value >= 15)
                 ;
             }

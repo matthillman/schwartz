@@ -16808,7 +16808,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return "/images/mods/" + slot + "_" + set + ".png";
         },
         isStatGood: function isStatGood(value, type) {
-            return type == "offense" && +value >= 50 || type == "health" && +value >= 1000 || type == "defense" && +value >= 25 || type == "speed" && +value >= 15;
+            return type == "offense" && +value >= 50 || type == "health" && +value >= 1000 || type == "defense" && +value >= 20 || type == "speed" && +value >= 15;
         }
     }
 });
