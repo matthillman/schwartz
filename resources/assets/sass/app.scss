@@ -179,7 +179,7 @@ html, body {
     transition: opacity, 300ms, ease-in-out;
     opacity: 1;
 
-    &:hover {
+    [mod-set]:hover & {
       opacity: 0;
       cursor: pointer;
     }
