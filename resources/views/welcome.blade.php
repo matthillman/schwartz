@@ -37,7 +37,7 @@
                     :url="'https://swgoh.gg/g/29865/schwartz-holiday-special/'"
                     :icon="'senate'"
                     :gp="'125M'"
-                    :raid="'Heroic AAT'"
+                    :raid="'Heroic Sith'"
                 ></guild>
                 <guild
                     :name="'The Phantom Schwartz'"
