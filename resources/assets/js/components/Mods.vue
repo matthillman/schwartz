@@ -32,7 +32,7 @@
                     <div class="mod-wrapper"
                         v-for="mod in hasAttribute(shape)"
                         :key="mod.id"
-                        :mod-set="mod.modSet"
+                        :mod-set="setDescriptionFor(mod)"
                         :class="{active: mod.modSet == currentSet}"
                         @click="addToActiveSet(mod)"
                     ><mod :mod="mod"></mod></div>
@@ -237,6 +237,10 @@
                 let mod = this.mods[set[shape]];
                 if (!mod) { return "empty"; }
                 return mod.set;
+            },
+            setDescriptionFor: function(mod) {
+                if (!mod.modSet) { return null; }
+                return mod.modSet + (sets[mod.modSet].destination ? ' (' + sets[mod.modSet].destination + ')' : '')
             }
         }
     }

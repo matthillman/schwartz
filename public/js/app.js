@@ -16509,6 +16509,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return "empty";
             }
             return mod.set;
+        },
+        setDescriptionFor: function setDescriptionFor(mod) {
+            if (!mod.modSet) {
+                return null;
+            }
+            return mod.modSet + (sets[mod.modSet].destination ? ' (' + sets[mod.modSet].destination + ')' : '');
         }
     }
 });
@@ -16661,7 +16667,7 @@ var render = function() {
                       key: mod.id,
                       staticClass: "mod-wrapper",
                       class: { active: mod.modSet == _vm.currentSet },
-                      attrs: { "mod-set": mod.modSet },
+                      attrs: { "mod-set": _vm.setDescriptionFor(mod) },
                       on: {
                         click: function($event) {
                           _vm.addToActiveSet(mod)
