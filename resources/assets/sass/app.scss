@@ -247,7 +247,20 @@ html, body {
 
       &.good {
         font-weight: 700;
-        color: black;
+        color: $black;
+
+        &[type=speed] {
+          color: $red;
+        }
+        &[type=defense] {
+          color: $primary;
+        }
+        &[type=offense] {
+          color: $green;
+        }
+        &[type=health] {
+          color: $purple;
+        }
       }
   }
   .character {

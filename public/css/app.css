@@ -10288,7 +10288,23 @@ body {
 
 .mod .secondary.good {
   font-weight: 700;
-  color: black;
+  color: #000;
+}
+
+.mod .secondary.good[type=speed] {
+  color: #dc3545;
+}
+
+.mod .secondary.good[type=defense] {
+  color: #0483B4;
+}
+
+.mod .secondary.good[type=offense] {
+  color: #28a745;
+}
+
+.mod .secondary.good[type=health] {
+  color: #6f42c1;
 }
 
 .mod .character {

@@ -14,6 +14,7 @@
                     v-for="(value, type) in mod.secondaries"
                     :key="type"
                     :class="{good: isStatGood(value, type)}"
+                    :type="type"
                 >{{ value }} {{ type }}</span>
             </div>
         </div>

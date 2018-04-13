@@ -16800,6 +16800,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['mod'],
@@ -16861,7 +16862,8 @@ var render = function() {
               {
                 key: type,
                 staticClass: "secondary",
-                class: { good: _vm.isStatGood(value, type) }
+                class: { good: _vm.isStatGood(value, type) },
+                attrs: { type: type }
               },
               [_vm._v(_vm._s(value) + " " + _vm._s(type))]
             )
