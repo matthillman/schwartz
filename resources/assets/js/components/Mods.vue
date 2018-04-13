@@ -240,7 +240,7 @@
             },
             setDescriptionFor: function(mod) {
                 if (!mod.modSet) { return null; }
-                return mod.modSet + (sets[mod.modSet].destination ? ' (' + sets[mod.modSet].destination + ')' : '')
+                return mod.modSet + (this.sets[mod.modSet].destination ? ' (' + this.sets[mod.modSet].destination + ')' : '')
             }
         }
     }

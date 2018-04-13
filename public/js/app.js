@@ -16514,7 +16514,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (!mod.modSet) {
                 return null;
             }
-            return mod.modSet + (sets[mod.modSet].destination ? ' (' + sets[mod.modSet].destination + ')' : '');
+            return mod.modSet + (this.sets[mod.modSet].destination ? ' (' + this.sets[mod.modSet].destination + ')' : '');
         }
     }
 });
