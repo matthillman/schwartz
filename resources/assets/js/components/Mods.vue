@@ -30,6 +30,9 @@
                 <div class="btn" v-for="set in modSets" :key="set" :class="{selected: setFilter.includes(set)}" @click="toggleFilterFor(set)">
                     <img :src="'/images/mods/square_' + set + '.png'" width="30">
                 </div>
+                <label>
+                    <input type="checkbox" v-model="filterSelected"> <span>Hide mods already in a set</span>
+                </label>
             </div>
             <div class="shapes">
                 <div class="mod-list" v-for="shape in shapes" :key="shape">
@@ -64,6 +67,7 @@
                 shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"],
                 modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
                 setFilter: [],
+                filterSelected: false,
             }
         },
 
@@ -122,10 +126,11 @@
 
         methods: {
             hasAttribute: function(shape) {
-                if (shape === "arrow") { return this.speedArrows; }
-                let mods = this.modsArray.filter((mod) => mod.slot === shape)
-                    .filter((mod) => this.setFilter.length ? this.setFilter.includes(mod.set) : true);
-                if (this.only === null) { return mods; }
+                let base = shape === "arrow" ? this.speedArrows : this.modsArray;
+                let mods = base.filter((mod) => mod.slot === shape)
+                    .filter((mod) => this.setFilter.length ? this.setFilter.includes(mod.set) : true)
+                    .filter((mod) => !this.filterSelected || !mod.modSet);
+                if (this.only === null || shape === "arrow") { return mods; }
                 return mods
                     .filter((mod) => mod.has[this.only])
                     .sort((a, b) => {
@@ -183,7 +188,6 @@
 
                         return all;
                     }, {});
-                    this.sets = [];
                     this.currentSet = 0;
 
                     this.syncState();

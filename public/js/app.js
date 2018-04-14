@@ -16274,6 +16274,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -16290,7 +16293,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             only: 'speed',
             shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"],
             modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
-            setFilter: []
+            setFilter: [],
+            filterSelected: false
         };
     },
 
@@ -16373,15 +16377,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         hasAttribute: function hasAttribute(shape) {
             var _this2 = this;
 
-            if (shape === "arrow") {
-                return this.speedArrows;
-            }
-            var mods = this.modsArray.filter(function (mod) {
+            var base = shape === "arrow" ? this.speedArrows : this.modsArray;
+            var mods = base.filter(function (mod) {
                 return mod.slot === shape;
             }).filter(function (mod) {
                 return _this2.setFilter.length ? _this2.setFilter.includes(mod.set) : true;
+            }).filter(function (mod) {
+                return !_this2.filterSelected || !mod.modSet;
             });
-            if (this.only === null) {
+            if (this.only === null || shape === "arrow") {
                 return mods;
             }
             return mods.filter(function (mod) {
@@ -16450,7 +16454,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                     return all;
                 }, {});
-                _this3.sets = [];
                 _this3.currentSet = 0;
 
                 _this3.syncState();
@@ -16708,29 +16711,74 @@ var render = function() {
         _c(
           "div",
           { staticClass: "set-filter row" },
-          _vm._l(_vm.modSets, function(set) {
-            return _c(
-              "div",
-              {
-                key: set,
-                staticClass: "btn",
-                class: { selected: _vm.setFilter.includes(set) },
+          [
+            _vm._l(_vm.modSets, function(set) {
+              return _c(
+                "div",
+                {
+                  key: set,
+                  staticClass: "btn",
+                  class: { selected: _vm.setFilter.includes(set) },
+                  on: {
+                    click: function($event) {
+                      _vm.toggleFilterFor(set)
+                    }
+                  }
+                },
+                [
+                  _c("img", {
+                    attrs: {
+                      src: "/images/mods/square_" + set + ".png",
+                      width: "30"
+                    }
+                  })
+                ]
+              )
+            }),
+            _vm._v(" "),
+            _c("label", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.filterSelected,
+                    expression: "filterSelected"
+                  }
+                ],
+                attrs: { type: "checkbox" },
+                domProps: {
+                  checked: Array.isArray(_vm.filterSelected)
+                    ? _vm._i(_vm.filterSelected, null) > -1
+                    : _vm.filterSelected
+                },
                 on: {
-                  click: function($event) {
-                    _vm.toggleFilterFor(set)
+                  change: function($event) {
+                    var $$a = _vm.filterSelected,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.filterSelected = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.filterSelected = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.filterSelected = $$c
+                    }
                   }
                 }
-              },
-              [
-                _c("img", {
-                  attrs: {
-                    src: "/images/mods/square_" + set + ".png",
-                    width: "30"
-                  }
-                })
-              ]
-            )
-          })
+              }),
+              _vm._v(" "),
+              _c("span", [_vm._v("Hide mods already in a set")])
+            ])
+          ],
+          2
         ),
         _vm._v(" "),
         _c(
