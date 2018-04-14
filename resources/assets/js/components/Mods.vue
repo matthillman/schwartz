@@ -18,12 +18,17 @@
             <div class="sets row">
                 <div class="set" v-for="(set, index) in sets" :key="index" @click="activateSet(index + 1)" :class="{active: (index + 1) == currentSet}">
                     <span>Speed: {{ formatSet(set) }}</span>
-                    <input type="text" v-model="set.destination" size="15" placeholder="Destination">
+                    <input type="text" v-model="set.destination" @change="syncState()" size="15" placeholder="Destination">
                     <div>
                         <div v-for="shape in shapes" :key="shape">
                             <img :src="'/images/mods/' + shape + '_' + setFor(shape, set) + '.png'" width="16"> {{ locationFor(shape, set) }}
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="set-filter row">
+                <div class="btn" v-for="set in modSets" :key="set" :class="{selected: setFilter.includes(set)}" @click="toggleFilterFor(set)">
+                    <img :src="'/images/mods/square_' + set + '.png'" width="30">
                 </div>
             </div>
             <div class="shapes">
@@ -44,6 +49,9 @@
 
 <script>
     export default {
+        mounted: function() {
+            this.loadState();
+        },
         components: {
             'mod': require('./Mod.vue')
         },
@@ -53,7 +61,9 @@
                 sets: [],
                 currentSet: 0,
                 only: 'speed',
-                shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"]
+                shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"],
+                modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
+                setFilter: [],
             }
         },
 
@@ -82,6 +92,7 @@
             speedArrows: function() {
                 return this.modsArray.filter((mod) => mod.slot === "arrow")
                     .filter((mod) => mod.primary.type === "speed")
+                    .filter((mod) => this.setFilter.length ? this.setFilter.includes(mod.set) : true)
                     .sort((a, b) => {
                         if (+a.primary.value < +b.primary.value) { return -1; }
                         if (+a.primary.value > +b.primary.value) { return 1; }
@@ -112,7 +123,8 @@
         methods: {
             hasAttribute: function(shape) {
                 if (shape === "arrow") { return this.speedArrows; }
-                let mods = this.modsArray.filter((mod) => mod.slot === shape);
+                let mods = this.modsArray.filter((mod) => mod.slot === shape)
+                    .filter((mod) => this.setFilter.length ? this.setFilter.includes(mod.set) : true);
                 if (this.only === null) { return mods; }
                 return mods
                     .filter((mod) => mod.has[this.only])
@@ -171,7 +183,10 @@
 
                         return all;
                     }, {});
+                    this.sets = [];
+                    this.currentSet = 0;
 
+                    this.syncState();
                 };
                 reader.onerror = (loadEvt) => {
                     console.warn("Failed to load file", evt, loadEvt);
@@ -193,6 +208,7 @@
                     destination: "",
                 });
                 this.activateSet(this.sets.length);
+                this.syncState();
             },
             activateSet: function(set) {
                 this.currentSet = this.currentSet == set ? null : set;
@@ -207,6 +223,7 @@
                     }
                     if (this.mods[prev].id == mod.id) {
                         this.sets[this.currentSet - 1][mod.slot] = null;
+                        this.syncState();
                         return;
                     }
                 }
@@ -215,6 +232,7 @@
                 if (mod.set == "speed") {
                     this.sets[this.currentSet - 1].speedSet += 1;
                 }
+                this.syncState();
             },
             formatSet: function(set) {
                 let speed = 0;
@@ -247,6 +265,30 @@
                 if (!mod.modSet) { return null; }
                 let set = this.sets[mod.modSet - 1];
                 return mod.modSet + (set.destination.length ? ' (' + set.destination + ')' : '');
+            },
+
+            toggleFilterFor: function(set) {
+                if (this.setFilter.includes(set)) {
+                    this.setFilter.splice(this.setFilter.indexOf(set), 1);
+                } else {
+                    this.setFilter.push(set);
+                }
+            },
+
+            syncState: function() {
+                let storage = window.localStorage;
+                storage.mods = JSON.stringify(this.mods);
+                storage.sets = JSON.stringify(this.sets);
+            },
+            loadState: function() {
+                let storage = window.localStorage;
+                if (storage.mods) {
+                    this.mods = JSON.parse(storage.mods);
+                }
+                if (storage.sets) {
+                    this.sets = JSON.parse(storage.sets);
+                }
+
             }
         }
     }

@@ -10225,6 +10225,46 @@ body {
           box-shadow: 0px 0px 15px #FFCA47;
 }
 
+.set-filter {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.set-filter .btn {
+  background-color: #adb5bd;
+  border-width: 1px 1px 1px 0;
+  border-style: solid;
+  border-color: #FFCA47;
+  border-radius: 0;
+  -webkit-transition: background-color, 300ms, ease-in-out;
+  transition: background-color, 300ms, ease-in-out;
+}
+
+.set-filter .btn:hover {
+  background-color: #343a40;
+}
+
+.set-filter .btn.selected {
+  background-color: #0483B4;
+}
+
+.set-filter .btn:first-of-type {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  margin-left: 16px;
+  border-left-width: 1px;
+}
+
+.set-filter .btn:last-of-type {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  margin-right: 16px;
+}
+
 .mod-wrapper {
   margin: 8px;
 }

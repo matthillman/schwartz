@@ -16269,8 +16269,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    mounted: function mounted() {
+        this.loadState();
+    },
     components: {
         'mod': __webpack_require__(67)
     },
@@ -16280,7 +16288,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             sets: [],
             currentSet: 0,
             only: 'speed',
-            shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"]
+            shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"],
+            modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
+            setFilter: []
         };
     },
 
@@ -16319,10 +16329,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         speedArrows: function speedArrows() {
+            var _this = this;
+
             return this.modsArray.filter(function (mod) {
                 return mod.slot === "arrow";
             }).filter(function (mod) {
                 return mod.primary.type === "speed";
+            }).filter(function (mod) {
+                return _this.setFilter.length ? _this.setFilter.includes(mod.set) : true;
             }).sort(function (a, b) {
                 if (+a.primary.value < +b.primary.value) {
                     return -1;
@@ -16357,31 +16371,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         hasAttribute: function hasAttribute(shape) {
-            var _this = this;
+            var _this2 = this;
 
             if (shape === "arrow") {
                 return this.speedArrows;
             }
             var mods = this.modsArray.filter(function (mod) {
                 return mod.slot === shape;
+            }).filter(function (mod) {
+                return _this2.setFilter.length ? _this2.setFilter.includes(mod.set) : true;
             });
             if (this.only === null) {
                 return mods;
             }
             return mods.filter(function (mod) {
-                return mod.has[_this.only];
+                return mod.has[_this2.only];
             }).sort(function (a, b) {
-                if (+a.secondaries[_this.only] < +b.secondaries[_this.only]) {
+                if (+a.secondaries[_this2.only] < +b.secondaries[_this2.only]) {
                     return -1;
                 }
-                if (+a.secondaries[_this.only] > +b.secondaries[_this.only]) {
+                if (+a.secondaries[_this2.only] > +b.secondaries[_this2.only]) {
                     return 1;
                 }
                 return 0;
             }).reverse();
         },
         filePicked: function filePicked(evt) {
-            var _this2 = this;
+            var _this3 = this;
 
             var jsonFile = evt.target.files[0];
             if (!jsonFile) {
@@ -16392,7 +16408,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             reader.onload = function (loadEvt) {
                 console.warn('Loaded', loadEvt);
                 var mods = JSON.parse(loadEvt.target.result);
-                _this2.mods = mods.reduce(function (all, mod) {
+                _this3.mods = mods.reduce(function (all, mod) {
                     var fixed = {
                         id: mod.mod_uid,
                         slot: mod.slot,
@@ -16434,6 +16450,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                     return all;
                 }, {});
+                _this3.sets = [];
+                _this3.currentSet = 0;
+
+                _this3.syncState();
             };
             reader.onerror = function (loadEvt) {
                 console.warn("Failed to load file", evt, loadEvt);
@@ -16455,6 +16475,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 destination: ""
             });
             this.activateSet(this.sets.length);
+            this.syncState();
         },
         activateSet: function activateSet(set) {
             this.currentSet = this.currentSet == set ? null : set;
@@ -16471,6 +16492,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
                 if (this.mods[prev].id == mod.id) {
                     this.sets[this.currentSet - 1][mod.slot] = null;
+                    this.syncState();
                     return;
                 }
             }
@@ -16479,15 +16501,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (mod.set == "speed") {
                 this.sets[this.currentSet - 1].speedSet += 1;
             }
+            this.syncState();
         },
         formatSet: function formatSet(set) {
-            var _this3 = this;
+            var _this4 = this;
 
             var speed = 0;
             var shapes = ["square", "diamond", "triangle", "circle", "cross"];
 
             shapes.forEach(function (shape) {
-                var mod = _this3.mods[set[shape]];
+                var mod = _this4.mods[set[shape]];
                 if (!mod) {
                     return;
                 }
@@ -16521,6 +16544,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             var set = this.sets[mod.modSet - 1];
             return mod.modSet + (set.destination.length ? ' (' + set.destination + ')' : '');
+        },
+
+        toggleFilterFor: function toggleFilterFor(set) {
+            if (this.setFilter.includes(set)) {
+                this.setFilter.splice(this.setFilter.indexOf(set), 1);
+            } else {
+                this.setFilter.push(set);
+            }
+        },
+
+        syncState: function syncState() {
+            var storage = window.localStorage;
+            storage.mods = JSON.stringify(this.mods);
+            storage.sets = JSON.stringify(this.sets);
+        },
+        loadState: function loadState() {
+            var storage = window.localStorage;
+            if (storage.mods) {
+                this.mods = JSON.parse(storage.mods);
+            }
+            if (storage.sets) {
+                this.sets = JSON.parse(storage.sets);
+            }
         }
     }
 });
@@ -16619,6 +16665,9 @@ var render = function() {
                   },
                   domProps: { value: set.destination },
                   on: {
+                    change: function($event) {
+                      _vm.syncState()
+                    },
                     input: function($event) {
                       if ($event.target.composing) {
                         return
@@ -16651,6 +16700,34 @@ var render = function() {
                     ])
                   })
                 )
+              ]
+            )
+          })
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "set-filter row" },
+          _vm._l(_vm.modSets, function(set) {
+            return _c(
+              "div",
+              {
+                key: set,
+                staticClass: "btn",
+                class: { selected: _vm.setFilter.includes(set) },
+                on: {
+                  click: function($event) {
+                    _vm.toggleFilterFor(set)
+                  }
+                }
+              },
+              [
+                _c("img", {
+                  attrs: {
+                    src: "/images/mods/square_" + set + ".png",
+                    width: "30"
+                  }
+                })
               ]
             )
           })

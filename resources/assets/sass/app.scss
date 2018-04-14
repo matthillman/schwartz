@@ -204,6 +204,39 @@ html, body {
   }
 }
 
+.set-filter {
+  justify-content: center;
+  align-items: center;
+  .btn {
+    background-color: $gray-500;
+    border-width: 1px 1px 1px 0;
+    border-style: solid;
+    border-color: $secondary;
+    border-radius: 0;
+    transition: background-color, 300ms, ease-in-out;
+
+    &:hover {
+      background-color: $gray-800;
+    }
+
+    &.selected {
+      background-color: $primary;
+    }
+
+    &:first-of-type {
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+      margin-left: 16px;
+      border-left-width: 1px;
+    }
+    &:last-of-type {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      margin-right: 16px;
+    }
+  }
+}
+
 .mod-wrapper {
   margin: 8px;
 }
