@@ -35,7 +35,7 @@
                             <img :src="'/images/mods/' + shape + '_' + setFor(shape, set) + '.png'" width="16"> {{ locationFor(shape, set) }}
                         </div>
                     </div>
-                    <div class="view-modal btn btn-primary" @click="detailSet = set">View</div>
+                    <div class="view-modal btn btn-primary" @click.stop="detailSet = set">View</div>
                 </div>
             </div>
             <div class="set-filter row">

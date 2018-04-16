@@ -16554,6 +16554,7 @@ var render = function() {
                       staticClass: "view-modal btn btn-primary",
                       on: {
                         click: function($event) {
+                          $event.stopPropagation()
                           _vm.detailSet = set
                         }
                       }
