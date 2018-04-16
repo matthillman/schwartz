@@ -29,7 +29,7 @@
                     @drop.prevent.stop="onDrop(index, $event)"
                 >
                     <span>Speed: {{ formatSet(set) }}</span>
-                    <input type="text" v-model="set.destination" @change="syncState()" size="15" placeholder="Destination">
+                    <input type="text" v-model="set.destination" @change="syncState()" @click.stop size="15" placeholder="Destination">
                     <div>
                         <div v-for="shape in shapes" :key="shape">
                             <img :src="'/images/mods/' + shape + '_' + setFor(shape, set) + '.png'" width="16"> {{ locationFor(shape, set) }}

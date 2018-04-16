@@ -16489,6 +16489,9 @@ var render = function() {
                     change: function($event) {
                       _vm.syncState()
                     },
+                    click: function($event) {
+                      $event.stopPropagation()
+                    },
                     input: function($event) {
                       if ($event.target.composing) {
                         return
