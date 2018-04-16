@@ -196,6 +196,7 @@ html, body {
     align-items: center;
     cursor: pointer;
     margin-bottom: 16px;
+    width: 185px;
 }
 
 .set, [mod-set] {
@@ -339,4 +340,19 @@ html, body {
           margin-bottom: 4px;
       }
   }
+}
+
+.mod-details {
+    display: flex;
+    flex-wrap: wrap;
+
+    .mod {
+        width: 200px;
+        margin: 8px;
+    }
+}
+
+.view-modal {
+  padding: 2px 4px;
+  margin-top: 4px;
 }

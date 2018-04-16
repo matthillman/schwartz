@@ -20,6 +20,7 @@ Vue.component("content-wrapper", {
     }
 })
 
+Vue.component('modal', require('./components/Modal.vue'));
 Vue.component('mods', require('./components/Mods.vue'));
 Vue.component('guild', require('./components/Guild.vue'));
 Vue.component('welcome-parallax', require('./components/Parallax.vue'));

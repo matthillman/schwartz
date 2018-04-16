@@ -35,6 +35,7 @@
                             <img :src="'/images/mods/' + shape + '_' + setFor(shape, set) + '.png'" width="16"> {{ locationFor(shape, set) }}
                         </div>
                     </div>
+                    <div class="view-modal btn btn-primary" @click="detailSet = set">View</div>
                 </div>
             </div>
             <div class="set-filter row">
@@ -58,6 +59,16 @@
                 </div>
             </div>
         </div>
+
+        <modal v-if="detailSet" @close="detailSet = null">
+            <h3 slot="header">{{ detailSet.destination || ('Set ' + (sets.indexOf(detailSet) + 1)) }}</h3>
+            <div slot="body" class="mod-details">
+                <mod v-for="shape in ['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross']"
+                    :key="shape"
+                    :mod="mods[detailSet[shape]]"
+                ></mod>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -82,6 +93,8 @@
 
                 dragOverIndex: null,
                 draggingIndex: null,
+
+                detailSet: null,
             }
         },
 
@@ -272,6 +285,8 @@
             locationFor: function(shape, set) {
                 let mod = this.mods[set[shape]];
                 if (!mod) { return "N/A"; }
+                if (mod.location == "Grand Admiral Thrawn") { return "Thrawn"; }
+                if (mod.location == "Commander Luke Skywalker") { return "CLS"; }
                 return mod.location;
             },
             setFor: function(shape, set) {

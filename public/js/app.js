@@ -466,6 +466,7 @@ Vue.component("content-wrapper", {
     }
 });
 
+Vue.component('modal', __webpack_require__(70));
 Vue.component('mods', __webpack_require__(42));
 Vue.component('guild', __webpack_require__(51));
 Vue.component('welcome-parallax', __webpack_require__(56));
@@ -15873,6 +15874,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -15893,7 +15905,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             filterSelected: false,
 
             dragOverIndex: null,
-            draggingIndex: null
+            draggingIndex: null,
+
+            detailSet: null
         };
     },
 
@@ -16130,6 +16144,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var mod = this.mods[set[shape]];
             if (!mod) {
                 return "N/A";
+            }
+            if (mod.location == "Grand Admiral Thrawn") {
+                return "Thrawn";
+            }
+            if (mod.location == "Commander Luke Skywalker") {
+                return "CLS";
             }
             return mod.location;
         },
@@ -16371,273 +16391,332 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "mods" }, [
-    _c("div", { staticClass: "row top" }, [
-      _c("label", { staticClass: "file-label" }, [
-        _c("input", {
-          attrs: { type: "file", id: "mods-json" },
-          on: { change: _vm.filePicked }
-        }),
+  return _c(
+    "div",
+    { staticClass: "mods" },
+    [
+      _c("div", { staticClass: "row top" }, [
+        _c("label", { staticClass: "file-label" }, [
+          _c("input", {
+            attrs: { type: "file", id: "mods-json" },
+            on: { change: _vm.filePicked }
+          }),
+          _vm._v(" "),
+          _c("span", [_vm._v("Load Mods Export File")])
+        ]),
         _vm._v(" "),
-        _c("span", [_vm._v("Load Mods Export File")])
+        _vm._m(0)
       ]),
       _vm._v(" "),
-      _vm._m(0)
-    ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.modsArray.length,
-            expression: "modsArray.length"
-          }
-        ]
-      },
-      [
-        _c("h2", [_vm._v("5* Speed Arrows")]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "arrows" },
-          _vm._l(_vm.speedArrowCounts, function(count, set) {
-            return _c("div", { key: set }, [
-              _c("img", {
-                attrs: {
-                  src: "/images/mods/arrow_" + set + ".png",
-                  width: "46"
-                }
-              }),
-              _vm._v(" " + _vm._s(count) + "\n            ")
-            ])
-          })
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "btn btn-primary", on: { click: _vm.addSet } },
-          [_vm._v("Add Mod Set")]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "sets row" },
-          _vm._l(_vm.sets, function(set, index) {
-            return _c(
-              "div",
-              {
-                key: index,
-                staticClass: "set",
-                class: {
-                  active: index + 1 == _vm.currentSet,
-                  over: index == _vm.dragOverIndex,
-                  dragging: index == _vm.draggingIndex
-                },
-                attrs: { draggable: "true" },
-                on: {
-                  click: function($event) {
-                    _vm.activateSet(index + 1)
-                  },
-                  dragstart: function($event) {
-                    if ($event.target !== $event.currentTarget) {
-                      return null
-                    }
-                    _vm.onDragStart(index, $event)
-                  },
-                  dragover: function($event) {
-                    $event.preventDefault()
-                    _vm.onDragOver(index, $event)
-                  },
-                  dragenter: function($event) {
-                    _vm.onDragEnter(index)
-                  },
-                  dragleave: function($event) {
-                    if ($event.target !== $event.currentTarget) {
-                      return null
-                    }
-                    _vm.onDragLeave(index)
-                  },
-                  drop: function($event) {
-                    $event.preventDefault()
-                    $event.stopPropagation()
-                    _vm.onDrop(index, $event)
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.modsArray.length,
+              expression: "modsArray.length"
+            }
+          ]
+        },
+        [
+          _c("h2", [_vm._v("5* Speed Arrows")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "arrows" },
+            _vm._l(_vm.speedArrowCounts, function(count, set) {
+              return _c("div", { key: set }, [
+                _c("img", {
+                  attrs: {
+                    src: "/images/mods/arrow_" + set + ".png",
+                    width: "46"
                   }
-                }
-              },
-              [
-                _c("span", [_vm._v("Speed: " + _vm._s(_vm.formatSet(set)))]),
-                _vm._v(" "),
+                }),
+                _vm._v(" " + _vm._s(count) + "\n            ")
+              ])
+            })
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            { staticClass: "btn btn-primary", on: { click: _vm.addSet } },
+            [_vm._v("Add Mod Set")]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "sets row" },
+            _vm._l(_vm.sets, function(set, index) {
+              return _c(
+                "div",
+                {
+                  key: index,
+                  staticClass: "set",
+                  class: {
+                    active: index + 1 == _vm.currentSet,
+                    over: index == _vm.dragOverIndex,
+                    dragging: index == _vm.draggingIndex
+                  },
+                  attrs: { draggable: "true" },
+                  on: {
+                    click: function($event) {
+                      _vm.activateSet(index + 1)
+                    },
+                    dragstart: function($event) {
+                      if ($event.target !== $event.currentTarget) {
+                        return null
+                      }
+                      _vm.onDragStart(index, $event)
+                    },
+                    dragover: function($event) {
+                      $event.preventDefault()
+                      _vm.onDragOver(index, $event)
+                    },
+                    dragenter: function($event) {
+                      _vm.onDragEnter(index)
+                    },
+                    dragleave: function($event) {
+                      if ($event.target !== $event.currentTarget) {
+                        return null
+                      }
+                      _vm.onDragLeave(index)
+                    },
+                    drop: function($event) {
+                      $event.preventDefault()
+                      $event.stopPropagation()
+                      _vm.onDrop(index, $event)
+                    }
+                  }
+                },
+                [
+                  _c("span", [_vm._v("Speed: " + _vm._s(_vm.formatSet(set)))]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: set.destination,
+                        expression: "set.destination"
+                      }
+                    ],
+                    attrs: {
+                      type: "text",
+                      size: "15",
+                      placeholder: "Destination"
+                    },
+                    domProps: { value: set.destination },
+                    on: {
+                      change: function($event) {
+                        _vm.syncState()
+                      },
+                      click: function($event) {
+                        $event.stopPropagation()
+                      },
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(set, "destination", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    _vm._l(_vm.shapes, function(shape) {
+                      return _c("div", { key: shape }, [
+                        _c("img", {
+                          attrs: {
+                            src:
+                              "/images/mods/" +
+                              shape +
+                              "_" +
+                              _vm.setFor(shape, set) +
+                              ".png",
+                            width: "16"
+                          }
+                        }),
+                        _vm._v(
+                          " " +
+                            _vm._s(_vm.locationFor(shape, set)) +
+                            "\n                    "
+                        )
+                      ])
+                    })
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "view-modal btn btn-primary",
+                      on: {
+                        click: function($event) {
+                          _vm.detailSet = set
+                        }
+                      }
+                    },
+                    [_vm._v("View")]
+                  )
+                ]
+              )
+            })
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "set-filter row" },
+            [
+              _vm._l(_vm.modSets, function(set) {
+                return _c(
+                  "div",
+                  {
+                    key: set,
+                    staticClass: "btn",
+                    class: { selected: _vm.setFilter.includes(set) },
+                    on: {
+                      click: function($event) {
+                        _vm.toggleFilterFor(set)
+                      }
+                    }
+                  },
+                  [
+                    _c("img", {
+                      attrs: {
+                        src: "/images/mods/square_" + set + ".png",
+                        width: "30"
+                      }
+                    })
+                  ]
+                )
+              }),
+              _vm._v(" "),
+              _c("label", [
                 _c("input", {
                   directives: [
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: set.destination,
-                      expression: "set.destination"
+                      value: _vm.filterSelected,
+                      expression: "filterSelected"
                     }
                   ],
-                  attrs: {
-                    type: "text",
-                    size: "15",
-                    placeholder: "Destination"
+                  attrs: { type: "checkbox" },
+                  domProps: {
+                    checked: Array.isArray(_vm.filterSelected)
+                      ? _vm._i(_vm.filterSelected, null) > -1
+                      : _vm.filterSelected
                   },
-                  domProps: { value: set.destination },
                   on: {
                     change: function($event) {
-                      _vm.syncState()
-                    },
-                    click: function($event) {
-                      $event.stopPropagation()
-                    },
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                      var $$a = _vm.filterSelected,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 && (_vm.filterSelected = $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            (_vm.filterSelected = $$a
+                              .slice(0, $$i)
+                              .concat($$a.slice($$i + 1)))
+                        }
+                      } else {
+                        _vm.filterSelected = $$c
                       }
-                      _vm.$set(set, "destination", $event.target.value)
                     }
                   }
                 }),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  _vm._l(_vm.shapes, function(shape) {
-                    return _c("div", { key: shape }, [
-                      _c("img", {
-                        attrs: {
-                          src:
-                            "/images/mods/" +
-                            shape +
-                            "_" +
-                            _vm.setFor(shape, set) +
-                            ".png",
-                          width: "16"
-                        }
-                      }),
-                      _vm._v(
-                        " " +
-                          _vm._s(_vm.locationFor(shape, set)) +
-                          "\n                    "
-                      )
-                    ])
-                  })
-                )
-              ]
-            )
-          })
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "set-filter row" },
-          [
-            _vm._l(_vm.modSets, function(set) {
+                _c("span", [_vm._v("Hide mods already in a set")])
+              ])
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "shapes" },
+            _vm._l(_vm.shapes, function(shape) {
               return _c(
                 "div",
-                {
-                  key: set,
-                  staticClass: "btn",
-                  class: { selected: _vm.setFilter.includes(set) },
-                  on: {
-                    click: function($event) {
-                      _vm.toggleFilterFor(set)
-                    }
-                  }
-                },
+                { key: shape, staticClass: "mod-list" },
                 [
-                  _c("img", {
-                    attrs: {
-                      src: "/images/mods/square_" + set + ".png",
-                      width: "30"
-                    }
-                  })
-                ]
-              )
-            }),
-            _vm._v(" "),
-            _c("label", [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.filterSelected,
-                    expression: "filterSelected"
-                  }
-                ],
-                attrs: { type: "checkbox" },
-                domProps: {
-                  checked: Array.isArray(_vm.filterSelected)
-                    ? _vm._i(_vm.filterSelected, null) > -1
-                    : _vm.filterSelected
-                },
-                on: {
-                  change: function($event) {
-                    var $$a = _vm.filterSelected,
-                      $$el = $event.target,
-                      $$c = $$el.checked ? true : false
-                    if (Array.isArray($$a)) {
-                      var $$v = null,
-                        $$i = _vm._i($$a, $$v)
-                      if ($$el.checked) {
-                        $$i < 0 && (_vm.filterSelected = $$a.concat([$$v]))
-                      } else {
-                        $$i > -1 &&
-                          (_vm.filterSelected = $$a
-                            .slice(0, $$i)
-                            .concat($$a.slice($$i + 1)))
-                      }
-                    } else {
-                      _vm.filterSelected = $$c
-                    }
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("span", [_vm._v("Hide mods already in a set")])
-            ])
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "shapes" },
-          _vm._l(_vm.shapes, function(shape) {
-            return _c(
-              "div",
-              { key: shape, staticClass: "mod-list" },
-              [
-                _c("h2", [_vm._v(_vm._s(shape))]),
-                _vm._v(" "),
-                _vm._l(_vm.hasAttribute(shape), function(mod) {
-                  return _c(
-                    "div",
-                    {
-                      key: mod.id,
-                      staticClass: "mod-wrapper",
-                      class: { active: mod.modSet == _vm.currentSet },
-                      attrs: { "mod-set": _vm.setDescriptionFor(mod) },
-                      on: {
-                        click: function($event) {
-                          _vm.addToActiveSet(mod)
+                  _c("h2", [_vm._v(_vm._s(shape))]),
+                  _vm._v(" "),
+                  _vm._l(_vm.hasAttribute(shape), function(mod) {
+                    return _c(
+                      "div",
+                      {
+                        key: mod.id,
+                        staticClass: "mod-wrapper",
+                        class: { active: mod.modSet == _vm.currentSet },
+                        attrs: { "mod-set": _vm.setDescriptionFor(mod) },
+                        on: {
+                          click: function($event) {
+                            _vm.addToActiveSet(mod)
+                          }
                         }
-                      }
-                    },
-                    [_c("mod", { attrs: { mod: mod } })],
-                    1
+                      },
+                      [_c("mod", { attrs: { mod: mod } })],
+                      1
+                    )
+                  })
+                ],
+                2
+              )
+            })
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _vm.detailSet
+        ? _c(
+            "modal",
+            {
+              on: {
+                close: function($event) {
+                  _vm.detailSet = null
+                }
+              }
+            },
+            [
+              _c("h3", { attrs: { slot: "header" }, slot: "header" }, [
+                _vm._v(
+                  _vm._s(
+                    _vm.detailSet.destination ||
+                      "Set " + (_vm.sets.indexOf(_vm.detailSet) + 1)
                   )
-                })
-              ],
-              2
-            )
-          })
-        )
-      ]
-    )
-  ])
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "mod-details",
+                  attrs: { slot: "body" },
+                  slot: "body"
+                },
+                _vm._l(
+                  ["square", "arrow", "diamond", "triangle", "circle", "cross"],
+                  function(shape) {
+                    return _c("mod", {
+                      key: shape,
+                      attrs: { mod: _vm.mods[_vm.detailSet[shape]] }
+                    })
+                  }
+                )
+              )
+            ]
+          )
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -17080,6 +17159,209 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(71)
+}
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(73)
+/* template */
+var __vue_template__ = __webpack_require__(74)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/Modal.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6e8d36f4", Component.options)
+  } else {
+    hotAPI.reload("data-v-6e8d36f4", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(72);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(7)("6b38b4de", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6e8d36f4\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Modal.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6e8d36f4\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Modal.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(6)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.modal-mask {\n  position: fixed;\n  z-index: 9998;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.5);\n  display: table;\n  -webkit-transition: opacity .3s ease;\n  transition: opacity .3s ease;\n}\n.modal-wrapper {\n  display: table-cell;\n  vertical-align: middle;\n}\n.modal-container {\n  width: 510px;\n  margin: 0px auto;\n  padding: 20px;\n  background-color: #fff;\n  border-radius: 8px;\n  -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);\n          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);\n  -webkit-transition: all .3s ease;\n  transition: all .3s ease;\n}\n.modal-header h3 {\n  margin-top: 0;\n}\n.modal-body {\n  margin: 16px 0;\n  padding: 0;\n}\n.modal-footer {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end;\n}\n.modal-enter {\n  opacity: 0;\n}\n.modal-leave-active {\n  opacity: 0;\n}\n.modal-enter .modal-container, .modal-leave-active .modal-container {\n  -webkit-transform: scale(1.1);\n          transform: scale(1.1);\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 73 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("transition", { attrs: { name: "modal" } }, [
+    _c("div", { staticClass: "modal-mask" }, [
+      _c("div", { staticClass: "modal-wrapper" }, [
+        _c("div", { staticClass: "modal-container" }, [
+          _c(
+            "div",
+            { staticClass: "modal-header" },
+            [
+              _vm._t("header", [
+                _vm._v("\n            default header\n          ")
+              ])
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "modal-body" },
+            [
+              _vm._t("body", [_vm._v("\n            default body\n          ")])
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "modal-footer" },
+            [
+              _vm._t("footer"),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "modal-default-button btn btn-primary",
+                  on: {
+                    click: function($event) {
+                      _vm.$emit("close")
+                    }
+                  }
+                },
+                [_vm._v("Close")]
+              )
+            ],
+            2
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6e8d36f4", module.exports)
+  }
+}
 
 /***/ })
 ],[16]);
