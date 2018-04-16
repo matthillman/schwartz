@@ -16,7 +16,18 @@
             </div>
             <button class="btn btn-primary" @click="addSet">Add Mod Set</button>
             <div class="sets row">
-                <div class="set" v-for="(set, index) in sets" :key="index" @click="activateSet(index + 1)" :class="{active: (index + 1) == currentSet}">
+                <div class="set"
+                    v-for="(set, index) in sets"
+                    :key="index"
+                    @click="activateSet(index + 1)"
+                    :class="{active: (index + 1) == currentSet, over: index == dragOverIndex, dragging: index == draggingIndex}"
+                    draggable="true"
+                    @dragstart.self="onDragStart(index, $event)"
+                    @dragover.prevent="onDragOver(index, $event)"
+                    @dragenter="onDragEnter(index)"
+                    @dragleave.self="onDragLeave(index)"
+                    @drop.prevent.stop="onDrop(index, $event)"
+                >
                     <span>Speed: {{ formatSet(set) }}</span>
                     <input type="text" v-model="set.destination" @change="syncState()" size="15" placeholder="Destination">
                     <div>
@@ -68,6 +79,9 @@
                 modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
                 setFilter: [],
                 filterSelected: false,
+
+                dragOverIndex: null,
+                draggingIndex: null,
             }
         },
 
@@ -293,7 +307,36 @@
                     this.sets = JSON.parse(storage.sets);
                 }
 
-            }
+            },
+
+            // DnD
+            onDragStart: function(index, evt) {
+                evt.dataTransfer.effectAllowed = 'move';
+                evt.dataTransfer.setData('text', index);
+                this.currentSet = null;
+                this.draggingIndex = index;
+            },
+            onDragEnter: function(index) {
+                this.dragOverIndex = index;
+            },
+            onDragOver: function(index, evt) {
+                this.dragOverIndex = index;
+                evt.dataTransfer.dropEffect = 'move';
+            },
+            onDragLeave: function(index) {
+                this.dragOverIndex = null;
+            },
+            onDragEnd: function() {
+                this.dragOverIndex = null;
+                this.draggingIndex = null;
+            },
+            onDrop: function(index, evt) {
+                let moving = +evt.dataTransfer.getData('text');
+                let moved = this.sets.splice(moving, 1)[0];
+                this.sets.splice(index, 0, moved);
+                this.dragOverIndex = null;
+                this.draggingIndex = null;
+            },
         }
     }
 </script>
@@ -330,5 +373,19 @@ h2 {
     > div:not(:last-of-type) {
         margin-right: 16px;
     }
+}
+
+[draggable] {
+    transition-property: opacity, border-color;
+    transition-duration: 300ms;
+    transition-timing-function: ease-in-out;
+    user-select: none;
+    border: 2px dashed transparent;
+}
+.dragging {
+    opacity: 0.4;
+}
+.over {
+    border-color: rgb(0, 0, 0);
 }
 </style>
