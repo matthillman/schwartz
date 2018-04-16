@@ -143,7 +143,7 @@
                 let base = shape === "arrow" ? this.speedArrows : this.modsArray;
                 let mods = base.filter((mod) => mod.slot === shape)
                     .filter((mod) => this.setFilter.length ? this.setFilter.includes(mod.set) : true)
-                    .filter((mod) => !this.filterSelected || !mod.modSet);
+                    .filter((mod) => !this.filterSelected || !mod.modSet || mod.modSet == this.currentSet);
                 if (this.only === null || shape === "arrow") { return mods; }
                 return mods
                     .filter((mod) => mod.has[this.only])

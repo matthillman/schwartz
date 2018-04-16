@@ -15982,7 +15982,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).filter(function (mod) {
                 return _this2.setFilter.length ? _this2.setFilter.includes(mod.set) : true;
             }).filter(function (mod) {
-                return !_this2.filterSelected || !mod.modSet;
+                return !_this2.filterSelected || !mod.modSet || mod.modSet == _this2.currentSet;
             });
             if (this.only === null || shape === "arrow") {
                 return mods;
