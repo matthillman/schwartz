@@ -10201,6 +10201,12 @@ body {
   cursor: pointer;
 }
 
+.sets {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
 .set {
   padding: 8px;
   background: #dedede;
@@ -10217,7 +10223,8 @@ body {
           align-items: center;
   cursor: pointer;
   margin-bottom: 16px;
-  width: 185px;
+  -ms-flex-preferred-size: 19%;
+      flex-basis: 19%;
 }
 
 .set.active,

@@ -385,7 +385,7 @@ h2 {
     display: flex;
     margin: 16px;
 
-    > div:not(:last-of-type) {
+    &.arrows > div:not(:last-of-type) {
         margin-right: 16px;
     }
 }

@@ -187,6 +187,10 @@ html, body {
   }
 }
 
+.sets {
+  justify-content: space-between;
+}
+
 .set {
     padding: 8px;
     background: #dedede;
@@ -196,7 +200,7 @@ html, body {
     align-items: center;
     cursor: pointer;
     margin-bottom: 16px;
-    width: 185px;
+    flex-basis: 19%;
 }
 
 .set, [mod-set] {
