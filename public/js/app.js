@@ -15885,6 +15885,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -15901,8 +15912,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             only: 'speed',
             shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"],
             modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
+            attributes: ["speed", "offense", "defense", "health", "protection"],
             setFilter: [],
             filterSelected: false,
+            showAll: false,
 
             dragOverIndex: null,
             draggingIndex: null,
@@ -15998,16 +16011,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).filter(function (mod) {
                 return !_this2.filterSelected || !mod.modSet || mod.modSet == _this2.currentSet;
             });
-            if (this.only === null || shape === "arrow") {
+            if (this.only == "speed" && shape == "arrow") {
                 return mods;
             }
-            return mods.filter(function (mod) {
-                return mod.has[_this2.only];
-            }).sort(function (a, b) {
-                if (+a.secondaries[_this2.only] < +b.secondaries[_this2.only]) {
+            if (this.only !== null && !this.showAll) {
+                mods = mods.filter(function (mod) {
+                    return mod.has[_this2.only];
+                });
+            }
+            var sortAttribute = this.only || "speed";
+            return mods.sort(function (a, b) {
+                if ((+a.secondaries[sortAttribute] || 0) < (+b.secondaries[sortAttribute] || 0)) {
                     return -1;
                 }
-                if (+a.secondaries[_this2.only] > +b.secondaries[_this2.only]) {
+                if ((+a.secondaries[sortAttribute] || 0) > (+b.secondaries[sortAttribute] || 0)) {
                     return 1;
                 }
                 return 0;
@@ -16179,6 +16196,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             } else {
                 this.setFilter.push(set);
             }
+        },
+        pickAttribute: function pickAttribute(attribute) {
+            this.only = this.only == attribute ? null : attribute;
         },
 
         syncState: function syncState() {
@@ -16571,10 +16591,35 @@ var render = function() {
             })
           ),
           _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "set-filter row" },
-            [
+          _c("div", { staticClass: "set-filter row" }, [
+            _c(
+              "div",
+              _vm._l(_vm.attributes, function(attribute) {
+                return _c(
+                  "div",
+                  {
+                    key: attribute,
+                    staticClass: "btn",
+                    class: { selected: _vm.only == attribute },
+                    on: {
+                      click: function($event) {
+                        _vm.pickAttribute(attribute)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(attribute) +
+                        "\n                "
+                    )
+                  ]
+                )
+              })
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
               _vm._l(_vm.modSets, function(set) {
                 return _c(
                   "div",
@@ -16597,8 +16642,10 @@ var render = function() {
                     })
                   ]
                 )
-              }),
-              _vm._v(" "),
+              })
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "checkboxes" }, [
               _c("label", [
                 _c("input", {
                   directives: [
@@ -16639,10 +16686,66 @@ var render = function() {
                 }),
                 _vm._v(" "),
                 _c("span", [_vm._v("Hide mods already in a set")])
-              ])
-            ],
-            2
-          ),
+              ]),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !!_vm.only,
+                      expression: "!!only"
+                    }
+                  ]
+                },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.showAll,
+                        expression: "showAll"
+                      }
+                    ],
+                    attrs: { type: "checkbox" },
+                    domProps: {
+                      checked: Array.isArray(_vm.showAll)
+                        ? _vm._i(_vm.showAll, null) > -1
+                        : _vm.showAll
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.showAll,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 && (_vm.showAll = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.showAll = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
+                        } else {
+                          _vm.showAll = $$c
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("span", [
+                    _vm._v("Show mods that don't have " + _vm._s(_vm.only))
+                  ])
+                ]
+              )
+            ])
+          ]),
           _vm._v(" "),
           _c(
             "div",

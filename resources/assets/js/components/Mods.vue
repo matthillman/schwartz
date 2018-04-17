@@ -14,6 +14,7 @@
                     <img :src="'/images/mods/arrow_' + set + '.png'" width="46"> {{ count }}
                 </div>
             </div>
+
             <button class="btn btn-primary" @click="addSet">Add Mod Set</button>
             <div class="sets row">
                 <div class="set"
@@ -38,14 +39,24 @@
                     <div class="view-modal btn btn-primary" @click.stop="detailSet = set">View</div>
                 </div>
             </div>
+
             <div class="set-filter row">
-                <div class="btn" v-for="set in modSets" :key="set" :class="{selected: setFilter.includes(set)}" @click="toggleFilterFor(set)">
-                    <img :src="'/images/mods/square_' + set + '.png'" width="30">
+                <div>
+                    <div class="btn" v-for="attribute in attributes" :key="attribute" :class="{selected: only == attribute}" @click="pickAttribute(attribute)">
+                        {{attribute}}
+                    </div>
                 </div>
-                <label>
-                    <input type="checkbox" v-model="filterSelected"> <span>Hide mods already in a set</span>
-                </label>
+                <div>
+                    <div class="btn" v-for="set in modSets" :key="set" :class="{selected: setFilter.includes(set)}" @click="toggleFilterFor(set)">
+                        <img :src="'/images/mods/square_' + set + '.png'" width="30">
+                    </div>
+                </div>
+                <div class="checkboxes">
+                    <label><input type="checkbox" v-model="filterSelected"> <span>Hide mods already in a set</span></label>
+                    <label v-show="!!only"><input type="checkbox" v-model="showAll"> <span>Show mods that don't have {{ only }}</span></label>
+                </div>
             </div>
+
             <div class="shapes">
                 <div class="mod-list" v-for="shape in shapes" :key="shape">
                     <h2>{{ shape }}</h2>
@@ -88,8 +99,10 @@
                 only: 'speed',
                 shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"],
                 modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
+                attributes: ["speed", "offense", "defense", "health", "protection"],
                 setFilter: [],
                 filterSelected: false,
+                showAll: false,
 
                 dragOverIndex: null,
                 draggingIndex: null,
@@ -157,12 +170,17 @@
                 let mods = base.filter((mod) => mod.slot === shape)
                     .filter((mod) => this.setFilter.length ? this.setFilter.includes(mod.set) : true)
                     .filter((mod) => !this.filterSelected || !mod.modSet || mod.modSet == this.currentSet);
-                if (this.only === null || shape === "arrow") { return mods; }
+                if (this.only == "speed" && shape == "arrow") {
+                    return mods;
+                }
+                if (this.only !== null && !this.showAll) {
+                    mods = mods.filter((mod) => mod.has[this.only]);
+                }
+                let sortAttribute = this.only || "speed";
                 return mods
-                    .filter((mod) => mod.has[this.only])
                     .sort((a, b) => {
-                        if (+a.secondaries[this.only] < +b.secondaries[this.only]) { return -1; }
-                        if (+a.secondaries[this.only] > +b.secondaries[this.only]) { return 1; }
+                        if ((+a.secondaries[sortAttribute] || 0) < (+b.secondaries[sortAttribute] || 0)) { return -1; }
+                        if ((+a.secondaries[sortAttribute] || 0) > (+b.secondaries[sortAttribute] || 0)) { return 1; }
                         return 0;
                     })
                     .reverse();
@@ -307,6 +325,9 @@
                 } else {
                     this.setFilter.push(set);
                 }
+            },
+            pickAttribute: function(attribute) {
+                this.only = this.only == attribute ? null : attribute;
             },
 
             syncState: function() {

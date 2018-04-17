@@ -219,6 +219,7 @@ html, body {
     border-color: $secondary;
     border-radius: 0;
     transition: background-color, 300ms, ease-in-out;
+    color: $white;
 
     &:hover {
       background-color: $gray-800;
@@ -238,6 +239,15 @@ html, body {
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
       margin-right: 16px;
+    }
+  }
+
+  .checkboxes {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      margin-bottom: 0;
     }
   }
 }
