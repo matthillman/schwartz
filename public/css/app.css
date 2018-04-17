@@ -10308,6 +10308,10 @@ body {
   display: flex;
 }
 
+.mod.missing {
+  text-align: center;
+}
+
 .mod .description,
 .mod .data {
   display: -webkit-box;

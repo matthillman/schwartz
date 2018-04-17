@@ -266,6 +266,10 @@ html, body {
       display: flex;
   }
 
+  &.missing {
+    text-align: center;
+  }
+
   .description, .data {
       display: flex;
       flex-direction: column;

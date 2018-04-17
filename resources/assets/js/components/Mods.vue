@@ -18,9 +18,9 @@
             <div class="sets row">
                 <div class="set"
                     v-for="(set, index) in sets"
-                    :key="index"
-                    @click="activateSet(index + 1)"
-                    :class="{active: (index + 1) == currentSet, over: index == dragOverIndex, dragging: index == draggingIndex}"
+                    :key="set.id"
+                    @click="activateSet(set.id)"
+                    :class="{active: set.id == currentSet, over: index == dragOverIndex, dragging: index == draggingIndex}"
                     draggable="true"
                     @dragstart.self="onDragStart(index, $event)"
                     @dragover.prevent="onDragOver(index, $event)"
@@ -63,10 +63,10 @@
         <modal v-if="detailSet" @close="detailSet = null">
             <h3 slot="header">{{ detailSet.destination || ('Set ' + (sets.indexOf(detailSet) + 1)) }}</h3>
             <div slot="body" class="mod-details">
-                <mod v-for="shape in ['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross']"
-                    :key="shape"
-                    :mod="mods[detailSet[shape]]"
-                ></mod>
+                <div v-for="shape in ['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross']" :key="shape">
+                    <mod :mod="mods[detailSet[shape]]" v-if="detailSet[shape]"></mod>
+                    <div v-else class="mod missing">No {{ shape }} selected</div>
+                </div>
             </div>
         </modal>
     </div>
@@ -173,7 +173,6 @@
 
                 let reader = new FileReader();
                 reader.onload = (loadEvt) => {
-                    console.warn('Loaded', loadEvt);
                     let mods = JSON.parse(loadEvt.target.result);
                     this.mods = mods.reduce((all, mod) => {
                         let fixed = {
@@ -220,15 +219,16 @@
                     this.syncState();
                 };
                 reader.onerror = (loadEvt) => {
-                    console.warn("Failed to load file", evt, loadEvt);
+                    console.error("Failed to load file", evt, loadEvt);
                 };
-                reader.onprogress = (progressEvt) => {
-                    console.warn('Progress', progressEvt);
-                }
+                // reader.onprogress = (progressEvt) => {
+                //     console.warn('Progress', progressEvt);
+                // }
                 reader.readAsText(jsonFile, 'UTF-8');
             },
             addSet: function(evt) {
-                this.sets.push({
+                let newSet = {
+                    id: (new Date).getTime(),
                     square: null,
                     diamond: null,
                     triangle: null,
@@ -236,32 +236,34 @@
                     cross: null,
                     arrow: null,
                     speedSet: 0,
-                    destination: "",
-                });
-                this.activateSet(this.sets.length);
+                    destination: "Set " + (this.sets.length + 1),
+                };
+                this.sets.push(newSet);
+                this.activateSet(newSet.id);
                 this.syncState();
             },
             activateSet: function(set) {
                 this.currentSet = this.currentSet == set ? null : set;
             },
             addToActiveSet: function(mod) {
-                if (this.currentSet == 0) { return; }
-                let prev = this.sets[this.currentSet - 1][mod.slot];
+                let set = this.sets.filter((set) => set.id == this.currentSet)[0];
+                if (!set) { return; }
+                let prev = set[mod.slot];
                 if (prev) {
                     this.mods[prev].modSet = null;
                     if (this.mods[prev].set == "speed") {
-                        this.sets[this.currentSet - 1].speedSet -= 1;
+                        set.speedSet -= 1;
                     }
                     if (this.mods[prev].id == mod.id) {
-                        this.sets[this.currentSet - 1][mod.slot] = null;
+                        set[mod.slot] = null;
                         this.syncState();
                         return;
                     }
                 }
                 mod.modSet = this.currentSet;
-                this.sets[this.currentSet - 1][mod.slot] = mod.id;
+                set[mod.slot] = mod.id;
                 if (mod.set == "speed") {
-                    this.sets[this.currentSet - 1].speedSet += 1;
+                    set.speedSet += 1;
                 }
                 this.syncState();
             },
@@ -285,8 +287,6 @@
             locationFor: function(shape, set) {
                 let mod = this.mods[set[shape]];
                 if (!mod) { return "N/A"; }
-                if (mod.location == "Grand Admiral Thrawn") { return "Thrawn"; }
-                if (mod.location == "Commander Luke Skywalker") { return "CLS"; }
                 return mod.location;
             },
             setFor: function(shape, set) {
@@ -296,8 +296,9 @@
             },
             setDescriptionFor: function(mod) {
                 if (!mod.modSet) { return null; }
-                let set = this.sets[mod.modSet - 1];
-                return mod.modSet + (set.destination.length ? ' (' + set.destination + ')' : '');
+                let set = this.sets.filter((set) => set.id == mod.modSet)[0];
+                if (!set) { return; }
+                return set.destination;
             },
 
             toggleFilterFor: function(set) {

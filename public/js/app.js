@@ -16023,7 +16023,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var reader = new FileReader();
             reader.onload = function (loadEvt) {
-                console.warn('Loaded', loadEvt);
                 var mods = JSON.parse(loadEvt.target.result);
                 _this3.mods = mods.reduce(function (all, mod) {
                     var fixed = {
@@ -16072,15 +16071,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this3.syncState();
             };
             reader.onerror = function (loadEvt) {
-                console.warn("Failed to load file", evt, loadEvt);
+                console.error("Failed to load file", evt, loadEvt);
             };
-            reader.onprogress = function (progressEvt) {
-                console.warn('Progress', progressEvt);
-            };
+            // reader.onprogress = (progressEvt) => {
+            //     console.warn('Progress', progressEvt);
+            // }
             reader.readAsText(jsonFile, 'UTF-8');
         },
         addSet: function addSet(evt) {
-            this.sets.push({
+            var newSet = {
+                id: new Date().getTime(),
                 square: null,
                 diamond: null,
                 triangle: null,
@@ -16088,45 +16088,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 cross: null,
                 arrow: null,
                 speedSet: 0,
-                destination: ""
-            });
-            this.activateSet(this.sets.length);
+                destination: "Set " + (this.sets.length + 1)
+            };
+            this.sets.push(newSet);
+            this.activateSet(newSet.id);
             this.syncState();
         },
         activateSet: function activateSet(set) {
             this.currentSet = this.currentSet == set ? null : set;
         },
         addToActiveSet: function addToActiveSet(mod) {
-            if (this.currentSet == 0) {
+            var _this4 = this;
+
+            var set = this.sets.filter(function (set) {
+                return set.id == _this4.currentSet;
+            })[0];
+            if (!set) {
                 return;
             }
-            var prev = this.sets[this.currentSet - 1][mod.slot];
+            var prev = set[mod.slot];
             if (prev) {
                 this.mods[prev].modSet = null;
                 if (this.mods[prev].set == "speed") {
-                    this.sets[this.currentSet - 1].speedSet -= 1;
+                    set.speedSet -= 1;
                 }
                 if (this.mods[prev].id == mod.id) {
-                    this.sets[this.currentSet - 1][mod.slot] = null;
+                    set[mod.slot] = null;
                     this.syncState();
                     return;
                 }
             }
             mod.modSet = this.currentSet;
-            this.sets[this.currentSet - 1][mod.slot] = mod.id;
+            set[mod.slot] = mod.id;
             if (mod.set == "speed") {
-                this.sets[this.currentSet - 1].speedSet += 1;
+                set.speedSet += 1;
             }
             this.syncState();
         },
         formatSet: function formatSet(set) {
-            var _this4 = this;
+            var _this5 = this;
 
             var speed = 0;
             var shapes = ["square", "diamond", "triangle", "circle", "cross"];
 
             shapes.forEach(function (shape) {
-                var mod = _this4.mods[set[shape]];
+                var mod = _this5.mods[set[shape]];
                 if (!mod) {
                     return;
                 }
@@ -16145,12 +16151,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (!mod) {
                 return "N/A";
             }
-            if (mod.location == "Grand Admiral Thrawn") {
-                return "Thrawn";
-            }
-            if (mod.location == "Commander Luke Skywalker") {
-                return "CLS";
-            }
             return mod.location;
         },
         setFor: function setFor(shape, set) {
@@ -16164,8 +16164,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (!mod.modSet) {
                 return null;
             }
-            var set = this.sets[mod.modSet - 1];
-            return mod.modSet + (set.destination.length ? ' (' + set.destination + ')' : '');
+            var set = this.sets.filter(function (set) {
+                return set.id == mod.modSet;
+            })[0];
+            if (!set) {
+                return;
+            }
+            return set.destination;
         },
 
         toggleFilterFor: function toggleFilterFor(set) {
@@ -16452,17 +16457,17 @@ var render = function() {
               return _c(
                 "div",
                 {
-                  key: index,
+                  key: set.id,
                   staticClass: "set",
                   class: {
-                    active: index + 1 == _vm.currentSet,
+                    active: set.id == _vm.currentSet,
                     over: index == _vm.dragOverIndex,
                     dragging: index == _vm.draggingIndex
                   },
                   attrs: { draggable: "true" },
                   on: {
                     click: function($event) {
-                      _vm.activateSet(index + 1)
+                      _vm.activateSet(set.id)
                     },
                     dragstart: function($event) {
                       if ($event.target !== $event.currentTarget) {
@@ -16705,10 +16710,20 @@ var render = function() {
                 _vm._l(
                   ["square", "arrow", "diamond", "triangle", "circle", "cross"],
                   function(shape) {
-                    return _c("mod", {
-                      key: shape,
-                      attrs: { mod: _vm.mods[_vm.detailSet[shape]] }
-                    })
+                    return _c(
+                      "div",
+                      { key: shape },
+                      [
+                        _vm.detailSet[shape]
+                          ? _c("mod", {
+                              attrs: { mod: _vm.mods[_vm.detailSet[shape]] }
+                            })
+                          : _c("div", { staticClass: "mod missing" }, [
+                              _vm._v("No " + _vm._s(shape) + " selected")
+                            ])
+                      ],
+                      1
+                    )
                   }
                 )
               )
