@@ -16174,7 +16174,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
 
             var arrow = this.mods[set.arrow];
-            if (arrow && arrow.primary.type == attribute) {
+            if (arrow && arrow.primary.type == attribute && attribute == "speed") {
                 total += +arrow.primary.value;
             } else if (arrow) {
                 total += +arrow.secondaries[attribute] || 0;
