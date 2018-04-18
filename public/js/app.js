@@ -15896,6 +15896,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -15961,13 +15964,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         speedArrows: function speedArrows() {
             var _this = this;
 
-            return this.modsArray.filter(function (mod) {
-                return mod.slot === "arrow";
-            }).filter(function (mod) {
-                return mod.primary.type === "speed";
-            }).filter(function (mod) {
+            var list = this.arrows;
+            if (!this.showAll) {
+                list = list.filter(function (mod) {
+                    return mod.primary.type === "speed";
+                });
+            }
+            return list.filter(function (mod) {
                 return _this.setFilter.length ? _this.setFilter.includes(mod.set) : true;
             }).sort(function (a, b) {
+                if (a.primary.type == "speed" && b.primary.type != "speed") {
+                    return 1;
+                }
+                if (a.primary.type != "speed" && b.primary.type == "speed") {
+                    return -1;
+                }
                 if (+a.primary.value < +b.primary.value) {
                     return -1;
                 }
@@ -15976,6 +15987,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
                 if (a.set == "speed" && b.set != "speed") {
                     return 1;
+                }
+                if (a.set != "speed" && b.set == "speed") {
+                    return -1;
                 }
                 return 0;
             }).reverse();
@@ -16061,7 +16075,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             health: false,
                             protection: false
                         },
-                        modSet: null
+                        modSet: (_this3.sets.filter(function (set) {
+                            return set[mod.slot] == mod.mod_uid;
+                        })[0] || {}).id
                     };
 
                     for (var index = 1; index <= 4; index++) {
@@ -16142,10 +16158,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             this.syncState();
         },
-        formatSet: function formatSet(set) {
+        formatSet: function formatSet(set, attribute) {
             var _this5 = this;
 
-            var speed = 0;
+            attribute = attribute || "speed";
+            var total = 0;
             var shapes = ["square", "diamond", "triangle", "circle", "cross"];
 
             shapes.forEach(function (shape) {
@@ -16153,15 +16170,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (!mod) {
                     return;
                 }
-                speed += +mod.secondaries.speed || 0;
+                total += +mod.secondaries[attribute] || 0;
             });
 
             var arrow = this.mods[set.arrow];
-            if (arrow && arrow.primary.type == "speed") {
-                speed += +arrow.primary.value;
+            if (arrow && arrow.primary.type == attribute) {
+                total += +arrow.primary.value;
+            } else if (arrow) {
+                total += +arrow.secondaries[attribute] || 0;
             }
 
-            return speed + (set.speedSet >= 4 ? " (+10%)" : "");
+            return total + (attribute == "speed" && set.speedSet >= 4 ? " (+10%)" : "");
         },
         locationFor: function locationFor(shape, set) {
             var mod = this.mods[set[shape]];
@@ -16739,9 +16758,7 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _c("span", [
-                    _vm._v("Show mods that don't have " + _vm._s(_vm.only))
-                  ])
+                  _c("span", [_vm._v("Show all mods")])
                 ]
               )
             ])
@@ -16829,6 +16846,24 @@ var render = function() {
                     )
                   }
                 )
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "bonuses",
+                  attrs: { slot: "footer" },
+                  slot: "footer"
+                },
+                _vm._l(_vm.attributes, function(attribute) {
+                  return _c("div", { key: attribute }, [
+                    _vm._v(
+                      _vm._s(attribute) +
+                        ": " +
+                        _vm._s(_vm.formatSet(_vm.detailSet, attribute))
+                    )
+                  ])
+                })
               )
             ]
           )

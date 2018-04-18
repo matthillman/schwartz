@@ -374,3 +374,13 @@ html, body {
   padding: 2px 4px;
   margin-top: 4px;
 }
+
+.bonuses {
+  display: flex;
+  flex-wrap: wrap;
+
+  > * {
+    flex-basis: 50%;
+    text-transform: capitalize;
+  }
+}

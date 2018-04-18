@@ -10436,3 +10436,17 @@ body {
   margin-top: 4px;
 }
 
+.bonuses {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.bonuses > * {
+  -ms-flex-preferred-size: 50%;
+      flex-basis: 50%;
+  text-transform: capitalize;
+}
+

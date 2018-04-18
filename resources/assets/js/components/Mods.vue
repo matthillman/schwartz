@@ -53,7 +53,7 @@
                 </div>
                 <div class="checkboxes">
                     <label><input type="checkbox" v-model="filterSelected"> <span>Hide mods already in a set</span></label>
-                    <label v-show="!!only"><input type="checkbox" v-model="showAll"> <span>Show mods that don't have {{ only }}</span></label>
+                    <label v-show="!!only"><input type="checkbox" v-model="showAll"> <span>Show all mods</span></label>
                 </div>
             </div>
 
@@ -78,6 +78,9 @@
                     <mod :mod="mods[detailSet[shape]]" v-if="detailSet[shape]"></mod>
                     <div v-else class="mod missing">No {{ shape }} selected</div>
                 </div>
+            </div>
+            <div slot="footer" class="bonuses">
+                <div v-for="attribute in attributes" :key="attribute">{{ attribute }}: {{ formatSet(detailSet, attribute) }}</div>
             </div>
         </modal>
     </div>
@@ -134,13 +137,18 @@
                 return this.modsArray.filter((mod) => mod.slot === "cross");
             },
             speedArrows: function() {
-                return this.modsArray.filter((mod) => mod.slot === "arrow")
-                    .filter((mod) => mod.primary.type === "speed")
-                    .filter((mod) => this.setFilter.length ? this.setFilter.includes(mod.set) : true)
+                let list = this.arrows;
+                if (!this.showAll) {
+                    list = list.filter((mod) => mod.primary.type === "speed");
+                }
+                return list.filter((mod) => this.setFilter.length ? this.setFilter.includes(mod.set) : true)
                     .sort((a, b) => {
+                        if (a.primary.type == "speed" && b.primary.type != "speed") { return 1; }
+                        if (a.primary.type != "speed" && b.primary.type == "speed") { return -1; }
                         if (+a.primary.value < +b.primary.value) { return -1; }
                         if (+a.primary.value > +b.primary.value) { return 1; }
                         if (a.set == "speed" && b.set != "speed") { return 1; }
+                        if (a.set != "speed" && b.set == "speed") { return -1; }
                         return 0;
                     })
                     .reverse();
@@ -212,7 +220,7 @@
                                 health: false,
                                 protection: false,
                             },
-                            modSet: null
+                            modSet: (this.sets.filter((set) => set[mod.slot] == mod.mod_uid)[0] || {}).id
                         };
 
                         for (let index = 1; index <= 4; index++) {
@@ -285,22 +293,25 @@
                 }
                 this.syncState();
             },
-            formatSet: function(set) {
-                let speed = 0;
+            formatSet: function(set, attribute) {
+                attribute = attribute || "speed";
+                let total = 0;
                 let shapes = ["square", "diamond", "triangle", "circle", "cross"];
 
                shapes.forEach((shape) => {
                     let mod = this.mods[set[shape]];
                     if (!mod) { return; }
-                    speed += +mod.secondaries.speed || 0;
+                    total += +mod.secondaries[attribute] || 0;
                 });
 
                 let arrow = this.mods[set.arrow];
-                if (arrow && arrow.primary.type == "speed") {
-                    speed += +arrow.primary.value
+                if (arrow && arrow.primary.type == attribute) {
+                    total += +arrow.primary.value
+                } else if (arrow) {
+                    total += +arrow.secondaries[attribute] || 0;
                 }
 
-                return speed + (set.speedSet >= 4 ? " (+10%)" : "");
+                return total + (attribute == "speed" && set.speedSet >= 4 ? " (+10%)" : "");
             },
             locationFor: function(shape, set) {
                 let mod = this.mods[set[shape]];
