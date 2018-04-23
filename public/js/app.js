@@ -16259,8 +16259,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         filePicked: function filePicked(evt) {
             var _this3 = this;
 
-            this.readFileFrom(evt, function (loadEvt) {
-                var mods = JSON.parse(loadEvt.target.result);
+            this.readFileFrom(evt, function (mods) {
                 _this3.mods = mods.reduce(function (all, mod) {
                     var fixed = {
                         id: mod.mod_uid,
@@ -16313,9 +16312,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         setsPicked: function setsPicked(evt) {
             var _this4 = this;
 
-            this.readFileFrom(evt, function (loadEvt) {
-                var sets = JSON.parse(loadEvt.target.result);
-                _this4.sets = set;
+            this.readFileFrom(evt, function (sets) {
+                _this4.sets = sets;
                 _this4.sets.forEach(function (set) {
                     _this4.shapes.forEach(function (shape) {
                         _this4.mods[set[shape]].modSet = set.id;
@@ -16332,7 +16330,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             var reader = new FileReader();
-            reader.onload = process;
+            reader.onload = function (loadEvt) {
+                var result = JSON.parse(loadEvt.target.result);
+                process(result);
+            };
             reader.onerror = function (loadEvt) {
                 console.error("Failed to load file", evt, loadEvt);
             };

@@ -208,8 +208,7 @@
             },
 
             filePicked: function(evt) {
-                this.readFileFrom(evt, (loadEvt) => {
-                    let mods = JSON.parse(loadEvt.target.result);
+                this.readFileFrom(evt, (mods) => {
                     this.mods = mods.reduce((all, mod) => {
                         let fixed = {
                             id: mod.mod_uid,
@@ -256,9 +255,8 @@
                 });
             },
             setsPicked: function(evt) {
-                this.readFileFrom(evt, (loadEvt) => {
-                    let sets = JSON.parse(loadEvt.target.result);
-                    this.sets = set;
+                this.readFileFrom(evt, (sets) => {
+                    this.sets = sets;
                     this.sets.forEach((set) => {
                         this.shapes.forEach((shape) => {
                             this.mods[set[shape]].modSet = set.id;
@@ -273,7 +271,10 @@
                 if (!jsonFile) { console.warn('no file seleted', evt); return; }
 
                 let reader = new FileReader();
-                reader.onload = process;
+                reader.onload = (loadEvt) => {
+                    let result = JSON.parse(loadEvt.target.result);
+                    process(result);
+                };
                 reader.onerror = (loadEvt) => {
                     console.error("Failed to load file", evt, loadEvt);
                 };
@@ -388,7 +389,6 @@
                 if (storage.sets) {
                     this.sets = JSON.parse(storage.sets);
                 }
-
             },
 
             // DnD
