@@ -11,7 +11,7 @@ class HandbookController extends Controller
     public function __invoke($name) {
         $dropbox = Storage::disk('dropbox');
 
-        $raw = $dropbox->get('guides/' . str_finish($name, '.guide.md'));
+        $raw = $dropbox->get('markdown/guides/' . str_finish($name, '.guide.md'));
 
         $handbook = collect(explode("\n", $raw));
 
