@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Auth;
 class ModsController extends Controller
 {
     /**
-     * Show the application dashboard.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if (Auth::user()->active && $request->route()->named('mods')) {
+            return redirect()->route('auth.mods');
+        }
         return view('mods');
     }
 }

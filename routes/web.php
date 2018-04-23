@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
         Route::get('/handbook/{name}', 'HandbookController')->name('handbook');
         Route::get('/guide/{name}', 'GuideController')->name('guide');
         Route::get('/home', 'HomeController@index')->name('home');
+        Route::get('/home/mods', 'ModsController@index')->name('auth.mods');
     });
 
     Route::name('approve.')->middleware(['auth:admin'])->group(function() {

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head><base target="_top"></head>
+<body style="font-family: Arial,Trebuchet,sans-serif;">
+  <h1>Export Mods</h1>
+  <p>Click to <span id="link"></span> in JSON format.</p>
+  <div></div>
+  <p>Next, visit the Crouching Rancor <a href="http://apps.crouchingrancor.com/Mods/Manager" target="_top">Mods Manager</a> and import the file.</p>
+  <textarea id="json" readonly cols="40" rows="5" style="display:none;"><?= json ?></textarea>
+  <script type="text/javascript">
+  var t = document.getElementById('json');
+  var data = "text/json;charset=utf-8," + encodeURIComponent(t.innerHTML);
+  var a = document.createElement('a');
+  a.href = 'data:' + data;
+  a.download = '<?= filename ?>.json';
+  a.innerHTML = 'download your Mods';
+  var container = document.getElementById('link');
+  container.appendChild(a);
+  </script>
+</body>
+
+</html>
+

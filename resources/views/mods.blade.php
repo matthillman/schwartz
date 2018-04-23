@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Mods: Speed Set Maker</div>
+                <div class="card-header">Mods: Set Maker</div>
 
                 <div class="card-body">
                     <mods></mods>
