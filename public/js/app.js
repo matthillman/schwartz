@@ -16097,6 +16097,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -16121,7 +16133,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             dragOverIndex: null,
             draggingIndex: null,
 
-            detailSet: null
+            detailSet: null,
+            jsonDownload: null
         };
     },
 
@@ -16242,16 +16255,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return 0;
             }).reverse();
         },
+
         filePicked: function filePicked(evt) {
             var _this3 = this;
 
-            var jsonFile = evt.target.files[0];
-            if (!jsonFile) {
-                console.warn('no file seleted', evt);return;
-            }
-
-            var reader = new FileReader();
-            reader.onload = function (loadEvt) {
+            this.readFileFrom(evt, function (loadEvt) {
                 var mods = JSON.parse(loadEvt.target.result);
                 _this3.mods = mods.reduce(function (all, mod) {
                     var fixed = {
@@ -16300,7 +16308,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this3.currentSet = 0;
 
                 _this3.syncState();
-            };
+            });
+        },
+        setsPicked: function setsPicked(evt) {
+            var _this4 = this;
+
+            this.readFileFrom(evt, function (loadEvt) {
+                var sets = JSON.parse(loadEvt.target.result);
+                _this4.sets = set;
+                _this4.sets.forEach(function (set) {
+                    _this4.shapes.forEach(function (shape) {
+                        _this4.mods[set[shape]].modSet = set.id;
+                    });
+                });
+                _this4.currentSet = 0;
+                _this4.syncState();
+            });
+        },
+        readFileFrom: function readFileFrom(evt, process) {
+            var jsonFile = evt.target.files[0];
+            if (!jsonFile) {
+                console.warn('no file seleted', evt);return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = process;
             reader.onerror = function (loadEvt) {
                 console.error("Failed to load file", evt, loadEvt);
             };
@@ -16309,6 +16341,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             // }
             reader.readAsText(jsonFile, 'UTF-8');
         },
+        downloadSets: function downloadSets() {
+            this.jsonDownload = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.sets));
+        },
+
         addSet: function addSet(evt) {
             var newSet = {
                 id: new Date().getTime(),
@@ -16329,10 +16365,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.currentSet = this.currentSet == set ? null : set;
         },
         addToActiveSet: function addToActiveSet(mod) {
-            var _this4 = this;
+            var _this5 = this;
 
             var set = this.sets.filter(function (set) {
-                return set.id == _this4.currentSet;
+                return set.id == _this5.currentSet;
             })[0];
             if (!set) {
                 return;
@@ -16357,14 +16393,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.syncState();
         },
         formatSet: function formatSet(set, attribute) {
-            var _this5 = this;
+            var _this6 = this;
 
             attribute = attribute || "speed";
             var total = 0;
             var shapes = ["square", "diamond", "triangle", "circle", "cross"];
 
             shapes.forEach(function (shape) {
-                var mod = _this5.mods[set[shape]];
+                var mod = _this6.mods[set[shape]];
                 if (!mod) {
                     return;
                 }
@@ -16647,7 +16683,25 @@ var render = function() {
           _c("span", [_vm._v("Load Mods Export File")])
         ]),
         _vm._v(" "),
-        _vm._m(0)
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", [
+          _vm._v("\n            Sets:\n            "),
+          _c("label", { staticClass: "file-label" }, [
+            _c("input", {
+              attrs: { type: "file", id: "mods-json" },
+              on: { change: _vm.setsPicked }
+            }),
+            _vm._v(" "),
+            _c("img", { attrs: { src: "/images/upload.svg", width: "20" } })
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            { staticClass: "file-label", on: { click: _vm.downloadSets } },
+            [_c("img", { attrs: { src: "/images/download.svg", width: "20" } })]
+          )
+        ])
       ]),
       _vm._v(" "),
       _c(
@@ -17063,6 +17117,35 @@ var render = function() {
                   ])
                 })
               )
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.jsonDownload
+        ? _c(
+            "modal",
+            {
+              on: {
+                close: function($event) {
+                  _vm.jsonDownload = null
+                }
+              }
+            },
+            [
+              _c("h3", { attrs: { slot: "header" }, slot: "header" }, [
+                _vm._v("Download Sets JSON")
+              ]),
+              _vm._v(" "),
+              _c("div", { attrs: { slot: "body" }, slot: "body" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { href: _vm.jsonDownload, download: "sets.json" }
+                  },
+                  [_vm._v("Download JSON")]
+                )
+              ])
             ]
           )
         : _vm._e()

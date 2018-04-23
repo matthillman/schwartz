@@ -14,7 +14,7 @@ class ModsController extends Controller
      */
     public function index(Request $request)
     {
-        if (Auth::user()->active && $request->route()->named('mods')) {
+        if (Auth::check() && Auth::user()->active && $request->route()->named('mods')) {
             return redirect()->route('auth.mods');
         }
         return view('mods');

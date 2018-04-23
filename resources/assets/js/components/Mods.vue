@@ -6,6 +6,11 @@
                 Download a copy of <a href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy" target="_gdocs">this spreadsheet</a> and follow
                 the instructions to export a json file containing your mod information. Then press the button to the left and select that file.
             </p>
+            <div>
+                Sets:
+                <label class="file-label"><input type="file" id="mods-json" v-on:change="setsPicked"> <img src="/images/upload.svg" width="20"></label>
+                <button class="file-label" @click="downloadSets"><img src="/images/download.svg" width="20"></button>
+            </div>
         </div>
         <div v-show="modsArray.length">
             <h2>5* Speed Arrows</h2>
@@ -83,6 +88,13 @@
                 <div v-for="attribute in attributes" :key="attribute">{{ attribute }}: {{ formatSet(detailSet, attribute) }}</div>
             </div>
         </modal>
+
+        <modal v-if="jsonDownload" @close="jsonDownload = null">
+            <h3 slot="header">Download Sets JSON</h3>
+            <div slot="body">
+                <a :href="jsonDownload" download="sets.json" class="btn btn-primary">Download JSON</a>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -111,6 +123,7 @@
                 draggingIndex: null,
 
                 detailSet: null,
+                jsonDownload: null,
             }
         },
 
@@ -193,12 +206,9 @@
                     })
                     .reverse();
             },
-            filePicked: function(evt) {
-                let jsonFile = evt.target.files[0];
-                if (!jsonFile) { console.warn('no file seleted', evt); return; }
 
-                let reader = new FileReader();
-                reader.onload = (loadEvt) => {
+            filePicked: function(evt) {
+                this.readFileFrom(evt, (loadEvt) => {
                     let mods = JSON.parse(loadEvt.target.result);
                     this.mods = mods.reduce((all, mod) => {
                         let fixed = {
@@ -243,7 +253,27 @@
                     this.currentSet = 0;
 
                     this.syncState();
-                };
+                });
+            },
+            setsPicked: function(evt) {
+                this.readFileFrom(evt, (loadEvt) => {
+                    let sets = JSON.parse(loadEvt.target.result);
+                    this.sets = set;
+                    this.sets.forEach((set) => {
+                        this.shapes.forEach((shape) => {
+                            this.mods[set[shape]].modSet = set.id;
+                        });
+                    });
+                    this.currentSet = 0;
+                    this.syncState();
+                });
+            },
+            readFileFrom: function(evt, process) {
+                let jsonFile = evt.target.files[0];
+                if (!jsonFile) { console.warn('no file seleted', evt); return; }
+
+                let reader = new FileReader();
+                reader.onload = process;
                 reader.onerror = (loadEvt) => {
                     console.error("Failed to load file", evt, loadEvt);
                 };
@@ -252,6 +282,10 @@
                 // }
                 reader.readAsText(jsonFile, 'UTF-8');
             },
+            downloadSets: function() {
+                this.jsonDownload = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.sets));
+            },
+
             addSet: function(evt) {
                 let newSet = {
                     id: (new Date).getTime(),
