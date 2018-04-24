@@ -25,7 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if (Auth::guard('admin')->check()) {
+        if (auth('admin')->check()) {
             $users = User::where('active', false)->get();
         } else {
             $users = [];

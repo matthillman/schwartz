@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ModsController extends Controller
 {
@@ -14,7 +13,7 @@ class ModsController extends Controller
      */
     public function index(Request $request)
     {
-        if (Auth::check() && Auth::user()->active && $request->route()->named('mods')) {
+        if (auth()->check() && auth()->user()->active && $request->route()->named('mods')) {
             return redirect()->route('auth.mods');
         }
         return view('mods');

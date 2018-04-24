@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
 
 class RedirectIfInactive
 {
@@ -16,7 +15,7 @@ class RedirectIfInactive
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::user()->active) {
+        if (auth()->user()->active) {
             return $next($request);
         }
 
