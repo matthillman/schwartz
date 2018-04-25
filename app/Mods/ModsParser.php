@@ -118,7 +118,7 @@ class ModsParser {
 
         return [
             'name' => $matches['name'][1],
-            'location' => $matches['name'][0],
+            'location' => str_replace("&quot;", '"', $matches['name'][0]),
         ];
     }
 
