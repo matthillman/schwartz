@@ -8,7 +8,11 @@
                 <div class="card-header">Mods: Set Maker</div>
 
                 <div class="card-body">
+                @guest
                     <mods></mods>
+                @else
+                    <mods user="{{ auth()->user()->id }}"></mods>
+                @endguest
                 </div>
             </div>
         </div>

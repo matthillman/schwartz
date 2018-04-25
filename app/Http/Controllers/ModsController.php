@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Mods\ModsParser;
 use Illuminate\Http\Request;
 
 class ModsController extends Controller
@@ -17,5 +18,12 @@ class ModsController extends Controller
             return redirect()->route('auth.mods');
         }
         return view('mods');
+    }
+
+    public function pullUser($user) {
+        $parser = new ModsParser($user);
+        $parser->scrape();
+
+        return response()->json($parser->mods);
     }
 }

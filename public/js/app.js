@@ -16109,6 +16109,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -16134,8 +16143,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             draggingIndex: null,
 
             detailSet: null,
-            jsonDownload: null
+            jsonDownload: null,
+            swgoh: null,
+            syncing: false
         };
+    },
+
+    props: {
+        user: {
+            type: Number,
+            default: 0
+        }
     },
 
     computed: {
@@ -16316,6 +16334,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this4.sets = sets;
                 _this4.sets.forEach(function (set) {
                     _this4.shapes.forEach(function (shape) {
+                        if (!_this4.mods[set[shape]]) {
+                            return;
+                        }
                         _this4.mods[set[shape]].modSet = set.id;
                     });
                 });
@@ -16468,6 +16489,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (storage.sets) {
                 this.sets = JSON.parse(storage.sets);
             }
+        },
+
+        importFromSwgoh: function importFromSwgoh() {
+            var _this7 = this;
+
+            if (this.swgoh == null) {
+                return;
+            }
+            this.syncing = true;
+
+            axios.get(window.location.href + '/' + this.swgoh).then(function (response) {
+                _this7.mods = response.data.reduce(function (all, mod) {
+                    mod.modSet = (_this7.sets.filter(function (set) {
+                        return set[mod.slot] == mod.id;
+                    })[0] || {}).id;
+
+                    mod.has = {
+                        speed: mod.secondaries.speed !== undefined,
+                        offense: mod.secondaries.offense !== undefined,
+                        defense: mod.secondaries.defense !== undefined,
+                        health: mod.secondaries.health !== undefined,
+                        protection: mod.secondaries.protection !== undefined
+                    };
+
+                    all[mod.id] = mod;
+
+                    return all;
+                }, {});
+
+                _this7.currentSet = 0;
+                _this7.syncState();
+                _this7.syncing = false;
+            });
         },
 
         // DnD
@@ -16704,6 +16758,53 @@ var render = function() {
           )
         ])
       ]),
+      _vm._v(" "),
+      _vm.user > 0
+        ? _c("div", { staticClass: "row top" }, [
+            _c("div", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.swgoh,
+                    expression: "swgoh"
+                  }
+                ],
+                attrs: {
+                  type: "text",
+                  placeholder: "swgoh.gg user",
+                  disabled: _vm.syncing
+                },
+                domProps: { value: _vm.swgoh },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.swgoh = $event.target.value
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { disabled: _vm.syncing },
+                  on: { click: _vm.importFromSwgoh }
+                },
+                [_vm._v("Import from swgoh.gg")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("p", { staticClass: "instructions" }, [
+              _vm._v(
+                '\n            or, enter your swgoh.gg username and press "Import".\n        '
+              )
+            ])
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "div",

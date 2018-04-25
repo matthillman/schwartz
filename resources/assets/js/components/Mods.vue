@@ -12,6 +12,15 @@
                 <button class="file-label" @click="downloadSets"><img src="/images/download.svg" width="20"></button>
             </div>
         </div>
+        <div v-if="user > 0" class="row top">
+            <div>
+                <input type="text" v-model="swgoh" placeholder="swgoh.gg user" :disabled="syncing">
+                <button class="btn btn-secondary" @click="importFromSwgoh" :disabled="syncing">Import from swgoh.gg</button>
+            </div>
+            <p class="instructions">
+                or, enter your swgoh.gg username and press "Import".
+            </p>
+        </div>
         <div v-show="modsArray.length">
             <h2>5* Speed Arrows</h2>
             <div class="arrows">
@@ -124,7 +133,16 @@
 
                 detailSet: null,
                 jsonDownload: null,
+                swgoh: null,
+                syncing: false,
             }
+        },
+
+        props: {
+            user: {
+                type: Number,
+                default: 0,
+            },
         },
 
         computed: {
@@ -259,6 +277,7 @@
                     this.sets = sets;
                     this.sets.forEach((set) => {
                         this.shapes.forEach((shape) => {
+                            if (!this.mods[set[shape]]) { return; }
                             this.mods[set[shape]].modSet = set.id;
                         });
                     });
@@ -389,6 +408,34 @@
                 if (storage.sets) {
                     this.sets = JSON.parse(storage.sets);
                 }
+            },
+
+            importFromSwgoh: function() {
+                if (this.swgoh == null) { return; }
+                this.syncing = true;
+
+                axios.get(window.location.href + '/' + this.swgoh)
+                    .then((response) => {
+                        this.mods = response.data.reduce((all, mod) => {
+                            mod.modSet = (this.sets.filter((set) => set[mod.slot] == mod.id)[0] || {}).id
+
+                            mod.has = {
+                                speed: mod.secondaries.speed !== undefined,
+                                offense: mod.secondaries.offense !== undefined,
+                                defense: mod.secondaries.defense !== undefined,
+                                health: mod.secondaries.health !== undefined,
+                                protection: mod.secondaries.protection !== undefined,
+                            };
+
+                            all[mod.id] = mod;
+
+                            return all;
+                        }, {});
+
+                        this.currentSet = 0;
+                        this.syncState();
+                        this.syncing = false;
+                    });
             },
 
             // DnD

@@ -18,22 +18,20 @@ class ModsParser {
         this.url = url;
     }
 
-    scrape() {
-        console.warn("Scraping page " + this.page);
+    scrape(done) {
         axios.get(this.url + 'mods/?page=' + this.page)
             .then((response) => {
                 let parsed = this.parse(response.data);
-                console.warn("Adding [" + parsed.length + "] mods", this.mods.length);
                 this.mods = this.mods.concat(parsed);
                 var next = this.getNextPage();
 
                 if (next) {
                     this.page = next;
-                    this.scrape();
+                    this.scrape(done);
                 } else {
-                    console.warn('Done', this.mods);
+                    done();
                 }
-            }, (error) => { console.error(error) });
+            }, (error) => { done(error) });
     }
 
     parse(html) {
