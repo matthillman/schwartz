@@ -465,6 +465,7 @@
                 this.sets.splice(index, 0, moved);
                 this.dragOverIndex = null;
                 this.draggingIndex = null;
+                this.syncState();
             },
         }
     }
