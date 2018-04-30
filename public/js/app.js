@@ -16118,6 +16118,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -16138,6 +16143,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             setFilter: [],
             filterSelected: false,
             showAll: false,
+            hideCompletedSets: false,
 
             dragOverIndex: null,
             draggingIndex: null,
@@ -16151,12 +16157,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     props: {
         user: {
-            type: Number,
-            default: 0
+            type: String,
+            default: "0"
         }
     },
 
     computed: {
+        userID: function userID() {
+            return +this.user;
+        },
+
         modsArray: function modsArray() {
             return Object.values(this.mods);
         },
@@ -16239,27 +16249,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 tenacity: 0,
                 defense: 0
             });
+        },
+
+        filteredSets: function filteredSets() {
+            var _this2 = this;
+
+            var sets = this.sets;
+            if (this.hideCompletedSets) {
+                sets = sets.map(function (set) {
+                    set.complete = _this2.shapes.map(function (shape) {
+                        return _this2.locationFor(shape, set);
+                    }).reduce(function (matches, location, index, locations) {
+                        return matches && location != "N/A" && (index == 0 || location == locations[index - 1]);
+                    }, true);
+                    return set;
+                }).filter(function (set) {
+                    return !set.complete;
+                });
+            }
+            return sets;
         }
     },
 
     methods: {
         hasAttribute: function hasAttribute(shape) {
-            var _this2 = this;
+            var _this3 = this;
 
             var base = shape === "arrow" ? this.speedArrows : this.modsArray;
             var mods = base.filter(function (mod) {
                 return mod.slot === shape;
             }).filter(function (mod) {
-                return _this2.setFilter.length ? _this2.setFilter.includes(mod.set) : true;
+                return _this3.setFilter.length ? _this3.setFilter.includes(mod.set) : true;
             }).filter(function (mod) {
-                return !_this2.filterSelected || !mod.modSet || mod.modSet == _this2.currentSet;
+                return !_this3.filterSelected || !mod.modSet || mod.modSet == _this3.currentSet;
             });
             if (this.only == "speed" && shape == "arrow") {
                 return mods;
             }
             if (this.only !== null && !this.showAll) {
                 mods = mods.filter(function (mod) {
-                    return mod.has[_this2.only];
+                    return mod.has[_this3.only];
                 });
             }
             var sortAttribute = this.only || "speed";
@@ -16275,12 +16304,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         filePicked: function filePicked(evt) {
-            var _this3 = this;
+            var _this4 = this;
 
             this.readFileFrom(evt, function (mods) {
-                _this3.mods = mods.reduce(function (all, mod) {
+                _this4.mods = mods.reduce(function (all, mod) {
                     var fixed = {
-                        id: mod.mod_uid,
+                        uid: mod.mod_uid,
                         slot: mod.slot,
                         set: mod.set,
                         level: mod.level,
@@ -16298,7 +16327,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             health: false,
                             protection: false
                         },
-                        modSet: (_this3.sets.filter(function (set) {
+                        modSet: (_this4.sets.filter(function (set) {
                             return set[mod.slot] == mod.mod_uid;
                         })[0] || {}).id
                     };
@@ -16318,30 +16347,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         fixed.has.protection = fixed.has.protection || type === "Protection";
                     }
 
-                    all[fixed.id] = fixed;
+                    all[fixed.uid] = fixed;
 
                     return all;
                 }, {});
-                _this3.currentSet = 0;
+                _this4.currentSet = 0;
 
-                _this3.syncState();
+                _this4.syncState();
             });
         },
         setsPicked: function setsPicked(evt) {
-            var _this4 = this;
+            var _this5 = this;
 
             this.readFileFrom(evt, function (sets) {
-                _this4.sets = sets;
-                _this4.sets.forEach(function (set) {
-                    _this4.shapes.forEach(function (shape) {
-                        if (!_this4.mods[set[shape]]) {
+                _this5.sets = sets;
+                _this5.sets.forEach(function (set) {
+                    _this5.shapes.forEach(function (shape) {
+                        if (!_this5.mods[set[shape]]) {
                             return;
                         }
-                        _this4.mods[set[shape]].modSet = set.id;
+                        _this5.mods[set[shape]].modSet = set.id;
                     });
                 });
-                _this4.currentSet = 0;
-                _this4.syncState();
+                _this5.currentSet = 0;
+                _this5.syncState();
             });
         },
         readFileFrom: function readFileFrom(evt, process) {
@@ -16387,10 +16416,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.currentSet = this.currentSet == set ? null : set;
         },
         addToActiveSet: function addToActiveSet(mod) {
-            var _this5 = this;
+            var _this6 = this;
 
             var set = this.sets.filter(function (set) {
-                return set.id == _this5.currentSet;
+                return set.id == _this6.currentSet;
             })[0];
             if (!set) {
                 return;
@@ -16401,28 +16430,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (this.mods[prev].set == "speed") {
                     set.speedSet -= 1;
                 }
-                if (this.mods[prev].id == mod.id) {
+                if (this.mods[prev].uid == mod.uid) {
                     set[mod.slot] = null;
                     this.syncState();
                     return;
                 }
             }
             mod.modSet = this.currentSet;
-            set[mod.slot] = mod.id;
+            set[mod.slot] = mod.uid;
             if (mod.set == "speed") {
                 set.speedSet += 1;
             }
             this.syncState();
         },
         formatSet: function formatSet(set, attribute) {
-            var _this6 = this;
+            var _this7 = this;
 
             attribute = attribute || "speed";
             var total = 0;
             var shapes = ["square", "diamond", "triangle", "circle", "cross"];
 
             shapes.forEach(function (shape) {
-                var mod = _this6.mods[set[shape]];
+                var mod = _this7.mods[set[shape]];
                 if (!mod) {
                     return;
                 }
@@ -16480,6 +16509,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var storage = window.localStorage;
             storage.mods = JSON.stringify(this.mods);
             storage.sets = JSON.stringify(this.sets);
+            storage.swgoh = this.swgoh;
         },
         loadState: function loadState() {
             var storage = window.localStorage;
@@ -16489,10 +16519,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (storage.sets) {
                 this.sets = JSON.parse(storage.sets);
             }
+            if (storage.swgoh) {
+                this.swgoh = storage.swgoh;
+            }
         },
 
         importFromSwgoh: function importFromSwgoh() {
-            var _this7 = this;
+            var _this8 = this;
 
             if (this.swgoh == null) {
                 return;
@@ -16500,9 +16533,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.syncing = true;
 
             axios.get(window.location.href + '/' + this.swgoh).then(function (response) {
-                _this7.mods = response.data.reduce(function (all, mod) {
-                    mod.modSet = (_this7.sets.filter(function (set) {
-                        return set[mod.slot] == mod.id;
+                _this8.mods = response.data.reduce(function (all, mod) {
+                    mod.modSet = (_this8.sets.filter(function (set) {
+                        return set[mod.slot] == mod.uid;
                     })[0] || {}).id;
 
                     mod.has = {
@@ -16513,14 +16546,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         protection: mod.secondaries.protection !== undefined
                     };
 
-                    all[mod.id] = mod;
+                    all[mod.uid] = mod;
 
                     return all;
                 }, {});
 
-                _this7.currentSet = 0;
-                _this7.syncState();
-                _this7.syncing = false;
+                _this8.currentSet = 0;
+                _this8.syncState();
+                _this8.syncing = false;
             });
         },
 
@@ -16551,6 +16584,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.sets.splice(index, 0, moved);
             this.dragOverIndex = null;
             this.draggingIndex = null;
+            this.syncState();
         }
     }
 });
@@ -16802,7 +16836,9 @@ var render = function() {
               _vm._v(
                 '\n            or, enter your swgoh.gg username and press "Import".\n        '
               )
-            ])
+            ]),
+            _vm._v(" "),
+            _c("div")
           ])
         : _vm._e(),
       _vm._v(" "),
@@ -16837,16 +16873,59 @@ var render = function() {
             })
           ),
           _vm._v(" "),
-          _c(
-            "button",
-            { staticClass: "btn btn-primary", on: { click: _vm.addSet } },
-            [_vm._v("Add Mod Set")]
-          ),
+          _c("div", [
+            _c(
+              "button",
+              { staticClass: "btn btn-primary", on: { click: _vm.addSet } },
+              [_vm._v("Add Mod Set")]
+            ),
+            _vm._v(" "),
+            _c("label", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.hideCompletedSets,
+                    expression: "hideCompletedSets"
+                  }
+                ],
+                attrs: { type: "checkbox" },
+                domProps: {
+                  checked: Array.isArray(_vm.hideCompletedSets)
+                    ? _vm._i(_vm.hideCompletedSets, null) > -1
+                    : _vm.hideCompletedSets
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.hideCompletedSets,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.hideCompletedSets = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.hideCompletedSets = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.hideCompletedSets = $$c
+                    }
+                  }
+                }
+              }),
+              _vm._v(" Hide sets with no movement")
+            ])
+          ]),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "sets row" },
-            _vm._l(_vm.sets, function(set, index) {
+            _vm._l(_vm.filteredSets, function(set, index) {
               return _c(
                 "div",
                 {
@@ -17132,7 +17211,7 @@ var render = function() {
                     return _c(
                       "div",
                       {
-                        key: mod.id,
+                        key: mod.uid,
                         staticClass: "mod-wrapper",
                         class: { active: mod.modSet == _vm.currentSet },
                         attrs: { "mod-set": _vm.setDescriptionFor(mod) },

@@ -194,7 +194,7 @@ html, body {
 }
 
 .sets {
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .set {
@@ -207,6 +207,10 @@ html, body {
     cursor: pointer;
     margin-bottom: 16px;
     flex-basis: 19%;
+
+    &:not(:nth-child(5n)) {
+      margin-right: 14px;
+    }
 }
 
 .set, [mod-set] {

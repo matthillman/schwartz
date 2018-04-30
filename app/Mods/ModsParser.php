@@ -44,7 +44,7 @@ class ModsParser {
     private function parseModHTML($html) {
         $mod = [];
 
-        $mod['id'] = $this->getUID($html);
+        $mod['uid'] = $this->getUID($html);
         $mod['slot'] = $this->getSlot($html);
         $mod['set'] = $this->getSet($html);
         $mod['pips'] = $this->getPips($html);

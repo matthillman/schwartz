@@ -10213,9 +10213,9 @@ body {
 }
 
 .sets {
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 
 .set {
@@ -10236,6 +10236,10 @@ body {
   margin-bottom: 16px;
   -ms-flex-preferred-size: 19%;
       flex-basis: 19%;
+}
+
+.set:not(:nth-child(5n)) {
+  margin-right: 14px;
 }
 
 .set.active,

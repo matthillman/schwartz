@@ -8,7 +8,7 @@
                 <div class="card-header">Waiting on Approval</div>
 
                 <div class="card-body">
-                @if (auth()->:user()->active)
+                @if (auth()->user()->active)
                     <a href="{{ route('home') }}">You have been approved! Click to continue</a>
                 @else
                     You have registered and are awaiting approval. Please contact an admin.

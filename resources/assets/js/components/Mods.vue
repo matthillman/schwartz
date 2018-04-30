@@ -20,6 +20,7 @@
             <p class="instructions">
                 or, enter your swgoh.gg username and press "Import".
             </p>
+            <div></div>
         </div>
         <div v-show="modsArray.length">
             <h2>5* Speed Arrows</h2>
@@ -29,10 +30,14 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary" @click="addSet">Add Mod Set</button>
+            <div>
+                <button class="btn btn-primary" @click="addSet">Add Mod Set</button>
+                <label><input type="checkbox" v-model="hideCompletedSets"> Hide sets with no movement</label>
+            </div>
+
             <div class="sets row">
                 <div class="set"
-                    v-for="(set, index) in sets"
+                    v-for="(set, index) in filteredSets"
                     :key="set.id"
                     @click="activateSet(set.id)"
                     :class="{active: set.id == currentSet, over: index == dragOverIndex, dragging: index == draggingIndex}"
@@ -76,7 +81,7 @@
                     <h2>{{ shape }}</h2>
                     <div class="mod-wrapper"
                         v-for="mod in hasAttribute(shape)"
-                        :key="mod.id"
+                        :key="mod.uid"
                         :mod-set="setDescriptionFor(mod)"
                         :class="{active: mod.modSet == currentSet}"
                         @click="addToActiveSet(mod)"
@@ -127,6 +132,7 @@
                 setFilter: [],
                 filterSelected: false,
                 showAll: false,
+                hideCompletedSets: false,
 
                 dragOverIndex: null,
                 draggingIndex: null,
@@ -140,12 +146,16 @@
 
         props: {
             user: {
-                type: Number,
-                default: 0,
+                type: String,
+                default: "0",
             },
         },
 
         computed: {
+            userID: function() {
+                return +this.user;
+            },
+
             modsArray: function() {
                 return Object.values(this.mods);
             },
@@ -200,6 +210,23 @@
                     tenacity: 0,
                     defense: 0,
                 });
+            },
+
+            filteredSets: function() {
+                let sets = this.sets;
+                if (this.hideCompletedSets) {
+                    sets = sets.map((set) => {
+                        set.complete = this.shapes
+                            .map((shape) => {
+                                return this.locationFor(shape, set);
+                            })
+                            .reduce((matches, location, index, locations) => {
+                                return matches && location != "N/A" && (index == 0 || location == locations[index - 1]);
+                            }, true);
+                        return set;
+                    }).filter((set) => !set.complete);
+                }
+                return sets;
             }
         },
 
@@ -229,7 +256,7 @@
                 this.readFileFrom(evt, (mods) => {
                     this.mods = mods.reduce((all, mod) => {
                         let fixed = {
-                            id: mod.mod_uid,
+                            uid: mod.mod_uid,
                             slot: mod.slot,
                             set: mod.set,
                             level: mod.level,
@@ -263,7 +290,7 @@
                             fixed.has.protection = fixed.has.protection || type === "Protection";
                         }
 
-                        all[fixed.id] = fixed;
+                        all[fixed.uid] = fixed;
 
                         return all;
                     }, {});
@@ -334,14 +361,14 @@
                     if (this.mods[prev].set == "speed") {
                         set.speedSet -= 1;
                     }
-                    if (this.mods[prev].id == mod.id) {
+                    if (this.mods[prev].uid == mod.uid) {
                         set[mod.slot] = null;
                         this.syncState();
                         return;
                     }
                 }
                 mod.modSet = this.currentSet;
-                set[mod.slot] = mod.id;
+                set[mod.slot] = mod.uid;
                 if (mod.set == "speed") {
                     set.speedSet += 1;
                 }
@@ -399,6 +426,7 @@
                 let storage = window.localStorage;
                 storage.mods = JSON.stringify(this.mods);
                 storage.sets = JSON.stringify(this.sets);
+                storage.swgoh = this.swgoh; 
             },
             loadState: function() {
                 let storage = window.localStorage;
@@ -407,6 +435,9 @@
                 }
                 if (storage.sets) {
                     this.sets = JSON.parse(storage.sets);
+                }
+                if (storage.swgoh) {
+                    this.swgoh = storage.swgoh;
                 }
             },
 
@@ -417,7 +448,7 @@
                 axios.get(window.location.href + '/' + this.swgoh)
                     .then((response) => {
                         this.mods = response.data.reduce((all, mod) => {
-                            mod.modSet = (this.sets.filter((set) => set[mod.slot] == mod.id)[0] || {}).id
+                            mod.modSet = (this.sets.filter((set) => set[mod.slot] == mod.uid)[0] || {}).id
 
                             mod.has = {
                                 speed: mod.secondaries.speed !== undefined,
@@ -427,7 +458,7 @@
                                 protection: mod.secondaries.protection !== undefined,
                             };
 
-                            all[mod.id] = mod;
+                            all[mod.uid] = mod;
 
                             return all;
                         }, {});

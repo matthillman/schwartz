@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Artisan;
 use App\User;
+use App\ModUser;
+use Carbon\Carbon;
 use App\Mods\ModsParser;
 use Illuminate\Http\Request;
 
@@ -21,9 +24,17 @@ class ModsController extends Controller
     }
 
     public function pullUser($user) {
-        $parser = new ModsParser($user);
-        $parser->scrape();
+        $needsScrape = ModUser::where('name', $user)
+            ->whereDate('last_scrape', Carbon::now())
+            ->whereTime('last_scrape', '>', Carbon::now()->subMinutes(30))
+            ->doesntExist();
 
-        return response()->json($parser->mods);
+        if ($needsScrape) {
+            Artisan::call('mods:pull', [
+                'user' => $user
+            ]);
+        }
+
+        return response()->json(ModUser::where('name', $user)->firstOrFail()->mods);
     }
 }
