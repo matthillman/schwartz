@@ -3,6 +3,9 @@
 namespace App\Mods;
 
 class ModsParser {
+
+    use Concerns\ParsesRegex;
+
     protected $page = 1;
     public $mods;
     protected $url = '';
@@ -120,21 +123,5 @@ class ModsParser {
             'name' => $matches['name'][1],
             'location' => str_replace("&quot;", '"', $matches['name'][0]),
         ];
-    }
-
-    private static function getStringValue($text, $regex) {
-        if (preg_match($regex, $text, $matches)) {
-            return trim($matches[1]);
-        }
-
-        return null;
-    }
-
-    private static function getIntegerValue($text, $regex) {
-        if (preg_match($regex, $text, $matches)) {
-            return intval(trim($matches[1])) - 1;
-        }
-
-        return null;
     }
 }

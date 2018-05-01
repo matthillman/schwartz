@@ -6,6 +6,7 @@ use DB;
 use App\Mod;
 use App\ModUser;
 use App\Mods\ModsParser;
+use App\Mods\ProfileParser;
 use Illuminate\Console\Command;
 
 class PullMods extends Command
@@ -32,6 +33,14 @@ class PullMods extends Command
     public function handle()
     {
         $user = ModUser::firstOrNew(['name' => $this->argument('user')]);
+
+        $profile = new ProfileParser($user->name);
+        $profile->scrape();
+
+        if ($profile->upToDate()) {
+            return 0;
+        }
+
         $user->last_scrape = new \DateTime;
         $parser = new ModsParser($user->name);
         $parser->scrape();
