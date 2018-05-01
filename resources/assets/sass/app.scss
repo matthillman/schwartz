@@ -38,7 +38,7 @@ html, body {
 
 .content {
   width: 100%;
-  
+
   h1:first-child {
     margin-top: 0;
   }
@@ -67,7 +67,7 @@ html, body {
       background-color: #c0c0c0;
     }
 
-    p, ul, ol {
+    & > p, & > ul, & > ol {
       margin-right: $margin;
       margin-left: $margin;
     }
@@ -92,6 +92,16 @@ html, body {
   .content {
     .container {
       width: 110ex;
+    }
+  }
+}
+
+@media (max-width: 110ex) {
+  .content {
+    .markdown {
+      h1, h2, h3, h4, h5 {
+        font-size: 1.5rem;
+      }
     }
   }
 }

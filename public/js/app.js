@@ -435,16 +435,15 @@ function applyToTag (styleElement, obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(17);
+__webpack_require__(66);
 __webpack_require__(67);
-__webpack_require__(68);
-module.exports = __webpack_require__(69);
+module.exports = __webpack_require__(68);
 
 
 /***/ }),
 /* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -15842,7 +15841,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    noClose: {
+      type: Boolean,
+      default: false
+    }
+  }
+});
 
 /***/ }),
 /* 47 */
@@ -15882,18 +15888,20 @@ var render = function() {
             [
               _vm._t("footer"),
               _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "modal-default-button btn btn-primary",
-                  on: {
-                    click: function($event) {
-                      _vm.$emit("close")
-                    }
-                  }
-                },
-                [_vm._v("Close")]
-              )
+              !_vm.noClose
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "modal-default-button btn btn-primary",
+                      on: {
+                        click: function($event) {
+                          _vm.$emit("close")
+                        }
+                      }
+                    },
+                    [_vm._v("Close")]
+                  )
+                : _vm._e()
             ],
             2
           )
@@ -16009,6 +16017,15 @@ exports.push([module.i, "\nh2[data-v-7568cc30] {\n  font-size: 16px;\n  font-wei
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -17329,6 +17346,33 @@ var render = function() {
               ])
             ]
           )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.syncing
+        ? _c(
+            "modal",
+            {
+              attrs: { "no-close": "" },
+              on: {
+                close: function($event) {
+                  _vm.syncing = null
+                }
+              }
+            },
+            [
+              _c("h3", { attrs: { slot: "header" }, slot: "header" }, [
+                _vm._v("Pulling mods for " + _vm._s(_vm.swgoh))
+              ]),
+              _vm._v(" "),
+              _c("div", { attrs: { slot: "body" }, slot: "body" }, [
+                _c("div", { staticClass: "flex-center" }, [
+                  _vm._v(
+                    "\n                Waiting and parsing and such\n            "
+                  )
+                ])
+              ])
+            ]
+          )
         : _vm._e()
     ],
     1
@@ -17759,7 +17803,12 @@ if (false) {
 }
 
 /***/ }),
-/* 66 */,
+/* 66 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
 /* 67 */
 /***/ (function(module, exports) {
 
@@ -17767,12 +17816,6 @@ if (false) {
 
 /***/ }),
 /* 68 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 69 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

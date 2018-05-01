@@ -10032,8 +10032,8 @@ body {
           justify-content: center;
 }
 
-.content .container {
-  width: 110ex;
+.content {
+  width: 100%;
 }
 
 .content h1:first-child {
@@ -10069,9 +10069,9 @@ body {
   background-color: #c0c0c0;
 }
 
-.content .markdown p,
-.content .markdown ul,
-.content .markdown ol {
+.content .markdown > p,
+.content .markdown > ul,
+.content .markdown > ol {
   margin-right: 32px;
   margin-left: 32px;
 }
@@ -10088,6 +10088,22 @@ body {
 @media (max-width: 1149px) {
   .content {
     padding-top: 74px;
+  }
+}
+
+@media (min-width: 110ex) {
+  .content .container {
+    width: 110ex;
+  }
+}
+
+@media (max-width: 110ex) {
+  .content .markdown h1,
+  .content .markdown h2,
+  .content .markdown h3,
+  .content .markdown h4,
+  .content .markdown h5 {
+    font-size: 1.5rem;
   }
 }
 
