@@ -109,6 +109,15 @@
                 <a :href="jsonDownload" download="sets.json" class="btn btn-primary">Download JSON</a>
             </div>
         </modal>
+
+        <modal v-if="syncing" @close="syncing = null" no-close>
+            <h3 slot="header">Pulling mods for {{ swgoh }}</h3>
+            <div slot="body">
+                <div class="flex-center">
+                    Waiting and parsing and such
+                </div>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -426,7 +435,7 @@
                 let storage = window.localStorage;
                 storage.mods = JSON.stringify(this.mods);
                 storage.sets = JSON.stringify(this.sets);
-                storage.swgoh = this.swgoh; 
+                storage.swgoh = this.swgoh;
             },
             loadState: function() {
                 let storage = window.localStorage;

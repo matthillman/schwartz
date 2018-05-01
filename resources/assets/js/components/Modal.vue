@@ -19,7 +19,7 @@
           <div class="modal-footer">
             <slot name="footer">
             </slot>
-            <button class="modal-default-button btn btn-primary" @click="$emit('close')">Close</button>
+            <button v-if="!noClose" class="modal-default-button btn btn-primary" @click="$emit('close')">Close</button>
           </div>
         </div>
       </div>
@@ -29,7 +29,12 @@
 
 <script>
 export default {
-
+  props: {
+    noClose: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>
 
