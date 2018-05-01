@@ -1,8 +1,8 @@
 @extends('layouts.html')
 
 @push('styles')
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/login.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/login.css') }}" rel="stylesheet">
 @endpush
 
 @section('body')

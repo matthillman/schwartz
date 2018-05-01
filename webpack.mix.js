@@ -17,3 +17,7 @@ mix.js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/login.scss', 'public/css')
     .sass('resources/assets/sass/welcome.scss', 'public/css')
     ;
+
+if (mix.inProduction()) {
+    mix.version();
+}
