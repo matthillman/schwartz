@@ -37,10 +37,8 @@ html, body {
 }
 
 .content {
-  .container {
-    width: 110ex;
-  }
-
+  width: 100%;
+  
   h1:first-child {
     margin-top: 0;
   }
@@ -87,6 +85,14 @@ html, body {
 @media (max-width: 1149px) {
   .content {
       padding-top: 74px;
+  }
+}
+
+@media (min-width: 110ex) {
+  .content {
+    .container {
+      width: 110ex;
+    }
   }
 }
 
