@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('viewport', '1300')
+
 @section('content')
 <div class="container mods">
     <div class="row justify-content-center">
