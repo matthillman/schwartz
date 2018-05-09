@@ -364,16 +364,23 @@
             addToActiveSet: function(mod) {
                 let set = this.sets.filter((set) => set.id == this.currentSet)[0];
                 if (!set) { return; }
-                let prev = set[mod.slot];
-                if (prev) {
-                    this.mods[prev].modSet = null;
-                    if (this.mods[prev].set == "speed") {
+                let prevMod = set[mod.slot];
+                if (prevMod) {
+                    this.mods[prevMod].modSet = null;
+                    if (this.mods[prevMod].set == "speed") {
                         set.speedSet -= 1;
                     }
-                    if (this.mods[prev].uid == mod.uid) {
+                    if (this.mods[prevMod].uid == mod.uid) {
                         set[mod.slot] = null;
                         this.syncState();
                         return;
+                    }
+                }
+                let prevSet = this.sets.filter((set) => set.id == mod.modSet)[0];
+                if (prevSet) {
+                    prevSet[mod.slot] = null;
+                    if (mod.set == "speed") {
+                        prevSet.speedSet -= 1;
                     }
                 }
                 mod.modSet = this.currentSet;
