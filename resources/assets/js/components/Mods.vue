@@ -137,7 +137,7 @@
                 only: 'speed',
                 shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"],
                 modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
-                attributes: ["speed", "offense", "defense", "health", "protection"],
+                attributes: ["speed", "offense", "defense", "health", "protection", "critical chance"],
                 setFilter: [],
                 filterSelected: false,
                 showAll: false,
@@ -254,8 +254,10 @@
                 let sortAttribute = this.only || "speed";
                 return mods
                     .sort((a, b) => {
-                        if ((+a.secondaries[sortAttribute] || 0) < (+b.secondaries[sortAttribute] || 0)) { return -1; }
-                        if ((+a.secondaries[sortAttribute] || 0) > (+b.secondaries[sortAttribute] || 0)) { return 1; }
+                        var attributeA = parseFloat(a.secondaries[sortAttribute], 10) || 0;
+                        var attributeB = parseFloat(b.secondaries[sortAttribute], 10) || 0;
+                        if (attributeA < attributeB) { return -1; }
+                        if (attributeA > attributeB) { return 1; }
                         return 0;
                     })
                     .reverse();
@@ -297,6 +299,7 @@
                             fixed.has.defense = fixed.has.defense || type === "Defense";
                             fixed.has.health = fixed.has.health || type === "Health";
                             fixed.has.protection = fixed.has.protection || type === "Protection";
+                            fixed.has["critical chance"] = fixed.has["critical chance"] || type.toLowerCase() === "critical chance";
                         }
 
                         all[fixed.uid] = fixed;
@@ -398,15 +401,17 @@
                shapes.forEach((shape) => {
                     let mod = this.mods[set[shape]];
                     if (!mod) { return; }
-                    total += +mod.secondaries[attribute] || 0;
+                    total += parseFloat(mod.secondaries[attribute], 10) || 0;
                 });
 
                 let arrow = this.mods[set.arrow];
                 if (arrow && arrow.primary.type == attribute && attribute == "speed") {
                     total += +arrow.primary.value
                 } else if (arrow) {
-                    total += +arrow.secondaries[attribute] || 0;
+                    total += parseFloat(arrow.secondaries[attribute]) || 0;
                 }
+
+                total = Math.round(total * 100) / 100;
 
                 return total + (attribute == "speed" && set.speedSet >= 4 ? " (+10%)" : "");
             },
@@ -472,6 +477,7 @@
                                 defense: mod.secondaries.defense !== undefined,
                                 health: mod.secondaries.health !== undefined,
                                 protection: mod.secondaries.protection !== undefined,
+                                "critical chance": mod.secondaries["critical chance"] !== undefined,
                             };
 
                             all[mod.uid] = mod;

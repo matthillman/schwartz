@@ -16156,7 +16156,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             only: 'speed',
             shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"],
             modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
-            attributes: ["speed", "offense", "defense", "health", "protection"],
+            attributes: ["speed", "offense", "defense", "health", "protection", "critical chance"],
             setFilter: [],
             filterSelected: false,
             showAll: false,
@@ -16310,10 +16310,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             var sortAttribute = this.only || "speed";
             return mods.sort(function (a, b) {
-                if ((+a.secondaries[sortAttribute] || 0) < (+b.secondaries[sortAttribute] || 0)) {
+                var attributeA = parseFloat(a.secondaries[sortAttribute], 10) || 0;
+                var attributeB = parseFloat(b.secondaries[sortAttribute], 10) || 0;
+                if (attributeA < attributeB) {
                     return -1;
                 }
-                if ((+a.secondaries[sortAttribute] || 0) > (+b.secondaries[sortAttribute] || 0)) {
+                if (attributeA > attributeB) {
                     return 1;
                 }
                 return 0;
@@ -16362,6 +16364,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         fixed.has.defense = fixed.has.defense || type === "Defense";
                         fixed.has.health = fixed.has.health || type === "Health";
                         fixed.has.protection = fixed.has.protection || type === "Protection";
+                        fixed.has["critical chance"] = fixed.has["critical chance"] || type.toLowerCase() === "critical chance";
                     }
 
                     all[fixed.uid] = fixed;
@@ -16441,16 +16444,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (!set) {
                 return;
             }
-            var prev = set[mod.slot];
-            if (prev) {
-                this.mods[prev].modSet = null;
-                if (this.mods[prev].set == "speed") {
+            var prevMod = set[mod.slot];
+            if (prevMod) {
+                this.mods[prevMod].modSet = null;
+                if (this.mods[prevMod].set == "speed") {
                     set.speedSet -= 1;
                 }
-                if (this.mods[prev].uid == mod.uid) {
+                if (this.mods[prevMod].uid == mod.uid) {
                     set[mod.slot] = null;
                     this.syncState();
                     return;
+                }
+            }
+            var prevSet = this.sets.filter(function (set) {
+                return set.id == mod.modSet;
+            })[0];
+            if (prevSet) {
+                prevSet[mod.slot] = null;
+                if (mod.set == "speed") {
+                    prevSet.speedSet -= 1;
                 }
             }
             mod.modSet = this.currentSet;
@@ -16472,15 +16484,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (!mod) {
                     return;
                 }
-                total += +mod.secondaries[attribute] || 0;
+                total += parseFloat(mod.secondaries[attribute], 10) || 0;
             });
 
             var arrow = this.mods[set.arrow];
             if (arrow && arrow.primary.type == attribute && attribute == "speed") {
                 total += +arrow.primary.value;
             } else if (arrow) {
-                total += +arrow.secondaries[attribute] || 0;
+                total += parseFloat(arrow.secondaries[attribute]) || 0;
             }
+
+            total = Math.round(total * 100) / 100;
 
             return total + (attribute == "speed" && set.speedSet >= 4 ? " (+10%)" : "");
         },
@@ -16560,7 +16574,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         offense: mod.secondaries.offense !== undefined,
                         defense: mod.secondaries.defense !== undefined,
                         health: mod.secondaries.health !== undefined,
-                        protection: mod.secondaries.protection !== undefined
+                        protection: mod.secondaries.protection !== undefined,
+                        "critical chance": mod.secondaries["critical chance"] !== undefined
                     };
 
                     all[mod.uid] = mod;
