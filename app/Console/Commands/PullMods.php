@@ -5,8 +5,8 @@ namespace App\Console\Commands;
 use DB;
 use App\Mod;
 use App\ModUser;
-use App\Mods\ModsParser;
-use App\Mods\ProfileParser;
+use App\Parsers\ModsParser;
+use App\Parsers\ProfileParser;
 use Illuminate\Console\Command;
 
 class PullMods extends Command
@@ -16,7 +16,7 @@ class PullMods extends Command
      *
      * @var string
      */
-    protected $signature = 'mods:pull {user}';
+    protected $signature = 'pull:mods {user}';
 
     /**
      * The console command description.

@@ -72,12 +72,12 @@ class ModsParser {
     }
 
     private function getSlot($el) {
-        $slot = static::getIntegerValue($el, '/tex\.statmodmystery_[0-9]+_([0-9]+)/m');
+        $slot = static::getArrayIndexValue($el, '/tex\.statmodmystery_[0-9]+_([0-9]+)/m');
         return is_null($slot) ? null : ['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross'][$slot];
     }
 
     private function getSet($el) {
-        $set = static::getIntegerValue($el, '/tex\.statmodmystery_([0-9]+)_[0-9]+/m');
+        $set = static::getArrayIndexValue($el, '/tex\.statmodmystery_([0-9]+)_[0-9]+/m');
         return is_null($set) ? null : ['health', 'offense', 'defense', 'speed', 'critchance', 'critdamage', 'potency', 'tenacity'][$set];
     }
 

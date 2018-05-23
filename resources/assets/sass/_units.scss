@@ -1,0 +1,98 @@
+.unit-list, .guild-list {
+    .row {
+        margin-bottom: 8px;
+        justify-content: stretch;
+        align-items: center;
+        padding: 4px 16px;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid grey;
+        }
+    }
+}
+.unit-list {
+    .row {
+        > * {
+            flex-grow: 1;
+        }
+        :first-child {
+            flex-basis: 200px;
+            text-align: right;
+            margin-right: 8px;
+            flex-grow: 0;
+        }
+        :last-child {
+            flex-grow: 0;
+        }
+    }
+}
+.guild-list {
+    .row {
+        > * {
+            flex-grow: 0;
+            &:not(:first-child) {
+                margin-left: 8px;
+            }
+        }
+        :first-child {
+            flex-grow: 1;
+        }
+    }
+}
+
+.add-row {
+    justify-content: flex-start;
+    padding: 8px;
+    > * {
+        margin-right: 8px;
+    }
+}
+.member-list {
+    .member {
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid grey;
+        }
+        .row {
+            justify-content: stretch;
+            align-items: center;
+            padding: 4px 16px;
+            > * {
+                flex-grow: 0;
+                &:not(:first-child) {
+                    margin-left: 8px;
+                }
+            }
+            :first-child {
+                flex-grow: 1;
+            }
+        }
+    }
+}
+
+.team-set {
+    display: flex;
+    > span {
+        padding: 4px;
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+        color: black;
+
+        background-color: red;
+
+        &:not(:last-child) {
+            border-right: none;
+        }
+
+        &[gear="12"] {
+            background-color: rgba($color: gold, $alpha: 0.5);
+        }
+
+        &[gear="11"], &[gear="10"] {
+            background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+        }
+    }
+}

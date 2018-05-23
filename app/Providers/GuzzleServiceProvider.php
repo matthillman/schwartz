@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\RedirectMiddleware;
 use Illuminate\Support\ServiceProvider;
 
 class GuzzleServiceProvider extends ServiceProvider
@@ -18,5 +19,9 @@ class GuzzleServiceProvider extends ServiceProvider
             $config = isset($this->app['config']['guzzle']) ? $this->app['config']['guzzle'] : [];
             return new Client($config);
         });
+
+        config([
+            'redirect.history.header' => RedirectMiddleware::HISTORY_HEADER
+        ]);
     }
 }

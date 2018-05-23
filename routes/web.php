@@ -34,5 +34,10 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
         Route::put('/approve/admin/{id}', 'HomeController@approveAdmin')->name('admin');
     });
 
+    Route::get('/units', 'UnitController@index')->name('units');
+    Route::get('/guilds', 'GuildController@listGuilds')->name('guilds');
+    Route::post('/guilds', 'GuildController@addGuild')->name('guild.add');
+    Route::get('/guild/{guild}', 'GuildController@listMembers')->name('guild.members');
+
     Route::get('/waiting', 'HomeController@waiting')->name('waiting');
 });

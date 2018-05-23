@@ -6,7 +6,7 @@ use Artisan;
 use App\User;
 use App\ModUser;
 use Carbon\Carbon;
-use App\Mods\ModsParser;
+use App\Parsers\ModsParser;
 use Illuminate\Http\Request;
 
 class ModsController extends Controller
@@ -30,7 +30,7 @@ class ModsController extends Controller
             ->doesntExist();
 
         if ($needsScrape) {
-            Artisan::call('mods:pull', [
+            Artisan::call('pull:mods', [
                 'user' => $user
             ]);
         }

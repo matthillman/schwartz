@@ -10014,6 +10014,7 @@ body {
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
   position: -webkit-sticky;
   top: 0;
+  z-index: 1000;
 }
 
 .full-height {
@@ -10147,6 +10148,31 @@ body {
 .logo svg {
   width: 100%;
   fill: #636b6f;
+}
+
+.gg-link {
+  height: 35px;
+  width: 35px;
+  padding: 2px;
+  border: 1px solid;
+  display: inline-block;
+  border-color: #d47c3f;
+  background-color: #d47c3f;
+  border-radius: 4px;
+}
+
+.gg-link svg {
+  height: 100%;
+  width: 100%;
+  fill: #fff;
+}
+
+.gg-link:hover {
+  background-color: #fff;
+}
+
+.gg-link:hover svg {
+  fill: #d47c3f;
 }
 
 .card {
@@ -10479,5 +10505,139 @@ body {
   -ms-flex-preferred-size: 50%;
       flex-basis: 50%;
   text-transform: capitalize;
+}
+
+.unit-list .row,
+.guild-list .row {
+  margin-bottom: 8px;
+  -webkit-box-pack: stretch;
+      -ms-flex-pack: stretch;
+          justify-content: stretch;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 4px 16px;
+}
+
+.unit-list .row:not(:last-child),
+.guild-list .row:not(:last-child) {
+  border-bottom: 1px solid grey;
+}
+
+.unit-list .row > * {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+.unit-list .row :first-child {
+  -ms-flex-preferred-size: 200px;
+      flex-basis: 200px;
+  text-align: right;
+  margin-right: 8px;
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+}
+
+.unit-list .row :last-child {
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+}
+
+.guild-list .row > * {
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+}
+
+.guild-list .row > *:not(:first-child) {
+  margin-left: 8px;
+}
+
+.guild-list .row :first-child {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+.add-row {
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  padding: 8px;
+}
+
+.add-row > * {
+  margin-right: 8px;
+}
+
+.member-list .member {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+}
+
+.member-list .member:not(:last-child) {
+  border-bottom: 1px solid grey;
+}
+
+.member-list .member .row {
+  -webkit-box-pack: stretch;
+      -ms-flex-pack: stretch;
+          justify-content: stretch;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 4px 16px;
+}
+
+.member-list .member .row > * {
+  -webkit-box-flex: 0;
+      -ms-flex-positive: 0;
+          flex-grow: 0;
+}
+
+.member-list .member .row > *:not(:first-child) {
+  margin-left: 8px;
+}
+
+.member-list .member .row :first-child {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+.team-set {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.team-set > span {
+  padding: 4px;
+  border: 1px solid black;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  color: black;
+  background-color: red;
+}
+
+.team-set > span:not(:last-child) {
+  border-right: none;
+}
+
+.team-set > span[gear="12"] {
+  background-color: rgba(255, 215, 0, 0.5);
+}
+
+.team-set > span[gear="11"],
+.team-set > span[gear="10"] {
+  background-color: rgba(102, 51, 153, 0.5);
 }
 
