@@ -107,4 +107,11 @@
             background-color: rgba($color: rebeccapurple, $alpha: 0.5);
         }
     }
+
+    [highlight="stars"] & > span {
+        background-color: red;
+        &[stars="7"] {
+            background-color: rgba($color: gold, $alpha: 0.5);
+        }
+    }
 }
