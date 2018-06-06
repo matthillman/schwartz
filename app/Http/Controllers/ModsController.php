@@ -6,7 +6,8 @@ use Artisan;
 use App\User;
 use App\ModUser;
 use Carbon\Carbon;
-use App\Parsers\ModsParser;
+use App\Jobs\ProcessUser;
+use App\Events\ModsFetched;
 use Illuminate\Http\Request;
 
 class ModsController extends Controller
@@ -30,11 +31,11 @@ class ModsController extends Controller
             ->doesntExist();
 
         if ($needsScrape) {
-            Artisan::call('pull:mods', [
-                'user' => $user
-            ]);
+            ProcessUser::dispatch(ModUser::where('name', $user)->firstOrFail());
         }
+    }
 
+    public function modsFor($user) {
         return response()->json(ModUser::where('name', $user)->firstOrFail()->mods);
     }
 }

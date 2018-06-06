@@ -40,6 +40,16 @@ return [
                 'encrypted' => true,
             ],
         ],
+        'echo' => [
+            'driver' => 'pusher',
+            'key' => env('ECHO_KEY'),
+            'secret' => null,
+            'app_id' => env('ECHO_ID'),
+            'options' => [
+                'port' => 6001,
+                'host' => 'schwartz.dev',
+            ],
+        ],
 
         'redis' => [
             'driver' => 'redis',

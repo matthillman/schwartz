@@ -32,12 +32,14 @@ class PullMods extends Command
      */
     public function handle()
     {
+        \Log::info("Starting mod scrape for user", [$this->argument('user')]);
         $user = ModUser::firstOrNew(['name' => $this->argument('user')]);
 
         $profile = new ProfileParser($user->name);
         $profile->scrape();
 
         if ($profile->upToDate()) {
+            \Log::info("Profile is up to date, returning");
             return 0;
         }
 
@@ -68,6 +70,8 @@ class PullMods extends Command
                 $mod->save();
             });
         });
+
+        \Log::info("Mods pulled, returning");
 
         return 0;
     }

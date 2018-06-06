@@ -1,0 +1,36 @@
+{
+	"authHost": "https://schwartz.dev",
+	"authEndpoint": "/broadcasting/auth",
+	"clients": [
+		{
+			"appId": "8ee008df992b7098",
+			"key": "a930aa0d6e188f7d308d8fa772f54ea7"
+		}
+	],
+	"database": "redis",
+	"databaseConfig": {
+		"redis": {
+			"port": 6379,
+			"host": "120.0.0.1",
+			"db": 0
+		},
+		"sqlite": {
+			"databasePath": "/database/laravel-echo-server.sqlite"
+		}
+	},
+	"devMode": true,
+	"host": null,
+	"port": "6001",
+	"protocol": "https",
+	"socketio": {},
+	"sslCertPath": "/Users/mhillman/.valet/Certificates/schwartz.dev.crt",
+	"sslKeyPath": "/Users/mhillman/.valet/Certificates/schwartz.dev.key",
+	"sslCertChainPath": "",
+	"sslPassphrase": "",
+	"apiOriginAllow": {
+		"allowCors": false,
+		"allowOrigin": "",
+		"allowMethods": "",
+		"allowHeaders": ""
+	}
+}

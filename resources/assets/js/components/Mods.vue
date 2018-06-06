@@ -15,7 +15,7 @@
         <div v-if="user > 0" class="row top">
             <div>
                 <input type="text" v-model="swgoh" placeholder="swgoh.gg user" :disabled="syncing">
-                <button class="btn btn-secondary" @click="importFromSwgoh" :disabled="syncing">Import from swgoh.gg</button>
+                <button class="btn btn-secondary" @click="triggerSync" :disabled="syncing">Import from swgoh.gg</button>
             </div>
             <p class="instructions">
                 or, enter your swgoh.gg username and press "Import".
@@ -125,6 +125,12 @@
     export default {
         mounted: function() {
             this.loadState();
+
+            Echo.private('mods.' + this.swgoh)
+                .listen('.mods.fetched', (e) => {
+                    console.log(e);
+                    this.importFromSwgoh();
+                });
         },
         components: {
             'mod': require('./Mod.vue')
@@ -460,6 +466,16 @@
                 if (storage.swgoh) {
                     this.swgoh = storage.swgoh;
                 }
+            },
+
+            triggerSync: function() {
+                if (this.swgoh == null) { return; }
+                this.syncing = true;
+
+                axios.put(window.location.href + '/' + this.swgoh)
+                    .then(response => {
+                        console.log(response.status);
+                    });
             },
 
             importFromSwgoh: function() {
