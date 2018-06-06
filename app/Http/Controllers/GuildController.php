@@ -41,7 +41,7 @@ class GuildController extends Controller
                 break;
             case 'rjt':
                 $teams = [
-                    'RJT' => ['REY', 'BB8', 'FINN', 'SMUGGLERHAN', 'SMUGGLERCHEWBACCA'],
+                    'RJT' => ['REYJEDITRAINING', 'REY', 'BB8', 'FINN', 'SMUGGLERHAN', 'SMUGGLERCHEWBACCA'],
                 ];
                 $highlight = 'stars';
                 break;
