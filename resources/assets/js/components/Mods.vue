@@ -48,6 +48,7 @@
                     @dragleave.self="onDragLeave(index)"
                     @drop.prevent.stop="onDrop(index, $event)"
                 >
+                    <span class="delete-set" @click.stop="removeSet = set"></span>
                     <span>Speed: {{ formatSet(set) }}</span>
                     <input type="text" v-model="set.destination" @change="syncState()" @click.stop size="15" placeholder="Destination">
                     <div>
@@ -118,6 +119,18 @@
                 </div>
             </div>
         </modal>
+
+        <modal v-if="removeSet" @close="removeSet = null">
+            <h3 slot="header">Delete set</h3>
+            <div slot="body">
+                <div class="flex-center">
+                    Are you sure you want to delete set "{{ removeSet.destination }}"? This cannot be undone.
+                </div>
+            </div>
+            <div slot="footer">
+                <button class="btn btn-danger" @click="deleteSet(removeSet)">Delete</button>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -147,6 +160,7 @@
                 draggingIndex: null,
 
                 detailSet: null,
+                removeSet: null,
                 jsonDownload: null,
                 swgoh: null,
                 syncing: false,
@@ -380,6 +394,15 @@
                 this.sets.push(newSet);
                 this.activateSet(newSet.id);
                 this.syncState();
+            },
+            deleteSet: function(set) {
+                let index = this.sets.indexOf(set);
+                this.sets.splice(index, 1);
+                if (this.currentSet == set) {
+                    this.currentSet = null;
+                }
+                this.syncState();
+                this.removeSet = null;
             },
             activateSet: function(set) {
                 this.currentSet = this.currentSet == set ? null : set;
