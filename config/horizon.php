@@ -59,6 +59,8 @@ return [
         'failed' => 10080,
     ],
 
+    'middleware' => ['web', 'auth:admin'],
+
     /*
     |--------------------------------------------------------------------------
     | Queue Worker Configuration
