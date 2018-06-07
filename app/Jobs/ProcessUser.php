@@ -34,9 +34,16 @@ class ProcessUser implements ShouldQueue
      */
     public function handle()
     {
-        Artisan::call('pull:mods', [
-            'user' => $this->user
-        ]);
+        $needsScrape = ModUser::where('name', $this->user)
+            ->whereDate('last_scrape', Carbon::now())
+            ->whereTime('last_scrape', '>', Carbon::now()->subMinutes(30))
+            ->doesntExist();
+
+        if ($needsScrape) {
+            Artisan::call('pull:mods', [
+                'user' => $this->user
+            ]);
+        }
 
         broadcast(new ModsFetched(ModUser::where('name', $this->user)->firstOrFail()));
     }

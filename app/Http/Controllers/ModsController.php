@@ -25,14 +25,7 @@ class ModsController extends Controller
     }
 
     public function pullUser($user) {
-        $needsScrape = ModUser::where('name', $user)
-            ->whereDate('last_scrape', Carbon::now())
-            ->whereTime('last_scrape', '>', Carbon::now()->subMinutes(30))
-            ->doesntExist();
-
-        if ($needsScrape) {
-            ProcessUser::dispatch($user);
-        }
+        ProcessUser::dispatch($user);
     }
 
     public function modsFor($user) {
