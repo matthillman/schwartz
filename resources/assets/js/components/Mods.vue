@@ -125,12 +125,6 @@
     export default {
         mounted: function() {
             this.loadState();
-
-            Echo.private('mods.' + this.swgoh)
-                .listen('.mods.fetched', (e) => {
-                    console.log(e);
-                    this.importFromSwgoh();
-                });
         },
         components: {
             'mod': require('./Mod.vue')
@@ -164,6 +158,22 @@
                 type: String,
                 default: "0",
             },
+        },
+
+        watch: {
+            swgoh: function(newName, oldName) {
+                console.warn('name changed', newName, oldName);
+                if (oldName) {
+                    Echo.leave('mods.' + oldName)
+                }
+
+
+                Echo.private('mods.' + newName)
+                    .listen('.mods.fetched', (e) => {
+                        console.log(e);
+                        this.importFromSwgoh();
+                    });
+            }
         },
 
         computed: {
