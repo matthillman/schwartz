@@ -22,7 +22,7 @@ class ProcessUser implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(ModUser $user)
+    public function __construct($user)
     {
         $this->user = $user;
     }
@@ -35,9 +35,9 @@ class ProcessUser implements ShouldQueue
     public function handle()
     {
         Artisan::call('pull:mods', [
-            'user' => $this->user->name
+            'user' => $this->user
         ]);
 
-        broadcast(new ModsFetched($this->user));
+        broadcast(new ModsFetched(ModUser::where('name', $this->user)->firstOrFail()));
     }
 }

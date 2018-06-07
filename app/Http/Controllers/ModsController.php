@@ -31,7 +31,7 @@ class ModsController extends Controller
             ->doesntExist();
 
         if ($needsScrape) {
-            ProcessUser::dispatch(ModUser::where('name', $user)->firstOrFail());
+            ProcessUser::dispatch($user);
         }
     }
 

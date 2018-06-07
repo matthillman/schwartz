@@ -160,20 +160,24 @@
             },
         },
 
-        watch: {
-            swgoh: function(newName, oldName) {
-                console.warn('name changed', newName, oldName);
+        created: function() {
+            this.unwatch = this.$watch('swgoh', _.debounce((newName, oldName) => {
                 if (oldName) {
                     Echo.leave('mods.' + oldName)
                 }
 
+                if (newName) {
+                    Echo.private('mods.' + newName)
+                        .listen('.mods.fetched', (e) => {
+                            console.log(e);
+                            this.importFromSwgoh();
+                        });
+                }
+            }, 250), {immediate: true});
+        },
 
-                Echo.private('mods.' + newName)
-                    .listen('.mods.fetched', (e) => {
-                        console.log(e);
-                        this.importFromSwgoh();
-                    });
-            }
+        beforeDestroy: function() {
+            this.unwatch();
         },
 
         computed: {
