@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use Artisan;
 use App\ModUser;
+use Carbon\Carbon;
 use App\Events\ModsFetched;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
