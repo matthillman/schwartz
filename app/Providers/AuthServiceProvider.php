@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use Auth;
+use Socialite;
+use App\Auth\DiscordProvider;
+use App\Auth\EloquentUserProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -25,6 +29,15 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Socialite::extend('discord', function() {
+            $config = $this->app['config']['services.discord'];
+            return Socialite::buildProvider(
+                DiscordProvider::class, $config
+            );
+        });
+
+        Auth::provider('eloquent_discord', function($app, array $config) {
+            return new EloquentUserProvider($app['hash'], $config['model']);
+        });
     }
 }

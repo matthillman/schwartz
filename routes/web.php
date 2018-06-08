@@ -17,6 +17,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::prefix('login')->group(function() {
+    Route::get('discord', 'Auth\LoginController@redirectToProvider')->name('login.discord');
+    Route::get('discord/callback', 'Auth\LoginController@handleProviderCallback');
+});
+
 Route::get('/mods', 'ModsController@index')->name('mods');
 Route::get('/mods/{user}', 'ModsController@pullUser')->name('mods.user');
 

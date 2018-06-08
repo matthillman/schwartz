@@ -71,11 +71,11 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
+            'driver' => 'eloquent_discord',
             'model' => App\User::class,
         ],
         'admins' => [
-            'driver' => 'eloquent',
+            'driver' => 'eloquent_discord',
             'model' => App\User::class,
         ],
 

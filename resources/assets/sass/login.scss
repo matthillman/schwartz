@@ -14,3 +14,32 @@
         }
     }
 }
+
+.discord-login-button {
+    display: flex;
+    font-size: 20px;
+    color: #ffffff;
+    font-weight: bold;
+    background: $discord-purple;
+    justify-content: center;
+
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: rgba($color: $discord-purple, $alpha: 0.8);
+        color: #ffffff;
+    }
+
+    > :first-child {
+        margin-right: 8px;
+    }
+
+    > .discord-logo {
+        display: flex;
+
+        svg {
+            height: 36px;
+            fill: #ffffff;
+        }
+    }
+}

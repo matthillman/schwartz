@@ -26,4 +26,22 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function updateFromOauthUser($user) {
+        $this->discord = $user->getNickname();
+        $this->name = $user->getName();
+        $this->discord_id = $user->getId();
+        $this->email = $user->getEmail();
+        $this->avatar = $user->getAvatar();
+        $this->token = $user->token;
+        $this->refresh_token = $user->refreshToken;
+
+        $this->discriminator = $user->user['discriminator'];
+
+        if (is_null($this->password)) {
+            $this->password = str_random(40);
+        }
+
+        $this->save();
+    }
 }

@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Artisan;
-use App\User;
 use App\ModUser;
-use Carbon\Carbon;
 use App\Jobs\ProcessUser;
-use App\Events\ModsFetched;
 use Illuminate\Http\Request;
 
 class ModsController extends Controller

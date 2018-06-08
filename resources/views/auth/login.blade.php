@@ -6,6 +6,18 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
+                <div class="card-body">
+                    <a href="{{ route('login.discord') }}" class="btn discord-login-button">
+                        <span>Login with</span>
+                        <div class="discord-logo">
+                            @include('shared.discord')
+                        </div>
+
+                    </a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
