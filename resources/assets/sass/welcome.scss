@@ -54,7 +54,7 @@ $hero-width: 500px;
   align-items: center;
 
 
-  $number-of-guilds: 6;
+  $number-of-guilds: 8;
   @for $i from 1 to ($number-of-guilds + 1) {
     .guild:nth-child(#{$i}), &.test.test .guild.guild:nth-child(#{$i}) {
       transform: translate3d(0, ($i - 1) * -1 * (75px + 16px), 0);
