@@ -54,7 +54,6 @@ class GuildController extends Controller
                     'CLS/Chaze' => ['COMMANDERLUKESKYWALKER', 'HANSOLO', 'CHIRRUTIMWE', 'BAZEMALBUS', 'HOTHHAN', 'HERMITYODA', 'OLDBENKENOBI'],
                     'CLS/Fat/ODB' => ['COMMANDERLUKESKYWALKER', 'HANSOLO', 'HOTHHAN', 'FULCRUMAHSOKA', 'OLDBENKENOBI'],
                 ];
-                $highlight = 'stars';
                 break;
 
             default:
