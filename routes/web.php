@@ -11,7 +11,8 @@
 |
 */
 
-Route::get('/', 'WelcomeController')->name('welcome');
+Route::get('/', 'WelcomeController@index')->name('welcome');
+Route::post('/', 'WelcomeController@store')->name('join.inquiry');
 
 Auth::routes();
 

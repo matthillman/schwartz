@@ -1,5 +1,9 @@
 <template>
-    <div class="parallax-container" v-scroll="handleScroll">
+    <div class="parallax-container"
+        v-scroll="handleScroll"
+        v-touchstart="handleTouchStart"
+        v-touchmove="handleTouchMove"
+    >
         <section
             v-for="(item, index) in $slots.sections"
             :key="index"
@@ -24,6 +28,8 @@
                 scrollSensitivity: 30,
                 duration: 900,
 
+                touchStart: 0,
+
                 isIE: (/MSIE/i.test(navigator.userAgent)) || (/Trident.*rv\:11\./i.test(navigator.userAgent)),
                 isFirefox: (/Firefox/i.test(navigator.userAgent)),
             }
@@ -42,6 +48,16 @@
                 inserted: function (el, binding) {
                     window.addEventListener((/Firefox/i.test(navigator.userAgent)) ? 'DOMMouseScroll' : 'wheel', (evt) => binding.value(evt, el));
                 }
+            },
+            touchstart: {
+                inserted: function (el, binding) {
+                    window.addEventListener('touchstart', (evt) => binding.value(evt, el));
+                }
+            },
+            touchmove: {
+                inserted: function (el, binding) {
+                    window.addEventListener('touchmove', (evt) => binding.value(evt, el));
+                }
             }
         },
 
@@ -49,6 +65,20 @@
             handleScroll(evt) {
                 if (this.ticking) { return; }
                 let delta = this.isFirefox ? evt.detail * -120 : this.isIE ? -evt.deltaY : evt.wheelDelta;
+                this.doScroll(delta);
+            },
+            handleTouchStart(evt) {
+                this.touchStart = evt.touches[0].pageY;
+            },
+            handleTouchMove(evt) {
+                this.doScroll(evt.touches[0].pageY - this.touchStart);
+            },
+            handleHashChange(evt) {
+                let next = this.hashes.indexOf(window.location.hash);
+                if (next < 0 || next === this.currentSlide) { return; }
+                this.currentSlide = next;
+            },
+            doScroll(delta) {
                 if (Math.abs(delta) < this.scrollSensitivity) { return; }
                 this.ticking = true;
 
@@ -63,12 +93,7 @@
                     this.ticking = false;
                     window.location.hash = this.hashes[this.currentSlide];
                 }, this.duration);
-            },
-            handleHashChange(evt) {
-                let next = this.hashes.indexOf(window.location.hash);
-                if (next < 0 || next === this.currentSlide) { return; }
-                this.currentSlide = next;
-            },
+            }
         }
     }
 </script>
@@ -171,13 +196,35 @@ html, body {
           will-change: transform;
           backface-visibility: hidden;
           @include transition($transition-speed * 0.9);
+
+            .col-form-label {
+                font-size: 18px;
+            }
         }
         &-title {
-          font-size: 12vh;
+          font-size: 10vh;
           line-height: 1.4;
         }
       }
 
+    }
+}
+
+@media (max-width: 600px) {
+    .parallax-container > section:not(:first-of-type) .content {
+        &-wrapper {
+            justify-content: flex-start;
+
+            .col-form-label, .form-control, .btn {
+                font-size: 24px;
+            }
+        }
+    }
+    .parallax-container > section .content {
+        &-title {
+            font-size: 6vh;
+            line-height: 1.2;
+        }
     }
 }
 </style>
