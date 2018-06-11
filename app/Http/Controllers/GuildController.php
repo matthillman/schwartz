@@ -45,6 +45,17 @@ class GuildController extends Controller
                 ];
                 $highlight = 'stars';
                 break;
+            case 'tw':
+                $teams = [
+                    'Traya' => ['DARTHTRAYA', 'DARTHSION', 'DARTHNIHILUS', 'SITHTROOPER', 'GRANDADMIRALTHRAWN', 'ENFYSNEST', 'WAMPA'],
+                    'Palp' => ['EMPERORPALPATINE', 'VADER', 'GRANDMOFFTARKIN', 'SHORETROOPER', 'DEATHTROOPER', 'GRANDADMIRALTHRAWN', 'DIRECTORKRENNIC'],
+                    'Palp (no Traya)' => ['EMPERORPALPATINE', 'VADER', 'DARTHSION', 'DARTHNIHILUS', 'SITHTROOPER'],
+                    'KRU' => ['KYLORENUNMASKED', 'KYLOREN', 'FIRSTORDEROFFICERMALE', 'FIRSTORDEREXECUTIONER', 'FIRSTORDERTROOPER', 'HERMITYODA'],
+                    'CLS/Chaze' => ['COMMANDERLUKESKYWALKER', 'HANSOLO', 'CHIRRUTIMWE', 'BAZEMALBUS', 'HOTHHAN', 'HERMITYODA', 'OLDBENKENOBI'],
+                    'CLS/Fat/ODB' => ['COMMANDERLUKESKYWALKER', 'HANSOLO', 'HOTHHAN', 'FULCRUMAHSOKA', 'OLDBENKENOBI'],
+                ];
+                $highlight = 'stars';
+                break;
 
             default:
                 $teams = [];

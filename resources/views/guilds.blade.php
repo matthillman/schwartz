@@ -34,6 +34,7 @@
                             <div>{{ $guild->name }}</div>
                             <a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => 'str']) }}">STR Teams</a>
                             <a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => 'rjt']) }}">RJT Teams</a>
+                            <a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => 'tw']) }}">TW Defense</a>
                             <a href="{{ $guild->url }}" target="_gg" class="gg-link">
                                 @include('shared.bb8')
                             </a>
