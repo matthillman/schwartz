@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\ProcessSchwartzGuilds;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,8 +25,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('pull:units')->daily();
+        $schedule->job(new ProcessSchwartzGuilds)->dailyAt('00:05');
     }
 
     /**
