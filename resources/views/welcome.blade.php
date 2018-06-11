@@ -18,48 +18,15 @@
         <div slot="sections" id="guilds">
             <div class="content-title">Our Guilds</div>
             <div class="guild-list">
+                @foreach ($guilds as $guild)
                 <guild
-                    :name="'Return of the Schwartz'"
-                    :url="'https://swgoh.gg/g/3577/return-of-the-schwartz/'"
-                    :icon="'mandalorian'"
-                    :gp="'148M'"
-                    :raid="'Heroic Sith'"
+                    :name="'{{ $guild->name }}'"
+                    :url="'{{ $guild->url }}'"
+                    :icon="'{{ $guild->icon_name }}'"
+                    :gp="'{{ intval(floor($guild->gp / 1000000)) }}M'"
+                    :raid="'{{ $guild->raid_tag }}'"
                 ></guild>
-                <guild
-                    :name="'theSCHWARTZ'"
-                    :url="'https://swgoh.gg/g/2238/theschwartz/'"
-                    :icon="'sabine'"
-                    :gp="'135M'"
-                    :raid="'Heroic Sith'"
-                ></guild>
-                <guild
-                    :name="'Schwartz Holiday Special'"
-                    :url="'https://swgoh.gg/g/29865/schwartz-holiday-special/'"
-                    :icon="'senate'"
-                    :gp="'125M'"
-                    :raid="'Heroic Sith'"
-                ></guild>
-                <guild
-                    :name="'The Phantom Schwartz'"
-                    :url="'https://swgoh.gg/g/11339/the-phantom-schwartz/'"
-                    :icon="'senate'"
-                    :gp="'90M'"
-                    :raid="'Heroic AAT'"
-                ></guild>
-                <guild
-                    :name="'The Clone Schwartz'"
-                    :url="'https://swgoh.gg/g/30376/the-cione-schwartz/'"
-                    :icon="'niteowl'"
-                    :gp="'89M'"
-                    :raid="'Heroic AAT'"
-                ></guild>
-                <guild
-                    :name="'A New Schwartz'"
-                    :url="'https://swgoh.gg/g/8545/a-new-schwartz/'"
-                    :icon="'blast'"
-                    :gp="'47M'"
-                    :raid="'Heroic AAT'"
-                ></guild>
+                @endforeach
             </div>
         </div>
         <div slot="sections" id="join">
