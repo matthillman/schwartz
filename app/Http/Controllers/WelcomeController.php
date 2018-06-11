@@ -9,7 +9,7 @@ class WelcomeController extends Controller
 {
     public function __invoke() {
         return view('welcome', [
-            'guilds' => Guild::where('schwartz', 1)->get()
+            'guilds' => Guild::where('schwartz', 1)->orderBy('gp', 'desc')->get()
         ]);
     }
 }
