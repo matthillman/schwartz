@@ -79,7 +79,6 @@
             },
             handleTouchMove(evt) {
                 if (this.touchInProgress) { return; }
-                this.touchInProgress = true;
                 this.doScroll(evt.touches[0].pageY - this.touchStart);
             },
             handleTouchEnd(evt) {
@@ -93,6 +92,7 @@
             doScroll(delta) {
                 if (Math.abs(delta) < this.scrollSensitivity) { return; }
                 this.ticking = true;
+                this.touchInProgress = true;
 
                 if (delta < 0) {
                     this.currentSlide = Math.min(this.currentSlide + 1, this.totalSlides - 1);
