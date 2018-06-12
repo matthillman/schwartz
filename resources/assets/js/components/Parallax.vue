@@ -3,6 +3,7 @@
         v-scroll="handleScroll"
         v-touchstart="handleTouchStart"
         v-touchmove="handleTouchMove"
+        v-touchend="handleTouchMove"
     >
         <section
             v-for="(item, index) in $slots.sections"
@@ -28,7 +29,7 @@
                 scrollSensitivity: 30,
                 duration: 900,
 
-                touchStart: 0,
+                touchStart: -1,
 
                 isIE: (/MSIE/i.test(navigator.userAgent)) || (/Trident.*rv\:11\./i.test(navigator.userAgent)),
                 isFirefox: (/Firefox/i.test(navigator.userAgent)),
@@ -58,6 +59,11 @@
                 inserted: function (el, binding) {
                     window.addEventListener('touchmove', (evt) => binding.value(evt, el));
                 }
+            },
+            touchstart: {
+                inserted: function (el, binding) {
+                    window.addEventListener('touchend', (evt) => binding.value(evt, el));
+                }
             }
         },
 
@@ -71,7 +77,11 @@
                 this.touchStart = evt.touches[0].pageY;
             },
             handleTouchMove(evt) {
+                if (this.touchStart < 0) { return; }
                 this.doScroll(evt.touches[0].pageY - this.touchStart);
+            },
+            handleTouchEnd(evt) {
+                this.touchStart = -1;
             },
             handleHashChange(evt) {
                 let next = this.hashes.indexOf(window.location.hash);
