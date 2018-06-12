@@ -30,6 +30,7 @@
                 duration: 900,
 
                 touchStart: -1,
+                touchInProgress: false,
 
                 isIE: (/MSIE/i.test(navigator.userAgent)) || (/Trident.*rv\:11\./i.test(navigator.userAgent)),
                 isFirefox: (/Firefox/i.test(navigator.userAgent)),
@@ -75,13 +76,14 @@
             },
             handleTouchStart(evt) {
                 this.touchStart = evt.touches[0].pageY;
+                this.touchInProgress = true;
             },
             handleTouchMove(evt) {
-                if (this.touchStart < 0) { return; }
+                if (this.touchInProgress) { return; }
                 this.doScroll(evt.touches[0].pageY - this.touchStart);
             },
             handleTouchEnd(evt) {
-                this.touchStart = -1;
+                this.touchInProgress = false;
             },
             handleHashChange(evt) {
                 let next = this.hashes.indexOf(window.location.hash);
