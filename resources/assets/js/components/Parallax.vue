@@ -76,10 +76,10 @@
             },
             handleTouchStart(evt) {
                 this.touchStart = evt.touches[0].pageY;
-                this.touchInProgress = true;
             },
             handleTouchMove(evt) {
                 if (this.touchInProgress) { return; }
+                this.touchInProgress = true;
                 this.doScroll(evt.touches[0].pageY - this.touchStart);
             },
             handleTouchEnd(evt) {
