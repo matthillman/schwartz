@@ -2,6 +2,7 @@
 
 namespace App\Auth;
 
+use Socialite;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Auth\EloquentUserProvider as BaseProvider;
 
