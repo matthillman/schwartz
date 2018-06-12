@@ -13,7 +13,7 @@ class CreateRecruitsTable extends Migration
      */
     public function up()
     {
-        Schema::table('recruits', function (Blueprint $table) {
+        Schema::create('recruits', function (Blueprint $table) {
             $table->increments('id');
             $table->string('discord')->unique();
             $table->string('url');
