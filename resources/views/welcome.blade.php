@@ -17,6 +17,7 @@
                 <a href="#join">Join Us</a>
             </div>
         </div>
+
         <div slot="sections" id="guilds">
             <div class="content-title">Our Guilds</div>
             <div class="guild-list">
@@ -31,9 +32,17 @@
                 @endforeach
             </div>
         </div>
+
         <div slot="sections" id="join">
             <div class="content-title">Join Us</div>
             <div>
+                @if (session('inquireStatus'))
+                <div class="form-group row justify-content-center">
+                    <div class="alert alert-success col-md-3">
+                        {{ session('inquireStatus') }}
+                    </div>
+                </div>
+                @else
                 <form method="POST" action="{{ route('join.inquiry') }}">
                     @csrf
                     <div class="form-group row justify-content-center">
@@ -111,6 +120,7 @@
                         </button>
                     </div>
                 </form>
+                @endif
             </div>
         </div>
     </welcome-parallax>

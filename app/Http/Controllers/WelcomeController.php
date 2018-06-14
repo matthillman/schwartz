@@ -29,6 +29,6 @@ class WelcomeController extends Controller
         $recruit->pitch = $validated['pitch'];
         $recruit->save();
 
-        return redirect()->route('welcome');
+        return redirect()->route('welcome', ['#join'])->with('inquireStatus', 'Thank you for your interest. Someone will be contacting you on Discord!');
     }
 }

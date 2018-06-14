@@ -19,6 +19,7 @@ class CreateRecruitsTable extends Migration
             $table->string('url');
             $table->string('referral')->nullable();
             $table->string('pitch')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +30,6 @@ class CreateRecruitsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('recruits');
     }
 }
