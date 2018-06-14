@@ -1,0 +1,3 @@
+[submodule "resources/bot"]
+	path = resources/bot
+	url = git@github.com:matthillman/guidebot.git
