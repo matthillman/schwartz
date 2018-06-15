@@ -9,9 +9,9 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ModsFetched implements ShouldBroadcastNow
+class ModsFetched implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
