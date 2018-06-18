@@ -164,6 +164,7 @@
                 jsonDownload: null,
                 swgoh: null,
                 syncing: false,
+                connected: true,
             }
         },
 
@@ -197,9 +198,6 @@
         computed: {
             userID: function() {
                 return +this.user;
-            },
-            connected: function() {
-                return !!Echo.socketId();
             },
 
             modsArray: function() {
