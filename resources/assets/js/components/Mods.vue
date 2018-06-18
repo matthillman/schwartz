@@ -15,7 +15,7 @@
         <div v-if="user > 0" class="row top">
             <div>
                 <input type="text" v-model="swgoh" placeholder="swgoh.gg user" :disabled="syncing">
-                <button class="btn btn-secondary" @click="triggerSync" :disabled="syncing">Import from swgoh.gg</button>
+                <button class="btn btn-secondary" @click="triggerSync" :disabled="syncing || !connected">Import from swgoh.gg</button>
             </div>
             <p class="instructions">
                 or, enter your swgoh.gg username and press "Import".
@@ -197,6 +197,9 @@
         computed: {
             userID: function() {
                 return +this.user;
+            },
+            connected: function() {
+                return !!Echo.socketId();
             },
 
             modsArray: function() {
