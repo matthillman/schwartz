@@ -14,14 +14,15 @@ class ProcessSchwartzGuilds implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $guild;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Guild $guild)
     {
-        //
+        $this->guild = $guild;
     }
 
     /**
@@ -31,10 +32,8 @@ class ProcessSchwartzGuilds implements ShouldQueue
      */
     public function handle()
     {
-        Guild::where('schwartz', true)->each(function($guild) {
-            Artisan::call('pull:guild', [
-                'guild' => $guild->guild_id
-            ]);
-        });
+        Artisan::call('pull:guild', [
+            'guild' => $this->guild->guild_id
+        ]);
     }
 }

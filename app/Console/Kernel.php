@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Guild;
 use App\Jobs\ProcessSchwartzGuilds;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -26,7 +27,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('pull:units')->daily();
-        $schedule->job(new ProcessSchwartzGuilds)->dailyAt('00:05');
+
+        Guild::where('schwartz', true)->each(function($guild) use ($schedule) {
+            $schedule->job(new ProcessSchwartzGuilds($guild))->dailyAt('00:05');
+        });
     }
 
     /**
