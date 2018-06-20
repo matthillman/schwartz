@@ -32,17 +32,17 @@
                     @foreach($guilds as $guild)
                         <div class="row">
                             <div>{{ $guild->name }}</div>
-                            <form method="POST" action="{{ route('guild.refresh', ['guild' => $guild->id]) }}">
-                                @method('PUT')
-                                @csrf
-                                <button type="submit" class="btn btn-primary btn-icon"><i class="icon ion-ios-refresh-circle"></i></button>
-                            </form>
                             <a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => 'str']) }}">STR Teams</a>
                             <a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => 'rjt']) }}">RJT Teams</a>
                             <a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => 'tw']) }}">TW Defense</a>
                             <a href="{{ $guild->url }}" target="_gg" class="gg-link">
                                 @include('shared.bb8')
                             </a>
+                            <form method="POST" action="{{ route('guild.refresh', ['guild' => $guild->id]) }}">
+                                @method('PUT')
+                                @csrf
+                                <button type="submit" class="btn btn-primary btn-icon"><i class="icon ion-ios-refresh-circle"></i></button>
+                            </form>
                         </div>
                     @endforeach
                     </div>

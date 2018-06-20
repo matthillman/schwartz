@@ -37,7 +37,7 @@
                 margin-left: 8px;
             }
         }
-        :nth-child(2) {
+        :first-child {
             flex-grow: 1;
         }
     }
