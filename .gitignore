@@ -14,3 +14,5 @@ yarn-error.log
 laravel-echo-server.json
 public/js/*
 public/css/*
+public/fonts/vendor/*
+public/*.js
