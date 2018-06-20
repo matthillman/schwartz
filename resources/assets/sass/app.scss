@@ -4,6 +4,7 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+@import '~ionicons/dist/scss/ionicons';
 
 html, body {
   color: #636b6f;
@@ -183,6 +184,15 @@ html, body {
   &:hover {
     background-color: rgba($color: #636b6f, $alpha: 0.3);
   }
+}
+
+.icon {
+  font-size: 24px;
+}
+
+.btn.btn-icon {
+  padding: 2px 4px;
+  line-height: 1;
 }
 
 @import "mods";

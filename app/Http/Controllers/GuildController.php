@@ -6,6 +6,7 @@ use Artisan;
 use App\Unit;
 use App\Guild;
 use Illuminate\Http\Request;
+use App\Jobs\ProcessSchwartzGuilds;
 
 class GuildController extends Controller
 {
@@ -25,6 +26,14 @@ class GuildController extends Controller
         ]);
 
         return redirect()->route('guilds')->with('guildStatus', "Guild added");
+    }
+
+    public function scrapeGuild($guild) {
+        $guild = Guild::findOrFail($guild);
+
+        ProcessSchwartzGuilds::dispatch($guild);
+
+        return redirect()->route('guilds')->with('guildStatus', "Guild scrape queued");
     }
 
     public function listMembers($guild, $team) {

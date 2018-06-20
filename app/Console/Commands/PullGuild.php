@@ -44,6 +44,13 @@ class PullGuild extends Command
 
         $units = collect(json_decode($json_string, true));
 
+        DB::transaction(function() use ($guild) {
+            $guild->members()->each(function($member) {
+                $member->guild()->dissociate();
+                $member->save();
+            });
+        });
+
         $units->each(function($data, $unit) use ($guild) {
             collect($data)->each(function($member_data) use ($guild, $unit) {
                 DB::transaction(function() use ($guild, $member_data, $unit) {
