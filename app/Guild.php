@@ -59,11 +59,11 @@ class Guild extends Model
             case 2238:  // TS
             case 29865: // SHS
             case 42367: // TSSB
+            case 11339: // TPS
                 return 'Heroic Sith';
                 break;
 
 
-            case 11339: // TPS
             case 30376: // TCS
             case 8545:  // ANS
             case 40305: // BSS
