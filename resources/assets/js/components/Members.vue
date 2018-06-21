@@ -5,7 +5,7 @@
                 <span v-for="(guild, index) in guildList" :key="guild.id"
                     @click="select(index)"
                     :class="{selected: selected === index}"
-                >{{ guild.name }}</span>
+                >{{ guild.name | acronymize }}</span>
             </div>
         </div>
 	    <list
@@ -18,12 +18,17 @@
 
 <script>
     const numberWithCommas = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+    const acronymize = (str) => str.split(/(\s|[A-Z]\w+)/).map((w) => w ? w[0].toUpperCase().trim() : '').join('');
+
     export default {
         mounted() {
             this.guildList = JSON.parse(this.guilds);
             this.refresh();
+        },
+        filters: {
+            acronymize: acronymize
         },
         data: function () {
             return {
@@ -34,7 +39,7 @@
 		            { prop: 'gp', label: 'Galactic Power', transform: numberWithCommas },
 		            { prop: 'character_gp', label: 'Character GP', transform: numberWithCommas },
 		            { prop: 'ship_gp', label: 'Ship GP', transform: numberWithCommas },
-		            { prop: 'guild_name', label: 'Guild', transform: (str) => str.split(/(\s|[A-Z]\w+)/).map((w) => w ? w[0].toUpperCase().trim() : '').join('')  },
+		            { prop: 'guild_name', label: 'Guild', transform: acronymize  },
                 ],
                 selected: 0,
                 guildList: [],
