@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Recruit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,11 +28,14 @@ class HomeController extends Controller
     {
         if (auth('admin')->check()) {
             $users = User::where('active', false)->get();
+            $recruits = Recruit::all();
         } else {
             $users = [];
+            $recruits = [];
         }
         return view('home', [
             'userRequests' => $users,
+            'recruits' => $recruits,
         ]);
     }
 

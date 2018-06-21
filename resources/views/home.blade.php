@@ -23,6 +23,17 @@
             </div>
 @auth('admin')
             <div class="card">
+                <div class="card-header">Guilds</div>
+
+                <div class="card-body">
+                    <div class="guides">
+                        <a href="{{ route('guilds') }}">Guild Teams</a>
+                        <a href="{{ route('schwartz.guilds') }}">Schwartz guilds GP List</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
                 <div class="card-header">User Requests</div>
 
                 <div class="card-body">
@@ -56,11 +67,19 @@
                 <div class="card-header">Recruiting</div>
 
                 <div class="card-body">
-                    @forelse($userRequests as $user)
-                        <div>{{ $user->name }} ({{ $user->discord }})</div>
-                    @empty
-                        <div>No information requests</div>
-                    @endforelse
+                    <table>
+                        <tbody>
+                        @forelse($recruits as $recruit)
+                            <tr>
+                                <td><a href="{{ $recruit->url }}" target="_blank">{{ $recruit->discord }}</a></td>
+                                <td>{{ $recruit->referral }}</td>
+                                <td>{{ $recruit->pitch }}</td>
+                            </tr>
+                        @empty
+                            <tr><td>No information requests</td></tr>
+                        @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
 @endauth
