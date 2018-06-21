@@ -34,7 +34,7 @@
 		            { prop: 'gp', label: 'Galactic Power', transform: numberWithCommas },
 		            { prop: 'character_gp', label: 'Character GP', transform: numberWithCommas },
 		            { prop: 'ship_gp', label: 'Ship GP', transform: numberWithCommas },
-		            { prop: 'guild_name', label: 'Guild', transform: (str) => str.split(' ').map((w) => w[0].toUpperCase()).join('')  },
+		            { prop: 'guild_name', label: 'Guild', transform: (str) => str.split(/(\s|[A-Z]\w+)/).map((w) => w ? w[0].toUpperCase().trim() : '').join('')  },
                 ],
                 selected: 0,
                 guildList: [],
