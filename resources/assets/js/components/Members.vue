@@ -59,7 +59,7 @@
                 axios.get(`/${this.route}/${this.guildList[this.selected].id}`)
                     .then(res => {
                         this.items = res.data;
-                        this.sort(this.columns[0].prop, false);
+                        this.sort(this.columns[1].prop, true);
                     });
             },
             resolve: function(item, prop) {
