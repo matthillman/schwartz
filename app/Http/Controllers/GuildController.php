@@ -77,4 +77,16 @@ class GuildController extends Controller
             'highlight' => $highlight,
         ]);
     }
+
+    public function schwartzGuilds() {
+        return view('gp', [
+            'guilds' => Guild::where('schwartz', 1)->orderBy('gp', 'desc')->get()
+        ]);
+    }
+
+    public function listGP($guild = null) {
+        $guild = is_null($guild) ? Guild::where('schwartz', '1') : Guild::findOrFail($guild);
+
+        return response()->json($guild->members);
+    }
 }

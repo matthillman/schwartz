@@ -51,14 +51,19 @@ class PullGuild extends Command
             });
         });
 
-        $units->each(function($data, $unit) use ($guild) {
-            collect($data)->each(function($member_data) use ($guild, $unit) {
-                DB::transaction(function() use ($guild, $member_data, $unit) {
+        $units->each(function($data, $unit) use ($guild, $parser) {
+            collect($data)->each(function($member_data) use ($guild, $unit, $parser) {
+                DB::transaction(function() use ($guild, $member_data, $unit, $parser) {
                     if (!isset($member_data['url'])) { return; }
                     $member = Member::firstOrNew(['url' => $member_data['url']]);
 
                     $member->url = $member_data['url'];
                     $member->player = $member_data['player'];
+
+                    $gp = $parser->memberGP()[$member->url];
+                    $member->gp = $gp['gp'];
+                    $member->character_gp = $gp['character_gp'];
+                    $member->ship_gp = $gp['ship_gp'];
 
                     $member->guild()->associate($guild);
                     $member->save();

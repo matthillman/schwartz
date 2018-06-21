@@ -163,6 +163,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\DropboxServiceProvider::class,
         App\Providers\GuzzleServiceProvider::class,
+        App\Providers\GoutteServiceProvider::class,
 
     ],
 
