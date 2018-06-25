@@ -28,8 +28,8 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('pull:units')->daily();
 
-        Guild::where('schwartz', true)->each(function($guild) use ($schedule) {
-            $schedule->job(new ProcessSchwartzGuilds($guild))->dailyAt('00:05');
+        Guild::where('schwartz', true)->each(function($guild, $index) use ($schedule) {
+            $schedule->job(new ProcessSchwartzGuilds($guild))->dailyAt('00:0' . (5 + $index));
         });
     }
 
