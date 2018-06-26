@@ -38,6 +38,10 @@ html, body {
   justify-content: center;
 }
 
+.spacing > * {
+  margin: 8px 16px;
+}
+
 .content {
   width: 100%;
 

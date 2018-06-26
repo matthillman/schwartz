@@ -8,6 +8,11 @@
                 >{{ guild.name | acronymize }}</span>
             </div>
         </div>
+        <div class="flex-center spacing">
+            <div><span>Total:</span> {{ items | sumProp('gp') | numberWithCommas }}</div>
+            <div><span>Char GP:</span> {{ items | sumProp('character_gp') | numberWithCommas }}</div>
+            <div><span>Ship GP:</span> {{ items | sumProp('ship_gp') | numberWithCommas }}</div>
+        </div>
 	    <list
 	    	:columns="columns"
 	    	:items="items"
@@ -28,7 +33,11 @@
             this.refresh();
         },
         filters: {
-            acronymize: acronymize
+            acronymize: acronymize,
+            numberWithCommas: numberWithCommas,
+            sumProp: function(value, prop) {
+                return value.reduce((sum, cur) =>sum + cur[prop], 0)
+            }
         },
         data: function () {
             return {
