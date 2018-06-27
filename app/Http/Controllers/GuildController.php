@@ -62,6 +62,8 @@ class GuildController extends Controller
                     'KRU' => ['KYLORENUNMASKED', 'KYLOREN', 'FIRSTORDEROFFICERMALE', 'FIRSTORDEREXECUTIONER', 'FIRSTORDERTROOPER', 'HERMITYODA'],
                     'CLS/Chaze' => ['COMMANDERLUKESKYWALKER', 'HANSOLO', 'CHIRRUTIMWE', 'BAZEMALBUS', 'HOTHHAN', 'HERMITYODA', 'OLDBENKENOBI'],
                     'CLS/Fat/ODB' => ['COMMANDERLUKESKYWALKER', 'HANSOLO', 'HOTHHAN', 'FULCRUMAHSOKA', 'OLDBENKENOBI'],
+                    'AA/CLS' => ['ADMIRALACKBAR', 'COMMANDERLUKESKYWALKER', 'HANSOLO', 'GENERALKENOBI', 'HERMITYODA'],
+                    'Bounty Hunters' => ['BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'IG88', 'BARRISSOFFEE'],
                 ];
                 break;
 
