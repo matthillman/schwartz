@@ -17,7 +17,7 @@ class HandbookController extends Controller
 
         $sections = $handbook->reduce(function($sections, $line) use ($dropbox) {
             if (starts_with($line, '@')) {
-                $file = $dropbox->get(str_finish(trim(str_replace_first('@', '', $line)), '.md'));
+                $file = $dropbox->get('markdown/' . str_finish(trim(str_replace_first('@', '', $line)), '.md'));
                 $sections[] = $file;
                 $sections[] = "";
             } else {
