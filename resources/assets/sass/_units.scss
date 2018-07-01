@@ -115,3 +115,22 @@
         }
     }
 }
+
+.character {
+    > span {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+
+        .zeta {
+            font-size: 10px;
+            margin-left: 4px;
+            border-radius: 50%;
+            background: rgba($color: black, $alpha: 0.6);
+            color: white;
+            font-weight: bold;
+            width: 16px;
+            height: 16px;
+        }
+    }
+}
