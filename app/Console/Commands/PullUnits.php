@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use DB;
 use App\Unit;
+use App\Zeta;
 use Illuminate\Console\Command;
 
 class PullUnits extends Command
@@ -50,6 +51,27 @@ class PullUnits extends Command
                 $unit->save();
             });
         });
+
+        $zetaHref = 'https://swgoh.gg/characters/zeta-abilities/?page=1';
+
+        do {
+            echo $zetaHref;
+            $page = goutte()->request('GET', $zetaHref);
+            $page->filter('li.character')->each(function($element) {
+                list($char, $name) = explode(' · ', $element->filter('.media-heading h5')->text());
+                $unit = Unit::where(['name' => $char])->firstOrFail();
+
+                list($class, ) = explode(' · ', $element->filter('.pull-right')->text());
+
+                $zeta = Zeta::firstOrNew(['name' => $name, 'character_id' => $unit->base_id]);
+                $zeta->class = $class;
+                $zeta->save();
+            });
+
+            $next = $page->filter('[aria-label="Next"]');
+
+            $zetaHref = $next->count() > 0 ? 'https://swgoh.gg'.$next->attr('href') : false;
+        } while ($zetaHref !== false);
 
         return 0;
     }

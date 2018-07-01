@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use DB;
+use App\Zeta;
 use App\Guild;
 use App\Member;
 use App\Character;
@@ -81,6 +82,17 @@ class PullGuild extends Command
 
                     $character->member()->associate($member);
                     $character->save();
+
+                    $memberZetas = $parser->zetas()[$member->url];
+                    if (isset($memberZetas) && isset($memberZetas[$character->unit_name])) {
+                        $zetas = $memberZetas[$character->unit_name];
+
+                        $ids = Zeta::where('character_id', $character->unit_name)
+                            ->whereIn('name', $zetas)
+                            ->get()->pluck('id')->all();
+
+                        $character->zetas()->sync($ids);
+                    }
                 });
             });
         });

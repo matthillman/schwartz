@@ -25,4 +25,7 @@ class Member extends Model
     public function getGuildNameAttribute() {
         return $this->guild->name;
     }
+    public function getZetasAttribute() {
+        return $this->characters->pluck('zetas')->flatten();
+    }
 }

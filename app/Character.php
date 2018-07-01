@@ -11,4 +11,7 @@ class Character extends Model
     public function member() {
         return $this->belongsTo(Member::class);
     }
+    public function zetas() {
+        return $this->belongsToMany(Zeta::class)->withTimestamps();
+    }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Parsers;
 
+use App\Unit;
 use App\Guild;
-use Goutte\Client;
 
 class GuildParser {
 
@@ -12,6 +12,7 @@ class GuildParser {
     protected $guild;
     protected $gp;
     protected $gpMap;
+    protected $zetaMap;
     protected $name;
     protected $url = '';
 
@@ -19,6 +20,7 @@ class GuildParser {
         $this->url = "https://swgoh.gg/g/${guild}/guild/";
         $this->guild = $guild;
         $this->gpMap = [];
+        $this->zetaMap = [];
     }
 
     public function scrape() {
@@ -31,6 +33,7 @@ class GuildParser {
         $this->name = static::getStringValue($head, '/<br.*?>\s*(.+?)\s*<br.*?>/');
 
         $this->scrapeGuildGP();
+        $this->scrapeZetas();
 
         return $this;
     }
@@ -52,6 +55,30 @@ class GuildParser {
         });
     }
 
+    protected function scrapeZetas() {
+        $page = goutte()->request('GET', "{$this->url}zetas/");
+
+        $page->filter('table tbody tr')->each(function($row) {
+            $slug = $row->filter('td:nth-child(1) a')->attr('href');
+
+            $zetaMap = [];
+
+            $row->filter('.guild-member-zeta')->each(function($zeta) use (&$zetaMap) {
+                $char = $zeta->filter('.char-portrait')->attr('title');
+                $unit = Unit::where(['name' => $char])->firstOrFail();
+
+                $zetaMap[$unit->base_id] = [];
+
+                $zeta->filter('.guild-member-zeta-ability')->each(function($z) use ($unit, &$zetaMap) {
+                    $name = $z->attr('title');
+                    $zetaMap[$unit->base_id][] = $name;
+                });
+            });
+
+            $this->zetaMap[$slug . 'collection/'] = $zetaMap;
+        });
+    }
+
     public function name() {
         return $this->name;
     }
@@ -60,6 +87,9 @@ class GuildParser {
     }
     public function memberGP() {
         return $this->gpMap;
+    }
+    public function zetas() {
+        return $this->zetaMap;
     }
     public function url() {
         return $this->url;
