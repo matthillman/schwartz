@@ -5,6 +5,7 @@ namespace App\Providers;
 use Auth;
 use Socialite;
 use App\Auth\DiscordProvider;
+use Laravel\Passport\Passport;
 use App\Auth\EloquentUserProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -39,5 +40,11 @@ class AuthServiceProvider extends ServiceProvider
         Auth::provider('eloquent_discord', function($app, array $config) {
             return new EloquentUserProvider($app['hash'], $config['model']);
         });
+
+        Passport::routes();
+
+        Passport::tokensCan([
+            'bot' => 'Schwartz bot',
+        ]);
     }
 }
