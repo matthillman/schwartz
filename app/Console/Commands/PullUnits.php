@@ -40,7 +40,7 @@ class PullUnits extends Command
                 $unit = Unit::firstOrNew(['base_id' => $unit_data['base_id']]);
 
                 $unit->base_id = $unit_data['base_id'];
-                $unit->name = $unit_data['name'];
+                $unit->name = str_replace('&#39;', "'", $unit_data['name']);
                 $unit->pk = $unit_data['pk'];
                 $unit->url = $unit_data['url'];
                 $unit->image = $unit_data['image'];
@@ -58,6 +58,7 @@ class PullUnits extends Command
             $page = goutte()->request('GET', $zetaHref);
             $page->filter('li.character')->each(function($element) {
                 list($char, $name) = explode(' · ', $element->filter('.media-heading h5')->text());
+                $char = str_replace('&#39;', "'", $char);
                 $unit = Unit::where(['name' => $char])->firstOrFail();
 
                 list($class, ) = explode(' · ', $element->filter('.pull-right')->text());

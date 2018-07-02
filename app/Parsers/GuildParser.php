@@ -31,6 +31,7 @@ class GuildParser {
 
         $head = static::getStringValue($body, '/h1 class=".*?h1.*?">\s*(.*?)\s*<\/h1>/s');
         $this->name = static::getStringValue($head, '/<br.*?>\s*(.+?)\s*<br.*?>/');
+        $this->name = str_replace('&#39;', "'", $this->name);
 
         $this->scrapeGuildGP();
         $this->scrapeZetas();
@@ -65,6 +66,7 @@ class GuildParser {
 
             $row->filter('.guild-member-zeta')->each(function($zeta) use (&$zetaMap) {
                 $char = $zeta->filter('.char-portrait')->attr('title');
+                str_replace('&#39;', "'", $char);
                 $unit = Unit::where(['name' => $char])->firstOrFail();
 
                 $zetaMap[$unit->base_id] = [];
