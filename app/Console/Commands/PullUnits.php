@@ -55,7 +55,6 @@ class PullUnits extends Command
         $zetaHref = 'https://swgoh.gg/characters/zeta-abilities/?page=1';
 
         do {
-            echo $zetaHref;
             $page = goutte()->request('GET', $zetaHref);
             $page->filter('li.character')->each(function($element) {
                 list($char, $name) = explode(' · ', $element->filter('.media-heading h5')->text());
