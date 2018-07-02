@@ -61,7 +61,7 @@ class PullGuild extends Command
                     $member->url = $member_data['url'];
                     $member->player = $member_data['player'];
 
-                    $gp = $parser->memberGP()[$member->url];
+                    $gp = isset($parser->memberGP()[$member->url]) ? $parser->memberGP()[$member->url] : ['gp' => 0, 'character_gp' => 0, 'ship_gp' => 0];
                     $member->gp = $gp['gp'];
                     $member->character_gp = $gp['character_gp'];
                     $member->ship_gp = $gp['ship_gp'];
@@ -83,15 +83,17 @@ class PullGuild extends Command
                     $character->member()->associate($member);
                     $character->save();
 
-                    $memberZetas = $parser->zetas()[$member->url];
-                    if (isset($memberZetas) && isset($memberZetas[$character->unit_name])) {
-                        $zetas = $memberZetas[$character->unit_name];
+                    if (isset($parser->zetas()[$member->url])) {
+                        $memberZetas = $parser->zetas()[$member->url];
+                        if (isset($memberZetas[$character->unit_name])) {
+                            $zetas = $memberZetas[$character->unit_name];
 
-                        $ids = Zeta::where('character_id', $character->unit_name)
-                            ->whereIn('name', $zetas)
-                            ->get()->pluck('id')->all();
+                            $ids = Zeta::where('character_id', $character->unit_name)
+                                ->whereIn('name', $zetas)
+                                ->get()->pluck('id')->all();
 
-                        $character->zetas()->sync($ids);
+                            $character->zetas()->sync($ids);
+                        }
                     }
                 });
             });
