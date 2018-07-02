@@ -21,7 +21,7 @@
                     </div>
                 </div>
             </div>
-@auth('admin')
+
             <div class="card">
                 <div class="card-header">Guilds</div>
 
@@ -33,6 +33,7 @@
                 </div>
             </div>
 
+@auth('admin')
             <div class="card">
                 <div class="card-header">User Requests</div>
 
