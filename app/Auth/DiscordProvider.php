@@ -45,6 +45,23 @@ class DiscordProvider extends AbstractProvider implements ProviderInterface
     }
 
     /**
+     * Get a Social User instance from a known access token.
+     *
+     * @param  string  $token
+     * @return \Laravel\Socialite\Two\User
+     */
+    public function userFromToken($token)
+    {
+        $user_map = $this->getUserByToken($token);
+        if (is_null($user_map)) {
+            return null;
+        }
+        $user = $this->mapUserToObject($user_map);
+
+        return $user->setToken($token);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getUserByToken($token)
@@ -67,7 +84,7 @@ class DiscordProvider extends AbstractProvider implements ProviderInterface
             Log::info(\GuzzleHttp\Psr7\str($e->getResponse()));
         }
 
-        return [];
+        return null;
     }
 
     /**
