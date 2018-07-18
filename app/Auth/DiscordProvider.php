@@ -6,7 +6,6 @@ use Log;
 
 use Laravel\Socialite\Two\User;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Psr7\str as exceptionToString;
 use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\ProviderInterface;
 
@@ -64,8 +63,8 @@ class DiscordProvider extends AbstractProvider implements ProviderInterface
             return json_decode($response->getBody(), true);
         } catch (ClientException $e) {
             Log::info("Discord user lookup by token failed");
-            Log::info(exceptionToString($e->getRequest()));
-            Log::info(exceptionToString($e->getResponse()));
+            Log::info(\GuzzleHttp\Psr7\str($e->getRequest()));
+            Log::info(\GuzzleHttp\Psr7\str($e->getResponse()));
         }
 
         return null;
