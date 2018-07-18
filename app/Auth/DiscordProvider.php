@@ -2,7 +2,11 @@
 
 namespace App\Auth;
 
+use Log;
+
 use Laravel\Socialite\Two\User;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Psr7\str as exceptionToString;
 use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\ProviderInterface;
 
@@ -48,20 +52,23 @@ class DiscordProvider extends AbstractProvider implements ProviderInterface
     {
         $userUrl = 'https://discordapp.com/api/users/@me';
 
-        $response = $this->getHttpClient()->get(
-            $userUrl,
-            [
-                'headers' => [
-                    'Authorization' => 'Bearer '.$token,
+        try {
+            $response = $this->getHttpClient()->get(
+                $userUrl,
+                [
+                    'headers' => [
+                        'Authorization' => 'Bearer '.$token,
+                    ]
                 ]
-            ]
-        );
-
-        if ($response->getStatusCode() === 401) {
-            return null;
+            );
+            return json_decode($response->getBody(), true);
+        } catch (ClientException $e) {
+            Log::info("Discord user lookup by token failed");
+            Log::info(exceptionToString($e->getRequest()));
+            Log::info(exceptionToString($e->getResponse()));
         }
 
-        return json_decode($response->getBody(), true);
+        return null;
     }
 
     /**
