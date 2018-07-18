@@ -57,6 +57,10 @@ class DiscordProvider extends AbstractProvider implements ProviderInterface
             ]
         );
 
+        if ($response->getStatusCode() === 401) {
+            return null;
+        }
+
         return json_decode($response->getBody(), true);
     }
 
@@ -65,6 +69,8 @@ class DiscordProvider extends AbstractProvider implements ProviderInterface
      */
     protected function mapUserToObject(array $user)
     {
+        if (is_null($user)) { return null; }
+
         return (new User)->setRaw($user)->map([
             'id'       => $user['id'],
             'nickname' => sprintf('%s#%s', $user['username'], $user['discriminator']),
