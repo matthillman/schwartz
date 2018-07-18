@@ -67,7 +67,7 @@ class DiscordProvider extends AbstractProvider implements ProviderInterface
             Log::info(\GuzzleHttp\Psr7\str($e->getResponse()));
         }
 
-        return null;
+        return [];
     }
 
     /**
@@ -75,7 +75,7 @@ class DiscordProvider extends AbstractProvider implements ProviderInterface
      */
     protected function mapUserToObject(array $user)
     {
-        if (is_null($user)) { return null; }
+        if (count($user) == 0) { return null; }
 
         return (new User)->setRaw($user)->map([
             'id'       => $user['id'],
