@@ -7,6 +7,7 @@ use App\Zeta;
 use App\Guild;
 use App\Member;
 use App\Character;
+use Carbon\Carbon;
 use App\Parsers\GuildParser;
 use Illuminate\Console\Command;
 
@@ -33,26 +34,36 @@ class PullGuild extends Command
      */
     public function handle()
     {
+        $start = Carbon::now();
         $guild = Guild::firstOrNew(['guild_id' => $this->argument('guild')]);
+        $name = $guild->name ?? 'GUILD ' . $guild->guild_id;
+        $this->info("Starting GuildParser for {$name}…");
         $parser = (new GuildParser($this->argument('guild')))->scrape();
         $guild->url = $parser->url();
         $guild->name = $parser->name();
         $guild->gp = $parser->gp();
         $guild->save();
+        $this->info("Guild saved.");
 
+        $this->info("Starting API pull…");
         $response = guzzle()->get("https://swgoh.gg/api/guilds/{$guild->guild_id}/units/");
         $json_string = (string)$response->getBody();
 
         $units = collect(json_decode($json_string, true));
+        $this->info("API pull finished.");
 
+        $this->info("Dissociating all guild members…");
         DB::transaction(function() use ($guild) {
             $guild->members()->each(function($member) {
                 $member->guild()->dissociate();
                 $member->save();
             });
         });
+        $this->info("Dissociation done.");
 
+        $this->info("Starting API results loop…");
         $units->each(function($data, $unit) use ($guild, $parser) {
+            $this->comment("   Looping over members for {$unit}…");
             collect($data)->each(function($member_data) use ($guild, $unit, $parser) {
                 DB::transaction(function() use ($guild, $member_data, $unit, $parser) {
                     if (!isset($member_data['url'])) { return; }
@@ -97,8 +108,12 @@ class PullGuild extends Command
                     }
                 });
             });
+            $this->info("   $unit done.");
         });
+        $this->info("API results parsed.");
 
+        $time = Carbon::now()->diffInSeconds($start);
+        $this->info("Returning. Scrape took {$time} seconds.");
         return 0;
     }
 }

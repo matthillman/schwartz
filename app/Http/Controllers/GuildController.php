@@ -74,7 +74,7 @@ class GuildController extends Controller
         }
 
         return view('members', [
-            'members' => $guild->members()->with('characters')->orderBy('player')->get(),
+            'members' => $guild->members()->with('characters.zetas')->orderBy('player')->get(),
             'units' => Unit::all(),
             'teams' => $teams,
             'highlight' => $highlight,
