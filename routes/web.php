@@ -43,11 +43,16 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
         Route::put('/approve/admin/{id}', 'HomeController@approveAdmin')->name('admin');
     });
 
+    Route::resource('tw-teams', 'TerritoryCountersController');
+
     Route::get('/units', 'UnitController@index')->name('units');
     Route::get('/guilds', 'GuildController@listGuilds')->name('guilds');
-    Route::post('/guilds', 'GuildController@addGuild')->name('guild.add');
     Route::put('/guild/{guild}/refresh', 'GuildController@scrapeGuild')->name('guild.refresh');
     Route::get('/guild/{guild}/{team}', 'GuildController@listMembers')->name('guild.members');
+
+    Route::middleware(['auth:admin'])->group(function() {
+        Route::post('/guilds', 'GuildController@addGuild')->name('guild.add');
+    });
 
     Route::get('/schwartz', 'GuildController@schwartzGuilds')->name('schwartz.guilds');
     Route::get('gp/{guild?}', 'GuildController@listGP')->name('guild.gp');

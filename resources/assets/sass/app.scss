@@ -176,6 +176,10 @@ html, body {
 
 .card {
   margin-top: 16px;
+
+  .card-header {
+    margin: 0;
+  }
 }
 
 .prospective-user {
@@ -208,10 +212,11 @@ html, body {
 	border-radius: 2px;
 	margin-left: 5px;
 	width: unset;
-	text-transform: capitalize;
+  text-transform: capitalize;
 
 	> * {
-		cursor: pointer;
+    cursor: pointer;
+    min-width: 44px;
 		padding: 4px 8px;
 		display: inline-block;
 		text-align: center;
@@ -271,7 +276,7 @@ html, body {
         margin-left: 8px;
         width: 10px;
         height: 10px;
-        transform-origin-y: 2px;
+        transform-origin: 0 2px;
         border: 5px solid transparent;
 
         transition-property: transform, border-color;
@@ -289,6 +294,15 @@ html, body {
       }
     }
   }
+}
+
+.border-bottom {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.small-note {
+  font-size: 10px;
 }
 
 @import "mods";

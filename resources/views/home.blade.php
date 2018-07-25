@@ -18,6 +18,7 @@
                         <a href="{{ guide('territory-wars-guide') }}">Territory Wars Guide</a>
                         <a href="{{ handbook('rots') }}">ROTS Handbook</a>
                         <a href="{{ route('auth.mods') }}">Mod Set Maker</a>
+                        <a href="{{ route('tw-teams.index') }}">TW Team Counters</a>
                     </div>
                 </div>
             </div>

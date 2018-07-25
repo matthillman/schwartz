@@ -26,6 +26,7 @@ Vue.component('guild', require('./components/Guild.vue'));
 Vue.component('list', require('./components/List.vue'));
 Vue.component('members', require('./components/Members.vue'));
 Vue.component('welcome-parallax', require('./components/Parallax.vue'));
+Vue.component('tw-form', require('./components/TWForm.vue'));
 
 const app = new Vue({
     el: '#app'

@@ -64,7 +64,7 @@ class GuildController extends Controller
                     'CLS/Fat/ODB' => ['COMMANDERLUKESKYWALKER', 'HANSOLO', 'HOTHHAN', 'FULCRUMAHSOKA', 'OLDBENKENOBI'],
                     'AA/CLS' => ['ADMIRALACKBAR', 'COMMANDERLUKESKYWALKER', 'HANSOLO', 'GENERALKENOBI', 'HERMITYODA'],
                     'Bounty Hunters' => ['BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'IG88', 'BARRISSOFFEE'],
-                    'Jedi' => ['GRANDMASTERYODA', 'HERMITYODA', 'GENERALKENOBI', 'OLDBENKENOBI', 'ANAKINKNIGHT', 'FULCRUMAHSOKA', 'AAYLASECURA', 'EZRABRIDGERS3'],
+                    // 'Jedi' => ['GRANDMASTERYODA', 'HERMITYODA', 'GENERALKENOBI', 'OLDBENKENOBI', 'ANAKINKNIGHT', 'FULCRUMAHSOKA', 'AAYLASECURA', 'EZRABRIDGERS3'],
                 ];
                 break;
 

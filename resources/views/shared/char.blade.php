@@ -12,6 +12,6 @@
 </span>
 @else
 <span missing>
-        <span>None</span>
+    <span>None</span>
 </span>
 @endif
