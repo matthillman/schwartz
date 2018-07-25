@@ -142,3 +142,9 @@
 .grow.grow {
     flex-grow: 1;
 }
+
+@media (min-width: 110ex) {
+    .row.row {
+        flex-wrap: nowrap;
+    }
+}
