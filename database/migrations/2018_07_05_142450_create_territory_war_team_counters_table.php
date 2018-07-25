@@ -18,7 +18,7 @@ class CreateTerritoryWarTeamCountersTable extends Migration
             $table->unsignedInteger('territory_war_team_id');
             $table->foreign('territory_war_team_id')->references('id')->on('territory_war_teams');
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
