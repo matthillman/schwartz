@@ -17,8 +17,8 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Request $request, $first, $second) {
-    $guild1 = \App\Guild::with('members.characters')->where(['guild_id' => $first])->firstOrFail();
-    $guild2 = \App\Guild::with('members.characters')->where(['guild_id' => $second])->firstOrFail();
+    $guild1 = \App\Guild::with('members.characters.zetas')->where(['guild_id' => $first])->firstOrFail();
+    $guild2 = \App\Guild::with('members.characters.zetas')->where(['guild_id' => $second])->firstOrFail();
 
     $members1 = $guild1->members->reduce(function($data, $member) {
         return [
