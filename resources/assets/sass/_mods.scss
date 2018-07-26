@@ -64,6 +64,17 @@
       flex-basis: 19%;
       position: relative;
 
+      .mod-list {
+        // width: calc(100% - 16px);
+
+        > div {
+          width: 100%;
+          // overflow: hidden;
+          white-space: nowrap;
+          // text-overflow: ellipsis;
+        }
+      }
+
       .delete-set {
         position: absolute;
         top: 4px;

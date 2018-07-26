@@ -144,7 +144,7 @@
 }
 
 @media (min-width: 110ex) {
-    .row.row {
+    .row.row.nowrap {
         flex-wrap: nowrap;
     }
 }

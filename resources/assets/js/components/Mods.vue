@@ -51,7 +51,7 @@
                     <span class="delete-set" @click.stop="removeSet = set"></span>
                     <span>Speed: {{ formatSet(set) }}</span>
                     <input type="text" v-model="set.destination" @change="syncState()" @click.stop size="15" placeholder="Destination">
-                    <div>
+                    <div class="mod-list">
                         <div v-for="shape in shapes" :key="shape">
                             <img :src="'/images/mods/' + shape + '_' + setFor(shape, set) + '.png'" width="16"> {{ locationFor(shape, set) }}
                         </div>

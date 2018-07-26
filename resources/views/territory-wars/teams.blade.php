@@ -43,7 +43,7 @@
                             </div>
                         </div>
                     @foreach($teams as $team)
-                        <div class="row top">
+                        <div class="row top nowrap">
                             <div class="col-md-3">
                                 <h4>{{ $team->name }}</h4>
                                 <div class="small-note">{{ $team->aliases }}</div>
