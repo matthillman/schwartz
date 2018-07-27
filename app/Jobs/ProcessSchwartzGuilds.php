@@ -15,6 +15,14 @@ class ProcessSchwartzGuilds implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $guild;
+
+    /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 60 * 10;
+
     /**
      * Create a new job instance.
      *

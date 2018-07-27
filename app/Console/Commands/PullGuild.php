@@ -61,24 +61,31 @@ class PullGuild extends Command
         });
         $this->info("Dissociation done.");
 
+        $guildMemberCache = [];
+        $zetaList = Zeta::all();
+
         $this->info("Starting API results loop…");
-        $units->each(function($data, $unit) use ($guild, $parser) {
+        $units->each(function($data, $unit) use ($guild, $parser, &$guildMemberCache, $zetaList) {
             $this->comment("   Looping over members for {$unit}…");
-            collect($data)->each(function($member_data) use ($guild, $unit, $parser) {
-                DB::transaction(function() use ($guild, $member_data, $unit, $parser) {
+            collect($data)->each(function($member_data) use ($guild, $unit, $parser, &$guildMemberCache, $zetaList) {
+                DB::transaction(function() use ($guild, $member_data, $unit, $parser, &$guildMemberCache, $zetaList) {
                     if (!isset($member_data['url'])) { return; }
-                    $member = Member::firstOrNew(['url' => $member_data['url']]);
+                    if (isset($guildMemberCache[$member_data['url']])) {
+                        $member = $guildMemberCache[$member_data['url']];
+                    } else {
+                        $member = Member::firstOrNew(['url' => $member_data['url']]);
 
-                    $member->url = $member_data['url'];
-                    $member->player = $member_data['player'];
+                        $member->url = $member_data['url'];
+                        $member->player = $member_data['player'];
 
-                    $gp = isset($parser->memberGP()[$member->url]) ? $parser->memberGP()[$member->url] : ['gp' => 0, 'character_gp' => 0, 'ship_gp' => 0];
-                    $member->gp = $gp['gp'];
-                    $member->character_gp = $gp['character_gp'];
-                    $member->ship_gp = $gp['ship_gp'];
+                        $gp = isset($parser->memberGP()[$member->url]) ? $parser->memberGP()[$member->url] : ['gp' => 0, 'character_gp' => 0, 'ship_gp' => 0];
+                        $member->gp = $gp['gp'];
+                        $member->character_gp = $gp['character_gp'];
+                        $member->ship_gp = $gp['ship_gp'];
 
-                    $member->guild()->associate($guild);
-                    $member->save();
+                        $member->guild()->associate($guild);
+                        $member->save();
+                    }
 
                     $character = Character::firstOrNew([
                         'member_id' => $member->id,
@@ -99,9 +106,10 @@ class PullGuild extends Command
                         if (isset($memberZetas[$character->unit_name])) {
                             $zetas = $memberZetas[$character->unit_name];
 
-                            $ids = Zeta::where('character_id', $character->unit_name)
+                            $ids = $zetaList->where('character_id', $character->unit_name)
                                 ->whereIn('name', $zetas)
-                                ->get()->pluck('id')->all();
+                                ->pluck('id')
+                                ->all();
 
                             $character->zetas()->sync($ids);
                         }

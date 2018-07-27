@@ -17,26 +17,20 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Request $request, $first, $second) {
-    $guild1 = \App\Guild::with('members.characters.zetas')->where(['guild_id' => $first])->firstOrFail();
-    $guild2 = \App\Guild::with('members.characters.zetas')->where(['guild_id' => $second])->firstOrFail();
+    $guild1 = \App\Guild::where(['guild_id' => $first])->firstOrFail();
+    $guild2 = \App\Guild::where(['guild_id' => $second])->firstOrFail();
 
-    $members1 = $guild1->members->reduce(function($data, $member) {
-        return [
-            'zetas' => $data['zetas'] + $member->zetas->count(),
-            'gear_12' => $data['gear_12'] + $member->characters()->where('gear_level', 12)->count(),
-            'gear_11' => $data['gear_11'] + $member->characters()->where('gear_level', 11)->count(),
-        ];
-    }, ['zetas' => 0, 'gear_12' => 0, 'gear_11' => 0]);
-    $members2 = $guild2->members->reduce(function($data, $member) {
-        return [
-            'zetas' => $data['zetas'] + $member->zetas->count(),
-            'gear_12' => $data['gear_12'] + $member->characters()->where('gear_level', 12)->count(),
-            'gear_11' => $data['gear_11'] + $member->characters()->where('gear_level', 11)->count(),
-        ];
-    }, ['zetas' => 0, 'gear_12' => 0, 'gear_11' => 0]);
+    $data = DB::table('guilds')
+        ->join('members', 'members.guild_id', '=', 'guilds.id')
+        ->join('characters', 'characters.member_id', '=', 'members.id')
+        ->join('character_zeta', 'character_zeta.character_id', '=', 'characters.id')
+        ->selectRaw("count('zeta_id') as zetas, sum(case when characters.gear_level = 12 then 1 else 0 end) as gear_12, sum(case when characters.gear_level = 11 then 1 else 0 end) as gear_11, guilds.name, guilds.id")
+        ->groupBy('guilds.id')
+        ->whereIn('guilds.guild_id', [$guild1->guild_id, $guild2->guild_id])
+        ->get();
 
     return response()->json([
-        $guild1->name => $members1,
-        $guild2->name => $members2,
+        $guild1->name => head($data),
+        $guild2->name => last($data),
     ]);
 });
