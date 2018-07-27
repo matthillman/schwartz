@@ -29,7 +29,8 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
         ->whereIn('guilds.guild_id', [$guild1->guild_id, $guild2->guild_id])
         ->get();
 
-    list($g1Data, $g2Data) = $data;
+    $g1Data = $data->firstWhere('guild_id', $guild1->guild_id);
+    $g2Data = $data->firstWhere('guild_id', $guild2->guild_id);
 
     return response()->json([
         $guild1->name => $g1Data,
