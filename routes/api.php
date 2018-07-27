@@ -24,7 +24,7 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
         ->join('members', 'members.guild_id', '=', 'guilds.id')
         ->join('characters', 'characters.member_id', '=', 'members.id')
         ->join('character_zeta', 'character_zeta.character_id', '=', 'characters.id')
-        ->selectRaw("count('zeta_id') as zetas, sum(case when characters.gear_level = 12 then 1 else 0 end) as gear_12, sum(case when characters.gear_level = 11 then 1 else 0 end) as gear_11, guilds.name, guilds.guild_id")
+        ->selectRaw("count('zeta_id') as zetas, sum(case when characters.gear_level = 12 then 1 else 0 end) as gear_12, sum(case when characters.gear_level = 11 then 1 else 0 end) as gear_11, guilds.guild_id")
         ->groupBy('guilds.guild_id')
         ->whereIn('guilds.guild_id', [$guild1->guild_id, $guild2->guild_id])
         ->get();
