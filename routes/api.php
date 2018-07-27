@@ -28,8 +28,8 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
         ->whereIn('guilds.guild_id', [$guild1->guild_id, $guild2->guild_id])
         ->get();
 
-    $g1Data = $data->firstWhere('guild_id', $guild1->guild_id);
-    $g2Data = $data->firstWhere('guild_id', $guild2->guild_id);
+    $g1Data = (array)$data->firstWhere('guild_id', $guild1->guild_id);
+    $g2Data = (array)$data->firstWhere('guild_id', $guild2->guild_id);
 
     $zetas = DB::table('character_zeta')
         ->join('characters', 'character_id', '=', 'characters.id')
@@ -39,8 +39,8 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
         ->whereIn('members.guild_id', [$guild1->guild_id, $guild2->guild_id])
         ->get();
 
-    $g1Zetas = $zetas->firstWhere('guild_id', $guild1->guild_id);
-    $g2Zetas = $zetas->firstWhere('guild_id', $guild2->guild_id);
+    $g1Zetas = (array)$zetas->firstWhere('guild_id', $guild1->guild_id);
+    $g2Zetas = (array)$zetas->firstWhere('guild_id', $guild2->guild_id);
 
     $g1Data['zetas'] = $g1Zetas['zetas'];
     $g2Data['zetas'] = $g2Zetas['zetas'];
