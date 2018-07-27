@@ -36,11 +36,11 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
         ->join('members', 'characters.member_id', '=', 'members.id')
         ->selectRaw('count(1) as zetas, members.guild_id')
         ->groupBy('members.guild_id')
-        ->whereIn('members.guild_id', [$guild1->guild_id, $guild2->guild_id])
+        ->whereIn('members.guild_id', [$guild1->id, $guild2->id])
         ->get();
 
-    $g1Zetas = (array)$zetas->firstWhere('guild_id', $guild1->guild_id);
-    $g2Zetas = (array)$zetas->firstWhere('guild_id', $guild2->guild_id);
+    $g1Zetas = (array)$zetas->firstWhere('guild_id', $guild1->id);
+    $g2Zetas = (array)$zetas->firstWhere('guild_id', $guild2->id);
 
     $g1Data['zetas'] = $g1Zetas['zetas'];
     $g2Data['zetas'] = $g2Zetas['zetas'];
