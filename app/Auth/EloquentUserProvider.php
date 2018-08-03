@@ -19,7 +19,7 @@ class EloquentUserProvider extends BaseProvider implements UserProvider
     {
         $model = parent::retrieveByToken($identifier, $token);
 
-        if ($model->token) {
+        if (!is_null($model) && $model->token) {
             $discordUser = Socialite::driver('discord')->userFromToken($model->token);
 
             if ($discordUser) {
