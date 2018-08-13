@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use Horizon;
+use App\Database\UpsertBuilder;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,6 +33,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Builder::macro('upsert', function(array $values, $conflict) {
+            $builder = new UpsertBuilder($this);
+            return $this->connection->insert($builder->getQuery($values, $conflict));
+        });
     }
 }

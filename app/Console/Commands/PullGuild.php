@@ -8,6 +8,7 @@ use App\Guild;
 use App\Member;
 use App\Character;
 use Carbon\Carbon;
+use App\CharacterZeta;
 use App\Parsers\GuildParser;
 use Illuminate\Console\Command;
 
@@ -63,12 +64,12 @@ class PullGuild extends Command
 
         $guildMemberCache = [];
         $zetaList = Zeta::all();
-
         $this->info("Starting API results loop…");
-        $units->each(function($data, $unit) use ($guild, $parser, &$guildMemberCache, $zetaList) {
+
+        $charactersToInsert = $units->flatMap(function($data, $unit) use ($guild, $parser, &$guildMemberCache, $zetaList) {
             $this->comment("   Looping over members for {$unit}…");
-            collect($data)->each(function($member_data) use ($guild, $unit, $parser, &$guildMemberCache, $zetaList) {
-                DB::transaction(function() use ($guild, $member_data, $unit, $parser, &$guildMemberCache, $zetaList) {
+            $chars = collect($data)->map(function($member_data) use ($guild, $unit, $parser, &$guildMemberCache, $zetaList) {
+                // DB::transaction(function() use ($guild, $member_data, $unit, $parser, &$guildMemberCache, $zetaList) {
                     if (!isset($member_data['url'])) { return; }
                     if (isset($guildMemberCache[$member_data['url']])) {
                         $member = $guildMemberCache[$member_data['url']];
@@ -85,40 +86,66 @@ class PullGuild extends Command
 
                         $member->guild()->associate($guild);
                         $member->save();
+
+                        $guildMemberCache[$member_data['url']] = $member;
                     }
 
-                    $character = Character::firstOrNew([
+                    $character = [
                         'member_id' => $member->id,
                         'unit_name' => $unit,
-                    ]);
+                        'gear_level' => $member_data['gear_level'],
+                        'power' => $member_data['power'],
+                        'level' => $member_data['level'],
+                        'combat_type' => $member_data['combat_type'],
+                        'rarity' => $member_data['rarity'],
+                    ];
 
-                    $character->gear_level = $member_data['gear_level'];
-                    $character->power = $member_data['power'];
-                    $character->level = $member_data['level'];
-                    $character->combat_type = $member_data['combat_type'];
-                    $character->rarity = $member_data['rarity'];
+                    // if (isset($parser->zetas()[$member->url])) {
+                    //     $memberZetas = $parser->zetas()[$member->url];
+                    //     if (isset($memberZetas[$character->unit_name])) {
+                    //         $zetas = $memberZetas[$character->unit_name];
 
-                    $character->member()->associate($member);
-                    $character->save();
+                    //         $ids = $zetaList->where('character_id', $character->unit_name)
+                    //             ->whereIn('name', $zetas)
+                    //             ->pluck('id')
+                    //             ->all();
 
-                    if (isset($parser->zetas()[$member->url])) {
-                        $memberZetas = $parser->zetas()[$member->url];
-                        if (isset($memberZetas[$character->unit_name])) {
-                            $zetas = $memberZetas[$character->unit_name];
-
-                            $ids = $zetaList->where('character_id', $character->unit_name)
-                                ->whereIn('name', $zetas)
-                                ->pluck('id')
-                                ->all();
-
-                            $character->zetas()->sync($ids);
-                        }
-                    }
-                });
+                    //         $character->zetas()->sync($ids);
+                    //     }
+                    // }
+                // });
+                return $character;
             });
             $this->info("   $unit done.");
-        });
+            return $chars;
+        })->reject(function ($value) { return is_null($value); });
         $this->info("API results parsed.");
+
+        $cCount = $charactersToInsert->count();
+        $this->info("Doing the character insert (${cCount} rows)");
+        Character::upsert($charactersToInsert->toArray(), "(member_id, unit_name)");
+        $this->info("Done with character insert.");
+
+        $zetasToInsert = collect($parser->zetas())->flatMap(function($zetaInfo, $memberURL) use ($guildMemberCache, $zetaList) {
+            if (!isset($guildMemberCache[$memberURL])) { return null; }
+            $memberChars = $guildMemberCache[$memberURL]->characters;
+            return collect($zetaInfo)->flatMap(function($zetas, $unit) use ($memberChars, $zetaList) {
+                $character = $memberChars->where('unit_name', $unit)->first();
+                return $zetaList->where('character_id', $character->unit_name)
+                    ->whereIn('name', $zetas)
+                    ->map(function($zeta) use ($character) {
+                        return [
+                            'zeta_id' => $zeta->id,
+                            'character_id' => $character->id,
+                        ];
+                    });
+            });
+        })->reject(function ($value) { return is_null($value); });
+
+        $zCount = $zetasToInsert->count();
+        $this->info("Doing the zeta insert (${zCount} rows)");
+        CharacterZeta::upsert($zetasToInsert->toArray(), "(character_id, zeta_id)");
+        $this->info("Done with zeta insert.");
 
         $time = Carbon::now()->diffInSeconds($start);
         $this->info("Returning. Scrape took {$time} seconds.");
