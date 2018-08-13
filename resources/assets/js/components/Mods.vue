@@ -63,7 +63,7 @@
             <div class="set-filter row">
                 <div>
                     <div class="btn" v-for="attribute in attributes" :key="attribute" :class="{selected: only == attribute}" @click="pickAttribute(attribute)">
-                        {{attribute}}
+                        {{ attribute }}
                     </div>
                 </div>
                 <div>
@@ -80,6 +80,9 @@
             <div class="shapes">
                 <div class="mod-list" v-for="shape in shapes" :key="shape">
                     <h2>{{ shape }}</h2>
+                    <div class="filter-wrapper">
+                        <v-select v-if="primaries[shape]" v-model="onlyPrimary[shape]" :options="primaries[shape]" :searchable="false"></v-select>
+                    </div>
                     <div class="mod-wrapper"
                         v-for="mod in hasAttribute(shape)"
                         :key="mod.uid"
@@ -151,6 +154,20 @@
                 shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"],
                 modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
                 attributes: ["speed", "offense", "defense", "health", "protection", "critical chance"],
+                primaries: {
+                    arrow: ['all', 'speed', 'offense', 'protection', 'health'],
+                    circle: ['all', 'protection', 'health'],
+                    cross: ['all', 'offense', 'protection', 'health', 'potency', 'tenacity'],
+                    triangle: ['critical damage', 'offense', 'protection', 'health'],
+                },
+                onlyPrimary: {
+                    square: null,
+                    diamond: null,
+                    triangle: 'all',
+                    circle: 'all',
+                    cross: 'all',
+                    arrow: 'speed',
+                },
                 setFilter: [],
                 filterSelected: false,
                 showAll: false,
@@ -223,7 +240,9 @@
             },
             speedArrows: function() {
                 let list = this.arrows;
-                if (!this.showAll) {
+                if (this.onlyPrimary.arrow && this.onlyPrimary.arrow !== 'all') {
+                    list = list.filter((mod) => mod.primary.type === this.onlyPrimary.arrow);
+                } else if (!this.onlyPrimary.arrow && !this.showAll) {
                     list = list.filter((mod) => mod.primary.type === "speed");
                 }
                 return list.filter((mod) => this.setFilter.length ? this.setFilter.includes(mod.set) : true)
@@ -278,6 +297,7 @@
             hasAttribute: function(shape) {
                 let base = shape === "arrow" ? this.speedArrows : this.modsArray;
                 let mods = base.filter((mod) => mod.slot === shape)
+                    .filter(mod => !this.onlyPrimary[shape] || this.onlyPrimary[shape] === 'all' || this.onlyPrimary[shape] === mod.primary.type)
                     .filter((mod) => this.setFilter.length ? this.setFilter.includes(mod.set) : true)
                     .filter((mod) => !this.filterSelected || !mod.modSet || mod.modSet == this.currentSet);
                 if (this.only == "speed" && shape == "arrow") {
