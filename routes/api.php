@@ -16,9 +16,26 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+Route::middleware('client')->get('/guild/scrape/{id}', function(Request $request, $id) {
+    Artisan::call('pull:guild', [
+        'guild' => $id
+    ]);
+
+    return response()->json([]);
+});
 Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Request $request, $first, $second) {
-    $guild1 = \App\Guild::where(['guild_id' => $first])->firstOrFail();
-    $guild2 = \App\Guild::where(['guild_id' => $second])->firstOrFail();
+    $guild1 = \App\Guild::where(['guild_id' => $first])->first();
+    $guild2 = \App\Guild::where(['guild_id' => $second])->first();
+    if (is_null($guild1) || is_null($guild2)) {
+        $response = [
+            'error' => 'Missing at least 1 guild',
+        ];
+        $response[$first] = is_null($guild1);
+        $response[$second] = is_null($guild2);
+
+        return response()->json($response);
+    }
 
     $data = DB::table('guilds')
         ->join('members', 'members.guild_id', '=', 'guilds.id')
