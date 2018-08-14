@@ -30,9 +30,11 @@
                 </div>
             </div>
 
-            <div>
+            <div class="row justify-content-between">
                 <button class="btn btn-primary" @click="addSet">Add Mod Set</button>
-                <label><input type="checkbox" v-model="hideCompletedSets"> Hide sets with no movement</label>
+                <div class="btn" :class="{'btn-primary': !hideCompletedSets, 'btn-secondary': hideCompletedSets}" @click="hideCompletedSets = !hideCompletedSets">
+                    {{ hideCompletedSets ? 'Show all sets' : 'Only show sets with movement' }}
+                </div>
             </div>
 
             <div class="sets row">
@@ -56,7 +58,7 @@
                             <img :src="'/images/mods/' + shape + '_' + setFor(shape, set) + '.png'" width="16"> {{ locationFor(shape, set) }}
                         </div>
                     </div>
-                    <div class="view-modal btn btn-primary" @click.stop="detailSet = set">View</div>
+                    <button class="view-modal btn btn-primary" @click.stop="detailSet = set">View</button>
                 </div>
             </div>
 
@@ -153,7 +155,7 @@
                 only: 'speed',
                 shapes: ["square", "diamond", "triangle", "circle", "cross", "arrow"],
                 modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
-                attributes: ["speed", "offense", "defense", "health", "protection", "critical chance"],
+                attributes: ["speed", "offense", "defense", "health", "protection", "critical chance", "tenacity"],
                 primaries: {
                     arrow: ['all', 'speed', 'offense', 'protection', 'health'],
                     circle: ['all', 'protection', 'health'],
@@ -354,6 +356,7 @@
                             fixed.has.defense = fixed.has.defense || type === "Defense";
                             fixed.has.health = fixed.has.health || type === "Health";
                             fixed.has.protection = fixed.has.protection || type === "Protection";
+                            fixed.has.tenacity = fixed.has.tenacity || type === "Tenacity";
                             fixed.has["critical chance"] = fixed.has["critical chance"] || type.toLowerCase() === "critical chance";
                         }
 
@@ -552,6 +555,7 @@
                                 health: mod.secondaries.health !== undefined,
                                 protection: mod.secondaries.protection !== undefined,
                                 "critical chance": mod.secondaries["critical chance"] !== undefined,
+                                tenacity: mod.secondaries.tenacity !== undefined,
                             };
 
                             all[mod.uid] = mod;
