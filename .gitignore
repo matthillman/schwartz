@@ -12,7 +12,3 @@ npm-debug.log
 yarn-error.log
 .env
 laravel-echo-server.json
-public/js/*
-public/css/*
-public/fonts/vendor/*
-public/*.js
