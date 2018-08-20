@@ -19,6 +19,10 @@
         </div>
 
         <div slot="sections" id="guilds">
+            <div class="narrow-links">
+                <a href="#main">Main</a>
+                <a href="#join">Join Us</a>
+            </div>
             <div class="content-title">Our Guilds</div>
             <div class="guild-list">
                 @foreach ($guilds as $guild)
@@ -34,6 +38,10 @@
         </div>
 
         <div slot="sections" id="join">
+            <div class="narrow-links">
+                <a href="#main">Main</a>
+                <a href="#guilds">Our Guilds</a>
+            </div>
             <div class="content-title">Join Us</div>
             <div>
                 @if (session('inquireStatus'))

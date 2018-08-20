@@ -8,6 +8,8 @@ body {
 }
 
 $hero-width: 500px;
+$number-of-guilds: 9;
+
 .logo.hero {
   width: $hero-width;
   fill: $sw-yellow;
@@ -51,20 +53,68 @@ $hero-width: 500px;
 
 .guild-list {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   align-content: center;
   align-items: center;
-  max-width: 1016px;
+  width: 1016px;
   flex-wrap: wrap;
   margin: 0 auto;
 
-  $number-of-guilds: 9;
   @for $i from 1 to ($number-of-guilds + 1) {
     .guild:nth-child(#{$i}), &.test.test .guild.guild:nth-child(#{$i}) {
-      transform: translate3d(0, ($i - 1) * -1 * (75px + 16px), 0);
+      transform: translate3d(0, ($i % 2) * -1 * (75px + 16px), 0);
       z-index: $number-of-guilds - $i + 1;
       background-color: rgba(255, 255, 255, 1);
     }
+  }
+}
+
+.narrow-links {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .narrow-links {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-around;
+    z-index: 100;
+
+    a {
+      color: white;
+      font-weight: bold;
+      background: rgba($color: white, $alpha: 0.25);
+      border-radius: 12px;
+      text-decoration: none;
+      flex-grow: 1;
+      flex-basis: 50%;
+      padding: 8px;
+      margin: 4px;
+      font-size: 16px;
+      text-transform: uppercase;
+      text-align: center;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .logo.hero, .description, .nav-links, .guild-list {
+    width: calc(100% - 16px);
+  }
+
+  .nav-links a {
+    font-size: 16px;
+  }
+
+  .content-title {
+    margin-top: 50px;
   }
 }

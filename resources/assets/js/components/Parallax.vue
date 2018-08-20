@@ -88,6 +88,7 @@
                 let next = this.hashes.indexOf(window.location.hash);
                 if (next < 0 || next === this.currentSlide) { return; }
                 this.currentSlide = next;
+                console.warn(`Has change got ${this.currentSlide} from ${window.location.hash}`, this.hashes);
             },
             doScroll(delta) {
                 if (Math.abs(delta) < this.scrollSensitivity) { return; }
@@ -169,12 +170,12 @@ html, body {
       }
 
       &.up-scroll {
-        transform: translate3d(0, -$parallax-offset / 2, 0);
+        transform: translateY(-$parallax-offset / 2);
         .content-wrapper {
           transform: translateY($parallax-offset / 2);
         }
         + section {
-          transform: translate3d(0,$parallax-offset,0);
+          transform: translateY($parallax-offset);
             .content-wrapper {
               transform: translateY($parallax-offset);
             }
@@ -182,12 +183,12 @@ html, body {
       }
 
       &.down-scroll {
-        transform: translate3d(0, -(100vh + $parallax-offset), 0);
+        transform: translateY(-(100vh + $parallax-offset));
         .content-wrapper {
           transform: translateY($content-offset);
         }
         + section:not(.down-scroll) {
-          transform: translate3d(0, -$parallax-offset / 2, 0);
+          transform: translateY(-$parallax-offset / 2);
             .content-wrapper {
               transform: translateY($parallax-offset / 2);
             }
@@ -228,7 +229,7 @@ html, body {
             justify-content: flex-start;
 
             .col-form-label, .form-control, .btn {
-                font-size: 24px;
+                font-size: 14px;
             }
         }
     }

@@ -76,4 +76,28 @@
         }
     }
 }
+
+
+@media (max-width: 600px) {
+  .guild {
+    width: 100%;
+    height: 44px;
+
+    img {
+        height: 44px;
+        width: 44px;
+        margin: 0 8px;
+    }
+
+    .info {
+        font-size: 10px;
+        margin: 0 8px;
+
+        .name {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+    }
+  }
+}
 </style>
