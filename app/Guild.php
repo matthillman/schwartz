@@ -48,6 +48,10 @@ class Guild extends Model
                 return 'blacksun';
                 break;
 
+            case 48168:
+                return 'wolffe';
+                break;
+
             default:
                 return '';
                 break;
@@ -67,6 +71,7 @@ class Guild extends Model
             case 30376: // TCS
             case 8545:  // ANS
             case 40305: // BSS
+            case 48168: // ASWS
                 return 'Heroic Tank';
                 break;
 

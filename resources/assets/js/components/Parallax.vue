@@ -3,7 +3,7 @@
         v-scroll="handleScroll"
         v-touchstart="handleTouchStart"
         v-touchmove="handleTouchMove"
-        v-touchend="handleTouchMove"
+        v-touchend="handleTouchEnd"
     >
         <section
             v-for="(item, index) in $slots.sections"
@@ -61,7 +61,7 @@
                     window.addEventListener('touchmove', (evt) => binding.value(evt, el));
                 }
             },
-            touchstart: {
+            touchend: {
                 inserted: function (el, binding) {
                     window.addEventListener('touchend', (evt) => binding.value(evt, el));
                 }
@@ -78,7 +78,7 @@
                 this.touchStart = evt.touches[0].pageY;
             },
             handleTouchMove(evt) {
-                if (this.touchInProgress) { return; }
+                if (this.touchInProgress || this.ticking) { return; }
                 this.doScroll(evt.touches[0].pageY - this.touchStart);
             },
             handleTouchEnd(evt) {

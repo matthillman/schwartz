@@ -52,12 +52,14 @@ $hero-width: 500px;
 .guild-list {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-content: center;
   align-items: center;
+  max-width: 1016px;
+  flex-wrap: wrap;
+  margin: 0 auto;
 
-
-  $number-of-guilds: 8;
+  $number-of-guilds: 9;
   @for $i from 1 to ($number-of-guilds + 1) {
     .guild:nth-child(#{$i}), &.test.test .guild.guild:nth-child(#{$i}) {
       transform: translate3d(0, ($i - 1) * -1 * (75px + 16px), 0);
