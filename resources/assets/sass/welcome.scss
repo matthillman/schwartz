@@ -63,7 +63,7 @@ $number-of-guilds: 9;
 
   @for $i from 1 to ($number-of-guilds + 1) {
     .guild:nth-child(#{$i}), &.test.test .guild.guild:nth-child(#{$i}) {
-      transform: translate3d(0, ($i % 2) * -1 * (75px + 16px), 0);
+      transform: translate3d(0, ($i / 2) * -1 * (75px + 16px), 0);
       z-index: $number-of-guilds - $i + 1;
       background-color: rgba(255, 255, 255, 1);
     }
