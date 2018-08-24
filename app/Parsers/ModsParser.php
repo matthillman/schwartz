@@ -52,6 +52,7 @@ class ModsParser {
         $mod['set'] = $this->getSet($html);
         $mod['pips'] = $this->getPips($html);
         $mod['level'] = $this->getLevel($html);
+        $mod['tier'] = $this->getTier($html);
 
         $stats = $this->getStats($html);
         $mod['primary'] = array_shift($stats);
@@ -87,6 +88,10 @@ class ModsParser {
 
     private function getLevel($el) {
         return static::getStringValue($el, '/statmod-level">([0-9]+)/m');
+    }
+
+    private function getTier($el) {
+        return static::getIntegerValue($el, '/statmod-t([0-9])/m');
     }
 
     private function getStats($el) {

@@ -6,7 +6,7 @@
                     <span class="pip" v-for="n in mod.pips" :key="n"></span>
                 </span>
                 <img class="image" :src="imgSrcFor(mod.set, mod.slot)" width="46">
-                <span class="level" :class="{max: mod.level == 15}">{{ mod.level }}</span>
+                <span class="level" :class="[{max: mod.level == 15}, `tier-${mod.tier}`]">{{ mod.level }}</span>
             </div>
             <div class="data">
                 <span class="primary">{{ mod.primary.value }} {{ mod.primary.type }}</span>

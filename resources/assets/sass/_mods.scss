@@ -46,7 +46,7 @@
 }
 
 .sets {
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 .set {
@@ -58,13 +58,24 @@
   align-items: center;
   cursor: pointer;
   margin-bottom: 16px;
-  flex-basis: 19%;
+  width: calc(20% - 14px);
   position: relative;
   .mod-list {
     // width: calc(100% - 16px);
-    >div {
+    > div {
       width: 100%; // overflow: hidden;
       white-space: nowrap; // text-overflow: ellipsis;
+      > img {
+        width: 20px;
+        height: 20px;
+        padding: 2px;
+        border-radius: 50%;
+      }
+      @for $tier from 1 through 5 {
+        &.tier-#{$tier} > img {
+          background-color: nth($mod-colors, $tier);
+        }
+      }
     }
   }
   .delete-set {
@@ -227,8 +238,15 @@ div.btn {
     padding: 0 2px;
     border-radius: 4px;
     top: 40px;
+    @for $tier from 1 through 5 {
+      &.tier-#{$tier} {
+        background: nth($mod-colors, $tier);
+        color: $text;
+        border: 1px solid $text;
+      }
+    }
     &.max {
-      color: $sw-yellow;
+      border: 1px solid $sw-yellow;
     }
   }
   .pips {

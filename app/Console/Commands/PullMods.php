@@ -61,7 +61,8 @@ class PullMods extends Command
                 $mod->pips = $mod_data['pips'];
                 $mod->level = $mod_data['level'];
                 $mod->name = $mod_data['name'];
-                $mod->location = $mod_data['location'];
+                $mod->location = str_replace('&#39;', "'", $mod_data['location']);
+                $mod->tier = $mod_data['tier'];
 
                 $mod->primary = $mod_data['primary'];
                 $mod->secondaries = $mod_data['secondaries'];

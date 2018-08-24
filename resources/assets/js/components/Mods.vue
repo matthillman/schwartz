@@ -54,8 +54,8 @@
                     <span>Speed: {{ formatSet(set) }}</span>
                     <input type="text" v-model="set.destination" @change="syncState()" @click.stop size="15" placeholder="Destination">
                     <div class="mod-list">
-                        <div v-for="shape in shapes" :key="shape">
-                            <img :src="'/images/mods/' + shape + '_' + setFor(shape, set) + '.png'" width="16"> {{ locationFor(shape, set) }}
+                        <div v-for="shape in shapes" :key="shape" :class="[`tier-${tierFor(shape, set)}`]">
+                            <img :src="'/images/mods/' + shape + '_' + setFor(shape, set) + '.png'" width="20"> {{ locationFor(shape, set) }}
                         </div>
                     </div>
                     <button class="view-modal btn btn-primary" @click.stop="detailSet = set">View</button>
@@ -486,6 +486,11 @@
                 let mod = this.mods[set[shape]];
                 if (!mod) { return "N/A"; }
                 return mod.location;
+            },
+            tierFor: function(shape, set) {
+                let mod = this.mods[set[shape]];
+                if (!mod)  { return 1; }
+                return mod.tier;
             },
             setFor: function(shape, set) {
                 let mod = this.mods[set[shape]];
