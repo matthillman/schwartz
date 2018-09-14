@@ -55,7 +55,9 @@ class MigrateDataToSwgohHelp extends Migration
             $parser = new ProfileParser($user->name);
             $parser->scrape();
             $user->name = $parser->getAllyCode();
-            $user->save();
+            if (!is_null($user->name)) {
+                $user->save();
+            }
         });
     }
 
