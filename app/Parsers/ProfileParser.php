@@ -27,8 +27,8 @@ class ProfileParser {
             $this->lastUpdate = Carbon::parse($this->getUpdatedDateFrom($body));
             return $this->lastUpdate;
         } catch (RequestException $e) {
-            return $this->user;
         }
+        return $this->user;
     }
 
     public function hasChanges() {
