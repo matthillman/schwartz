@@ -4,6 +4,7 @@ namespace App\Parsers;
 
 use App\ModUser;
 use Carbon\Carbon;
+use GuzzleHttp\Exception\RequestException;
 
 class ProfileParser {
 
@@ -19,11 +20,15 @@ class ProfileParser {
     }
 
     public function scrape() {
-        $response = guzzle()->get($this->url, ['allow_redirects' => [ 'track_redirects' => true ]]);
-        $this->url = head($response->getHeader(config('redirect.history.header')));
-        $body = (string)$response->getBody();
-        $this->lastUpdate = Carbon::parse($this->getUpdatedDateFrom($body));
-        return $this->lastUpdate;
+        try {
+            $response = guzzle()->get($this->url, ['allow_redirects' => [ 'track_redirects' => true ]]);
+            $this->url = head($response->getHeader(config('redirect.history.header')));
+            $body = (string)$response->getBody();
+            $this->lastUpdate = Carbon::parse($this->getUpdatedDateFrom($body));
+            return $this->lastUpdate;
+        } catch (RequestException $e) {
+            return $this->user;
+        }
     }
 
     public function hasChanges() {
