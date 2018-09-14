@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use DB;
 use App\Unit;
 use App\Zeta;
+use App\Parsers\SH\SWGOHHelp;
 use Illuminate\Console\Command;
 
 class PullUnits extends Command
@@ -23,6 +24,13 @@ class PullUnits extends Command
      */
     protected $description = 'Pull all units from swogh.gg';
 
+    protected $api;
+
+    public function __construct() {
+        $this->api = new SWGOHHelp;
+        parent::__construct();
+    }
+
     /**
      * Execute the console command.
      *
@@ -30,48 +38,43 @@ class PullUnits extends Command
      */
     public function handle()
     {
-        $response = guzzle()->get('https://swgoh.gg/api/characters/');
-        $json_string = (string)$response->getBody();
-
-        $units = collect(json_decode($json_string, true));
+        $units = $this->api->getUnitData();
 
         DB::transaction(function() use ($units) {
             $units->each(function($unit_data) {
-                $unit = Unit::firstOrNew(['base_id' => $unit_data['base_id']]);
+                $unit = Unit::firstOrNew(['base_id' => $unit_data['baseId']]);
 
-                $unit->base_id = $unit_data['base_id'];
-                $unit->name = str_replace('&#39;', "'", $unit_data['name']);
-                $unit->pk = $unit_data['pk'];
-                $unit->url = $unit_data['url'];
-                $unit->image = $unit_data['image'];
-                $unit->power = $unit_data['power'];
-                $unit->description = $unit_data['description'];
-                $unit->combat_type = $unit_data['combat_type'];
+                $unit->name = $unit_data['nameKey'];
+                $unit->description = $unit_data['descKey'];
+                $unit->image = $unit_data['thumbnailName'];
+                $unit->combat_type = $unit_data['combatType'];
+                $unit->pk = $unit_data['_id'];
+
+                $unit->url = $unit->url ?? '';
+                $unit->power = $unit->power ?? $unit_data['basePower'];
 
                 $unit->save();
             });
         });
 
-        $zetaHref = 'https://swgoh.gg/characters/zeta-abilities/?page=1';
+        $zetas = $this->api->getZetaData();
 
-        do {
-            $page = goutte()->request('GET', $zetaHref);
-            $page->filter('li.character')->each(function($element) {
-                list($char, $name) = explode(' · ', $element->filter('.media-heading h5')->text());
-                $char = str_replace('&#39;', "'", $char);
-                $unit = Unit::where(['name' => $char])->firstOrFail();
+        DB::transaction(function() use ($units, $zetas) {
+            $zetas->each(function($data) use ($units) {
+                $character = $units->first(function($unit) use ($data) {
+                    return $unit['skillReferenceList']->contains($data['id']);
+                });
 
-                list($class, ) = explode(' · ', $element->filter('.pull-right')->text());
+                if (is_null($character)) {
+                    \Log::error("Failed to find character for zeta", [$data]);
+                    return;
+                }
 
-                $zeta = Zeta::firstOrNew(['name' => $name, 'character_id' => $unit->base_id]);
-                $zeta->class = $class;
+                $zeta = Zeta::firstOrNew(['name' => $data['name'], 'character_id' => $character['baseId']]);
+                $zeta->class = $data['class'];
                 $zeta->save();
             });
-
-            $next = $page->filter('[aria-label="Next"]');
-
-            $zetaHref = $next->count() > 0 ? 'https://swgoh.gg'.$next->attr('href') : false;
-        } while ($zetaHref !== false);
+        });
 
         return 0;
     }

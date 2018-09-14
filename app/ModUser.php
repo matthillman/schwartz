@@ -16,4 +16,8 @@ class ModUser extends Model
     public function mods() {
         return $this->hasMany(Mod::class);
     }
+
+    public function stats() {
+        return $this->hasMany(ModStat::class);
+    }
 }

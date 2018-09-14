@@ -19,7 +19,8 @@ class ProfileParser {
     }
 
     public function scrape() {
-        $response = guzzle()->get($this->url);
+        $response = guzzle()->get($this->url, ['allow_redirects' => [ 'track_redirects' => true ]]);
+        $this->url = head($response->getHeader(config('redirect.history.header')));
         $body = (string)$response->getBody();
         $this->lastUpdate = Carbon::parse($this->getUpdatedDateFrom($body));
         return $this->lastUpdate;
@@ -32,6 +33,10 @@ class ProfileParser {
 
     public function upToDate() {
         return !$this->hasChanges();
+    }
+
+    public function getAllyCode() {
+        return static::getStringValue($this->url, '/\/([0-9]{9})\/$/');
     }
 
     private function getUpdatedDateFrom($html) {

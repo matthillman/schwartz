@@ -14,11 +14,11 @@
         </div>
         <div v-if="user > 0" class="row top">
             <div>
-                <input type="text" v-model="swgoh" placeholder="swgoh.gg user" :disabled="syncing">
-                <button class="btn btn-secondary" @click="triggerSync" :disabled="syncing || !connected">Import from swgoh.gg</button>
+                <input type="text" v-model="swgoh" placeholder="Ally code (ex: 552325555)" :disabled="syncing">
+                <button class="btn btn-secondary" @click="triggerSync" :disabled="syncing || !connected">Import from swgoh</button>
             </div>
             <p class="instructions">
-                or, enter your swgoh.gg username and press "Import".
+                or, enter your ally code and press "Import".
             </p>
             <div></div>
         </div>
@@ -140,6 +140,41 @@
 </template>
 
 <script>
+    function translate(stat, primary) {
+        if (primary) {
+            stat = stat.replace(/PERCENTADDITIVE$/, '');
+        }
+        switch(stat) {
+            case 'UNITSTATSPEED': return 'speed';
+            case 'UNITSTATOFFENSE': return 'offense';
+            case 'UNITSTATOFFENSEPERCENTADDITIVE': return '% offense';
+            case 'UNITSTATDEFENSE': return 'defense';
+            case 'UNITSTATDEFENSEPERCENTADDITIVE': return '% defense';
+            case 'UNITSTATMAXSHIELD': return 'protection';
+            case 'UNITSTATMAXSHIELDPERCENTADDITIVE': return '% protection';
+            case 'UNITSTATMAXHEALTH': return 'health';
+            case 'UNITSTATMAXHEALTHPERCENTADDITIVE': return '% health';
+            case 'UNITSTATACCURACY': return 'potency';
+            case 'UNITSTATRESISTANCE': return 'tenacity';
+            case 'UNITSTATCRITICALCHANCEPERCENTADDITIVE': return 'critical chance';
+            case 'UNITSTATCRITICALDAMAGE': return 'critical damage';
+            case 'UNITSTATCRITICALNEGATECHANCEPERCENTADDITIVE': return 'critical avoidance';
+            case 'UNITSTATEVASIONNEGATEPERCENTADDITIVE': return 'accuracy';
+        }
+    }
+    function translateValue(stat, value) {
+        switch(stat) {
+            case 'UNITSTATACCURACY':
+            case 'UNITSTATRESISTANCE':
+            case 'UNITSTATCRITICALCHANCEPERCENTADDITIVE':
+            case 'UNITSTATCRITICALDAMAGE':
+            case 'UNITSTATCRITICALNEGATECHANCEPERCENTADDITIVE':
+            case 'UNITSTATEVASIONNEGATEPERCENTADDITIVE':
+                return value;
+        }
+
+        return value.replace(/%$/, '');
+    }
     export default {
         mounted: function() {
             this.loadState();
@@ -552,6 +587,16 @@
                     .then((response) => {
                         this.mods = response.data.reduce((all, mod) => {
                             mod.modSet = (this.sets.filter((set) => set[mod.slot] == mod.uid)[0] || {}).id
+
+                            mod.primary.type = translate(mod.primary.type, true);
+
+                            for (const secondary in mod.secondaries) {
+                                if (mod.secondaries.hasOwnProperty(secondary)) {
+                                    const element = mod.secondaries[secondary];
+                                    mod.secondaries[translate(secondary)] = translateValue(secondary, element);
+                                    delete mod.secondaries[secondary];
+                                }
+                            }
 
                             mod.has = {
                                 speed: mod.secondaries.speed !== undefined,

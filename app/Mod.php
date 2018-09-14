@@ -52,7 +52,7 @@ class Mod extends Model
     }
 
     public function setSecondariesAttribute($value) {
-        foreach (array_keys($value) as $index => $key) {
+        foreach (collect($value)->keys() as $index => $key) {
             $fixed = $index + 1;
             $this->attributes["secondary_{$fixed}_type"] = $key;
             $this->attributes["secondary_{$fixed}_value"] = $value[$key];
@@ -61,5 +61,15 @@ class Mod extends Model
 
     public function user() {
         return $this->belongsTo(ModUser::class, 'mod_user_id');
+    }
+
+    public function toArray() {
+        $json = parent::toArray();
+
+        $char = Unit::where('base_id', $json['location'])->first();
+
+        $json['location'] = $char->name;
+
+        return $json;
     }
 }

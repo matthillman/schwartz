@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     });
 
     Route::resource('tw-teams', 'TerritoryCountersController');
+    Route::resource('character-mods', 'UnitModPreferenceController');
 
     Route::get('/units', 'UnitController@index')->name('units');
     Route::get('/guilds', 'GuildController@listGuilds')->name('guilds');

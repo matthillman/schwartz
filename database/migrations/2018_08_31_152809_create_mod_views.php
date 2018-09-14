@@ -103,7 +103,20 @@ SELECT id, uid, mod_user_id, name, location, slot, set, pips, level, primary_typ
 		WHEN secondary_4_type = 'tenacity' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as tenacity
 FROM mods;
-        ");
+		");
+
+		DB::statement("create view mod_stat_critical_chance as select id, critical_chance, ntile(100) over (order by critical_chance) as percentile from mod_stats where critical_chance > 0;");
+		DB::statement("create view mod_stat_defense as select id, defense, ntile(100) over (order by defense) as percentile from mod_stats where defense > 0;");
+		DB::statement("create view mod_stat_defense_percent as select id, defense_percent, ntile(100) over (order by defense_percent) as percentile from mod_stats where defense_percent > 0;");
+		DB::statement("create view mod_stat_health as select id, health, ntile(100) over (order by health) as percentile from mod_stats where health > 0;");
+		DB::statement("create view mod_stat_health_percent as select id, health_percent, ntile(100) over (order by health_percent) as percentile from mod_stats where health_percent > 0;");
+		DB::statement("create view mod_stat_offense as select id, offense, ntile(100) over (order by offense) as percentile from mod_stats where offense > 0;");
+		DB::statement("create view mod_stat_offense_percent as select id, offense_percent, ntile(100) over (order by offense_percent) as percentile from mod_stats where offense_percent > 0;");
+		DB::statement("create view mod_stat_protection as select id, protection, ntile(100) over (order by protection) as percentile from mod_stats where protection > 0;");
+		DB::statement("create view mod_stat_protection_percent as select id, protection_percent, ntile(100) over (order by protection_percent) as percentile from mod_stats where protection_percent > 0;");
+		DB::statement("create view mod_stat_potency as select id, potency, ntile(100) over (order by potency) as percentile from mod_stats where potency > 0;");
+		DB::statement("create view mod_stat_speed as select id, speed, ntile(100) over (order by speed) as percentile from mod_stats where speed > 0;");
+		DB::statement("create view mod_stat_tenacity as select id, tenacity, ntile(100) over (order by tenacity) as percentile from mod_stats where tenacity > 0;");
     }
 
     /**
@@ -117,6 +130,18 @@ FROM mods;
             $table->dropIndex(['id', 'type']);
         });
         DB::statement("DROP MATERIALIZED VIEW mod_secondaries");
-        DB::statement("DROP VIEW mod_stats");
+		DB::statement("DROP VIEW mod_stats");
+		DB::statement("DROP VIEW mod_stat_critical_chance");
+		DB::statement("DROP VIEW mod_stat_defense");
+		DB::statement("DROP VIEW mod_stat_defense_percent");
+		DB::statement("DROP VIEW mod_stat_health");
+		DB::statement("DROP VIEW mod_stat_health_percent");
+		DB::statement("DROP VIEW mod_stat_offense");
+		DB::statement("DROP VIEW mod_stat_offense_percent");
+		DB::statement("DROP VIEW mod_stat_protection");
+		DB::statement("DROP VIEW mod_stat_protection_percent");
+		DB::statement("DROP VIEW mod_stat_potency");
+		DB::statement("DROP VIEW mod_stat_speed");
+		DB::statement("DROP VIEW mod_stat_tenacity");
     }
 }

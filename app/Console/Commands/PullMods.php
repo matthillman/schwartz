@@ -5,8 +5,8 @@ namespace App\Console\Commands;
 use DB;
 use App\Mod;
 use App\ModUser;
-use App\Parsers\ModsParser;
-use App\Parsers\ProfileParser;
+use App\Parsers\SH\ModsParser;
+use App\Parsers\SH\ProfileParser;
 use Illuminate\Console\Command;
 
 class PullMods extends Command
@@ -32,8 +32,9 @@ class PullMods extends Command
      */
     public function handle()
     {
-        \Log::info("Starting mod scrape for user", [$this->argument('user')]);
-        $user = ModUser::firstOrNew(['name' => $this->argument('user')]);
+        $arg = $this->argument('user');
+        \Log::info("Starting mod scrape for user", [$arg]);
+        $user = ModUser::firstOrNew(['name' => "$arg"]);
 
         $profile = new ProfileParser($user->name);
         $profile->scrape();
@@ -50,9 +51,9 @@ class PullMods extends Command
         DB::transaction(function() use ($user, $parser) {
             $user->save();
 
-            $user->mods()->whereNotIn('uid', $parser->mods->pluck('uid'))->delete();
+            $user->mods()->whereNotIn('uid', $parser->getMods()->pluck('uid'))->delete();
 
-            $parser->mods->each(function($mod_data) use ($user) {
+            $parser->getMods()->each(function($mod_data) use ($user) {
                 $mod = Mod::firstOrNew(['uid' => $mod_data['uid']]);
 
                 $mod->uid = $mod_data['uid'];
@@ -61,7 +62,7 @@ class PullMods extends Command
                 $mod->pips = $mod_data['pips'];
                 $mod->level = $mod_data['level'];
                 $mod->name = $mod_data['name'];
-                $mod->location = str_replace('&#39;', "'", $mod_data['location']);
+                $mod->location = $mod_data['location'];
                 $mod->tier = $mod_data['tier'];
 
                 $mod->primary = $mod_data['primary'];
