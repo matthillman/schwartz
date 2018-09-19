@@ -130,46 +130,46 @@ class PullGuild extends Command
         CharacterZeta::upsert($zetasToInsert->toArray(), "(character_id, zeta_id)");
         $this->info("Done with zeta insert.");
 
-        $rosterByAllyCode->each(function($roster, $allyCode) {
-            $modUser = ModUser::firstOrNew(['name' => (string)$allyCode]);
-            $modUser->last_scrape = new \DateTime;
-            $modUser->save();
+        // $rosterByAllyCode->each(function($roster, $allyCode) {
+        //     $modUser = ModUser::firstOrNew(['name' => (string)$allyCode]);
+        //     $modUser->last_scrape = new \DateTime;
+        //     $modUser->save();
 
-            $mods = collect($roster)->pluck('mods', 'defId');
+        //     $mods = collect($roster)->pluck('mods', 'defId');
 
-            $modUser->mods()->whereNotIn('uid', $mods->flatten(1)->pluck('id'))->delete();
+        //     $modUser->mods()->whereNotIn('uid', $mods->flatten(1)->pluck('id'))->delete();
 
-            $modsToInsert = $mods->flatMap(function($charMods, $charID) use ($modUser) {
-                return collect($charMods)->map(function($mod) use ($charID, $modUser) {
-                    return [
-                        "uid" => $mod["id"],
-                        "slot" => $mod["slot"],
-                        "set" => $mod["set"],
-                        "pips" => $mod["pips"],
-                        "level" => $mod["level"],
-                        "name" => "",
-                        "location" => $charID,
-                        "mod_user_id" => $modUser->id,
-                        "tier" => $mod["tier"],
-                        "primary_type" => $mod["primaryBonusType"],
-                        "primary_value" => $mod["primaryBonusValue"],
-                        "secondary_1_type" => $mod["secondaryType_1"],
-                        "secondary_1_value" => $mod["secondaryValue_1"],
-                        "secondary_2_type" => $mod["secondaryType_2"],
-                        "secondary_2_value" => $mod["secondaryValue_2"],
-                        "secondary_3_type" => $mod["secondaryType_3"],
-                        "secondary_3_value" => $mod["secondaryValue_3"],
-                        "secondary_4_type" => $mod["secondaryType_4"],
-                        "secondary_4_value" => $mod["secondaryValue_4"],
-                      ];
-                });
-            });
+        //     $modsToInsert = $mods->flatMap(function($charMods, $charID) use ($modUser) {
+        //         return collect($charMods)->map(function($mod) use ($charID, $modUser) {
+        //             return [
+        //                 "uid" => $mod["id"],
+        //                 "slot" => $mod["slot"],
+        //                 "set" => $mod["set"],
+        //                 "pips" => $mod["pips"],
+        //                 "level" => $mod["level"],
+        //                 "name" => "",
+        //                 "location" => $charID,
+        //                 "mod_user_id" => $modUser->id,
+        //                 "tier" => $mod["tier"],
+        //                 "primary_type" => $mod["primaryBonusType"],
+        //                 "primary_value" => $mod["primaryBonusValue"],
+        //                 "secondary_1_type" => $mod["secondaryType_1"],
+        //                 "secondary_1_value" => $mod["secondaryValue_1"],
+        //                 "secondary_2_type" => $mod["secondaryType_2"],
+        //                 "secondary_2_value" => $mod["secondaryValue_2"],
+        //                 "secondary_3_type" => $mod["secondaryType_3"],
+        //                 "secondary_3_value" => $mod["secondaryValue_3"],
+        //                 "secondary_4_type" => $mod["secondaryType_4"],
+        //                 "secondary_4_value" => $mod["secondaryValue_4"],
+        //               ];
+        //         });
+        //     });
 
-            $mCount = $modsToInsert->count();
-            $this->info("Doing the mod insert for {$modUser->name} (${mCount} rows)");
-            Mod::upsert($modsToInsert->toArray(), "(uid)");
-            $this->info("Done with mod insert.");
-        });
+        //     $mCount = $modsToInsert->count();
+        //     $this->info("Doing the mod insert for {$modUser->name} (${mCount} rows)");
+        //     Mod::upsert($modsToInsert->toArray(), "(uid)");
+        //     $this->info("Done with mod insert.");
+        // });
 
         $time = Carbon::now()->diffInSeconds($start);
         $this->info("Returning. Scrape took {$time} seconds.");
