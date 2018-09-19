@@ -3,14 +3,17 @@
 namespace App\Console\Commands;
 
 use DB;
+use App\Mod;
 use App\Zeta;
 use App\Guild;
 use App\Member;
+use App\ModUser;
 use App\Character;
 use Carbon\Carbon;
 use App\CharacterZeta;
-use App\Parsers\GuildParser;
+use App\Parsers\SH\GuildParser;
 use Illuminate\Console\Command;
+use App\Parsers\SH\Enums\PlayerStats;
 
 class PullGuild extends Command
 {
@@ -39,19 +42,19 @@ class PullGuild extends Command
         $guild = Guild::firstOrNew(['guild_id' => $this->argument('guild')]);
         $name = $guild->name ?? 'GUILD ' . $guild->guild_id;
         $this->info("Starting GuildParser for {$name}…");
-        $parser = (new GuildParser($this->argument('guild')))->scrape();
+
+        $parser = new GuildParser($this->argument('guild'));
+        $this->info("Starting API pull…");
+
+        $parser->scrape();
+        $this->info("API pull finished.");
+
+        $this->info("Saving basic info.");
         $guild->url = $parser->url();
         $guild->name = $parser->name();
         $guild->gp = $parser->gp();
         $guild->save();
         $this->info("Guild saved.");
-
-        $this->info("Starting API pull…");
-        $response = guzzle()->get("https://swgoh.gg/api/guilds/{$guild->guild_id}/units/");
-        $json_string = (string)$response->getBody();
-
-        $units = collect(json_decode($json_string, true));
-        $this->info("API pull finished.");
 
         $this->info("Dissociating all guild members…");
         DB::transaction(function() use ($guild) {
@@ -62,63 +65,44 @@ class PullGuild extends Command
         });
         $this->info("Dissociation done.");
 
-        $guildMemberCache = [];
+        $guildMembers = [];
         $zetaList = Zeta::all();
         $this->info("Starting API results loop…");
 
-        $charactersToInsert = $units->flatMap(function($data, $unit) use ($guild, $parser, &$guildMemberCache, $zetaList) {
-            $this->comment("   Looping over members for {$unit}…");
-            $chars = collect($data)->map(function($member_data) use ($guild, $unit, $parser, &$guildMemberCache, $zetaList) {
-                // DB::transaction(function() use ($guild, $member_data, $unit, $parser, &$guildMemberCache, $zetaList) {
-                    if (!isset($member_data['url'])) { return; }
-                    if (isset($guildMemberCache[$member_data['url']])) {
-                        $member = $guildMemberCache[$member_data['url']];
-                    } else {
-                        $member = Member::firstOrNew(['url' => $member_data['url']]);
+        $charactersToInsert = $parser->members()->flatMap(function($member_data) use ($guild, &$guildMembers) {
+            $member = Member::firstOrNew(['ally_code' => (string)$member_data['allyCode']]);
 
-                        $member->url = $member_data['url'];
-                        $member->player = $member_data['player'];
+            $ally = $member_data['allyCode'];
+            $member->url = "/p/{$ally}/collection/";
+            $member->player = $member_data['name'];
 
-                        $gp = isset($parser->memberGP()[$member->url]) ? $parser->memberGP()[$member->url] : ['gp' => 0, 'character_gp' => 0, 'ship_gp' => 0];
-                        $member->gp = $gp['gp'];
-                        $member->character_gp = $gp['character_gp'];
-                        $member->ship_gp = $gp['ship_gp'];
+            $stats = collect($member_data['stats']);
+            $member->gp = $stats->where('nameKey', PlayerStats::gp)->pluck('value')->first();
+            $member->character_gp = $stats->where('nameKey', PlayerStats::charGP)->pluck('value')->first();
+            $member->ship_gp = $stats->where('nameKey', PlayerStats::shipGP)->pluck('value')->first();
 
-                        $member->guild()->associate($guild);
-                        $member->save();
+            $member->guild()->associate($guild);
+            $member->save();
 
-                        $guildMemberCache[$member_data['url']] = $member;
-                    }
+            $guildMembers[$member->ally_code] = $member;
 
-                    $character = [
-                        'member_id' => $member->id,
-                        'unit_name' => $unit,
-                        'gear_level' => $member_data['gear_level'],
-                        'power' => $member_data['power'],
-                        'level' => $member_data['level'],
-                        'combat_type' => $member_data['combat_type'],
-                        'rarity' => $member_data['rarity'],
-                    ];
-
-                    // if (isset($parser->zetas()[$member->url])) {
-                    //     $memberZetas = $parser->zetas()[$member->url];
-                    //     if (isset($memberZetas[$character->unit_name])) {
-                    //         $zetas = $memberZetas[$character->unit_name];
-
-                    //         $ids = $zetaList->where('character_id', $character->unit_name)
-                    //             ->whereIn('name', $zetas)
-                    //             ->pluck('id')
-                    //             ->all();
-
-                    //         $character->zetas()->sync($ids);
-                    //     }
-                    // }
-                // });
+            $this->comment("   Looping over units for {$member->player}…");
+            $chars = collect($member_data['roster'])->map(function($unit) use ($member) {
+                $character = [
+                    'member_id' => $member->id,
+                    'unit_name' => $unit['defId'],
+                    'gear_level' => $unit['gear'],
+                    'power' => $unit['gp'],
+                    'level' => $unit['level'],
+                    'combat_type' => 1,
+                    'rarity' => $unit['rarity'],
+                ];
                 return $character;
             });
-            $this->info("   $unit done.");
+            $this->info("   {$member->player} done.");
             return $chars;
         })->reject(function ($value) { return is_null($value); });
+
         $this->info("API results parsed.");
 
         $cCount = $charactersToInsert->count();
@@ -126,19 +110,18 @@ class PullGuild extends Command
         Character::upsert($charactersToInsert->toArray(), "(member_id, unit_name)");
         $this->info("Done with character insert.");
 
-        $zetasToInsert = collect($parser->zetas())->flatMap(function($zetaInfo, $memberURL) use ($guildMemberCache, $zetaList) {
-            if (!isset($guildMemberCache[$memberURL])) { return null; }
-            $memberChars = $guildMemberCache[$memberURL]->characters;
-            return collect($zetaInfo)->flatMap(function($zetas, $unit) use ($memberChars, $zetaList) {
-                $character = $memberChars->where('unit_name', $unit)->first();
-                return $zetaList->where('character_id', $character->unit_name)
-                    ->whereIn('name', $zetas)
-                    ->map(function($zeta) use ($character) {
-                        return [
-                            'zeta_id' => $zeta->id,
-                            'character_id' => $character->id,
-                        ];
-                    });
+        $rosterByAllyCode = $parser->members()->pluck('roster', 'allyCode');
+
+        $zetasToInsert = $rosterByAllyCode->flatMap(function($roster, $allyCode) use ($guildMembers, $zetaList) {
+            if (!isset($guildMembers[$allyCode])) { return null; }
+            $memberChars = $guildMembers[$allyCode]->characters;
+            $skills = collect($roster)->pluck('skills')->flatten(1)->where('isZeta', true)->where('tier', 8)->pluck('id');
+            return $zetaList->whereIn('skill_id', $skills)->map(function($zeta) use ($memberChars) {
+                $character = $memberChars->where('unit_name', $zeta->character_id)->first();
+                return [
+                    'zeta_id' => $zeta->id,
+                    'character_id' => $character->id,
+                ];
             });
         })->reject(function ($value) { return is_null($value); });
 
@@ -146,6 +129,47 @@ class PullGuild extends Command
         $this->info("Doing the zeta insert (${zCount} rows)");
         CharacterZeta::upsert($zetasToInsert->toArray(), "(character_id, zeta_id)");
         $this->info("Done with zeta insert.");
+
+        $rosterByAllyCode->each(function($roster, $allyCode) {
+            $modUser = ModUser::firstOrNew(['name' => (string)$allyCode]);
+            $modUser->last_scrape = new \DateTime;
+            $modUser->save();
+
+            $mods = collect($roster)->pluck('mods', 'defId');
+
+            $modUser->mods()->whereNotIn('uid', $mods->flatten(1)->pluck('id'))->delete();
+
+            $modsToInsert = $mods->flatMap(function($charMods, $charID) use ($modUser) {
+                return collect($charMods)->map(function($mod) use ($charID, $modUser) {
+                    return [
+                        "uid" => $mod["id"],
+                        "slot" => $mod["slot"],
+                        "set" => $mod["set"],
+                        "pips" => $mod["pips"],
+                        "level" => $mod["level"],
+                        "name" => "",
+                        "location" => $charID,
+                        "mod_user_id" => $modUser->id,
+                        "tier" => $mod["tier"],
+                        "primary_type" => $mod["primaryBonusType"],
+                        "primary_value" => $mod["primaryBonusValue"],
+                        "secondary_1_type" => $mod["secondaryType_1"],
+                        "secondary_1_value" => $mod["secondaryValue_1"],
+                        "secondary_2_type" => $mod["secondaryType_2"],
+                        "secondary_2_value" => $mod["secondaryValue_2"],
+                        "secondary_3_type" => $mod["secondaryType_3"],
+                        "secondary_3_value" => $mod["secondaryValue_3"],
+                        "secondary_4_type" => $mod["secondaryType_4"],
+                        "secondary_4_value" => $mod["secondaryValue_4"],
+                      ];
+                });
+            });
+
+            $mCount = $modsToInsert->count();
+            $this->info("Doing the mod insert for {$modUser->name} (${mCount} rows)");
+            Mod::upsert($modsToInsert->toArray(), "(uid)");
+            $this->info("Done with mod insert.");
+        });
 
         $time = Carbon::now()->diffInSeconds($start);
         $this->info("Returning. Scrape took {$time} seconds.");

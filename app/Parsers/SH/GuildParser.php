@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Parsers;
+namespace App\Parsers\SH;
 
 use App\Unit;
 use App\Guild;
 
 class GuildParser {
 
-    use Concerns\ParsesRegex;
+    use \App\Parsers\Concerns\ParsesRegex;
 
+    public $data;
     protected $guild;
     protected $gp;
     protected $gpMap;
@@ -28,9 +29,8 @@ class GuildParser {
         $this->url = head($response->getHeader(config('redirect.history.header')));
         $anAllyCode = $this->getAnAllyCode();
 
-
-
-
+        ini_set('memory_limit', '192M');
+        $this->data = swgoh()->getGuild($anAllyCode, SWGOHHelp::FULL_ROSTER);
 
         return $this;
     }
@@ -38,26 +38,17 @@ class GuildParser {
     protected function getAnAllyCode() {
         $page = goutte()->request('GET', $this->url);
         $slug = $page->filter('table tbody tr td:first-child a')->attr('href');
-        return (preg_match('/\/^(.+)\/$/', $slug, $matches)) ? trim($matches[1]) : null;
-
-            // $this->gpMap[$slug . 'collection/'] = [
-            //     'gp' => $gp,
-            //     'character_gp' => $charGP,
-            //     'ship_gp' => $shipGP,
-            // ];
+        return (preg_match('/\/(\d+)\/$/', $slug, $matches)) ? trim($matches[1]) : null;
     }
 
     public function name() {
-        return $this->name;
+        return $this->data['name'];
     }
     public function gp() {
-        return $this->gp;
+        return $this->data['gp'];
     }
-    public function memberGP() {
-        return $this->gpMap;
-    }
-    public function zetas() {
-        return $this->zetaMap;
+    public function members() {
+        return collect($this->data['roster']);
     }
     public function url() {
         return $this->url;

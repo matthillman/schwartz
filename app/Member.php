@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
-    protected $fillable = ['url'];
+    protected $fillable = ['url', 'ally_code'];
 
     /**
      * The accessors to append to the model's array form.

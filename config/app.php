@@ -164,6 +164,7 @@ return [
         App\Providers\DropboxServiceProvider::class,
         App\Providers\GuzzleServiceProvider::class,
         App\Providers\GoutteServiceProvider::class,
+        App\Providers\SWGOHServiceProvider::class,
 
     ],
 

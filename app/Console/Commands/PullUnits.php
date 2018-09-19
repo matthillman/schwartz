@@ -70,8 +70,12 @@ class PullUnits extends Command
                     return;
                 }
 
-                $zeta = Zeta::firstOrNew(['name' => $data['name'], 'character_id' => $character['baseId']]);
+                $zeta = Zeta::firstOrNew([
+                    'name' => $data['name'],
+                    'character_id' => $character['baseId']
+                ]);
                 $zeta->class = $data['class'];
+                $zeta->skill_id = $data['id'];
                 $zeta->save();
             });
         });

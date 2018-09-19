@@ -110,14 +110,14 @@ class SWGOHHelp {
                 "desc" => 1,
                 "members" => 1,
                 "status" => 1,
-                "required" => 1,
+                "required" => 0,
                 "bannerColor" => 1,
                 "bannerLogo" => 1,
                 "message" => 1,
                 "gp" => 1,
                 "raid" => 0,
                 "roster" => 1,
-                "updated" => 1,
+                "updated" => 0,
             ], $projection),
         ];
 
@@ -235,7 +235,13 @@ class SWGOHHelp {
                 ],
                 'json' => $query,
             ]);
-            return collect(json_decode($response->getBody(), true));
+            $raw = $response->getBody();
+            $response = null;
+            unset($response);
+            $decoded = json_decode($raw, true);
+            $raw = null;
+            unset($raw);
+            return collect($decoded);
         } catch (ClientException $e) {
             $response = $e->getResponse();
             $body = json_decode($response->getBody(), true);
