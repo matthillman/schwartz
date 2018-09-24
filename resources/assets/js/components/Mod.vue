@@ -5,7 +5,7 @@
                 <span class="pips">
                     <span class="pip" v-for="n in mod.pips" :key="n"></span>
                 </span>
-                <img class="image" :src="imgSrcFor(mod.set, mod.slot)" width="46">
+                <div class="mod-image" :class="[mod.set, mod.slot, `tier-${mod.tier}`, {'gold': mod.pips > 5}]"></div>
                 <span class="level" :class="[{max: mod.level == 15}, `tier-${mod.tier}`]">{{ mod.level }}</span>
             </div>
             <div class="data">
@@ -26,9 +26,6 @@
     export default {
         props: ['mod'],
         methods: {
-            imgSrcFor: function(set, slot) {
-                return "/images/mods/" + slot + "_" + set + ".png";
-            },
             isStatGood(value, type) {
                 return (type == "offense" && +value >= 50)
                     || (type == "health" && +value >= 1000)

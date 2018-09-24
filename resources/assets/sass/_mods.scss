@@ -65,16 +65,10 @@
     > div {
       width: 100%; // overflow: hidden;
       white-space: nowrap; // text-overflow: ellipsis;
-      > img {
-        width: 20px;
+
+      > span {
+        display: inline-flex;
         height: 20px;
-        padding: 2px;
-        border-radius: 50%;
-      }
-      @for $tier from 1 through 5 {
-        &.tier-#{$tier} > img {
-          background-color: nth($mod-colors, $tier);
-        }
       }
     }
   }
@@ -119,6 +113,110 @@
   }
 }
 
+@mixin mod-image($grid-size, $class: '') {
+  .mod-image#{$class} {
+    display: inline-block;
+    position: relative;
+    width: $grid-size;
+    height: $grid-size;
+    background: url('/images/mods/mod-shapes.png');
+    $bg-size-x: 12 * $grid-size;
+    $bg-size-y: 5 * $grid-size;
+    background-size: $bg-size-x $bg-size-y;
+
+    &.square   { background-position-x: -1 * 0 * $grid-size; }
+    &.arrow    { background-position-x: -1 * 1 * $grid-size; }
+    &.diamond  { background-position-x: -1 * 2 * $grid-size; }
+    &.triangle { background-position-x: -1 * 3 * $grid-size; }
+    &.circle   { background-position-x: -1 * 4 * $grid-size; }
+    &.cross    { background-position-x: -1 * 5 * $grid-size; }
+
+    $gold-base: 6 * $grid-size;
+
+    &.gold.square   { background-position-x: -1 * 0 * ($grid-size + $gold-base); }
+    &.gold.arrow    { background-position-x: -1 * 1 * ($grid-size + $gold-base); }
+    &.gold.diamond  { background-position-x: -1 * 2 * ($grid-size + $gold-base); }
+    &.gold.triangle { background-position-x: -1 * 3 * ($grid-size + $gold-base); }
+    &.gold.circle   { background-position-x: -1 * 4 * ($grid-size + $gold-base); }
+    &.gold.cross    { background-position-x: -1 * 5 * ($grid-size + $gold-base); }
+
+    &.tier-1 { background-position-y: -1 * 0 * $grid-size; }
+    &.tier-2 { background-position-y: -1 * 1 * $grid-size; }
+    &.tier-3 { background-position-y: -1 * 2 * $grid-size; }
+    &.tier-4 { background-position-y: -1 * 3 * $grid-size; }
+    &.tier-5 { background-position-y: -1 * 4 * $grid-size; }
+
+    $icon-grid-size: 13/45 * $grid-size;
+    &::after {
+      content: '';
+      background: url('/images/mods/mod-icons.png');
+      $bg-size-x: 8 * $icon-grid-size;
+      $bg-size-y: 5 * $icon-grid-size;
+      background-size: $bg-size-x $bg-size-y;
+      width: $icon-grid-size;
+      height: $icon-grid-size;
+      display: block;
+      position: absolute;
+    }
+
+    &.arrow::after    { left: 1.69  * $icon-grid-size; top:  .77  * $icon-grid-size; }
+    &.square::after   { left: 1.55  * $icon-grid-size; top:  .923 * $icon-grid-size; }
+    &.diamond::after  { left: 1.231 * $icon-grid-size; top: 1.21  * $icon-grid-size; }
+    &.triangle::after { left: 1.231 * $icon-grid-size; top: 1.38  * $icon-grid-size; }
+    &.circle::after   { left: 1.231 * $icon-grid-size; top: 1.21  * $icon-grid-size; }
+    &.cross::after    { left: 1.231 * $icon-grid-size; top: 1.21  * $icon-grid-size; }
+
+    &.health::after     { background-position-x: -1 * 0 * $icon-grid-size; }
+    &.offense::after    { background-position-x: -1 * 1 * $icon-grid-size; }
+    &.defense::after    { background-position-x: -1 * 2 * $icon-grid-size; }
+    &.speed::after      { background-position-x: -1 * 3 * $icon-grid-size; }
+    &.critchance::after { background-position-x: -1 * 4 * $icon-grid-size; }
+    &.critdamage::after { background-position-x: -1 * 5 * $icon-grid-size; }
+    &.potency::after    { background-position-x: -1 * 6 * $icon-grid-size; }
+    &.tenacity::after   { background-position-x: -1 * 7 * $icon-grid-size; }
+
+    &.tier-1::after { background-position-y: -1 * 0 * $icon-grid-size; }
+    &.tier-2::after { background-position-y: -1 * 1 * $icon-grid-size; }
+    &.tier-3::after { background-position-y: -1 * 2 * $icon-grid-size; }
+    &.tier-4::after { background-position-y: -1 * 3 * $icon-grid-size; }
+    &.tier-5::after { background-position-y: -1 * 4 * $icon-grid-size; }
+  }
+}
+
+@include mod-image(45px);
+@include mod-image(20px, '.mini');
+
+.mod-image.mini {
+  top: 5px;
+}
+
+.mod-set-image {
+  $icon-grid-size: 23px;
+  display: inline-block;
+  position: relative;
+  background: url('/images/mods/mod-icons.png');
+  $bg-size-x: 8 * $icon-grid-size;
+  $bg-size-y: 5 * $icon-grid-size;
+  background-size: $bg-size-x $bg-size-y;
+  width: $icon-grid-size;
+  height: $icon-grid-size;
+
+  &.health     { background-position-x: -1 * 0 * $icon-grid-size; }
+  &.offense    { background-position-x: -1 * 1 * $icon-grid-size; }
+  &.defense    { background-position-x: -1 * 2 * $icon-grid-size; }
+  &.speed      { background-position-x: -1 * 3 * $icon-grid-size; }
+  &.critchance { background-position-x: -1 * 4 * $icon-grid-size; }
+  &.critdamage { background-position-x: -1 * 5 * $icon-grid-size; }
+  &.potency    { background-position-x: -1 * 6 * $icon-grid-size; }
+  &.tenacity   { background-position-x: -1 * 7 * $icon-grid-size; }
+
+  &.tier-1 { background-position-y: -1 * 0 * $icon-grid-size; }
+  &.tier-2 { background-position-y: -1 * 1 * $icon-grid-size; }
+  &.tier-3 { background-position-y: -1 * 2 * $icon-grid-size; }
+  &.tier-4 { background-position-y: -1 * 3 * $icon-grid-size; }
+  &.tier-5 { background-position-y: -1 * 4 * $icon-grid-size; }
+}
+
 .btn {
   border-radius: 8px;
 }
@@ -151,6 +249,7 @@ div.btn {
     background-color: $gray-500;
     border-color: $secondary;
     color: $white;
+    display: inline-flex;
     &.selected {
       background-color: $primary;
       border-color: $secondary;

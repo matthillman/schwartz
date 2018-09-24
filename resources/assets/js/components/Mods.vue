@@ -26,7 +26,7 @@
             <h2>5* Speed Arrows</h2>
             <div class="arrows">
                 <div v-for="(count, set) in speedArrowCounts" :key="set">
-                    <img :src="'/images/mods/arrow_' + set + '.png'" width="46"> {{ count }}
+                    <div class="mod-image arrow gold" :class="[set, `tier-1`]"></div> {{ count }}
                 </div>
             </div>
 
@@ -55,7 +55,8 @@
                     <input type="text" v-model="set.destination" @change="syncState()" @click.stop size="15" placeholder="Destination">
                     <div class="mod-list">
                         <div v-for="shape in shapes" :key="shape" :class="[`tier-${tierFor(shape, set)}`]">
-                            <img :src="'/images/mods/' + shape + '_' + setFor(shape, set) + '.png'" width="20"> {{ locationFor(shape, set) }}
+                            <div class="mod-image mini" :class="[setFor(shape, set), shape, `tier-${tierFor(shape, set)}`, {'gold': pipsFor(shape, set) > 5}]"></div>
+                            <span>{{ locationFor(shape, set) }}</span>
                         </div>
                     </div>
                     <button class="view-modal btn btn-primary" @click.stop="detailSet = set">View</button>
@@ -70,7 +71,7 @@
                 </div>
                 <div>
                     <div class="btn" v-for="set in modSets" :key="set" :class="{selected: setFilter.includes(set)}" @click="toggleFilterFor(set)">
-                        <img :src="'/images/mods/square_' + set + '.png'" width="30">
+                        <div class="mod-set-image tier-5" :class="[set]"></div>
                     </div>
                 </div>
                 <div class="checkboxes">
@@ -526,6 +527,11 @@
                 let mod = this.mods[set[shape]];
                 if (!mod)  { return 1; }
                 return mod.tier;
+            },
+            pipsFor: function(shape, set) {
+                let mod = this.mods[set[shape]];
+                if (!mod)  { return 1; }
+                return mod.pips;
             },
             setFor: function(shape, set) {
                 let mod = this.mods[set[shape]];
