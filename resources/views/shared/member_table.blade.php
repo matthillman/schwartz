@@ -2,7 +2,7 @@
     <table>
         <thead>
             <tr>
-                <th>Membrer</th>
+                <th>Member</th>
             @foreach($characters as $character)
                 <th>
                     {{ $units->firstWhere('base_id', $character)->name }}

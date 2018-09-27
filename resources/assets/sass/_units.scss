@@ -117,7 +117,11 @@
 }
 
 .character {
-    > span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    > span:last-child {
         display: flex;
         align-items: baseline;
         justify-content: center;

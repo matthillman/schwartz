@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header"><h2>STR Teams</h2></div>
+                <div class="card-header"><h2>Guild Teams</h2></div>
 
                 @foreach($teams as $title => $team)
                     <div class="card-body" highlight="{{$highlight}}">

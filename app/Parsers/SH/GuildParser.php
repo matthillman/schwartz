@@ -29,7 +29,7 @@ class GuildParser {
         $this->url = head($response->getHeader(config('redirect.history.header')));
         $anAllyCode = $this->getAnAllyCode();
 
-        ini_set('memory_limit', '192M');
+        ini_set('memory_limit', '256M');
         $this->data = swgoh()->getGuild($anAllyCode, SWGOHHelp::FULL_ROSTER);
 
         return $this;

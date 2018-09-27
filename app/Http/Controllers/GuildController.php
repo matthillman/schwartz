@@ -54,6 +54,18 @@ class GuildController extends Controller
                 ];
                 $highlight = 'stars';
                 break;
+            case 'bh':
+                $teams = [
+                    'Bounty Hunters' => ['BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'ZAMWESELL', 'CADBANE', 'EMBO', 'JANGOFETT'],
+                ];
+                $highlight = 'stars';
+                break;
+            case 'newie':
+                $teams = [
+                    'Newie' => ['CHEWBACCALEGENDARY'],
+                ];
+                $highlight = 'stars';
+                break;
             case 'tw':
                 $teams = [
                     'Traya' => ['DARTHTRAYA', 'DARTHSION', 'DARTHNIHILUS', 'SITHTROOPER', 'VISASMARR', 'GRANDADMIRALTHRAWN', 'ENFYSNEST', 'WAMPA'],
