@@ -43,19 +43,6 @@ class PullGuild extends Command
         $name = $guild->name ?? 'GUILD ' . $guild->guild_id;
         $this->info("Starting GuildParser for {$name}…");
 
-        $parser = new GuildParser($this->argument('guild'));
-        $this->info("Starting API pull…");
-
-        $parser->scrape();
-        $this->info("API pull finished.");
-
-        $this->info("Saving basic info.");
-        $guild->url = $parser->url();
-        $guild->name = $parser->name();
-        $guild->gp = $parser->gp();
-        $guild->save();
-        $this->info("Guild saved.");
-
         $this->info("Dissociating all guild members…");
         DB::transaction(function() use ($guild) {
             $guild->members()->each(function($member) {
@@ -65,11 +52,11 @@ class PullGuild extends Command
         });
         $this->info("Dissociation done.");
 
-        $guildMembers = [];
-        $zetaList = Zeta::all();
-        $this->info("Starting API results loop…");
+        $parser = new GuildParser($this->argument('guild'));
+        $this->info("Starting API pull…");
 
-        $charactersToInsert = $parser->members()->flatMap(function($member_data) use ($guild, &$guildMembers) {
+        $zetaList = Zeta::all();
+        $parser->scrape(function($member_data) use ($guild, $zetaList) {
             $member = Member::firstOrNew(['ally_code' => (string)$member_data['allyCode']]);
 
             $ally = $member_data['allyCode'];
@@ -84,10 +71,9 @@ class PullGuild extends Command
             $member->guild()->associate($guild);
             $member->save();
 
-            $guildMembers[$member->ally_code] = $member;
-
             $this->comment("   Looping over units for {$member->player}…");
-            $chars = collect($member_data['roster'])->map(function($unit) use ($member) {
+            $roster = collect($member_data['roster']);
+            $chars = $roster->map(function($unit) use ($member) {
                 $character = [
                     'member_id' => $member->id,
                     'unit_name' => $unit['defId'],
@@ -99,36 +85,37 @@ class PullGuild extends Command
                 ];
                 return $character;
             });
-            $this->info("   {$member->player} done.");
-            return $chars;
-        })->reject(function ($value) { return is_null($value); });
 
-        $this->info("API results parsed.");
+            $cCount = $chars->count();
+            $this->info("   ➡ Doing the character insert (${cCount} rows)");
+            Character::upsert($chars->toArray(), "(member_id, unit_name)");
+            $this->info("   ⬅ Done with character insert.");
 
-        $cCount = $charactersToInsert->count();
-        $this->info("Doing the character insert (${cCount} rows)");
-        Character::upsert($charactersToInsert->toArray(), "(member_id, unit_name)");
-        $this->info("Done with character insert.");
-
-        $rosterByAllyCode = $parser->members()->pluck('roster', 'allyCode');
-
-        $zetasToInsert = $rosterByAllyCode->flatMap(function($roster, $allyCode) use ($guildMembers, $zetaList) {
-            if (!isset($guildMembers[$allyCode])) { return null; }
-            $memberChars = $guildMembers[$allyCode]->characters;
-            $skills = collect($roster)->pluck('skills')->flatten(1)->where('isZeta', true)->where('tier', 8)->pluck('id');
-            return $zetaList->whereIn('skill_id', $skills)->map(function($zeta) use ($memberChars) {
+            $skills = $roster->pluck('skills')->flatten(1)->where('isZeta', true)->where('tier', 8)->pluck('id');
+            $memberChars = $member->characters;
+            $zetas = $zetaList->whereIn('skill_id', $skills)->map(function($zeta) use ($memberChars) {
                 $character = $memberChars->where('unit_name', $zeta->character_id)->first();
                 return [
                     'zeta_id' => $zeta->id,
                     'character_id' => $character->id,
                 ];
             });
-        })->reject(function ($value) { return is_null($value); });
 
-        $zCount = $zetasToInsert->count();
-        $this->info("Doing the zeta insert (${zCount} rows)");
-        CharacterZeta::upsert($zetasToInsert->toArray(), "(character_id, zeta_id)");
-        $this->info("Done with zeta insert.");
+            $zCount = $zetas->count();
+            $this->info("   ➡ Doing the zeta insert (${zCount} rows)");
+            CharacterZeta::upsert($zetas->toArray(), "(character_id, zeta_id)");
+            $this->info("   ⬅ Done with zeta insert.");
+            $this->comment("   {$member->player} done.");
+        });
+
+        $this->info("API pull finished.");
+
+        $this->info("Saving basic info.");
+        $guild->url = $parser->url();
+        $guild->name = $parser->name();
+        $guild->gp = $parser->gp();
+        $guild->save();
+        $this->info("Guild saved.");
 
         // $rosterByAllyCode->each(function($roster, $allyCode) {
         //     $modUser = ModUser::firstOrNew(['name' => (string)$allyCode]);
@@ -172,7 +159,7 @@ class PullGuild extends Command
         // });
 
         $time = Carbon::now()->diffInSeconds($start);
-        $this->info("Returning. Scrape took {$time} seconds.");
+        $this->comment("Returning. Scrape took {$time} seconds.");
         return 0;
     }
 }

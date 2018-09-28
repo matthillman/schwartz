@@ -24,13 +24,12 @@ class GuildParser {
         $this->zetaMap = [];
     }
 
-    public function scrape() {
+    public function scrape(Callable $memberCallback) {
         $response = guzzle()->get($this->url, ['allow_redirects' => [ 'track_redirects' => true ]]);
         $this->url = head($response->getHeader(config('redirect.history.header')));
         $anAllyCode = $this->getAnAllyCode();
 
-        ini_set('memory_limit', '256M');
-        $this->data = swgoh()->getGuild($anAllyCode, SWGOHHelp::FULL_ROSTER);
+        $this->data = swgoh()->getGuild($anAllyCode, $memberCallback, SWGOHHelp::FULL_ROSTER);
 
         return $this;
     }

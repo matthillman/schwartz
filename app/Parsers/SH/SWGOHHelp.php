@@ -4,8 +4,11 @@ namespace App\Parsers\SH;
 
 use Storage;
 use GuzzleHttp\Client;
+use JsonStreamingParser\Parser;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7\StreamWrapper;
 use GuzzleHttp\Exception\ClientException;
+use JsonStreamingParser\Listener\InMemoryListener;
 
 class SWGOHHelp {
 
@@ -97,7 +100,7 @@ class SWGOHHelp {
         return $this->getUnits($allyCode, true, $data);
     }
 
-    public function getGuild($allyCode, $fullRoster = false, $mods = false, $projection = []) {
+    public function getGuild($allyCode, Callable $memberCallback, $fullRoster = false, $mods = false, $projection = []) {
         $data = [
             "allycode" => $allyCode,
             "roster" => $fullRoster == static::FULL_ROSTER,
@@ -121,7 +124,7 @@ class SWGOHHelp {
             ], $projection),
         ];
 
-        return $this->callAPI(static::API_GUILD, $data);
+        return $this->callAPI(static::API_GUILD, $data, $memberCallback);
     }
 
     public function getUnitData($projection = []) {
@@ -221,7 +224,7 @@ class SWGOHHelp {
         ];
     }
 
-    protected function callAPI($api, $query) {
+    protected function callAPI($api, $query, Callable $memberCallback = null) {
         if (is_null($this->getToken())) {
             $this->setToken($this->getAccessToken());
         }
@@ -238,10 +241,15 @@ class SWGOHHelp {
             $raw = $response->getBody();
             $response = null;
             unset($response);
-            $decoded = json_decode($raw, true);
-            $raw = null;
-            unset($raw);
-            return collect($decoded);
+            if (is_null($memberCallback)) {
+                $listener = new InMemoryListener;
+            } else {
+                $listener = new GuildListener($memberCallback);
+            }
+            $parser = new Parser(StreamWrapper::getResource($raw), $listener);
+            $parser->parse();
+
+            return collect($listener->getJson());
         } catch (ClientException $e) {
             $response = $e->getResponse();
             $body = json_decode($response->getBody(), true);
