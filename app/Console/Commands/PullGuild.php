@@ -60,7 +60,7 @@ class PullGuild extends Command
             $member = Member::firstOrNew(['ally_code' => (string)$member_data['allyCode']]);
 
             $ally = $member_data['allyCode'];
-            $member->url = "/p/{$ally}/collection/";
+            $member->url = "/p/{$ally}/characters/";
             $member->player = $member_data['name'];
 
             $stats = collect($member_data['stats']);
