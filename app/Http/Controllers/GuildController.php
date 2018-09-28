@@ -73,7 +73,7 @@ class GuildController extends Controller
                     'Bounty Hunters' => ['BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'EMBO', 'BARRISSOFFEE'],
                     'Jedi' => ['BASTILASHAN', 'GRANDMASTERYODA', 'GENERALKENOBI', 'FULCRUMAHSOKA', 'EZRABRIDGERS3'],
                     'Smugglers' => ['QIRA', 'ZAALBAR', 'YOUNGCHEWBACCA', 'L3_37', 'ENFYSNEST'],
-                    'Palp' => ['EMPERORPALPATINE', 'VADER', 'GRANDMOFFTARKIN', 'TIEFIGHTERIMPERIAL', 'ROYALGUARD'],
+                    'Palp' => ['EMPERORPALPATINE', 'VADER', 'GRANDMOFFTARKIN', 'TIEFIGHTERPILOT', 'ROYALGUARD'],
                 ];
                 break;
 
