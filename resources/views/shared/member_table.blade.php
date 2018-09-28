@@ -21,9 +21,9 @@
         @foreach($characters as $character)
             <td>
                 <div class="team-set">
-            @include('shared.char', [
-                'character' => $member->characters->firstWhere('unit_name', $character),
-            ])
+                @include('shared.char', [
+                    'character' => $member->characters->firstWhere('unit_name', $character),
+                ])
                 </div>
             </td>
         @endforeach
