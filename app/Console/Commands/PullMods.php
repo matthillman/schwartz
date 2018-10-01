@@ -5,8 +5,8 @@ namespace App\Console\Commands;
 use DB;
 use App\Mod;
 use App\ModUser;
-use App\Parsers\SH\ModsParser;
-use App\Parsers\SH\ProfileParser;
+use SwgohHelp\Parsers\ModsParser;
+use SwgohHelp\Parsers\ProfileParser;
 use Illuminate\Console\Command;
 
 class PullMods extends Command
@@ -16,14 +16,14 @@ class PullMods extends Command
      *
      * @var string
      */
-    protected $signature = 'pull:mods {user}';
+    protected $signature = 'swgoh:mods {user}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Pull a user‘s mods from swogh.gg';
+    protected $description = 'Pull a user‘s mods from swogh.help';
 
     /**
      * Execute the console command.
@@ -39,7 +39,7 @@ class PullMods extends Command
         $profile = new ProfileParser($user->name);
         $profile->scrape();
 
-        if ($profile->upToDate()) {
+        if ($user->hasChangesSince($profile->updated())) {
             \Log::info("Profile is up to date, returning");
             return 0;
         }

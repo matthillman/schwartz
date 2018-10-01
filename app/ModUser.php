@@ -20,4 +20,8 @@ class ModUser extends Model
     public function stats() {
         return $this->hasMany(ModStat::class);
     }
+
+    public function hasChangesSince($date) {
+        return is_null($this->last_scrape) || $date->greaterThan($this->last_scrape);
+    }
 }

@@ -152,6 +152,7 @@ return [
          */
 
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
+        SwgohHelp\SwgohHelpServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -162,9 +163,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\DropboxServiceProvider::class,
-        App\Providers\GuzzleServiceProvider::class,
+        // App\Providers\GuzzleServiceProvider::class,
         App\Providers\GoutteServiceProvider::class,
-        App\Providers\SWGOHServiceProvider::class,
 
     ],
 

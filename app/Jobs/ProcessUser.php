@@ -41,7 +41,7 @@ class ProcessUser implements ShouldQueue
             ->doesntExist();
 
         if ($needsScrape) {
-            Artisan::call('pull:mods', [
+            Artisan::call('swgoh:mods', [
                 'user' => $this->user
             ]);
         }

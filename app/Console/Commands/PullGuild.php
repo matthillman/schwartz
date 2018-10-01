@@ -11,9 +11,9 @@ use App\ModUser;
 use App\Character;
 use Carbon\Carbon;
 use App\CharacterZeta;
-use App\Parsers\SH\GuildParser;
 use Illuminate\Console\Command;
-use App\Parsers\SH\Enums\PlayerStats;
+use SwgohHelp\Enums\PlayerStats;
+use SwgohHelp\Parsers\GuildParser;
 
 class PullGuild extends Command
 {
@@ -22,14 +22,14 @@ class PullGuild extends Command
      *
      * @var string
      */
-    protected $signature = 'pull:guild {guild}';
+    protected $signature = 'swgoh:guild {guild}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Pull all characters for a guild from swogh.gg';
+    protected $description = 'Pull all characters and member information for a guild from swogh.help';
 
     /**
      * Execute the console command.
@@ -92,7 +92,7 @@ class PullGuild extends Command
             $this->info("   ⬅ Done with character insert.");
 
             $skills = $roster->pluck('skills')->flatten(1)->where('isZeta', true)->where('tier', 8)->pluck('id');
-            $memberChars = $member->characters;
+            $memberChars = $member->characters()->get();
             $zetas = $zetaList->whereIn('skill_id', $skills)->map(function($zeta) use ($memberChars) {
                 $character = $memberChars->where('unit_name', $zeta->character_id)->first();
                 return [

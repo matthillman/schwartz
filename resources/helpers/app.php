@@ -10,18 +10,18 @@ if (!function_exists('handbook')) {
 	}
 }
 
-if (!function_exists('guzzle')) {
-    /**
-     * Return a guzzle client
-     *
-     * @param  string  $value
-     * @param  array  $options
-     * @return GuzzleHttp\Client
-     */
-    function guzzle() {
-        return app('guzzle');
-    }
-}
+// if (!function_exists('guzzle')) {
+//     /**
+//      * Return a guzzle client
+//      *
+//      * @param  string  $value
+//      * @param  array  $options
+//      * @return GuzzleHttp\Client
+//      */
+//     function guzzle() {
+//         return app('guzzle');
+//     }
+// }
 
 if (!function_exists('goutte')) {
     /**
@@ -33,18 +33,5 @@ if (!function_exists('goutte')) {
      */
     function goutte() {
         return app('goutte');
-    }
-}
-
-if (!function_exists('swgoh')) {
-    /**
-     * Return a goutte client
-     *
-     * @param  string  $value
-     * @param  array  $options
-     * @return SWGOHHelp
-     */
-    function swgoh() {
-        return app('swgoh');
     }
 }

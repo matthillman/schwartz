@@ -21,7 +21,7 @@ class GuildController extends Controller
             'guild' => 'required|integer'
         ]);
 
-        Artisan::call('pull:guild', [
+        Artisan::call('swgoh:guild', [
             'guild' => $validated['guild']
         ]);
 

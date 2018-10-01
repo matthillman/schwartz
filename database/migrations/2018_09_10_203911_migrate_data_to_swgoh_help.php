@@ -5,8 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 use App\ModUser;
-use App\Parsers\ProfileParser;
-use App\Parsers\SH\Enums\ModStat;
+use SwgohHelp\Enums\ModStat;
+use SwgohHelp\Parsers\ProfileParser;
 
 class MigrateDataToSwgohHelp extends Migration
 {

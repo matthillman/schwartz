@@ -40,7 +40,7 @@ class ProcessSchwartzGuilds implements ShouldQueue
      */
     public function handle()
     {
-        Artisan::call('pull:guild', [
+        Artisan::call('swgoh:guild', [
             'guild' => $this->guild->guild_id
         ]);
     }

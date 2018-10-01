@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 // });
 
 Route::middleware('client')->get('/guild/scrape/{id}', function(Request $request, $id) {
-    Artisan::call('pull:guild', [
+    Artisan::call('swgoh:guild', [
         'guild' => $id
     ]);
 

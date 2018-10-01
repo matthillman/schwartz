@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use DB;
 use App\Unit;
 use App\Zeta;
-use App\Parsers\SH\SWGOHHelp;
 use Illuminate\Console\Command;
 
 class PullUnits extends Command
@@ -15,21 +14,14 @@ class PullUnits extends Command
      *
      * @var string
      */
-    protected $signature = 'pull:units';
+    protected $signature = 'swgoh:units';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Pull all units from swogh.gg';
-
-    protected $api;
-
-    public function __construct() {
-        $this->api = new SWGOHHelp;
-        parent::__construct();
-    }
+    protected $description = 'Pull the unit list from swogh.help';
 
     /**
      * Execute the console command.
@@ -38,7 +30,7 @@ class PullUnits extends Command
      */
     public function handle()
     {
-        $units = $this->api->getUnitData();
+        $units = swgoh()->getUnitData();
 
         DB::transaction(function() use ($units) {
             $units->each(function($unit_data) {
@@ -57,7 +49,7 @@ class PullUnits extends Command
             });
         });
 
-        $zetas = $this->api->getZetaData();
+        $zetas = swgoh()->getZetaData();
 
         DB::transaction(function() use ($units, $zetas) {
             $zetas->each(function($data) use ($units) {
