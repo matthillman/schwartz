@@ -43,14 +43,21 @@ class PullGuild extends Command
         $name = $guild->name ?? 'GUILD ' . $guild->guild_id;
         $this->info("Starting GuildParser for {$name}…");
 
-        $this->info("Dissociating all guild members…");
-        DB::transaction(function() use ($guild) {
-            $guild->members()->each(function($member) {
-                $member->guild()->dissociate();
-                $member->save();
+        if (is_null($guild->id)) {
+            $guild->name = $name;
+            $guild->url = 'not_scraped';
+            $guild->gp = 0;
+            $guild->save();
+        } else {
+            $this->info("Dissociating all guild members…");
+            DB::transaction(function() use ($guild) {
+                $guild->members()->each(function($member) {
+                    $member->guild()->dissociate();
+                    $member->save();
+                });
             });
-        });
-        $this->info("Dissociation done.");
+            $this->info("Dissociation done.");
+        }
 
         $parser = new GuildParser($this->argument('guild'));
         $this->info("Starting API pull…");
