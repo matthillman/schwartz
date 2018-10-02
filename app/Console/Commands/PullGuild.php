@@ -109,9 +109,13 @@ class PullGuild extends Command
             });
 
             $zCount = $zetas->count();
-            $this->info("   ➡ Doing the zeta insert (${zCount} rows)");
-            CharacterZeta::upsert($zetas->toArray(), "(character_id, zeta_id)");
-            $this->info("   ⬅ Done with zeta insert.");
+            if ($zCount > 0) {
+                $this->info("   ➡ Doing the zeta insert (${zCount} rows)");
+                CharacterZeta::upsert($zetas->toArray(), "(character_id, zeta_id)");
+                $this->info("   ⬅ Done with zeta insert.");
+            } else {
+                $this->info("   No zetas to insert.");
+            }
             $this->comment("   {$member->player} done.");
         });
 
