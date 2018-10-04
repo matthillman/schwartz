@@ -40,7 +40,7 @@ class GuildController extends Controller
         $guild = Guild::findOrFail($guild);
 
         $highlight = "gear";
-        switch ($team) {
+        switch (strtolower($team)) {
             case 'str':
                 $teams = [
                     'RJT' => ['REYJEDITRAINING', 'BB8', 'R2D2_LEGENDARY', 'REY', 'RESISTANCETROOPER', 'VISASMARR', 'HERMITYODA'],
