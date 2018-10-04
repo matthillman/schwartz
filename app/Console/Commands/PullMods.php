@@ -39,7 +39,7 @@ class PullMods extends Command
         $profile = new ProfileParser($user->name);
         $profile->scrape();
 
-        if ($user->hasChangesSince($profile->updated())) {
+        if (!$user->hasChangesSince($profile->updated())) {
             \Log::info("Profile is up to date, returning");
             return 0;
         }
