@@ -18,3 +18,7 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 Broadcast::channel('mods.{name}', function ($user, $name) {
     return $user->active;
 });
+
+Broadcast::channel('bot', function ($user) {
+
+});

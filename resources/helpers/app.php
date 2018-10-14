@@ -23,15 +23,15 @@ if (!function_exists('handbook')) {
 //     }
 // }
 
-if (!function_exists('goutte')) {
-    /**
-     * Return a goutte client
-     *
-     * @param  string  $value
-     * @param  array  $options
-     * @return Goutte\Client
-     */
-    function goutte() {
-        return app('goutte');
-    }
-}
+// if (!function_exists('goutte')) {
+//     /**
+//      * Return a goutte client
+//      *
+//      * @param  string  $value
+//      * @param  array  $options
+//      * @return Goutte\Client
+//      */
+//     function goutte() {
+//         return app('goutte');
+//     }
+// }

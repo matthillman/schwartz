@@ -70,10 +70,9 @@ class PullGuild extends Command
             $member->url = "/p/{$ally}/characters/";
             $member->player = $member_data['name'];
 
-            $stats = collect($member_data['stats']);
-            $member->gp = $stats->where('nameKey', PlayerStats::gp)->pluck('value')->first();
-            $member->character_gp = $stats->where('nameKey', PlayerStats::charGP)->pluck('value')->first();
-            $member->ship_gp = $stats->where('nameKey', PlayerStats::shipGP)->pluck('value')->first();
+            $member->gp = $member_data['gp'];
+            $member->character_gp = $member_data['gpChar'];
+            $member->ship_gp = $member_data['gpShip'];
 
             $member->guild()->associate($guild);
             $member->save();

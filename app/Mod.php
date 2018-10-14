@@ -55,7 +55,7 @@ class Mod extends Model
         foreach (collect($value)->keys() as $index => $key) {
             $fixed = $index + 1;
             $this->attributes["secondary_{$fixed}_type"] = $key;
-            $this->attributes["secondary_{$fixed}_value"] = $value[$key];
+            $this->attributes["secondary_{$fixed}_value"] = $value[$key]['value'];
         }
     }
 
