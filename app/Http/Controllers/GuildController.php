@@ -20,10 +20,9 @@ class GuildController extends Controller
         $validated = $request->validate([
             'guild' => 'required|integer'
         ]);
+        $guild = Guild::firstOrNew(['guild_id' => $validated['guild']]);
 
-        Artisan::call('swgoh:guild', [
-            'guild' => $validated['guild']
-        ]);
+        ProcessGuild::dispatch($guild);
 
         return redirect()->route('guilds')->with('guildStatus', "Guild added");
     }

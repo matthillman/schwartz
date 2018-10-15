@@ -88,7 +88,7 @@ class PullGuild extends Command
                     'gear_level' => $unit['gear'],
                     'power' => $unit['gp'],
                     'level' => $unit['level'],
-                    'combat_type' => 1,
+                    'combat_type' => $unit['combatType'] === 'CHARACTER' ? 1 : 2,
                     'rarity' => $unit['rarity'],
                 ];
                 return $character;

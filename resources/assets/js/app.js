@@ -30,7 +30,12 @@ Vue.component('tw-form', require('./components/TWForm.vue'));
 
 const VueSelect = require('vue-select');
 Vue.component('v-select', VueSelect.VueSelect);
-
 const app = new Vue({
     el: '#app'
+});
+
+import Toasted from 'vue-toasted';
+
+Vue.use(Toasted, {
+    iconPack : 'custom-class'
 });

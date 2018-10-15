@@ -5,6 +5,7 @@ namespace App\Jobs;
 use Artisan;
 use App\Guild;
 use Illuminate\Bus\Queueable;
+use App\Events\GuildProcessed;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -43,5 +44,7 @@ class ProcessGuild implements ShouldQueue
         Artisan::call('swgoh:guild', [
             'guild' => $this->guild->guild_id
         ]);
+
+        broadcast(new GuildProcessed($this->guild));
     }
 }

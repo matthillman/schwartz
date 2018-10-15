@@ -44,8 +44,6 @@ return [
     'swgoh_help' => [
         'user' => env('SWGOH_HELP_USER'),
         'password' => env('SWGOH_HELP_PASSWORD'),
-        'client_id' => env('SWGOH_HELP_CLIENT_ID'),
-        'client_secret' => env('SWGOH_HELP_CLIENT_SECRET'),
     ],
 
 ];

@@ -1731,16 +1731,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.47",
+            "version": "1.0.48",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "a11e4a75f256bdacf99d20780ce42d3b8272975c"
+                "reference": "a6ded5b2f6055e2db97b4b859fdfca2b952b78aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/a11e4a75f256bdacf99d20780ce42d3b8272975c",
-                "reference": "a11e4a75f256bdacf99d20780ce42d3b8272975c",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/a6ded5b2f6055e2db97b4b859fdfca2b952b78aa",
+                "reference": "a6ded5b2f6055e2db97b4b859fdfca2b952b78aa",
                 "shasum": ""
             },
             "require": {
@@ -1811,7 +1811,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2018-09-14T15:30:29+00:00"
+            "time": "2018-10-15T13:53:10+00:00"
         },
         {
             "name": "league/oauth1-client",
@@ -1952,12 +1952,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthillman/swgoh-help.git",
-                "reference": "e64593bc82f00ffc55e337649042c948be6ddb8d"
+                "reference": "5596432bf3e1e8b958c74a30be77b0ac2b2989b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthillman/swgoh-help/zipball/e64593bc82f00ffc55e337649042c948be6ddb8d",
-                "reference": "e64593bc82f00ffc55e337649042c948be6ddb8d",
+                "url": "https://api.github.com/repos/matthillman/swgoh-help/zipball/5596432bf3e1e8b958c74a30be77b0ac2b2989b3",
+                "reference": "5596432bf3e1e8b958c74a30be77b0ac2b2989b3",
                 "shasum": ""
             },
             "require": {
@@ -2005,7 +2005,7 @@
                 "source": "https://github.com/matthillman/swgoh-help/tree/master",
                 "issues": "https://github.com/matthillman/swgoh-help/issues"
             },
-            "time": "2018-10-15 02:37:53"
+            "time": "2018-10-15 16:48:47"
         },
         {
             "name": "monolog/monolog",

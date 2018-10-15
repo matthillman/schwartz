@@ -19,6 +19,10 @@ Broadcast::channel('mods.{name}', function ($user, $name) {
     return $user->active;
 });
 
+Broadcast::channel('guilds', function ($user) {
+    return $user->active;
+});
+
 Broadcast::channel('bot', function ($user) {
 
 });
