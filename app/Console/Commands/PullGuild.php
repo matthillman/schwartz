@@ -12,8 +12,8 @@ use App\Character;
 use Carbon\Carbon;
 use App\CharacterZeta;
 use Illuminate\Console\Command;
-use SwgohHelp\Enums\PlayerStats;
 use SwgohHelp\Parsers\GuildParser;
+use SwgohHelp\Enums\PlayerStatsIndex;
 
 class PullGuild extends Command
 {
@@ -71,9 +71,10 @@ class PullGuild extends Command
             $member->player = $member_data['name'];
 
             $stats = collect($member_data['stats']);
-            $member->gp = $stats->where('nameKey', PlayerStats::gp)->pluck('value')->first();
-            $member->character_gp = $stats->where('nameKey', PlayerStats::charGP)->pluck('value')->first();
-            $member->ship_gp = $stats->where('nameKey', PlayerStats::shipGP)->pluck('value')->first();
+
+            $member->gp = $stats->where('index', PlayerStatsIndex::gp)->pluck('value')->first();
+            $member->character_gp = $stats->where('index', PlayerStatsIndex::charGP)->pluck('value')->first();
+            $member->ship_gp = $stats->where('index', PlayerStatsIndex::shipGP)->pluck('value')->first();
 
             $member->guild()->associate($guild);
             $member->save();
