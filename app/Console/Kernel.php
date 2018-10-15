@@ -3,7 +3,7 @@
 namespace App\Console;
 
 use App\Guild;
-use App\Jobs\ProcessSchwartzGuilds;
+use App\Jobs\ProcessGuild;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('swgoh:units')->daily();
 
         Guild::where('schwartz', true)->each(function($guild, $index) use ($schedule) {
-            $schedule->job(new ProcessSchwartzGuilds($guild))->dailyAt('00:0' . (5 + $index));
+            $schedule->job(new ProcessGuild($guild))->dailyAt('00:0' . (5 + $index));
         });
     }
 
