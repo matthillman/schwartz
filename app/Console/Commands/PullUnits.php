@@ -40,7 +40,7 @@ class PullUnits extends Command
                 $unit->description = $unit_data['descKey'];
                 $unit->image = $unit_data['thumbnailName'];
                 $unit->combat_type = $unit_data['combatType'];
-                $unit->pk = $unit_data['_id'];
+                $unit->pk = $unit_data['baseId'];
 
                 $unit->url = $unit->url ?? '';
                 $unit->power = $unit->power ?? $unit_data['basePower'];
