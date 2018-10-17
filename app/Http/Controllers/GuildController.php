@@ -22,6 +22,13 @@ class GuildController extends Controller
         ]);
         $guild = Guild::firstOrNew(['guild_id' => $validated['guild']]);
 
+        if (is_null($guild->id)) {
+            $guild->name = 'GUILD ' . $guild->guild_id;
+            $guild->url = 'not_scraped';
+            $guild->gp = 0;
+            $guild->save();
+        }
+
         ProcessGuild::dispatch($guild);
 
         return redirect()->route('guilds')->with('guildStatus', "Guild added");
