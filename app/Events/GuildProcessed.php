@@ -46,6 +46,7 @@ class GuildProcessed implements ShouldBroadcast
             'guild' => [
                 'name' => $this->guild->name,
                 'id' => $this->guild->id,
+                'guild_id' => $this->guild->guild_id,
             ]
         ];
     }

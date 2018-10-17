@@ -152,7 +152,6 @@ return [
          */
 
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
-        SwgohHelp\SwgohHelpServiceProvider::class,
 
         /*
          * Application Service Providers...

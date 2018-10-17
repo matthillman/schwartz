@@ -1,5 +1,7 @@
 <?php
 
+use App\Guild;
+use App\Jobs\ProcessGuild;
 use Illuminate\Http\Request;
 
 /*
@@ -18,12 +20,22 @@ use Illuminate\Http\Request;
 // });
 
 Route::middleware('client')->get('/guild/scrape/{id}', function(Request $request, $id) {
-    Artisan::call('swgoh:guild', [
-        'guild' => $id
-    ]);
+    $guild = Guild::firstOrNew(['guild_id' => $id]);
+
+    $name = $guild->name ?? 'GUILD ' . $guild->guild_id;
+
+    if (is_null($guild->id)) {
+        $guild->name = $name;
+        $guild->url = 'not_scraped';
+        $guild->gp = 0;
+        $guild->save();
+    }
+
+    ProcessGuild::dispatch($guild);
 
     return response()->json([]);
 });
+
 Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Request $request, $first, $second) {
     $guild1 = \App\Guild::where(['guild_id' => $first])->first();
     $guild2 = \App\Guild::where(['guild_id' => $second])->first();
