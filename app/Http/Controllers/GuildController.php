@@ -74,7 +74,7 @@ class GuildController extends Controller
                 break;
             case 'kotor':
                 $teams = [
-                    'Newie' => ['JEDIKNIGHTREVAN', 'BASTILASHAN', 'ZAALBAR', 'MISSIONVAO', 'JOLEEBINDO', 'T3_M4'],
+                    'Revan' => ['JEDIKNIGHTREVAN', 'BASTILASHAN', 'ZAALBAR', 'MISSIONVAO', 'JOLEEBINDO', 'T3_M4'],
                 ];
                 $highlight = 'stars';
                 break;
