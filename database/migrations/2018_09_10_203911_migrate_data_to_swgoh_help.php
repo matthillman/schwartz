@@ -54,7 +54,7 @@ class MigrateDataToSwgohHelp extends Migration
         ModUser::all()->each(function($user) {
             $parser = new ProfileParser($user->name);
             $parser->scrape();
-            $user->name = $parser->getAllyCode();
+            $user->name = $parser->getUser()['allyCode'];
             if (!is_null($user->name)) {
                 $user->save();
             }
