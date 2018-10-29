@@ -27,6 +27,7 @@ Vue.component('list', require('./components/List.vue'));
 Vue.component('members', require('./components/Members.vue'));
 Vue.component('welcome-parallax', require('./components/Parallax.vue'));
 Vue.component('tw-form', require('./components/TWForm.vue'));
+Vue.component('guild-teams', require('./components/GuildTeams.vue'));
 
 const VueSelect = require('vue-select');
 Vue.component('v-select', VueSelect.VueSelect);

@@ -6,8 +6,17 @@ $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
 $sw-yellow: #fce34d;
+$swgoh-orange: #d47c3f;
+$discord-purple: #7289da;
 
 $text: #636b6f;
+$white: #ffffff;
+$black: #000000;
+$red: #ff0000;
+$green: #00ff00;
+$purple: $discord-purple;
+$gray-500: rgba(0, 0, 0, 0.03);
+$gray-800: rgba(0, 0, 0, 0.125);
 
 $primary:       #0483B4;
 $secondary:     #FFCA47 !default;
@@ -17,9 +26,6 @@ $secondary:     #FFCA47 !default;
 // $danger:        $red !default;
 // $light:         $gray-100 !default;
 // $dark:          $gray-800 !default;
-
-$swgoh-orange: #d47c3f;
-$discord-purple: #7289da;
 
 $mod-colors: (
      #cdffff,

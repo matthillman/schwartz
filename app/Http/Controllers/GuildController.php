@@ -42,7 +42,7 @@ class GuildController extends Controller
         return redirect()->route('guilds')->with('guildStatus', "Guild scrape queued");
     }
 
-    public function listMembers($guild, $team) {
+    public function listMembers($guild, $team, $mode = 'guild') {
         $guild = Guild::findOrFail($guild);
 
         $highlight = "gear";
@@ -83,10 +83,21 @@ class GuildController extends Controller
                     'Traya' => ['DARTHTRAYA', 'DARTHSION', 'DARTHNIHILUS', 'SITHTROOPER', 'VISASMARR', 'GRANDADMIRALTHRAWN', 'ENFYSNEST', 'WAMPA'],
                     'KRU' => ['KYLORENUNMASKED', 'KYLOREN', 'FIRSTORDEROFFICERMALE', 'FIRSTORDEREXECUTIONER', 'FIRSTORDERTROOPER'],
                     'Bounty Hunters' => ['BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'EMBO', 'BARRISSOFFEE'],
+                    'Revan' => ['JEDIKNIGHTREVAN', 'JOLEEBINDO', 'BASTILASHAN', 'GRANDMASTERYODA', 'GENERALKENOBI'],
                     'Jedi' => ['BASTILASHAN', 'GRANDMASTERYODA', 'GENERALKENOBI', 'FULCRUMAHSOKA', 'EZRABRIDGERS3'],
                     'Smugglers' => ['QIRA', 'ZAALBAR', 'YOUNGCHEWBACCA', 'L3_37', 'ENFYSNEST'],
                     'Palp' => ['EMPERORPALPATINE', 'VADER', 'GRANDMOFFTARKIN', 'TIEFIGHTERPILOT', 'ROYALGUARD'],
                 ];
+                break;
+            case 'tb':
+                $teams = [
+                    'Phoenix' => ['HERASYNDULLAS3', 'EZRABRIDGERS3', 'SABINEWRENS3', 'CHOPPERS3', 'KANANJARRUSS3', 'ZEBS3'],
+                    'Rogue One' => ['JYNERSO', 'K2SO', 'CASSIANANDOR', 'CHIRRUTIMWE', 'BAZEMALBUS', 'SCARIFREBEL', 'BISTAN'],
+                    'Bounty Hunters' => ['BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'ZAMWESELL', 'CADBANE', 'IG88', 'EMBO', 'JANGOFETT'],
+                    'Troopers' => ['VEERS', 'COLONELSTARCK', 'IMPERIALPROBEDROID', 'SNOWTROOPER', 'STORMTROOPER', 'DEATHTROOPER', 'RANGETROOPER', 'SHORETROOPER', 'MAGMATROOPER'],
+                    'Hoth People' => ['COMMANDERLUKESKYWALKER', 'HOTHLEIA', 'HOTHHAN', 'HOTHREBELSCOUT', 'HOTHREBELSOLDIER'],
+                ];
+                $highlight = 'stars';
                 break;
 
             default:
@@ -94,11 +105,14 @@ class GuildController extends Controller
                 break;
         }
 
-        return view('members', [
+        $view = $mode === 'members' ? 'member-teams' : 'guild-teams';
+        return view("guild.$view", [
             'members' => $guild->members()->with('characters.zetas')->orderBy('player')->get(),
             'units' => Unit::all(),
             'teams' => $teams,
             'highlight' => $highlight,
+            'team' => $team,
+            'guild' => $guild,
         ]);
     }
 

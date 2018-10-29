@@ -28,16 +28,41 @@
 @endauth
 
             <div class="card">
-                <div class="card-header"><h2>Guilds</h2></div>
+                <div class="card-header"><h2>Schwartz Guilds</h2></div>
 
                 <div class="card-body">
                     <div class="guild-list">
-                    @foreach($guilds as $guild)
+                    @foreach($guilds->where('schwartz', true) as $guild)
                         <div class="row">
                             <div>{{ $guild->name }}</div>
-                            <a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => 'str']) }}">STR Teams</a>
-                            <a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => 'rjt']) }}">RJT Teams</a>
-                            <a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => 'tw']) }}">TW Defense</a>
+
+                            <guild-teams :id="{{ $guild->id }}"></guild-teams>
+
+                            <a href="{{ $guild->url }}" target="_gg" class="gg-link">
+                                @include('shared.bb8')
+                            </a>
+                            <form method="POST" action="{{ route('guild.refresh', ['guild' => $guild->id]) }}">
+                                @method('PUT')
+                                @csrf
+                                <button type="submit" class="btn btn-primary btn-icon"><i class="icon ion-ios-refresh-circle"></i></button>
+                            </form>
+                        </div>
+                    @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><h2>Other Guilds</h2></div>
+
+                <div class="card-body">
+                    <div class="guild-list">
+                    @foreach($guilds->where('schwartz', false) as $guild)
+                        <div class="row">
+                            <div>{{ $guild->name }}</div>
+
+                            <guild-teams :id="{{ $guild->id }}"></guild-teams>
+
                             <a href="{{ $guild->url }}" target="_gg" class="gg-link">
                                 @include('shared.bb8')
                             </a>
