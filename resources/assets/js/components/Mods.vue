@@ -594,7 +594,7 @@
                         this.mods = response.data.reduce((all, mod) => {
                             mod.modSet = (this.sets.filter((set) => set[mod.slot] == mod.uid)[0] || {}).id
 
-                            if (mod.primary.type.indexOf('PERCENTADDITIVE') > -1) {
+                            if (mod.primary.type.indexOf('SPEED') === -1) {
                                 mod.primary.value = `${mod.primary.value}%`;
                             }
                             mod.primary.type = translate(mod.primary.type, true);

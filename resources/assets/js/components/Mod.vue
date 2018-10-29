@@ -27,7 +27,7 @@
         props: ['mod'],
         methods: {
             padType(type) {
-                return type.indexOf('%') > -1 ? type : ` ${type}`;
+                return (type || '').indexOf('%') > -1 ? type : ` ${type}`;
             },
             isStatGood(value, type) {
                 return (type == "offense" && +value >= 50)
