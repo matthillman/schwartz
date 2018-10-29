@@ -15,7 +15,7 @@
                     :key="type"
                     :class="{good: isStatGood(value, type)}"
                     :type="type"
-                >{{ value }} {{ type }}</span>
+                >{{ value }}{{ padType(type) }}</span>
             </div>
         </div>
         <div class="character">{{ mod.location }}</div>
@@ -26,6 +26,9 @@
     export default {
         props: ['mod'],
         methods: {
+            padType(type) {
+                return type.indexOf('%') > -1 ? type : ` ${type}`;
+            },
             isStatGood(value, type) {
                 return (type == "offense" && +value >= 50)
                     || (type == "health" && +value >= 1000)
