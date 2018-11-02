@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Guild extends Model
@@ -12,6 +13,22 @@ class Guild extends Model
 
     public function members() {
         return $this->hasMany(Member::class);
+    }
+
+    public function getCompareDataAttribute() {
+        return DB::table('guilds')
+        ->join('members', 'members.guild_id', '=', 'guilds.id')
+        ->join('characters', 'characters.member_id', '=', 'members.id')
+        ->selectRaw("
+            guilds.guild_id,
+            sum(case when characters.gear_level = 12 then 1 else 0 end) as gear_12,
+            sum(case when characters.gear_level = 11 then 1 else 0 end) as gear_11,
+            sum(case when characters.unit_name = 'DARTHTRAYA' then 1 else 0 end) as traya,
+            sum(case when characters.unit_name = 'JEDIKNIGHTREVAN' then 1 else 0 end) as revan
+        ")
+        ->groupBy('guilds.guild_id')
+        ->whereIn('guilds.guild_id', [$this->guild_id])
+        ->get();
     }
 
     public function getIconNameAttribute() {
