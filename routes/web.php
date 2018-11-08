@@ -27,6 +27,12 @@ Route::get('/mods/{user}', 'ModsController@pullUser')->name('mods.user');
 Route::get('/u/{user}/{param?}', function($user, $param) {
     return redirect()->away("https://swgoh.gg/u/$user/$param");
 });
+Route::get('/p/{user}/{param?}', function($user, $param) {
+    return redirect()->away("https://swgoh.gg/u/$user/$param");
+});
+Route::get('podcast.rss', function() {
+    return redirect()->away("http://feeds.soundcloud.com/users/soundcloud:users:536817606/sounds.rss");
+});
 
 Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::group(['middleware' => ['active']], function() {
