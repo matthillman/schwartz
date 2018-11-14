@@ -55,7 +55,6 @@ class CreateUnitModPreferencesTable extends Migration
             $table->smallInteger('arrow_accuracy');
             $table->smallInteger('arrow_crit_avoid');
 
-            $table->smallInteger('secondary_');
             $table->smallInteger('secondary_speed');
             $table->smallInteger('secondary_crit_chance');
             $table->smallInteger('secondary_potency');

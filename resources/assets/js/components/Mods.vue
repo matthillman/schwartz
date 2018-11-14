@@ -157,10 +157,14 @@
             case 'UNITSTATMAXHEALTHPERCENTADDITIVE': return '% health';
             case 'UNITSTATACCURACY': return 'potency';
             case 'UNITSTATRESISTANCE': return 'tenacity';
-            case 'UNITSTATCRITICALCHANCEPERCENTADDITIVE': return 'critical chance';
             case 'UNITSTATCRITICALDAMAGE': return 'critical damage';
+            case 'UNITSTATCRITICALCHANCEPERCENTADDITIVE': return 'critical chance';
             case 'UNITSTATCRITICALNEGATECHANCEPERCENTADDITIVE': return 'critical avoidance';
             case 'UNITSTATEVASIONNEGATEPERCENTADDITIVE': return 'accuracy';
+
+            case 'UNITSTATCRITICALCHANCE': return 'critical chance';
+            case 'UNITSTATCRITICALNEGATECHANCE': return 'critical avoidance';
+            case 'UNITSTATEVASIONNEGATE': return 'accuracy';
         }
     }
     function translateValue(stat, value) {

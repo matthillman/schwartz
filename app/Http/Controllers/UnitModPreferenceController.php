@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Unit;
 use App\UnitModPreference;
 use Illuminate\Http\Request;
 
@@ -14,28 +15,11 @@ class UnitModPreferenceController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return view('unit-mods.list', [
+            'units' => Unit::with('preference')
+                ->where('combat_type', 'CHARACTER')
+                ->orderBy('name')->get()
+        ]);
     }
 
     /**
@@ -44,20 +28,13 @@ class UnitModPreferenceController extends Controller
      * @param  \App\UnitModPreference  $unitModPreference
      * @return \Illuminate\Http\Response
      */
-    public function show(UnitModPreference $unitModPreference)
+    public function show($baseID)
     {
-        //
-    }
+        $baseID = strtoupper($baseID);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\UnitModPreference  $unitModPreference
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UnitModPreference $unitModPreference)
-    {
-        //
+        return view('unit-mods.edit', [
+            'preference' => UnitModPreference::firstOrNew(['unit_id' => $baseID])
+        ]);
     }
 
     /**
@@ -67,9 +44,10 @@ class UnitModPreferenceController extends Controller
      * @param  \App\UnitModPreference  $unitModPreference
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UnitModPreference $unitModPreference)
+    public function update(Request $request)
     {
-        //
+        
+        return response()->json($request->all());
     }
 
     /**

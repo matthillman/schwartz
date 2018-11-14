@@ -25,6 +25,7 @@
         "pusher-js": "^4.3.1",
         "socket.io-client": "^2.1.1",
         "vue-select": "^2.5.1",
+        "vue-slider-component": "^2.8.0",
         "vue-toasted": "^1.1.25"
     }
 }

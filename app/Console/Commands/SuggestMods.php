@@ -46,56 +46,80 @@ class SuggestMods extends Command
         $ranking = [
             'DARTHTRAYA' => [
                 'sets' => [
-                    'offense',
-                    'offense',
-                    'health',
+                    [
+                        'offense' => 100,
+                        'speed' => 0,
+                        'crit_damage' => 80,
+                        'health' => 0,
+                        'defense' => 0,
+                        'crit_chance' => 0,
+                        'tenacity' => 0,
+                        'potency' => 0,
+                    ],
+                    [
+                        'offense' => 100,
+                        'speed' => 0,
+                        'crit_damage' => 80,
+                        'health' => 0,
+                        'defense' => 0,
+                        'crit_chance' => 0,
+                        'tenacity' => 0,
+                        'potency' => 0,
+                    ],
+                    [
+                        'health' => 100,
+                        'defense' => 0,
+                        'crit_chance' => 0,
+                        'tenacity' => 0,
+                        'potency' => 0,
+                    ],
                 ],
-                'square' => ['offense' => 5],
-                'diamond' => ['defense' => 5],
+                'square' => ['UNITSTATOFFENSEPERCENTADDITIVE' => 100],
+                'diamond' => ['UNITSTATDEFENSEPERCENTADDITIVE' => 100],
                 'triangle' => [
-                    'critical damage' => 5,
-                    'offense' => 5,
-                    'health' => 1,
-                    'protection' => 1,
-                    'critical chance' => 0,
-                    'defense' => 0,
+                    'UNITSTATCRITICALDAMAGE' => 100,
+                    'UNITSTATOFFENSEPERCENTADDITIVE' => 100,
+                    'UNITSTATMAXHEALTHPERCENTADDITIVE' => 20,
+                    'UNITSTATMAXSHIELDPERCENTADDITIVE' => 20,
+                    'UNITSTATCRITICALCHANCEPERCENTADDITIVE' => 0,
+                    'UNITSTATDEFENSEPERCENTADDITIVE' => 0,
                 ],
-                'circle' => ['health' => 5, 'protection' => 4],
+                'circle' => ['UNITSTATMAXHEALTHPERCENTADDITIVE' => 100, 'UNITSTATMAXSHIELDPERCENTADDITIVE' => 80],
                 'cross' => [
-                    'offense' => 5,
-                    'protection' => 4,
-                    'health' => 4,
-                    'potency' => 1,
-                    'tenacity' => 0,
-                    'defense' => 0,
+                    'UNITSTATOFFENSEPERCENTADDITIVE' => 100,
+                    'UNITSTATMAXSHIELDPERCENTADDITIVE' => 80,
+                    'UNITSTATMAXHEALTHPERCENTADDITIVE' => 80,
+                    'UNITSTATACCURACY' => 20,
+                    'UNITSTATRESISTANCE' => 0,
+                    'UNITSTATDEFENSEPERCENTADDITIVE' => 0,
                 ],
                 'arrow' => [
-                    'speed' => 5,
-                    'offense' => 0,
-                    'health' => 0,
-                    'protection' => 0,
-                    'defense' => 0,
-                    'accuracy' => 0,
-                    'critical avoidance' => 0,
+                    'UNITSTATSPEED' => 100,
+                    'UNITSTATOFFENSEPERCENTADDITIVE' => 0,
+                    'UNITSTATMAXHEALTHPERCENTADDITIVE' => 0,
+                    'UNITSTATMAXSHIELDPERCENTADDITIVE' => 0,
+                    'UNITSTATDEFENSEPERCENTADDITIVE' => 0,
+                    'UNITSTATEVASIONNEGATEPERCENTADDITIVE' => 0,
+                    'UNITSTATCRITICALNEGATECHANCEPERCENTADDITIVE' => 0,
                 ],
                 'secondary' => [
                     'speed' => 100,
                     'critical_chance' => 20,
                     'potency' => 10,
-                    'tenacity' => 1,
+                    'tenacity' => 20,
                     'offense' => 70,
-                    'defense' => 5,
+                    'defense' => 100,
                     'health' => 30,
-                    'protection' => 1,
+                    'protection' => 20,
                     'offense_percent' => 15,
-                    'defense_percent' => 1,
-                    'health_percent' => 1,
-                    'protection_percent' => 1,
+                    'defense_percent' => 20,
+                    'health_percent' => 20,
+                    'protection_percent' => 20,
                 ]
             ],
         ];
 
-        $user = ModUser::with('stats')->where(['name' => 'fraxgoran'])->first();
+        $user = ModUser::with('stats')->where(['name' => '552325555'])->first();
 
         $charRanking = $ranking['DARTHTRAYA'];
         $result = [
@@ -106,16 +130,26 @@ class SuggestMods extends Command
             'cross' => null,
             'arrow' => null,
         ];
-        $charRanking['secondaryTotal'] = array_reduce(array_values($charRanking['secondary']), 'max', 0);
+
         $charRanking['needed'] = [
+            'crit_damage' => 4,
             'offense' => 4,
+            'speed' => 4,
+
+            'crit_chance' => 2,
+            'tenacity' => 2,
+            'defense' => 2,
+            'potency' => 2,
             'health' => 2,
         ];
+
         $charRanking['primaryTotal'] = [];
-        foreach(['square', 'diamond', 'triangle', 'circle', 'cross', 'arrow'] as $slot => $ranks) {
-            $charRanking['primaryTotal'][$slot] = array_reduce(array_values($ranks), 'max', 0);
+        foreach(['square', 'diamond', 'triangle', 'circle', 'cross', 'arrow'] as $slot) {
+            $charRanking['primaryTotal'][$slot] = array_reduce(array_values($charRanking[$slot]), 'max', 0);
         }
-        $done = false;
+        $charRanking['secondaryTotal'] = array_reduce(array_values($charRanking['secondary']), 'max', 0);
+
+        $done = 0;
         $firstPass = true;
         do {
             $mod = $user->stats
@@ -127,14 +161,30 @@ class SuggestMods extends Command
                 })
                 ->map(function($mod) use ($charRanking) {
                     $mod->score = 0;
-                    foreach ($charRanking[$mod->slot] as $primary => $rank) {
-                        if ($rank > 0 && $mod->primary_type == $primary) {
-                            $mod->score += $mod->pips * $rank / $charRanking['primaryTotal'][$mod->slot] / 5 * 100;
-                            $mod->{"primary_score"} = $mod->pips * $rank / $charRanking['primaryTotal'][$mod->slot] / 5 * 100;
+                    foreach ($charRanking['sets'][$mod->set] as $set => $rank) {
+                        if ($rank > 0 && $mod->set == $set) {
+                            $mod->score += $charRanking['sets'][$mod->set] / 100;
+                            $mod->set_score = $charRanking['sets'][$mod->set] / 100;
                         }
                     }
 
                     return $mod;
+                })
+                ->filter(function($mod) {
+                    return $mod->set_score > 0;
+                })
+                ->map(function($mod) use ($charRanking) {
+                    foreach ($charRanking[$mod->slot] as $primary => $rank) {
+                        if ($rank > 0 && $mod->primary_type == $primary) {
+                            $mod->score += $mod->pips * $rank / $charRanking['primaryTotal'][$mod->slot];
+                            $mod->primary_score = $mod->pips * $rank / $charRanking['primaryTotal'][$mod->slot];
+                        }
+                    }
+
+                    return $mod;
+                })
+                ->filter(function($mod) {
+                    return $mod->primary_score > 0;
                 })
                 ->map(function($mod) use ($charRanking) {
                     foreach ($charRanking['secondary'] as $secondary => $rank) {
@@ -157,18 +207,20 @@ class SuggestMods extends Command
             $this->line("Picked a mod: ". $mod->toJson());
 
             $charRanking['needed'][$mod->set] -= 1;
-            if ($charRanking['needed'][$mod->set] == 0) {
-                unset($charRanking['needed'][$mod->set]);
+            $thisOne = $charRanking['needed'][$mod->set];
+            foreach (array_keys($charRanking['needed']) as $set) {
+                $remaining = $charRanking['needed'][$set];
+                if ($remaining > $done || ($remaining == 4 && $thisOne == 3)) {
+                    unset($charRanking['needed'][$mod->set]);
+                }
             }
 
             $result[$mod->slot] = $mod;
 
             $firstPass = false;
 
-            $done = array_reduce(array_values($result), function ($done, $val) {
-                return $done && !is_null($val);
-            }, true);
-        } while (!$done);
+            $done += 1;
+        } while ($done < 6);
 
         dd(collect($result)->toJson());
     }

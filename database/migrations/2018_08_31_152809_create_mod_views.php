@@ -31,76 +31,76 @@ class CreateModViews extends Migration
         DB::statement("CREATE VIEW mod_stats AS
 SELECT id, uid, mod_user_id, name, location, slot, set, pips, level, primary_type, trim(trailing '%' from primary_value)::numeric as primary_value, tier,
 	CASE
-		WHEN secondary_1_type = 'critical chance' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'critical chance' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'critical chance' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'critical chance' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATCRITICALCHANCEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATCRITICALCHANCEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATCRITICALCHANCEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATCRITICALCHANCEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as critical_chance,
 	CASE
-		WHEN secondary_1_type = 'defense' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'defense' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'defense' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'defense' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATDEFENSE' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATDEFENSE' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATDEFENSE' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATDEFENSE' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as defense,
 	CASE
-		WHEN secondary_1_type = 'defense %' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'defense %' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'defense %' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'defense %' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATDEFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATDEFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATDEFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATDEFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as defense_percent,
 	CASE
-		WHEN secondary_1_type = 'health' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'health' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'health' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'health' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATMAXHEALTH' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATMAXHEALTH' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATMAXHEALTH' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATMAXHEALTH' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as health,
 	CASE
-		WHEN secondary_1_type = 'health %' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'health %' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'health %' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'health %' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATMAXHEALTHPERCENTADDITIVE' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATMAXHEALTHPERCENTADDITIVE' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATMAXHEALTHPERCENTADDITIVE' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATMAXHEALTHPERCENTADDITIVE' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as health_percent,
 	CASE
-		WHEN secondary_1_type = 'offense' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'offense' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'offense' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'offense' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as offense,
 	CASE
-		WHEN secondary_1_type = 'offense %' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'offense %' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'offense %' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'offense %' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATOFFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATOFFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATOFFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATOFFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as offense_percent,
 	CASE
-		WHEN secondary_1_type = 'protection' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'protection' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'protection' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'protection' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATMAXSHIELD' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATMAXSHIELD' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATMAXSHIELD' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATMAXSHIELD' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as protection,
 	CASE
-		WHEN secondary_1_type = 'protection %' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'protection %' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'protection %' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'protection %' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATMAXSHIELDPERCENTADDITIVE' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATMAXSHIELDPERCENTADDITIVE' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATMAXSHIELDPERCENTADDITIVE' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATMAXSHIELDPERCENTADDITIVE' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as protection_percent,
 	CASE
-		WHEN secondary_1_type = 'potency' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'potency' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'potency' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'potency' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATACCURACY' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATACCURACY' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATACCURACY' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATACCURACY' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as potency,
 	CASE
-		WHEN secondary_1_type = 'speed' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'speed' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'speed' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'speed' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as speed,
 	CASE
-		WHEN secondary_1_type = 'tenacity' THEN trim(trailing '%' from secondary_1_value)::numeric
-		WHEN secondary_2_type = 'tenacity' THEN trim(trailing '%' from secondary_2_value)::numeric
-		WHEN secondary_3_type = 'tenacity' THEN trim(trailing '%' from secondary_3_value)::numeric
-		WHEN secondary_4_type = 'tenacity' THEN trim(trailing '%' from secondary_4_value)::numeric
+		WHEN secondary_1_type = 'UNITSTATRESISTANCE' THEN trim(trailing '%' from secondary_1_value)::numeric
+		WHEN secondary_2_type = 'UNITSTATRESISTANCE' THEN trim(trailing '%' from secondary_2_value)::numeric
+		WHEN secondary_3_type = 'UNITSTATRESISTANCE' THEN trim(trailing '%' from secondary_3_value)::numeric
+		WHEN secondary_4_type = 'UNITSTATRESISTANCE' THEN trim(trailing '%' from secondary_4_value)::numeric
 	ELSE 0 END as tenacity
 FROM mods;
 		");

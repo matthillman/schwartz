@@ -28,9 +28,13 @@ Vue.component('members', require('./components/Members.vue'));
 Vue.component('welcome-parallax', require('./components/Parallax.vue'));
 Vue.component('tw-form', require('./components/TWForm.vue'));
 Vue.component('guild-teams', require('./components/GuildTeams.vue'));
+Vue.component('mod-preference', require('./components/Preference.vue'));
 
 const VueSelect = require('vue-select');
 Vue.component('v-select', VueSelect.VueSelect);
+const VueSlider = require('vue-slider-component');
+Vue.component('vue-slider', VueSlider);
+
 const app = new Vue({
     el: '#app'
 });
