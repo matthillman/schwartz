@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b8093c0c0a1c0f29bb1712f9c1a651e",
+    "content-hash": "9383cdb4314fe228cde000bd4279733d",
     "packages": [
         {
             "name": "cakephp/chronos",
@@ -1955,16 +1955,16 @@
         },
         {
             "name": "matthillman/swgoh-help",
-            "version": "dev-dev/apiv2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthillman/swgoh-help.git",
-                "reference": "8147f8a2f8c46288734b69086b8681c7701ca153"
+                "reference": "6190db63d9476fe6650f92f35952b0bef4fd6c04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthillman/swgoh-help/zipball/8147f8a2f8c46288734b69086b8681c7701ca153",
-                "reference": "8147f8a2f8c46288734b69086b8681c7701ca153",
+                "url": "https://api.github.com/repos/matthillman/swgoh-help/zipball/6190db63d9476fe6650f92f35952b0bef4fd6c04",
+                "reference": "6190db63d9476fe6650f92f35952b0bef4fd6c04",
                 "shasum": ""
             },
             "require": {
@@ -2011,7 +2011,7 @@
                 "swgoh.help",
                 "swogh"
             ],
-            "time": "2018-10-24 19:54:45"
+            "time": "2018-11-18T19:26:03+00:00"
         },
         {
             "name": "monolog/monolog",
