@@ -96,6 +96,10 @@
             }
         }
     }
+
+    .unit-table tbody td:first-of-type {
+        width: 100px;
+    }
 }
 
 .team-set {

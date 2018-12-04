@@ -26,8 +26,8 @@
                         </h1>
 
                         @foreach($teams as $title => $team)
-                        <h3>{{ $title }}</h3>
                             @include('shared.unit_table', [
+                                'team' => $title,
                                 'characters' => $team
                             ])
                         @endforeach

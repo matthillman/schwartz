@@ -1,16 +1,8 @@
 <div class="member-list">
-    <table>
-        <thead>
-            <tr>
-            @foreach($characters as $character)
-                <th>
-                    {{ $units->firstWhere('base_id', $character)->name }}
-                </th>
-            @endforeach
-            </tr>
-        </thead>
+    <table class="unit-table">
         <tbody>
             <tr>
+                <td>{{ $team }}</td>
             @foreach($characters as $character)
                 <td>
                     <div class="team-set">
