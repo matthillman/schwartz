@@ -15,6 +15,7 @@
                     {label: 'Bounty Hunters', value: 'bh'},
                     {label: 'Newie', value: 'newie'},
                     {label: 'Revan', value: 'kotor'},
+                    {label: 'C3PO', value: 'ewoks'},
                     {label: 'TW Defense', value: 'tw'},
                     {label: 'TB', value: 'tb'},
                 ],
