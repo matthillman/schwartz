@@ -14,6 +14,7 @@
                     {label: 'RJT', value: 'rjt'},
                     {label: 'Bounty Hunters', value: 'bh'},
                     {label: 'Newie', value: 'newie'},
+                    {label: 'OG Falcon', value: 'falcon'},
                     {label: 'Revan', value: 'kotor'},
                     {label: 'C3PO', value: 'ewoks'},
                     {label: 'TW Defense', value: 'tw'},
