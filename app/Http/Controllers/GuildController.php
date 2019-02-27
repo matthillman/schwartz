@@ -98,13 +98,14 @@ class GuildController extends Controller
                 break;
             case 'tw':
                 $teams = [
-                    'Traya' => ['DARTHTRAYA', 'DARTHSION', 'DARTHNIHILUS', 'SITHTROOPER', 'VISASMARR', 'GRANDADMIRALTHRAWN', 'ENFYSNEST', 'WAMPA'],
-                    'KRU' => ['KYLORENUNMASKED', 'KYLOREN', 'FIRSTORDEROFFICERMALE', 'FIRSTORDEREXECUTIONER', 'FIRSTORDERTROOPER'],
-                    'Bounty Hunters' => ['BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'EMBO', 'BARRISSOFFEE'],
-                    'Revan' => ['JEDIKNIGHTREVAN', 'JOLEEBINDO', 'BASTILASHAN', 'GRANDMASTERYODA', 'GENERALKENOBI'],
-                    'Jedi' => ['BASTILASHAN', 'GRANDMASTERYODA', 'GENERALKENOBI', 'FULCRUMAHSOKA', 'EZRABRIDGERS3'],
+                    'Revan' => ['JEDIKNIGHTREVAN', 'JOLEEBINDO', 'HERMITYODA', 'GRANDMASTERYODA', 'GENERALKENOBI'],
                     'Smugglers' => ['QIRA', 'ZAALBAR', 'YOUNGCHEWBACCA', 'L3_37', 'ENFYSNEST'],
-                    'Palp' => ['EMPERORPALPATINE', 'VADER', 'GRANDMOFFTARKIN', 'TIEFIGHTERPILOT', 'ROYALGUARD'],
+                    'Old Republic' => ['CARTHONASI', 'ZAALBAR', 'MISSIONVAO', 'JUHANI', 'CANDEROUSORDO'],
+                    'Nightsisters' => ['ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'MOTHERTALZIN', 'NIGHTSISTERSPIRIT'],
+                    'Bounty Hunters' => ['BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'EMBO', 'BARRISSOFFEE'],
+                    'KRU' => ['KYLORENUNMASKED', 'KYLOREN', 'FIRSTORDEROFFICERMALE', 'FIRSTORDEREXECUTIONER', 'FIRSTORDERTROOPER'],
+                    'Jedi' => ['BASTILASHAN', 'OLDBENKENOBI', 'ANAKINKNIGHT', 'FULCRUMAHSOKA', 'EZRABRIDGERS3'],
+                    'Traya' => ['DARTHTRAYA', 'DARTHSION', 'DARTHNIHILUS', 'SITHTROOPER', 'VISASMARR'],
                 ];
                 break;
             case 'tb':
