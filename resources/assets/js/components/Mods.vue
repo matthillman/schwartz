@@ -1,26 +1,23 @@
 <template>
     <div class="mods">
         <div class="row top">
-            <label class="file-label"><input type="file" id="mods-json" v-on:change="filePicked"> <span>Load Mods Export File</span></label>
-            <p class="instructions">
+            <label class="file-label" v-if="user == 0"><input type="file" id="mods-json" v-on:change="filePicked"> <span>Load Mods Export File</span></label>
+            <p class="instructions" v-if="user == 0">
                 Download a copy of <a href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy" target="_gdocs">this spreadsheet</a> and follow
                 the instructions to export a json file containing your mod information. Then press the button to the left and select that file.
+            </p>
+            <div v-if="user > 0">
+                <input type="text" v-model="swgoh" placeholder="Ally code (ex: 552325555)" :disabled="syncing">
+                <button class="btn btn-secondary" @click="triggerSync" :disabled="syncing || !connected()">Import from swgoh</button>
+            </div>
+            <p class="instructions" v-if="user > 0">
+                Enter your ally code and press the yellow button on the left. Upload or download your sets on the right.
             </p>
             <div>
                 Sets:
                 <label class="file-label"><input type="file" id="mods-json" v-on:change="setsPicked"> <img src="/images/upload.svg" width="20"></label>
                 <button class="file-label" @click="downloadSets"><img src="/images/download.svg" width="20"></button>
             </div>
-        </div>
-        <div v-if="user > 0" class="row top">
-            <div>
-                <input type="text" v-model="swgoh" placeholder="Ally code (ex: 552325555)" :disabled="syncing">
-                <button class="btn btn-secondary" @click="triggerSync" :disabled="syncing || !connected">Import from swgoh</button>
-            </div>
-            <p class="instructions">
-                or, enter your ally code and press "Import".
-            </p>
-            <div></div>
         </div>
         <div v-show="modsArray.length">
             <h2>5* Speed Arrows</h2>
@@ -223,7 +220,7 @@
                 jsonDownload: null,
                 swgoh: null,
                 syncing: false,
-                connected: true,
+                listening: false,
             }
         },
 
@@ -234,18 +231,28 @@
             },
         },
 
+        watch: {
+            swgoh(val, oldVal) {
+                if (!/^\d{0,9}$/.test(val)) {
+                    this.$set(this, 'swgoh', oldVal || '');
+                }
+            }
+        },
+
         created: function() {
             this.unwatch = this.$watch('swgoh', _.debounce((newName, oldName) => {
-                if (oldName) {
-                    Echo.leave('mods.' + oldName)
+                if (oldName && /^\d{9}$/.test(oldName)) {
+                    Echo.leave('mods.' + oldName);
+                    this.listening = false;
                 }
 
-                if (newName) {
+                if (newName && /^\d{9}$/.test(newName)) {
                     Echo.private('mods.' + newName)
                         .listen('.mods.fetched', (e) => {
                             console.log(e);
                             this.importFromSwgoh();
                         });
+                    this.listening = true;
                 }
             }, 250), {immediate: true});
         },
@@ -336,6 +343,9 @@
         },
 
         methods: {
+            connected: function() {
+                return this.listening && Object.keys(Echo.connector.channels).length;
+            },
             hasAttribute: function(shape) {
                 let base = shape === "arrow" ? this.speedArrows : this.modsArray;
                 let mods = base.filter((mod) => mod.slot === shape)
