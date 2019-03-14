@@ -16,9 +16,10 @@
                     {label: 'Newie', value: 'newie'},
                     {label: 'OG Falcon', value: 'falcon'},
                     {label: 'Revan', value: 'kotor'},
+                    {label: 'Darth Revan', value: 'kotor2'},
                     {label: 'C3PO', value: 'ewoks'},
-                    {label: 'TW Defense', value: 'tw'},
                     {label: 'TB', value: 'tb'},
+                    {label: 'TW Defense', value: 'tw'},
                 ],
             }
         },
