@@ -51,15 +51,15 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
 
     $data = DB::table('guilds') ->join('members', 'members.guild_id', '=', 'guilds.id') ->join('characters', 'characters.member_id', '=', 'members.id') ->selectRaw("
             guilds.guild_id,
-            guilds.gp,
+            max(guilds.gp) as gp,
             sum(case when characters.gear_level = 12 then 1 else 0 end) as gear_12,
             sum(case when characters.gear_level = 11 then 1 else 0 end) as gear_11,
             sum(case when characters.unit_name = 'DARTHTRAYA' then 1 else 0 end) as traya,
-            sum(case when characters.unit_name = 'DARTHTRAYA' && characters.gear_level = 12 then 1 else 0 end) as traya_12,
+            sum(case when characters.unit_name = 'DARTHTRAYA' AND characters.gear_level = 12 then 1 else 0 end) as traya_12,
             sum(case when characters.unit_name = 'JEDIKNIGHTREVAN' then 1 else 0 end) as revan,
-            sum(case when characters.unit_name = 'JEDIKNIGHTREVAN' && characters.gear_level = 12 then 1 else 0 end) as revan_12
+            sum(case when characters.unit_name = 'JEDIKNIGHTREVAN' AND characters.gear_level = 12 then 1 else 0 end) as revan_12,
             sum(case when characters.unit_name = 'DARTHREVAN' then 1 else 0 end) as darth_revan,
-            sum(case when characters.unit_name = 'DARTHREVAN' && characters.gear_level = 12 then 1 else 0 end) as darth_revan_12
+            sum(case when characters.unit_name = 'DARTHREVAN' AND characters.gear_level = 12 then 1 else 0 end) as darth_revan_12
         ") ->groupBy('guilds.guild_id')
         ->whereIn('guilds.guild_id', [$guild1->guild_id, $guild2->guild_id])
         ->get();
