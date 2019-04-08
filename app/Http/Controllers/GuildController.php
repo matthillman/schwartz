@@ -98,14 +98,13 @@ class GuildController extends Controller
                 break;
             case 'tw':
                 $teams = [
-                    'Revan' => ['JEDIKNIGHTREVAN', 'JOLEEBINDO', 'HERMITYODA', 'GRANDMASTERYODA', 'GENERALKENOBI'],
-                    'Smugglers' => ['QIRA', 'ZAALBAR', 'YOUNGCHEWBACCA', 'L3_37', 'ENFYSNEST'],
-                    'Old Republic' => ['CARTHONASI', 'ZAALBAR', 'MISSIONVAO', 'JUHANI', 'CANDEROUSORDO'],
-                    'Nightsisters' => ['ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'MOTHERTALZIN', 'NIGHTSISTERSPIRIT'],
-                    'Bounty Hunters' => ['BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'EMBO', 'BARRISSOFFEE'],
-                    'KRU' => ['KYLORENUNMASKED', 'KYLOREN', 'FIRSTORDEROFFICERMALE', 'FIRSTORDEREXECUTIONER', 'FIRSTORDERTROOPER'],
-                    'Jedi' => ['BASTILASHAN', 'OLDBENKENOBI', 'ANAKINKNIGHT', 'FULCRUMAHSOKA', 'EZRABRIDGERS3'],
-                    'Traya' => ['DARTHTRAYA', 'DARTHSION', 'DARTHNIHILUS', 'SITHTROOPER', 'VISASMARR'],
+                    'Bounty Hunters' => ['JANGOFETT', 'BOSSK', 'BOBAFETT', 'ZAMWESELL', 'DENGAR'],
+                    'Smugglers' => ['QIRA', 'YOUNGCHEWBACCA', 'L3_37', 'HANSOLO', 'CHEWBACCALEGENDARY'],
+                    'Old Republic' => ['CARTHONASI', 'ZAALBAR', 'MISSIONVAO', 'CANDEROUSORDO', 'ENFYSNEST'],
+                    'Darth Revan' => ['DARTHREVAN', 'BASTILASHANDARK', 'HK47', 'SITHMARAUDER', 'SITHASSASSIN', 'SITHTROOPER'],
+                    'Revan' => ['JEDIKNIGHTREVAN', 'JOLEEBINDO', 'GRANDMASTERYODA', 'EZRABRIDGERS3', 'OLDBENKENOBI'],
+                    'Nightsisters' => ['MOTHERTALZIN', 'ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'NIGHTSISTERSPIRIT'],
+                    'KRU' => ['KYLORENUNMASKED', 'KYLOREN', 'BARRISSOFFEE', 'FIRSTORDEREXECUTIONER', 'FIRSTORDERTROOPER'],
                 ];
                 break;
             case 'tb':
