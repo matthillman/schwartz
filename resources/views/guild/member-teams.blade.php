@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('body-class', 'no-bg')
 @section('content')
 <div class="container guild-members">
     <div class="row justify-content-center">
