@@ -90,6 +90,13 @@ class GuildController extends Controller
                 ];
                 $highlight = 'stars';
                 break;
+            case 'malak':
+                $teams = [
+                    'Revan' => ['JEDIKNIGHTREVAN', 'BASTILASHAN', 'ZAALBAR', 'MISSIONVAO', 'JOLEEBINDO', 'T3_M4'],
+                    'Darth Revan' => ['DARTHREVAN', 'CARTHONASI', 'BASTILASHANDARK', 'HK47', 'JUHANI', 'CANDEROUSORDO'],
+                ];
+                $highlight = 'power';
+                break;
             case 'ewoks':
                 $teams = [
                     'C3PO' => ['C3POLEGENDARY', 'CHIEFCHIRPA', 'PAPLOO', 'EWOKELDER', 'LOGRAY', 'WICKET', 'EWOKSCOUT', 'TEEBO'],
