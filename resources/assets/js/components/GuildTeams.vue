@@ -17,6 +17,7 @@
                     {label: 'OG Falcon', value: 'falcon'},
                     {label: 'Revan', value: 'kotor'},
                     {label: 'Darth Revan', value: 'kotor2'},
+                    {label: 'Darth Malak', value: 'malak'},
                     {label: 'C3PO', value: 'ewoks'},
                     {label: 'TB', value: 'tb'},
                     {label: 'TW Defense', value: 'tw'},
