@@ -92,6 +92,7 @@ class GuildController extends Controller
                 break;
             case 'malak':
                 $teams = [
+                    'Darth Malak' => ['DARTHMALAK'],
                     'Revan' => ['JEDIKNIGHTREVAN', 'BASTILASHAN', 'ZAALBAR', 'MISSIONVAO', 'JOLEEBINDO', 'T3_M4'],
                     'Darth Revan' => ['DARTHREVAN', 'CARTHONASI', 'BASTILASHANDARK', 'HK47', 'JUHANI', 'CANDEROUSORDO'],
                 ];
