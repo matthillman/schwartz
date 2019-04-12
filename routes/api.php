@@ -58,6 +58,8 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
             sum(case when characters.unit_name = 'DARTHTRAYA' AND characters.gear_level = 12 then 1 else 0 end) as traya_12,
             sum(case when characters.unit_name = 'JEDIKNIGHTREVAN' then 1 else 0 end) as revan,
             sum(case when characters.unit_name = 'JEDIKNIGHTREVAN' AND characters.gear_level = 12 then 1 else 0 end) as revan_12,
+            sum(case when characters.unit_name = 'DARTHMALAK' then 1 else 0 end) as malak,
+            sum(case when characters.unit_name = 'DARTHMALAK' AND characters.gear_level = 12 then 1 else 0 end) as malak_12,
             sum(case when characters.unit_name = 'DARTHREVAN' then 1 else 0 end) as darth_revan,
             sum(case when characters.unit_name = 'DARTHREVAN' AND characters.gear_level = 12 then 1 else 0 end) as darth_revan_12
         ") ->groupBy('guilds.guild_id')
@@ -81,8 +83,17 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
     $g1Data['zetas'] = $g1Zetas['zetas'];
     $g2Data['zetas'] = $g2Zetas['zetas'];
 
+    $chars = ['traya', 'revan', 'malak', 'darth_revan'];
+
     return response()->json([
         $guild1->name => $g1Data,
         $guild2->name => $g2Data,
+        'char_keys' => $chars,
+        'char_names' => [
+            'traya' => 'Traya',
+            'revan' => 'Revan',
+            'malak' => 'Malak',
+            'darth_revan' => 'Darth Revan',
+        ]
     ]);
 });
