@@ -79,7 +79,10 @@
 
             <div class="shapes">
                 <div class="mod-list" v-for="shape in shapes" :key="shape">
-                    <h2>{{ shape }}</h2>
+                    <div class="column-title">
+                        <h2>{{ shape }}</h2>
+                        <span>({{ hasAttribute(shape).length }})</span>
+                    </div>
                     <div class="filter-wrapper">
                         <v-select v-if="primaries[shape]" v-model="onlyPrimary[shape]" :options="primaries[shape]" :searchable="false"></v-select>
                     </div>
@@ -156,11 +159,11 @@
             case 'UNITSTATRESISTANCE': return 'tenacity';
             case 'UNITSTATCRITICALDAMAGE': return 'critical damage';
             case 'UNITSTATCRITICALCHANCEPERCENTADDITIVE': return 'critical chance';
-            case 'UNITSTATCRITICALNEGATECHANCEPERCENTADDITIVE': return 'critical avoidance';
+            case 'UNITSTATCRITICALNEGATECHANCEPERCENTADDITIVE': return 'crit avoidance';
             case 'UNITSTATEVASIONNEGATEPERCENTADDITIVE': return 'accuracy';
 
             case 'UNITSTATCRITICALCHANCE': return 'critical chance';
-            case 'UNITSTATCRITICALNEGATECHANCE': return 'critical avoidance';
+            case 'UNITSTATCRITICALNEGATECHANCE': return 'crit avoidance';
             case 'UNITSTATEVASIONNEGATE': return 'accuracy';
         }
     }
@@ -194,10 +197,10 @@
                 modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
                 attributes: ["speed", "offense", "defense", "health", "protection", "critical chance", "tenacity"],
                 primaries: {
-                    arrow: ['all', 'speed', 'offense', 'protection', 'health'],
+                    arrow: ['all', 'speed', 'offense', 'protection', 'health', 'critical avoidance'],
                     circle: ['all', 'protection', 'health'],
                     cross: ['all', 'offense', 'protection', 'health', 'potency', 'tenacity'],
-                    triangle: ['critical damage', 'offense', 'protection', 'health'],
+                    triangle: ['all', 'critical damage', 'offense', 'protection', 'health'],
                 },
                 onlyPrimary: {
                     square: null,
@@ -697,6 +700,17 @@ h2 {
         display: flex;
         flex-direction: column;
         flex-basis: 20%;
+        flex-grow: 0;
+
+        > .column-title {
+            display: flex;
+            align-items: baseline;
+
+            > span {
+                font-size: 12px;
+                margin-left: 6px
+            }
+        }
     }
 }
 
