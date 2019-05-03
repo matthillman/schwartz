@@ -18,6 +18,7 @@
                     {label: 'Revan', value: 'kotor'},
                     {label: 'Darth Revan', value: 'kotor2'},
                     {label: 'Darth Malak', value: 'malak'},
+                    {label: 'Padmé Amidala', value: 'padme'},
                     {label: 'C3PO', value: 'ewoks'},
                     {label: 'TB', value: 'tb'},
                     {label: 'TW Defense', value: 'tw'},
