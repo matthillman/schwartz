@@ -119,6 +119,7 @@ class GuildController extends Controller
                     'Revan' => ['JEDIKNIGHTREVAN', 'JOLEEBINDO', 'GRANDMASTERYODA', 'EZRABRIDGERS3', 'OLDBENKENOBI'],
                     'Nightsisters' => ['MOTHERTALZIN', 'ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'NIGHTSISTERSPIRIT'],
                     'KRU' => ['KYLORENUNMASKED', 'KYLOREN', 'BARRISSOFFEE', 'FIRSTORDEREXECUTIONER', 'FIRSTORDERTROOPER'],
+                    'GG' => ['GRIEVOUS', 'B2SUPERBATTLEDROID', 'MAGNAGUARD', 'B1BATTLEDROIDV2', 'DROIDEKA'],
                 ];
                 break;
             case 'tb':
