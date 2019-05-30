@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "matthillman/schwartz",
+    "description": "The Schwartzies website.",
+    "keywords": ["schwartz"],
     "license": "MIT",
     "type": "project",
     "require": {

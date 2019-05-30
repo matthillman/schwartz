@@ -22,14 +22,14 @@ class PullGuild extends Command
      *
      * @var string
      */
-    protected $signature = 'swgoh:guild {guild}';
+    protected $signature = 'swgoh:guild {--A|ally} {guild}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Pull all characters and member information for a guild from swogh.help';
+    protected $description = 'Pull all characters and member information for a guild from swgoh.help';
 
     /**
      * Execute the console command.
@@ -38,32 +38,34 @@ class PullGuild extends Command
      */
     public function handle()
     {
+        $isAllyCode = $this->option('ally');
         $start = Carbon::now();
-        $guild = Guild::firstOrNew(['guild_id' => $this->argument('guild')]);
-        $name = $guild->name ?? 'GUILD ' . $guild->guild_id;
+        $guildID = $this->argument('guild');
+        if ($isAllyCode) {
+            $guildID = preg_replace('/[^0-9]/', '', $guildID);
+            $member = Member::firstOrNew(['ally_code' => $guildID]);
+            $guild = $member->guild;
+        } else {
+            $guild = Guild::firstOrNew(['guild_id' => $guildID]);
+        }
+        $name = $guild->name ?? ($isAllyCode ? 'ALLY CODE ' : 'GUILD ') . $guildID;
         $this->info("Starting GuildParser for {$name}…");
 
         if (is_null($guild->id)) {
+            $guild->guild_id = $guildID;
             $guild->name = $name;
             $guild->url = 'not_scraped';
             $guild->gp = 0;
             $guild->save();
-        } else {
-            $this->info("Dissociating all guild members…");
-            DB::transaction(function() use ($guild) {
-                $guild->members()->each(function($member) {
-                    $member->guild()->dissociate();
-                    $member->save();
-                });
-            });
-            $this->info("Dissociation done.");
         }
 
-        $parser = new GuildParser($this->argument('guild'));
+        $parser = new GuildParser($guildID, $isAllyCode);
         $this->info("Starting API pull…");
 
+        $updated = [];
+
         $zetaList = Zeta::all();
-        $parser->scrape(function($member_data) use ($guild, $zetaList) {
+        $parser->scrape(function($member_data) use ($guild, $zetaList, &$updated) {
             $member = Member::firstOrNew(['ally_code' => (string)$member_data['allyCode']]);
 
             $ally = $member_data['allyCode'];
@@ -79,9 +81,15 @@ class PullGuild extends Command
             $member->guild()->associate($guild);
             $member->save();
 
+            $modUser = ModUser::firstOrNew(['name' => (string)$ally]);
+            $modUser->last_scrape = new \DateTime;
+            $modUser->save();
+
+            $updated[] = $member->id;
+
             $this->comment("   Looping over units for {$member->player}…");
             $roster = collect($member_data['roster']);
-            $chars = $roster->map(function($unit) use ($member) {
+            $mappedRoster = $roster->map(function($unit) use ($member, $modUser) {
                 $character = [
                     'member_id' => $member->id,
                     'unit_name' => $unit['defId'],
@@ -91,8 +99,35 @@ class PullGuild extends Command
                     'combat_type' => $unit['combatType'] === 'CHARACTER' ? 1 : 2,
                     'rarity' => $unit['rarity'],
                 ];
-                return $character;
+                $mods = collect($unit['mods'] ?? [])->map(function($mod) use ($character, $modUser) {
+                    $modItem = [
+                        "uid" => $mod["id"],
+                        "slot" => $mod["slot"],
+                        "set" => $mod["set"],
+                        "pips" => $mod["pips"],
+                        "level" => $mod["level"],
+                        "name" => "",
+                        "location" => $character['unit_name'],
+                        "mod_user_id" => $modUser->id,
+                        "tier" => $mod["tier"],
+                        "primary_type" => $mod["primaryStat"]["unitStat"],
+                        "primary_value" => $mod["primaryStat"]["value"],
+                    ];
+
+
+                    collect([1, 2, 3, 4])->each(function($index) use ($mod, &$modItem) {
+                        $modItem["secondary_${index}_type"] = array_get($mod, "secondaryStat.${index}.unitStat", null);
+                        $modItem["secondary_${index}_value"] = array_get($mod, "secondaryStat.${index}.value", null);
+                    });
+
+                    return $modItem;
+                });
+
+                return ['char' => $character, 'mods' => $mods];
             });
+
+            $chars = $mappedRoster->pluck('char');
+            $mods = $mappedRoster->pluck('mods')->flatten(1);
 
             $cCount = $chars->count();
             $this->info("   ➡ Doing the character insert (${cCount} rows)");
@@ -114,61 +149,67 @@ class PullGuild extends Command
                 $this->info("   ➡ Doing the zeta insert (${zCount} rows)");
                 CharacterZeta::upsert($zetas->toArray(), "(character_id, zeta_id)");
                 $this->info("   ⬅ Done with zeta insert.");
+
+                $existing = $member->characters->map(function($c) { return $c->zetas; })->collapse()->pluck('id');
+                $diff = $existing->diff($zetas->pluck('zeta_id'))->values();
+                $zCount = $diff->count();
+                if ($zCount > 0) {
+                    $this->info("   ➡ Deleting extra zetas (${zCount} rows)");
+                    CharacterZeta::whereIn('zeta_id', $diff)->delete();
+                    $this->info("   ⬅ Extra zetas deleted.");
+                }
             } else {
                 $this->info("   No zetas to insert.");
             }
+
+            $mCount = $mods->count();
+            $this->info("   ➡ Doing the mod insert for {$modUser->name} (${mCount} rows)");
+            Mod::upsert($mods->toArray(), "(uid)");
+            $this->info("   ⬅ Done with mod insert.");
+
             $this->comment("   {$member->player} done.");
-        });
+        }, /* pullMods: */ true);
 
         $this->info("API pull finished.");
 
         $this->info("Saving basic info.");
         $guild->url = $parser->url();
+
+        // make sure we didn't create a duplicate guild
+        $possibleExistingGuild = Guild::where('name', $parser->name())->where('id', '<>', $guild->id)->first();
+
+        if ($possibleExistingGuild) {
+            if (strlen($guild->guild_id) === 9) {
+                $this->info("Found existing guild, transitioning parsed members to $guild->name ($guild->id)");
+                $possibleExistingGuild->members()->saveMany(
+                    $guild->members
+                );
+
+                $guild->delete();
+
+                $guild = $possibleExistingGuild;
+            } else if (strlen($possibleExistingGuild->guild_id) === 9) {
+                $this->info("Found existing guild with ally code, deleting it: $possibleExistingGuild->name ($possibleExistingGuild->id)");
+                // No need to transition any members as all active members
+                // have already been parsed and attached to $guild
+                $possibleExistingGuild->delete();
+            }
+        }
+
         $guild->name = $parser->name();
         $guild->gp = $parser->gp();
         $guild->save();
         $this->info("Guild saved.");
 
-        // $rosterByAllyCode->each(function($roster, $allyCode) {
-        //     $modUser = ModUser::firstOrNew(['name' => (string)$allyCode]);
-        //     $modUser->last_scrape = new \DateTime;
-        //     $modUser->save();
-
-        //     $mods = collect($roster)->pluck('mods', 'defId');
-
-        //     $modUser->mods()->whereNotIn('uid', $mods->flatten(1)->pluck('id'))->delete();
-
-        //     $modsToInsert = $mods->flatMap(function($charMods, $charID) use ($modUser) {
-        //         return collect($charMods)->map(function($mod) use ($charID, $modUser) {
-        //             return [
-        //                 "uid" => $mod["id"],
-        //                 "slot" => $mod["slot"],
-        //                 "set" => $mod["set"],
-        //                 "pips" => $mod["pips"],
-        //                 "level" => $mod["level"],
-        //                 "name" => "",
-        //                 "location" => $charID,
-        //                 "mod_user_id" => $modUser->id,
-        //                 "tier" => $mod["tier"],
-        //                 "primary_type" => $mod["primaryBonusType"],
-        //                 "primary_value" => $mod["primaryBonusValue"],
-        //                 "secondary_1_type" => $mod["secondaryType_1"],
-        //                 "secondary_1_value" => $mod["secondaryValue_1"],
-        //                 "secondary_2_type" => $mod["secondaryType_2"],
-        //                 "secondary_2_value" => $mod["secondaryValue_2"],
-        //                 "secondary_3_type" => $mod["secondaryType_3"],
-        //                 "secondary_3_value" => $mod["secondaryValue_3"],
-        //                 "secondary_4_type" => $mod["secondaryType_4"],
-        //                 "secondary_4_value" => $mod["secondaryValue_4"],
-        //               ];
-        //         });
-        //     });
-
-        //     $mCount = $modsToInsert->count();
-        //     $this->info("Doing the mod insert for {$modUser->name} (${mCount} rows)");
-        //     Mod::upsert($modsToInsert->toArray(), "(uid)");
-        //     $this->info("Done with mod insert.");
-        // });
+        $removeCount = $guild->members()->whereNotIn('id', $updated)->count();
+        $this->info("Removing all guild members not updated (${removeCount})");
+        DB::transaction(function() use ($guild, $updated) {
+            $guild->members()->whereNotIn('id', $updated)->each(function($member) {
+                $member->guild()->dissociate();
+                $member->save();
+            });
+        });
+        $this->info("Guild cleanup done.");
 
         $time = Carbon::now()->diffInSeconds($start);
         $this->comment("Returning. Scrape took {$time} seconds.");

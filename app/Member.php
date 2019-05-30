@@ -19,7 +19,7 @@ class Member extends Model
         return $this->hasMany(Character::class);
     }
     public function guild() {
-        return $this->belongsTo(Guild::class);
+        return $this->belongsTo(Guild::class)->withDefault();
     }
 
     public function getGuildNameAttribute() {
