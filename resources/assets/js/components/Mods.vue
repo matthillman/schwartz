@@ -488,7 +488,7 @@
                 let set = this.sets.filter((set) => set.id == this.currentSet)[0];
                 if (!set) { return; }
                 let prevMod = set[mod.slot];
-                if (prevMod) {
+                if (prevMod && this.mods[prevMod]) {
                     this.mods[prevMod].modSet = null;
                     if (this.mods[prevMod].set == "speed") {
                         set.speedSet -= 1;
