@@ -73,11 +73,12 @@
                 </div>
                 <div class="checkboxes">
                     <label><input type="checkbox" v-model="filterSelected"> <span>Hide mods already in a set</span></label>
+                    <label><input type="checkbox" v-model="showSetOverlays"> <span>Show set overlays</span></label>
                     <label v-show="!!only"><input type="checkbox" v-model="showAll"> <span>Show all mods</span></label>
                 </div>
             </div>
 
-            <div class="shapes">
+            <div class="shapes" :class="{'hide-overlay': !showSetOverlays}">
                 <div class="mod-list" v-for="shape in shapes" :key="shape">
                     <div class="column-title">
                         <h2>{{ shape }}</h2>
@@ -90,7 +91,7 @@
                         v-for="mod in hasAttribute(shape)"
                         :key="mod.uid"
                         :mod-set="setDescriptionFor(mod)"
-                        :class="{active: mod.modSet == currentSet}"
+                        :class="{active: mod.modSet == currentSet && currentSet > 0}"
                         @click="addToActiveSet(mod)"
                     ><mod :mod="mod"></mod></div>
                 </div>
@@ -212,6 +213,7 @@
                 },
                 setFilter: [],
                 filterSelected: false,
+                showSetOverlays: true,
                 showAll: false,
                 hideCompletedSets: false,
 
@@ -355,7 +357,7 @@
                     .filter(mod => !this.onlyPrimary[shape] || this.onlyPrimary[shape] === 'all' || this.onlyPrimary[shape] === mod.primary.type)
                     .filter((mod) => this.setFilter.length ? this.setFilter.includes(mod.set) : true)
                     .filter((mod) => !this.filterSelected || !mod.modSet || mod.modSet == this.currentSet);
-                if (this.only == "speed" && shape == "arrow") {
+                if (this.only == "speed" && shape == "arrow" && this.onlyPrimary.arrow == "speed") {
                     return mods;
                 }
                 if (this.only !== null && !this.showAll) {

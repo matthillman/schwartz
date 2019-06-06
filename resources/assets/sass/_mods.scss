@@ -38,6 +38,10 @@
     text-align: center;
     transition: opacity, 300ms, ease-in-out;
     opacity: 1;
+
+    .hide-overlay & {
+      content: none;
+    }
   }
   &:hover::before {
     opacity: 0;
@@ -98,6 +102,7 @@
 [mod-set] {
   &.active {
     box-shadow: 0px 0px 15px $secondary;
+    border-radius: 8px;
   }
 }
 
