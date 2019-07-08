@@ -63,7 +63,7 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
             "sum(case when characters.unit_name = '${unitName}' AND characters.gear_level = 12 then 1 else 0 end) as ${unitName}_12",
             "sum(case when characters.unit_name = '${unitName}' AND characters.gear_level = 13 then 1 else 0 end) as ${unitName}_13",
         ];
-    })->collapse()->join(', ');
+    })->collapse()->implode(', '); // FIXME ->join when upgrading laravel
 
     $data = DB::table('guilds') ->join('members', 'members.guild_id', '=', 'guilds.id') ->join('characters', 'characters.member_id', '=', 'members.id') ->selectRaw("
             guilds.guild_id,
