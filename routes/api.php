@@ -49,21 +49,29 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
         return response()->json($response);
     }
 
+    $chars = [
+        'DARTHTRAYA' => 'Traya',
+        'DARTHREVAN' => 'Revan',
+        'DARTHMALAK' => 'Malak',
+        'JEDIKNIGHTREVAN' => 'Darth Revan',
+        'PADMEAMIDALA' => 'Padmé',
+    ];
+
+    $unitQueries = collect($chars)->map(function($name, $unitName) {
+        return [
+            "sum(case when characters.unit_name = '${unitName}' then 1 else 0 end) as ${unitName}",
+            "sum(case when characters.unit_name = '${unitName}' AND characters.gear_level = 12 then 1 else 0 end) as ${unitName}_12",
+            "sum(case when characters.unit_name = '${unitName}' AND characters.gear_level = 13 then 1 else 0 end) as ${unitName}_13",
+        ];
+    })->collapse()->join(', ');
+
     $data = DB::table('guilds') ->join('members', 'members.guild_id', '=', 'guilds.id') ->join('characters', 'characters.member_id', '=', 'members.id') ->selectRaw("
             guilds.guild_id,
             max(guilds.gp) as gp,
+            sum(case when characters.gear_level = 13 then 1 else 0 end) as gear_13,
             sum(case when characters.gear_level = 12 then 1 else 0 end) as gear_12,
             sum(case when characters.gear_level = 11 then 1 else 0 end) as gear_11,
-            sum(case when characters.unit_name = 'DARTHTRAYA' then 1 else 0 end) as traya,
-            sum(case when characters.unit_name = 'DARTHTRAYA' AND characters.gear_level = 12 then 1 else 0 end) as traya_12,
-            sum(case when characters.unit_name = 'JEDIKNIGHTREVAN' then 1 else 0 end) as revan,
-            sum(case when characters.unit_name = 'JEDIKNIGHTREVAN' AND characters.gear_level = 12 then 1 else 0 end) as revan_12,
-            sum(case when characters.unit_name = 'DARTHMALAK' then 1 else 0 end) as malak,
-            sum(case when characters.unit_name = 'DARTHMALAK' AND characters.gear_level = 12 then 1 else 0 end) as malak_12,
-            sum(case when characters.unit_name = 'DARTHREVAN' then 1 else 0 end) as darth_revan,
-            sum(case when characters.unit_name = 'DARTHREVAN' AND characters.gear_level = 12 then 1 else 0 end) as darth_revan_12,
-            sum(case when characters.unit_name = 'PADMEAMIDALA' then 1 else 0 end) as padme,
-            sum(case when characters.unit_name = 'PADMEAMIDALA' AND characters.gear_level = 12 then 1 else 0 end) as padme_12
+            ${unitQueries}
         ") ->groupBy('guilds.guild_id')
         ->whereIn('guilds.guild_id', [$guild1->guild_id, $guild2->guild_id])
         ->get();
@@ -85,18 +93,10 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
     $g1Data['zetas'] = $g1Zetas['zetas'];
     $g2Data['zetas'] = $g2Zetas['zetas'];
 
-    $chars = ['traya', 'revan', 'malak', 'darth_revan', 'padme'];
-
     return response()->json([
         $guild1->name => $g1Data,
         $guild2->name => $g2Data,
-        'char_keys' => $chars,
-        'char_names' => [
-            'traya' => 'Traya',
-            'revan' => 'Revan',
-            'malak' => 'Malak',
-            'darth_revan' => 'Darth Revan',
-            'padme' => 'Padmé',
-        ]
+        'char_keys' => array_keys($chars),
+        'char_names' => $chars
     ]);
 });
