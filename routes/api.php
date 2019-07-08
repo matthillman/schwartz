@@ -97,6 +97,6 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
         $guild1->name => $g1Data,
         $guild2->name => $g2Data,
         'char_keys' => collect($chars)->map(function($name, $unit) { return strtolower($unit); })->values()->toArray(),
-        'char_names' => $chars
+        'char_names' => collect($chars)->mapWithKeys(function($name, $unit) { return [strtolower($unit) => $name]; })->toArray(),
     ]);
 });
