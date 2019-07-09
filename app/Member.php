@@ -18,6 +18,15 @@ class Member extends Model
     public function characters() {
         return $this->hasMany(Character::class);
     }
+
+    public function gear12() {
+        return $this->characters()->where('gear_level', '=', 12);
+    }
+
+    public function gear13() {
+        return $this->characters()->where('gear_level', '=', 13);
+    }
+
     public function guild() {
         return $this->belongsTo(Guild::class)->withDefault();
     }

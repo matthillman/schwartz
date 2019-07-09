@@ -12,6 +12,8 @@
             <div><span>Total:</span> {{ items | sumProp('gp') | numberWithCommas }}</div>
             <div><span>Char GP:</span> {{ items | sumProp('character_gp') | numberWithCommas }}</div>
             <div><span>Ship GP:</span> {{ items | sumProp('ship_gp') | numberWithCommas }}</div>
+            <div><span>Gear 13:</span> {{ items | sumProp('gear_13') | numberWithCommas }}</div>
+            <div><span>Gear 12:</span> {{ items | sumProp('gear_12') | numberWithCommas }}</div>
         </div>
 	    <list
 	    	:columns="columns"
@@ -48,6 +50,8 @@
 		            { prop: 'gp', label: 'Galactic Power', transform: numberWithCommas },
 		            { prop: 'character_gp', label: 'Character GP', transform: numberWithCommas },
 		            { prop: 'ship_gp', label: 'Ship GP', transform: numberWithCommas },
+		            { prop: 'gear_13', label: 'Gear 13', transform: numberWithCommas },
+		            { prop: 'gear_12', label: 'Gear 12', transform: numberWithCommas },
 		            { prop: 'guild_name', label: 'Guild', transform: acronymize  },
                 ],
                 selected: 0,
