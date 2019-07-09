@@ -104,6 +104,10 @@ body{
   .content {
     .container {
       width: 110ex;
+
+      &.guild-stats {
+        width: 120ex;
+      }
     }
   }
 }

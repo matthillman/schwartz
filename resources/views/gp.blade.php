@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('viewport', '716')
+@section('viewport', '830')
 
 @section('content')
-<div class="container">
+<div class="container guild-stats">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">

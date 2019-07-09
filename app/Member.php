@@ -13,7 +13,7 @@ class Member extends Model
      *
      * @var array
      */
-    protected $appends = ['guild_name'];
+    protected $appends = ['guild_name', 'gear_12', 'gear_13'];
 
     public function characters() {
         return $this->hasMany(Character::class);
@@ -34,6 +34,15 @@ class Member extends Model
     public function getGuildNameAttribute() {
         return $this->guild->name;
     }
+
+    public function getGear12Attribute() {
+        return $this->gear12()->count();
+    }
+
+    public function getGear13Attribute() {
+        return $this->gear13()->count();
+    }
+
     public function getZetasAttribute() {
         return $this->characters->pluck('zetas')->flatten();
     }
