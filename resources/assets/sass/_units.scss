@@ -113,8 +113,13 @@
 
         background-color: red;
 
+        &[gear="13"] {
+            background-color: none;
+            background: linear-gradient(to top, rgba($color: #fe150d, $alpha: 0.5), rgba($color: #eadb39, $alpha: 0.5))
+        }
+
         &[gear="12"] {
-            background-color: rgba($color: gold, $alpha: 0.5);
+            background-color: rgba($color: #eadb39, $alpha: 0.5);
         }
 
         &[gear="11"], &[gear="10"] {
@@ -125,7 +130,7 @@
     [highlight="stars"] & [stars] {
         background-color: red;
         &[stars="7"] {
-            background-color: rgba($color: gold, $alpha: 0.5);
+            background-color: rgba($color: #eadb39, $alpha: 0.5);
         }
     }
     [highlight="power"] & [power] {
@@ -134,7 +139,7 @@
             background-color: rgba($color: rebeccapurple, $alpha: 0.5);
         }
         &[power="2"] {
-            background-color: rgba($color: gold, $alpha: 0.5);
+            background-color: rgba($color: #eadb39, $alpha: 0.5);
         }
     }
 }
