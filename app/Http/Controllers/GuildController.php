@@ -118,7 +118,6 @@ class GuildController extends Controller
                     'Bounty Hunters' => ['JANGOFETT', 'BOSSK', 'BOBAFETT', 'ZAMWESELL', 'DENGAR'],
                     'Geonosians' => ['GEONOSIANBROODALPHA', 'GEONOSIANSOLDIER', 'GEONOSIANSPY', 'POGGLETHELESSER', 'SUNFAC'],
                     'Padmé Amidala GR' => ['PADMEAMIDALA', 'ANAKINKNIGHT', 'AHSOKATANO', 'GENERALKENOBI', 'C3POLEGENDARY'],
-                    'Revan' => ['JEDIKNIGHTREVAN', 'JOLEEBINDO', 'GRANDMASTERYODA', 'EZRABRIDGERS3', 'OLDBENKENOBI'],
                 ];
                 break;
             case 'tb':
