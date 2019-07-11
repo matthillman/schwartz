@@ -112,14 +112,13 @@ class GuildController extends Controller
                 break;
             case 'tw':
                 $teams = [
-                    'Bounty Hunters' => ['JANGOFETT', 'BOSSK', 'BOBAFETT', 'ZAMWESELL', 'DENGAR'],
-                    'Smugglers' => ['QIRA', 'YOUNGCHEWBACCA', 'L3_37', 'HANSOLO', 'CHEWBACCALEGENDARY'],
-                    'Old Republic' => ['CARTHONASI', 'ZAALBAR', 'MISSIONVAO', 'CANDEROUSORDO', 'ENFYSNEST'],
                     'Darth Revan' => ['DARTHREVAN', 'BASTILASHANDARK', 'HK47', 'SITHMARAUDER', 'SITHASSASSIN', 'SITHTROOPER'],
-                    'Revan' => ['JEDIKNIGHTREVAN', 'JOLEEBINDO', 'GRANDMASTERYODA', 'EZRABRIDGERS3', 'OLDBENKENOBI'],
+                    'GG' => ['GRIEVOUS', 'B2SUPERBATTLEDROID', 'MAGNAGUARD', 'B1BATTLEDROIDV2', 'DROIDEKA', 'NUTEGUNRAY'],
                     'Nightsisters' => ['MOTHERTALZIN', 'ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'NIGHTSISTERSPIRIT'],
-                    'KRU' => ['KYLORENUNMASKED', 'KYLOREN', 'BARRISSOFFEE', 'FIRSTORDEREXECUTIONER', 'FIRSTORDERTROOPER'],
-                    'GG' => ['GRIEVOUS', 'B2SUPERBATTLEDROID', 'MAGNAGUARD', 'B1BATTLEDROIDV2', 'DROIDEKA'],
+                    'Bounty Hunters' => ['JANGOFETT', 'BOSSK', 'BOBAFETT', 'ZAMWESELL', 'DENGAR'],
+                    'Geonosians' => ['GEONOSIANBROODALPHA', 'GEONOSIANSOLDIER', 'GEONOSIANSPY', 'POGGLETHELESSER', 'SUNFAC'],
+                    'Padmé Amidala GR' => ['PADMEAMIDALA', 'ANAKINKNIGHT', 'AHSOKATANO', 'GENERALKENOBI', 'C3POLEGENDARY'],
+                    'Revan' => ['JEDIKNIGHTREVAN', 'JOLEEBINDO', 'GRANDMASTERYODA', 'EZRABRIDGERS3', 'OLDBENKENOBI'],
                 ];
                 break;
             case 'tb':
