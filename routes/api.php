@@ -51,9 +51,9 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
 
     $chars = [
         'DARTHTRAYA' => 'Traya',
-        'DARTHREVAN' => 'Revan',
+        'DARTHREVAN' => 'Darth Revan',
         'DARTHMALAK' => 'Malak',
-        'JEDIKNIGHTREVAN' => 'Darth Revan',
+        'JEDIKNIGHTREVAN' => 'Revan',
         'PADMEAMIDALA' => 'Padmé',
     ];
 
