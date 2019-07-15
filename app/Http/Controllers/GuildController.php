@@ -92,7 +92,7 @@ class GuildController extends Controller
                 break;
             case 'geo':
                 $teams = [
-                    'Seperatists' => ['COUNTDOOKU', 'NUTEGUNRAY', 'ASAJVENTRESS'],
+                    'Seperatists' => ['COUNTDOOKU', 'NUTEGUNRAY', 'ASAJVENTRESS', 'WATTAMBOR'],
                     'Droids' => ['GRIEVOUS', 'B2SUPERBATTLEDROID', 'MAGNAGUARD', 'B1BATTLEDROIDV2', 'DROIDEKA'],
                     'Geonosians' => ['GEONOSIANBROODALPHA', 'GEONOSIANSOLDIER', 'GEONOSIANSPY', 'POGGLETHELESSER', 'SUNFAC'],
                     'Darth Revan' => ['DARTHREVAN', 'BASTILASHANDARK', 'HK47', 'SITHMARAUDER', 'SITHASSASSIN'],
