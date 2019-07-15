@@ -54,26 +54,14 @@ class GuildController extends Controller
                     'Nightsisters' => ['ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'MOTHERTALZIN', 'TALIA', 'NIGHTSISTERACOLYTE', 'NIGHTSISTERINITIATE'],
                 ];
                 break;
-            case 'rjt':
+            case 'legendary':
                 $teams = [
+                    'Revan' => ['JEDIKNIGHTREVAN', 'BASTILASHAN', 'ZAALBAR', 'MISSIONVAO', 'JOLEEBINDO', 'T3_M4'],
+                    'Darth Revan' => ['DARTHREVAN', 'CARTHONASI', 'BASTILASHANDARK', 'HK47', 'JUHANI', 'CANDEROUSORDO'],
+                    'Darth Malak' => ['DARTHMALAK'],
+                    'C3PO' => ['C3POLEGENDARY', 'CHIEFCHIRPA', 'PAPLOO', 'EWOKELDER', 'LOGRAY', 'WICKET', 'EWOKSCOUT', 'TEEBO'],
                     'RJT' => ['REYJEDITRAINING', 'REY', 'BB8', 'FINN', 'SMUGGLERHAN', 'SMUGGLERCHEWBACCA'],
-                ];
-                $highlight = 'stars';
-                break;
-            case 'bh':
-                $teams = [
-                    'Bounty Hunters' => ['BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'ZAMWESELL', 'CADBANE', 'IG88', 'EMBO', 'JANGOFETT'],
-                ];
-                $highlight = 'stars';
-                break;
-            case 'newie':
-                $teams = [
-                    'Newie' => ['CHEWBACCALEGENDARY'],
-                ];
-                $highlight = 'stars';
-                break;
-            case 'falcon':
-                $teams = [
+                    'Newie' => ['CHEWBACCALEGENDARY', 'BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'ZAMWESELL', 'CADBANE', 'IG88', 'EMBO', 'JANGOFETT'],
                     'OG MF' => ['MILLENNIUMFALCON'],
                 ];
                 $highlight = 'stars';
@@ -81,18 +69,6 @@ class GuildController extends Controller
             case 'padme':
                 $teams = [
                     'Padmé Amidala GR' => ['PADMEAMIDALA', 'ANAKINKNIGHT', 'AHSOKATANO', 'GENERALKENOBI', 'C3POLEGENDARY'],
-                ];
-                $highlight = 'stars';
-                break;
-            case 'kotor':
-                $teams = [
-                    'Revan' => ['JEDIKNIGHTREVAN', 'BASTILASHAN', 'ZAALBAR', 'MISSIONVAO', 'JOLEEBINDO', 'T3_M4'],
-                ];
-                $highlight = 'stars';
-                break;
-            case 'kotor2':
-                $teams = [
-                    'Darth Revan' => ['DARTHREVAN', 'CARTHONASI', 'BASTILASHANDARK', 'HK47', 'JUHANI', 'CANDEROUSORDO'],
                 ];
                 $highlight = 'stars';
                 break;
@@ -104,12 +80,6 @@ class GuildController extends Controller
                 ];
                 $highlight = 'power';
                 break;
-            case 'ewoks':
-                $teams = [
-                    'C3PO' => ['C3POLEGENDARY', 'CHIEFCHIRPA', 'PAPLOO', 'EWOKELDER', 'LOGRAY', 'WICKET', 'EWOKSCOUT', 'TEEBO'],
-                ];
-                $highlight = 'stars';
-                break;
             case 'tw':
                 $teams = [
                     'Darth Revan' => ['DARTHREVAN', 'BASTILASHANDARK', 'HK47', 'SITHMARAUDER', 'SITHASSASSIN', 'SITHTROOPER'],
@@ -119,6 +89,17 @@ class GuildController extends Controller
                     'Geonosians' => ['GEONOSIANBROODALPHA', 'GEONOSIANSOLDIER', 'GEONOSIANSPY', 'POGGLETHELESSER', 'SUNFAC'],
                     'Padmé Amidala GR' => ['PADMEAMIDALA', 'ANAKINKNIGHT', 'AHSOKATANO', 'GENERALKENOBI', 'C3POLEGENDARY'],
                 ];
+                break;
+            case 'geo':
+                $teams = [
+                    'Seperatists' => ['COUNTDOOKU', 'NUTEGUNRAY', 'ASAJVENTRESS'],
+                    'Droids' => ['GRIEVOUS', 'B2SUPERBATTLEDROID', 'MAGNAGUARD', 'B1BATTLEDROIDV2', 'DROIDEKA'],
+                    'Geonosians' => ['GEONOSIANBROODALPHA', 'GEONOSIANSOLDIER', 'GEONOSIANSPY', 'POGGLETHELESSER', 'SUNFAC'],
+                    'Darth Revan' => ['DARTHREVAN', 'BASTILASHANDARK', 'HK47', 'SITHMARAUDER', 'SITHASSASSIN'],
+                    'Nightsisters' => ['MOTHERTALZIN', 'ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'NIGHTSISTERSPIRIT'],
+                    'Traya' => ['DARTHTRAYA', 'DARTHNIHILUS', 'DARTHSION', 'SITHTROOPER'],
+                ];
+                $highlight = 'stars';
                 break;
             case 'tb':
                 $teams = [

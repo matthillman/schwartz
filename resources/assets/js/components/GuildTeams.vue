@@ -11,16 +11,11 @@
             return {
                 teams: [
                     {label: 'STR', value: 'str'},
-                    {label: 'RJT', value: 'rjt'},
-                    {label: 'Bounty Hunters', value: 'bh'},
-                    {label: 'Newie', value: 'newie'},
-                    {label: 'OG Falcon', value: 'falcon'},
-                    {label: 'Revan', value: 'kotor'},
-                    {label: 'Darth Revan', value: 'kotor2'},
+                    {label: 'Legendaries', value: 'legendary'},
                     {label: 'Darth Malak', value: 'malak'},
                     {label: 'Padmé Amidala', value: 'padme'},
-                    {label: 'C3PO', value: 'ewoks'},
-                    {label: 'TB', value: 'tb'},
+                    {label: 'Geo TB', value: 'geo'},
+                    {label: 'Hoth TB', value: 'tb'},
                     {label: 'TW Defense', value: 'tw'},
                 ],
             }
