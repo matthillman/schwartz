@@ -99,7 +99,7 @@ class GuildController extends Controller
                     'Nightsisters' => ['MOTHERTALZIN', 'ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'NIGHTSISTERSPIRIT'],
                     'Traya' => ['DARTHTRAYA', 'DARTHNIHILUS', 'DARTHSION', 'SITHTROOPER'],
                 ];
-                $highlight = 'stars';
+                $highlight = 'power';
                 break;
             case 'tb':
                 $teams = [
