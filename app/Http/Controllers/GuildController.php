@@ -95,7 +95,7 @@ class GuildController extends Controller
                     'Seperatists' => ['COUNTDOOKU', 'NUTEGUNRAY', 'ASAJVENTRESS', 'WATTAMBOR'],
                     'Droids' => ['GRIEVOUS', 'B2SUPERBATTLEDROID', 'MAGNAGUARD', 'B1BATTLEDROIDV2', 'DROIDEKA'],
                     'Geonosians' => ['GEONOSIANBROODALPHA', 'GEONOSIANSOLDIER', 'GEONOSIANSPY', 'POGGLETHELESSER', 'SUNFAC'],
-                    'Darth Revan' => ['DARTHREVAN', 'BASTILASHANDARK', 'HK47', 'SITHMARAUDER', 'SITHASSASSIN'],
+                    'Darth Revan' => ['DARTHREVAN', 'BASTILASHANDARK', 'DARTHMALAK', 'HK47', 'SITHMARAUDER'],
                     'Nightsisters' => ['MOTHERTALZIN', 'ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'NIGHTSISTERSPIRIT'],
                     'Traya' => ['DARTHTRAYA', 'DARTHNIHILUS', 'DARTHSION', 'SITHTROOPER'],
                 ];
