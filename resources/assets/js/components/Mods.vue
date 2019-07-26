@@ -198,7 +198,7 @@
                 modSets: ["health", "defense", "critdamage", "critchance", "tenacity", "offense", "potency", "speed"],
                 attributes: ["speed", "offense", "defense", "health", "protection", "critical chance", "tenacity"],
                 primaries: {
-                    arrow: ['all', 'speed', 'offense', 'protection', 'health', 'critical avoidance'],
+                    arrow: ['all', 'speed', 'offense', 'protection', 'health', 'crit avoidance'],
                     circle: ['all', 'protection', 'health'],
                     cross: ['all', 'offense', 'protection', 'health', 'potency', 'tenacity'],
                     triangle: ['all', 'critical damage', 'offense', 'protection', 'health'],

@@ -10,13 +10,12 @@
         data: function() {
             return {
                 teams: [
-                    {label: 'STR', value: 'str'},
+                    {label: 'Geo TB', value: 'geo'},
+                    {label: 'TW', value: 'tw'},
                     {label: 'Legendaries', value: 'legendary'},
                     {label: 'Darth Malak', value: 'malak'},
-                    {label: 'Padmé Amidala', value: 'padme'},
-                    {label: 'Geo TB', value: 'geo'},
                     {label: 'Hoth TB', value: 'tb'},
-                    {label: 'TW Defense', value: 'tw'},
+                    {label: 'STR', value: 'str'},
                 ],
             }
         },

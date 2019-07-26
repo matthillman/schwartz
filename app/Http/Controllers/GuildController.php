@@ -62,13 +62,8 @@ class GuildController extends Controller
                     'C3PO' => ['C3POLEGENDARY', 'CHIEFCHIRPA', 'PAPLOO', 'EWOKELDER', 'LOGRAY', 'WICKET', 'EWOKSCOUT', 'TEEBO'],
                     'RJT' => ['REYJEDITRAINING', 'REY', 'BB8', 'FINN', 'SMUGGLERHAN', 'SMUGGLERCHEWBACCA'],
                     'Newie' => ['CHEWBACCALEGENDARY', 'BOSSK', 'BOBAFETT', 'GREEDO', 'DENGAR', 'ZAMWESELL', 'CADBANE', 'IG88', 'EMBO', 'JANGOFETT'],
-                    'OG MF' => ['MILLENNIUMFALCON'],
-                ];
-                $highlight = 'stars';
-                break;
-            case 'padme':
-                $teams = [
-                    'Padmé Amidala GR' => ['PADMEAMIDALA', 'ANAKINKNIGHT', 'AHSOKATANO', 'GENERALKENOBI', 'C3POLEGENDARY'],
+                    'Padmé Amidala' => ['PADMEAMIDALA', 'GRIEVOUS', 'B2SUPERBATTLEDROID', 'MAGNAGUARD', 'B1BATTLEDROIDV2', 'DROIDEKA', 'COUNTDOOKU', 'NUTEGUNRAY', 'ASAJVENTRESS', 'WATTAMBOR'],
+                    'OG MF' => ['MILLENNIUMFALCON', 'HOUNDSTOOTH', 'IG2000', 'XANADUBLOOD', 'SLAVE1'],
                 ];
                 $highlight = 'stars';
                 break;

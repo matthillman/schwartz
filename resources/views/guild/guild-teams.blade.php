@@ -17,6 +17,10 @@
                     </div>
                 </div>
 
+                <div>
+                    Highlighting based on <strong>{{$highlight}}</strong>
+                </div>
+
                 @foreach($teams as $title => $team)
                     <div class="card-body" highlight="{{$highlight}}">
                         <h1>{{ $title }}</h1>
