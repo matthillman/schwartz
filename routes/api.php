@@ -50,11 +50,13 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
     }
 
     $chars = [
-        'DARTHTRAYA' => 'Traya',
-        'DARTHREVAN' => 'Darth Revan',
-        'DARTHMALAK' => 'Malak',
-        'JEDIKNIGHTREVAN' => 'Revan',
-        'PADMEAMIDALA' => 'Padmé',
+        'DARTHTRAYA' =>          'Traya',
+        'DARTHREVAN' =>          'Darth Revan',
+        'DARTHMALAK' =>          'Malak',
+        'JEDIKNIGHTREVAN' =>     'Revan',
+        'PADMEAMIDALA' =>        'Padmé',
+        'GRIEVOUS' =>            'Grievous',
+        'GEONOSIANBROODALPHA' => 'Geo Alpha',
     ];
 
     $unitQueries = collect($chars)->map(function($name, $unitName) {
