@@ -30,7 +30,7 @@ class PullUnits extends Command
      */
     public function handle()
     {
-        $units = swgoh()->getUnitData();
+        $units = swgoh()->getUnitData(['obtainable' => true, 'obtainableTime' => 0]);
 
         DB::transaction(function() use ($units) {
             $units->each(function($unit_data) {
