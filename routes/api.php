@@ -129,7 +129,7 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
             'fifteen_plus' => '15+',
             'twenty_plus' => '20+',
             'twenty_five_plus' => '25+',
-            'one_hundred_offense' => '100+ offense',
+            'one_hundred_offense' => '100+ Off',
         ],
     ]);
 });
