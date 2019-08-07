@@ -70,6 +70,7 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
     $data = DB::table('guilds') ->join('members', 'members.guild_id', '=', 'guilds.id') ->join('characters', 'characters.member_id', '=', 'members.id') ->selectRaw("
             guilds.guild_id,
             max(guilds.gp) as gp,
+            count(distinct members.id) as member_count,
             sum(case when characters.gear_level = 13 then 1 else 0 end) as gear_13,
             sum(case when characters.gear_level = 12 then 1 else 0 end) as gear_12,
             sum(case when characters.gear_level = 11 then 1 else 0 end) as gear_11,
@@ -95,10 +96,40 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
     $g1Data['zetas'] = $g1Zetas['zetas'];
     $g2Data['zetas'] = $g2Zetas['zetas'];
 
+    $mods = DB::table('guilds')
+        ->join('members', 'members.guild_id', '=', 'guilds.id')
+        ->join('mod_users', 'mod_users.name', '=', 'members.ally_code')
+        ->join('mod_stats', 'mod_stats.mod_user_id', '=', 'mod_users.id')
+        ->selectRaw("
+            guilds.guild_id,
+            sum(case when pips = 6 then 1 else 0 end) as six_dot,
+            sum(case when speed >= 10 then 1 else 0 end) as ten_plus,
+            sum(case when speed >= 15 then 1 else 0 end) as fifteen_plus,
+            sum(case when speed >= 20 then 1 else 0 end) as twenty_plus,
+            sum(case when speed >= 25 then 1 else 0 end) as twenty_five_plus,
+            sum(case when offense >= 100 then 1 else 0 end) as one_hundred_offense
+        ") ->groupBy('guilds.guild_id')
+        ->whereIn('guilds.guild_id', [$guild1->guild_id, $guild2->guild_id])
+        ->get();
+
+    $g1Mods = (array)$mods->firstWhere('guild_id', $guild1->guild_id);
+    $g2Mods = (array)$mods->firstWhere('guild_id', $guild2->guild_id);
+
+    $g1Data['mods'] = $g1Mods;
+    $g2Data['mods'] = $g2Mods;
+
     return response()->json([
         $guild1->name => $g1Data,
         $guild2->name => $g2Data,
         'char_keys' => collect($chars)->map(function($name, $unit) { return strtolower($unit); })->values()->toArray(),
         'char_names' => collect($chars)->mapWithKeys(function($name, $unit) { return [strtolower($unit) => $name]; })->toArray(),
+        'mod_keys' => [
+            'six_dot' => '6*',
+            'ten_plus' => '10+',
+            'fifteen_plus' => '15+',
+            'twenty_plus' => '20+',
+            'twenty_five_plus' => '25+',
+            'one_hundred_offense' => '100+ offense',
+        ],
     ]);
 });
