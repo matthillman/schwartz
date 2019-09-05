@@ -39,7 +39,8 @@
             acronymize: acronymize,
             numberWithCommas: numberWithCommas,
             sumProp: function(value, prop) {
-                return value.reduce((sum, cur) =>sum + cur[prop], 0)
+                console.warn(value);
+                return value.reduce((sum, cur) => sum + cur[prop], 0)
             }
         },
         data: function () {
@@ -72,6 +73,7 @@
             refresh: function() {
                 axios.get(`/${this.route}/${this.guildList[this.selected].id}`)
                     .then(res => {
+                        console.warn(res);
                         this.items = res.data;
                         this.sort(this.columns[1].prop, true);
                     });

@@ -18,18 +18,18 @@ Vue.component("content-wrapper", {
         });
         return node;
     }
-})
+});
 
-Vue.component('modal', require('./components/Modal.vue'));
-Vue.component('mods', require('./components/Mods.vue'));
-Vue.component('guild', require('./components/Guild.vue'));
-Vue.component('list', require('./components/List.vue'));
-Vue.component('members', require('./components/Members.vue'));
-Vue.component('member-mods', require('./components/MemberMods.vue'));
-Vue.component('welcome-parallax', require('./components/Parallax.vue'));
-Vue.component('tw-form', require('./components/TWForm.vue'));
-Vue.component('guild-teams', require('./components/GuildTeams.vue'));
-Vue.component('mod-preference', require('./components/Preference.vue'));
+Vue.component('modal', require('./components/Modal.vue').default);
+Vue.component('mods', require('./components/Mods.vue').default);
+Vue.component('guild', require('./components/Guild.vue').default);
+Vue.component('list', require('./components/List.vue').default);
+Vue.component('members', require('./components/Members.vue').default);
+Vue.component('member-mods', require('./components/MemberMods.vue').default);
+Vue.component('welcome-parallax', require('./components/Parallax.vue').default);
+Vue.component('tw-form', require('./components/TWForm.vue').default);
+Vue.component('guild-teams', require('./components/GuildTeams.vue').default);
+Vue.component('mod-preference', require('./components/Preference.vue').default);
 
 const VueSelect = require('vue-select');
 Vue.component('v-select', VueSelect.VueSelect);

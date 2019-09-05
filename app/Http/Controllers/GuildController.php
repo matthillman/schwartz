@@ -144,6 +144,7 @@ class GuildController extends Controller
     }
 
     public function listMods($guild) {
+        $guild = Guild::findOrFail($guild);
         $mods = DB::table('guilds')
         ->join('members', 'members.guild_id', '=', 'guilds.id')
         ->join('mod_users', 'mod_users.name', '=', 'members.ally_code')
@@ -157,7 +158,7 @@ class GuildController extends Controller
             sum(case when speed >= 25 then 1 else 0 end) as speed_25,
             sum(case when offense >= 100 then 1 else 0 end) as offense_100
         ") ->groupBy('guilds.guild_id')
-        ->whereIn('guilds.guild_id', [$guild1->guild_id, $guild2->guild_id])
+        ->whereIn('guilds.guild_id', [$guild->guild_id])
         ->get();
 
         return response()->json($mods);
