@@ -34,7 +34,10 @@
                     <div class="guild-list">
                     @foreach($guilds->where('schwartz', true) as $guild)
                         <div class="row">
-                            <div>{{ $guild->name }}</div>
+                            <div>
+                                <div>{{ $guild->name }}</div>
+                                <div class="small-note">{{ intval(floor($guild->gp / 1000000)) }}M</div>
+                            </div>
 
                             <guild-teams :id="{{ $guild->id }}"></guild-teams>
 
@@ -59,7 +62,10 @@
                     <div class="guild-list">
                     @foreach($guilds->where('schwartz', false) as $guild)
                         <div class="row">
-                            <div>{{ $guild->name }}</div>
+                            <div>
+                                <div>{{ $guild->name }}</div>
+                                <div class="small-note">{{ intval(floor($guild->gp / 1000000)) }}M</div>
+                            </div>
 
                             <guild-teams :id="{{ $guild->id }}"></guild-teams>
 

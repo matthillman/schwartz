@@ -116,8 +116,9 @@ class PullGuild extends Command
 
 
                     collect([1, 2, 3, 4])->each(function($index) use ($mod, &$modItem) {
-                        $modItem["secondary_${index}_type"] = array_get($mod, "secondaryStat.${index}.unitStat", null);
-                        $modItem["secondary_${index}_value"] = array_get($mod, "secondaryStat.${index}.value", null);
+                        $statIndex = $index - 1;
+                        $modItem["secondary_${index}_type"] = array_get($mod, "secondaryStat.${statIndex}.unitStat", null);
+                        $modItem["secondary_${index}_value"] = array_get($mod, "secondaryStat.${statIndex}.value", null);
                     });
 
                     return $modItem;
