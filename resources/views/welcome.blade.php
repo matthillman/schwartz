@@ -1,5 +1,6 @@
 @extends('layouts.html')
 
+@section('body-class', 'no-scroll')
 @section('viewport', '600')
 
 @push('styles')

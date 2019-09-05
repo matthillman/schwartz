@@ -124,7 +124,7 @@ $content-offset: 40vh;
 $transition-speed: 900ms;
 $slide-number: 3;
 
-html, body {
+body.no-scroll {
   overflow: hidden;
 }
 

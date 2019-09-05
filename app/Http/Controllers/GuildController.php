@@ -145,19 +145,23 @@ class GuildController extends Controller
 
     public function listMods($guild) {
         $guild = Guild::findOrFail($guild);
-        $mods = DB::table('guilds')
+        $mods = \DB::table('guilds')
         ->join('members', 'members.guild_id', '=', 'guilds.id')
         ->join('mod_users', 'mod_users.name', '=', 'members.ally_code')
         ->join('mod_stats', 'mod_stats.mod_user_id', '=', 'mod_users.id')
         ->selectRaw("
-            guilds.guild_id,
+            members.id,
+            members.player,
+            members.url,
+            members.ally_code,
             sum(case when pips = 6 then 1 else 0 end) as six_dot,
             sum(case when speed >= 10 then 1 else 0 end) as speed_10,
             sum(case when speed >= 15 then 1 else 0 end) as speed_15,
             sum(case when speed >= 20 then 1 else 0 end) as speed_20,
             sum(case when speed >= 25 then 1 else 0 end) as speed_25,
             sum(case when offense >= 100 then 1 else 0 end) as offense_100
-        ") ->groupBy('guilds.guild_id')
+        ")
+        ->groupBy('members.id', 'members.player', 'members.url', 'members.ally_code')
         ->whereIn('guilds.guild_id', [$guild->guild_id])
         ->get();
 

@@ -30,6 +30,7 @@
                     <div class="guides">
                         <a href="{{ route('guilds') }}">Guild Teams</a>
                         <a href="{{ route('schwartz.guilds') }}">Schwartz guilds GP List</a>
+                        <a href="{{ route('schwartz.mods') }}">Schwartz guilds Mod List</a>
                     </div>
                 </div>
             </div>

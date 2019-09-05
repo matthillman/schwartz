@@ -39,13 +39,12 @@
             acronymize: acronymize,
             numberWithCommas: numberWithCommas,
             sumProp: function(value, prop) {
-                console.warn(value);
                 return value.reduce((sum, cur) => sum + cur[prop], 0)
             }
         },
         data: function () {
             return {
-                route: 'mods',
+                route: 'guild_mods',
                 items: [],
                 columns: [
 		            { prop: 'player', label: 'Member', href: 'url' },
@@ -73,7 +72,6 @@
             refresh: function() {
                 axios.get(`/${this.route}/${this.guildList[this.selected].id}`)
                     .then(res => {
-                        console.warn(res);
                         this.items = res.data;
                         this.sort(this.columns[1].prop, true);
                     });
