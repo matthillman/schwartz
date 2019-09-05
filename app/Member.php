@@ -13,10 +13,47 @@ class Member extends Model
      *
      * @var array
      */
-    protected $appends = ['guild_name', 'gear_12', 'gear_13'];
+    protected $appends = [
+        'guild_name', 
+        'gear_12', 'gear_13',
+        // 'speed_10', 'speed_15', 'speed_20', 'speed_25',
+        // 'offense_100',
+    ];
 
     public function characters() {
         return $this->hasMany(Character::class);
+    }
+
+    public function mods() {
+        return $this->hasManyThrough(Mod::class, ModUser::class, 'name', 'mod_user_id', 'ally_code', 'id');
+    }
+
+    private function modStats() {
+        return $this->hasManyThrough(ModStat::class, ModUser::class, 'name', 'mod_user_id', 'ally_code', 'id');
+    }
+
+    private function modsAtOrOver($threshold, $attribute = 'speed') {
+        return $this->modStats()->where($attribute, '>=', $threshold);
+    }
+
+    public function modsSpeedGT10() {
+        return $this->modsAtOrOver(10);
+    }
+
+    public function modsSpeedGT15() {
+        return $this->modsAtOrOver(15);
+    }
+
+    public function modsSpeedGT20() {
+        return $this->modsAtOrOver(20);
+    }
+
+    public function modsSpeedGT25() {
+        return $this->modsAtOrOver(25);
+    }
+
+    public function modsOffenseGT100() {
+        return $this->modsAtOrOver(100, 'offense');
     }
 
     public function gear12() {
@@ -41,6 +78,26 @@ class Member extends Model
 
     public function getGear13Attribute() {
         return $this->gear13()->count();
+    }
+
+    public function getSpeed10Attribute() {
+        return $this->modsSpeedGT10()->count();
+    }
+
+    public function getSpeed15Attribute() {
+        return $this->modsSpeedGT15()->count();
+    }
+
+    public function getSpeed20Attribute() {
+        return $this->modsSpeedGT20()->count();
+    }
+
+    public function getSpeed25Attribute() {
+        return $this->modsSpeedGT25()->count();
+    }
+
+    public function getOffense100Attribute() {
+        return $this->modsOffenseGT100()->count();
     }
 
     public function getZetasAttribute() {

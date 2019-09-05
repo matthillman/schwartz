@@ -9,11 +9,12 @@
             </div>
         </div>
         <div class="flex-center spacing">
-            <div><span>Total:</span> {{ items | sumProp('gp') | numberWithCommas }}</div>
-            <div><span>Char GP:</span> {{ items | sumProp('character_gp') | numberWithCommas }}</div>
-            <div><span>Ship GP:</span> {{ items | sumProp('ship_gp') | numberWithCommas }}</div>
-            <div><span>Gear 13:</span> {{ items | sumProp('gear_13') | numberWithCommas }}</div>
-            <div><span>Gear 12:</span> {{ items | sumProp('gear_12') | numberWithCommas }}</div>
+            <div><span>6•:</span> {{ items | sumProp('six_dot') | numberWithCommas }}</div>
+            <div><span>25+ Speed:</span> {{ items | sumProp('speed_25') | numberWithCommas }}</div>
+            <div><span>20+ Speed:</span> {{ items | sumProp('speed_20') | numberWithCommas }}</div>
+            <div><span>15+ Speed:</span> {{ items | sumProp('speed_15') | numberWithCommas }}</div>
+            <div><span>10+ Speed:</span> {{ items | sumProp('speed_10') | numberWithCommas }}</div>
+            <div><span>100+ Offense:</span> {{ items | sumProp('offense_100') | numberWithCommas }}</div>
         </div>
 	    <list
 	    	:columns="columns"
@@ -43,16 +44,16 @@
         },
         data: function () {
             return {
-                route: 'gp',
+                route: 'mods',
                 items: [],
                 columns: [
 		            { prop: 'player', label: 'Member', href: 'url' },
-		            { prop: 'gp', label: 'Galactic Power', transform: numberWithCommas },
-		            { prop: 'character_gp', label: 'Character GP', transform: numberWithCommas },
-		            { prop: 'ship_gp', label: 'Ship GP', transform: numberWithCommas },
-		            { prop: 'gear_13', label: 'Gear 13', transform: numberWithCommas },
-		            { prop: 'gear_12', label: 'Gear 12', transform: numberWithCommas },
-		            { prop: 'guild_name', label: 'Guild', transform: acronymize  },
+		            { prop: 'six_dot', label: '6•', transform: numberWithCommas },
+		            { prop: 'speed_25', label: 'Speed 25+', transform: numberWithCommas },
+		            { prop: 'speed_20', label: 'Speed 20+', transform: numberWithCommas },
+		            { prop: 'speed_15', label: 'Speed 15+', transform: numberWithCommas },
+		            { prop: 'speed_10', label: 'Speed 10+', transform: numberWithCommas },
+		            { prop: 'offense_100', label: 'Offense 100+', transform: numberWithCommas },
                 ],
                 selected: 0,
                 guildList: [],

@@ -62,7 +62,9 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     });
 
     Route::get('/schwartz', 'GuildController@schwartzGuilds')->name('schwartz.guilds');
+    Route::get('/schwartz_mods', 'GuildController@schwartzGuildMods')->name('schwartz.mods');
     Route::get('gp/{guild?}', 'GuildController@listGP')->name('guild.gp');
+    Route::get('mods/{guild}', 'GuildController@listMods')->name('guild.mods');
 
     Route::get('/waiting', 'HomeController@waiting')->name('waiting');
 });
