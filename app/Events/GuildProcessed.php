@@ -50,4 +50,8 @@ class GuildProcessed implements ShouldBroadcast
             ]
         ];
     }
+
+    public function tags() {
+        return ['fetched', 'guild:' . $this->guild->guild_id];
+    }
 }

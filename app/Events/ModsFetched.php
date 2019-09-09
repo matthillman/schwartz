@@ -41,4 +41,8 @@ class ModsFetched implements ShouldBroadcast
     public function broadcastWith() {
         return ['mods' => $this->user->name];
     }
+
+    public function tags() {
+        return ['fetched', 'mods:' . $this->user->name];
+    }
 }
