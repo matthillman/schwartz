@@ -1,6 +1,7 @@
 <?php
 
 use App\Guild;
+use App\Member;
 use App\Jobs\ProcessGuild;
 use Illuminate\Http\Request;
 use App\Jobs\ProcessGuildAlly;
