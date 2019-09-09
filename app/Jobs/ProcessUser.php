@@ -37,7 +37,7 @@ class ProcessUser implements ShouldQueue
     {
         $needsScrape = ModUser::where('name', $this->user)
             ->whereDate('last_scrape', Carbon::now())
-            ->whereTime('last_scrape', '>', Carbon::now()->subMinutes(30))
+            ->whereTime('last_scrape', '>', Carbon::now()->subMinutes(15))
             ->doesntExist();
 
         if ($needsScrape) {
@@ -47,5 +47,9 @@ class ProcessUser implements ShouldQueue
         }
 
         broadcast(new ModsFetched(ModUser::where('name', $this->user)->firstOrFail()));
+    }
+
+    public function tags() {
+        return ['mods', 'ally_code:' . $this->user];
     }
 }

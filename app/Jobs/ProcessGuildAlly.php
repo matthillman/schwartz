@@ -49,4 +49,8 @@ class ProcessGuildAlly implements ShouldQueue
             Member::firstOrFail(['ally_code' => $this->allyCode])->guild
         ));
     }
+
+    public function tags() {
+        return ['guild', 'ally_code:' . $this->allyCode];
+    }
 }

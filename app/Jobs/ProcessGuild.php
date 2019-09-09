@@ -29,7 +29,7 @@ class ProcessGuild implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Guild $guild)
+    public function __construct($guild)
     {
         $this->guild = $guild;
     }
@@ -42,9 +42,15 @@ class ProcessGuild implements ShouldQueue
     public function handle()
     {
         Artisan::call('swgoh:guild', [
-            'guild' => $this->guild->guild_id
+            'guild' => $this->guild
         ]);
 
-        broadcast(new GuildProcessed($this->guild));
+        broadcast(new GuildProcessed(
+            Guild::where(['guild_id' => $this->guild])->firstOrFail()
+        ));
+    }
+
+    public function tags() {
+        return ['guild', 'guild_id:' . $this->guild];
     }
 }

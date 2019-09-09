@@ -3,6 +3,7 @@
 use App\Guild;
 use App\Jobs\ProcessGuild;
 use Illuminate\Http\Request;
+use App\Jobs\ProcessGuildAlly;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,25 +21,32 @@ use Illuminate\Http\Request;
 // });
 
 Route::middleware('client')->get('/guild/scrape/{id}', function(Request $request, $id) {
-    $guild = Guild::firstOrNew(['guild_id' => $id]);
-
-    $name = $guild->name ?? 'GUILD ' . $guild->guild_id;
-
-    if (is_null($guild->id)) {
-        $guild->name = $name;
-        $guild->url = 'not_scraped';
-        $guild->gp = 0;
-        $guild->save();
+    $isAllyCode = preg_match('/^\d{3}-?\d{3}-?\d{3}$', $id);
+    if ($isAllyCode) {
+        $id = preg_replace('/[^0-9]/', '', $id);
+        ProcessGuildAlly::dispatch($id);
+    } else {
+        ProcessGuild::dispatch($id);
     }
-
-    ProcessGuild::dispatch($guild);
-
     return response()->json([]);
 });
 
 Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Request $request, $first, $second) {
-    $guild1 = \App\Guild::where(['guild_id' => $first])->first();
-    $guild2 = \App\Guild::where(['guild_id' => $second])->first();
+    if (preg_match('/^\d{3}-?\d{3}-?\d{3}$', $first)) {
+        $ally = preg_replace('/[^0-9]/', '', $first);
+        $member = Member::where(['ally_code' => $ally])->first();
+        $guild1 = is_null($member) ? $member->guild : null;
+    } else {
+        $guild1 = \App\Guild::where(['guild_id' => $first])->first();
+    }
+    if (preg_match('/^\d{3}-?\d{3}-?\d{3}$', $second)) {
+        $ally2 = preg_replace('/[^0-9]/', '', $second);
+        $member2 = Member::where(['ally_code' => $ally2])->first();
+        $guild2 = is_null($member2) ? $member2->guild : null;
+    } else {
+        $guild2 = \App\Guild::where(['guild_id' => $second])->first();
+    }
+
     if (is_null($guild1) || is_null($guild2)) {
         $response = [
             'error' => 'Missing at least 1 guild',
