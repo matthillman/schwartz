@@ -42,7 +42,8 @@ class ProcessGuildAlly implements ShouldQueue
     public function handle()
     {
         Artisan::call('swgoh:guild', [
-            'ally' => $this->allyCode
+            '--ally',
+            'guild' => $this->allyCode
         ]);
 
         broadcast(new GuildProcessed(
