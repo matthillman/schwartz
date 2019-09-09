@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use Artisan;
 use App\Guild;
+use App\Member;
 use Illuminate\Bus\Queueable;
 use App\Events\GuildProcessed;
 use Illuminate\Queue\SerializesModels;
@@ -42,7 +43,7 @@ class ProcessGuildAlly implements ShouldQueue
     public function handle()
     {
         Artisan::call('swgoh:guild', [
-            '--ally',
+            '--ally' => true,
             'guild' => $this->allyCode
         ]);
 

@@ -36,14 +36,14 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
     if (preg_match('/^\d{3}-?\d{3}-?\d{3}$/', $first)) {
         $ally = preg_replace('/[^0-9]/', '', $first);
         $member = Member::where(['ally_code' => $ally])->first();
-        $guild1 = is_null($member) ? $member->guild : null;
+        $guild1 = is_null($member) ? null : $member->guild;
     } else {
         $guild1 = \App\Guild::where(['guild_id' => $first])->first();
     }
     if (preg_match('/^\d{3}-?\d{3}-?\d{3}$/', $second)) {
         $ally2 = preg_replace('/[^0-9]/', '', $second);
         $member2 = Member::where(['ally_code' => $ally2])->first();
-        $guild2 = is_null($member2) ? $member2->guild : null;
+        $guild2 = is_null($member2) ? null : $member2->guild;
     } else {
         $guild2 = \App\Guild::where(['guild_id' => $second])->first();
     }
