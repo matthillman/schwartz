@@ -11,12 +11,12 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
+mix.js('resources/js/app.js', 'public/js')
     .extract(['jquery', 'popper.js', 'lodash', 'axios', 'ionicons'])
-    .js('resources/assets/js/guild.js', 'public/js')
-    .sass('resources/assets/sass/app.scss', 'public/css')
-    .sass('resources/assets/sass/login.scss', 'public/css')
-    .sass('resources/assets/sass/welcome.scss', 'public/css')
+    .js('resources/js/guild.js', 'public/js')
+    .sass('resources/sass/app.scss', 'public/css')
+    .sass('resources/sass/login.scss', 'public/css')
+    .sass('resources/sass/welcome.scss', 'public/css')
     ;
 
 if (mix.inProduction()) {
