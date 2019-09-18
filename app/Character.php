@@ -2,6 +2,7 @@
 
 namespace App;
 
+use SwgohHelp\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
 
 class Character extends Model
@@ -16,10 +17,18 @@ class Character extends Model
         'rarity',
     ];
 
+    protected $appends = [ 'alignment' ];
+
     public function member() {
         return $this->belongsTo(Member::class);
     }
     public function zetas() {
         return $this->belongsToMany(Zeta::class)->withTimestamps();
+    }
+    public function unit() {
+        return $this->belongsTo(Unit::class, 'unit_name', 'base_id');
+    }
+    public function getAlignmentAttribute() {
+        return strtolower((new Alignment($this->unit->alignment))->getKey());
     }
 }

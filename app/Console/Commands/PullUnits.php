@@ -35,12 +35,12 @@ class PullUnits extends Command
         DB::transaction(function() use ($units) {
             $units->each(function($unit_data) {
                 $unit = Unit::firstOrNew(['base_id' => $unit_data['baseId']]);
-
                 $unit->name = $unit_data['nameKey'];
                 $unit->description = $unit_data['descKey'];
                 $unit->image = $unit_data['thumbnailName'];
                 $unit->combat_type = $unit_data['combatType'];
                 $unit->pk = $unit_data['baseId'];
+                $unit->alignment = $unit_data['forceAlignment'];
 
                 $unit->url = $unit->url ?? '';
                 $unit->power = $unit->power ?? $unit_data['basePower'];

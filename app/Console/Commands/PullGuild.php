@@ -13,7 +13,12 @@ use Carbon\Carbon;
 use App\CharacterZeta;
 use Illuminate\Console\Command;
 use SwgohHelp\Parsers\GuildParser;
+
+use SwgohHelp\Enums\ModSet;
+use SwgohHelp\Enums\ModSlot;
+use SwgohHelp\Enums\UnitStat;
 use SwgohHelp\Enums\PlayerStatsIndex;
+
 
 class PullGuild extends Command
 {
@@ -90,34 +95,38 @@ class PullGuild extends Command
             $this->comment("   Looping over units for {$member->player}…");
             $roster = collect($member_data['roster']);
             $mappedRoster = $roster->map(function($unit) use ($member, $modUser) {
+                $isChar = $unit['combatType'] === 1;
                 $character = [
                     'member_id' => $member->id,
                     'unit_name' => $unit['defId'],
                     'gear_level' => $unit['gear'],
                     'power' => $unit['gp'],
                     'level' => $unit['level'],
-                    'combat_type' => $unit['combatType'] === 'CHARACTER' ? 1 : 2,
+                    'combat_type' => $unit['combatType'],
                     'rarity' => $unit['rarity'],
+                    'relic' => $isChar ? $unit['relic']['currentTier'] : 0,
                 ];
                 $mods = collect($unit['mods'] ?? [])->map(function($mod) use ($character, $modUser) {
                     $modItem = [
                         "uid" => $mod["id"],
-                        "slot" => $mod["slot"],
-                        "set" => $mod["set"],
+                        'slot' => (new ModSlot(+$mod['slot']))->getKey(),
+                        'set' => (new ModSet(+$mod['set']))->getKey(),
                         "pips" => $mod["pips"],
                         "level" => $mod["level"],
                         "name" => "",
                         "location" => $character['unit_name'],
                         "mod_user_id" => $modUser->id,
                         "tier" => $mod["tier"],
-                        "primary_type" => $mod["primaryStat"]["unitStat"],
+                        "primary_type" => (new UnitStat($mod["primaryStat"]["unitStat"]))->getKey(),
                         "primary_value" => $mod["primaryStat"]["value"],
                     ];
 
 
                     collect([1, 2, 3, 4])->each(function($index) use ($mod, &$modItem) {
                         $statIndex = $index - 1;
-                        $modItem["secondary_${index}_type"] = array_get($mod, "secondaryStat.${statIndex}.unitStat", null);
+                        $secondaryType = array_get($mod, "secondaryStat.${statIndex}.unitStat", null);
+                        $secondaryType = $secondaryType !== null ? (new UnitStat($secondaryType))->getKey() : null;
+                        $modItem["secondary_${index}_type"] = $secondaryType;
                         $modItem["secondary_${index}_value"] = array_get($mod, "secondaryStat.${statIndex}.value", null);
                     });
 
