@@ -17,6 +17,7 @@
                 <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
                     {{ $member->player }}
                 </a>
+                <div class="small-note">Power: {{ $member->characters->whereIn('unit_name', $characters)->sum('power') }}</div>
             </td>
         @foreach($characters as $character)
             <td>

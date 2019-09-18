@@ -85,20 +85,34 @@
             border: 1px solid black;
             text-align: center;
 
-            &:first-of-type > a {
+            &:first-of-type > a, &:first-of-type > .small-note {
                 display: block;
                 text-align: left;
                 margin-left: 8px;
+
+                &.small-note {
+                    font-size: 12px;
+                }
             }
 
             > * {
                 height: 100%;
             }
+
+            &:first-of-type > * {
+                height: auto;
+            }
         }
     }
 
     .unit-table tbody td:first-of-type {
-        width: 100px;
+        width: 125px;
+
+        > div:first-child {
+            font-weight: 700;
+            text-align: left;
+            margin-left: 8px;
+        }
     }
 }
 
