@@ -1968,12 +1968,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthillman/swgoh-help.git",
-                "reference": "9a0f6214b365577177f6868e11e98a9f0098315d"
+                "reference": "edabfd3b5eb821047de2bf7d451f494794f12831"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthillman/swgoh-help/zipball/9a0f6214b365577177f6868e11e98a9f0098315d",
-                "reference": "9a0f6214b365577177f6868e11e98a9f0098315d",
+                "url": "https://api.github.com/repos/matthillman/swgoh-help/zipball/edabfd3b5eb821047de2bf7d451f494794f12831",
+                "reference": "edabfd3b5eb821047de2bf7d451f494794f12831",
                 "shasum": ""
             },
             "require": {
@@ -2020,7 +2020,7 @@
                 "swgoh.help",
                 "swogh"
             ],
-            "time": "2019-05-30T16:25:39+00:00"
+            "time": "2019-09-18T16:25:39+00:00"
         },
         {
             "name": "monolog/monolog",
