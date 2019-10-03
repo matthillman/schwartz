@@ -9,6 +9,10 @@ use SwgohHelp\Parsers\ModsParser;
 use SwgohHelp\Parsers\ProfileParser;
 use Illuminate\Console\Command;
 
+use SwgohHelp\Enums\ModSet;
+use SwgohHelp\Enums\ModSlot;
+use SwgohHelp\Enums\UnitStat;
+
 class PullMods extends Command
 {
     /**
@@ -55,7 +59,7 @@ class PullMods extends Command
 
             $parser->getMods()->each(function($mod_data) use ($user) {
                 $mod = Mod::firstOrNew(['uid' => $mod_data['uid']]);
-
+// dd($mod_data);
                 $mod->uid = $mod_data['uid'];
                 $mod->slot = $mod_data['slot'];
                 $mod->set = $mod_data['set'];
@@ -65,8 +69,17 @@ class PullMods extends Command
                 $mod->location = $mod_data['location'];
                 $mod->tier = $mod_data['tier'];
 
-                $mod->primary = $mod_data['primary'];
-                $mod->secondaries = $mod_data['secondaries'];
+                $primary = [
+                    'type' => (new UnitStat($mod_data['primary']['type']))->getKey(),
+                    'value' => $mod_data['primary']['value'],
+                ];
+                $mod->primary = $primary;
+                $secondaries = [];
+                foreach($mod_data['secondaries'] as $t => $v) {
+                    $secondaries[(new UnitStat($t))->getKey()] = $v;
+                }
+
+                $mod->secondaries = $secondaries;
 
                 $mod->user()->associate($user);
                 $mod->save();

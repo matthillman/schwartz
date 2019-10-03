@@ -186,7 +186,7 @@
             this.loadState();
         },
         components: {
-            'mod': require('./Mod.vue')
+            'mod': require('./Mod.vue').default
         },
         data: function() {
             return {
