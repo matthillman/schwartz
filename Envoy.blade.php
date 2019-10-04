@@ -26,3 +26,7 @@
     restart-schwartz.horizon
     restart-stat-calc
 @endstory
+
+@task('update-submodules', ['on' => 'web'])
+    sgit submodule update
+@endtask
