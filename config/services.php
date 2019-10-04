@@ -46,4 +46,8 @@ return [
         'password' => env('SWGOH_HELP_PASSWORD'),
     ],
 
+    'swgoh_stats' => [
+        'url' => env('SWGOH_HELP_STATS_URL'),
+    ],
+
 ];
