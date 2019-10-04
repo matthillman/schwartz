@@ -66,13 +66,19 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
         'PADMEAMIDALA' =>        'Padmé',
         'GRIEVOUS' =>            'Grievous',
         'GEONOSIANBROODALPHA' => 'Geo Alpha',
+        'ANAKINKNIGHT'        => 'Anakin',
     ];
 
     $unitQueries = collect($chars)->map(function($name, $unitName) {
         return [
             "sum(case when characters.unit_name = '${unitName}' then 1 else 0 end) as ${unitName}",
+            "sum(case when characters.unit_name = '${unitName}' AND characters.gear_level = 11 then 1 else 0 end) as ${unitName}_11",
             "sum(case when characters.unit_name = '${unitName}' AND characters.gear_level = 12 then 1 else 0 end) as ${unitName}_12",
             "sum(case when characters.unit_name = '${unitName}' AND characters.gear_level = 13 then 1 else 0 end) as ${unitName}_13",
+            "sum(case when characters.unit_name = '${unitName}' AND characters.relic > 5 then 1 else 0 end) as ${unitName}_r_total",
+            "sum(case when characters.unit_name = '${unitName}' AND characters.relic = 7 then 1 else 0 end) as ${unitName}_r5",
+            "sum(case when characters.unit_name = '${unitName}' AND characters.relic = 8 then 1 else 0 end) as ${unitName}_r6",
+            "sum(case when characters.unit_name = '${unitName}' AND characters.relic = 9 then 1 else 0 end) as ${unitName}_r7",
         ];
     })->collapse()->implode(', '); // FIXME ->join when upgrading laravel
 
@@ -83,6 +89,9 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
             sum(case when characters.gear_level = 13 then 1 else 0 end) as gear_13,
             sum(case when characters.gear_level = 12 then 1 else 0 end) as gear_12,
             sum(case when characters.gear_level = 11 then 1 else 0 end) as gear_11,
+            sum(case when characters.relic = 9 then 1 else 0 end) as relic_7,
+            sum(case when characters.relic = 8 then 1 else 0 end) as relic_6,
+            sum(case when characters.relic = 7 then 1 else 0 end) as relic_5,
             ${unitQueries}
         ") ->groupBy('guilds.guild_id')
         ->whereIn('guilds.guild_id', [$guild1->guild_id, $guild2->guild_id])
