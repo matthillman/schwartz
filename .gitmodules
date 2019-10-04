@@ -1,3 +1,6 @@
 [submodule "resources/bot"]
 	path = resources/bot
 	url = git@github.com:matthillman/guidebot.git
+[submodule "resources/swgoh-stat-calc"]
+	path = resources/swgoh-stat-calc
+	url = https://api.glitch.com/git/swgoh-stat-calc
