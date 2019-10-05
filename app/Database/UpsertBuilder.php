@@ -31,6 +31,9 @@ class UpsertBuilder
                 if (is_null($value)) {
                     return 'NULL';
                 }
+                if (is_array($value)) {
+                    $value = json_encode($value);
+                }
                 return $this->builder->connection->getPdo()->quote($value);
             });
         });

@@ -73,6 +73,8 @@ class PullGuild extends Command
         $parser->scrape(function($member_data) use ($guild, $zetaList, &$updated) {
             $member = Member::firstOrNew(['ally_code' => (string)$member_data['allyCode']]);
 
+            $member_data = stats()->addStatsTo([$member_data])->first();
+
             $ally = $member_data['allyCode'];
             $member->url = "/p/{$ally}/characters/";
             $member->player = $member_data['name'];
@@ -105,6 +107,7 @@ class PullGuild extends Command
                     'combat_type' => $unit['combatType'],
                     'rarity' => $unit['rarity'],
                     'relic' => $isChar ? $unit['relic']['currentTier'] : 0,
+                    'stats' => $unit['stats'],
                 ];
                 $mods = collect($unit['mods'] ?? [])->map(function($mod) use ($character, $modUser) {
                     $modItem = [

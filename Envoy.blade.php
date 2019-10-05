@@ -20,7 +20,7 @@
     sudo systemctl restart stat-calc
 @endtask
 
-@story('restart')
+@story('restart', ['confirm' => true])
     restart-schwartz.bot
     restart-schwartz.broadcast
     restart-schwartz.horizon
@@ -28,5 +28,6 @@
 @endstory
 
 @task('update-submodules', ['on' => 'web'])
-    sgit submodule update
+    pushd /srv/http/schwartz.hillman.me/
+    git --git-dir=/var/repo/schwartz.git --work-tree=. submodule update
 @endtask

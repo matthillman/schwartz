@@ -15,9 +15,14 @@ class Character extends Model
         'level',
         'combat_type',
         'rarity',
+        'stats',
     ];
 
     protected $appends = [ 'alignment' ];
+
+    protected $casts = [
+        'stats' => 'array'
+    ];
 
     public function member() {
         return $this->belongsTo(Member::class);
