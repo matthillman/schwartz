@@ -15,6 +15,7 @@ trait KeyStats {
                 "SITHMARAUDER" => UnitStat::UNITSTATATTACKDAMAGE(),
                 "ANAKINKNIGHT" => UnitStat::UNITSTATATTACKDAMAGE(),
                 "HANSOLO" => UnitStat::UNITSTATATTACKDAMAGE(),
+                "ENFYSNEST" => UnitStat::UNITSTATRESISTANCE(),
                 "BOSSK" => UnitStat::UNITSTATRESISTANCE(),
                 "C3POLEGENDARY" => UnitStat::UNITSTATACCURACY(),
             ]);
