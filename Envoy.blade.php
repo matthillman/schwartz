@@ -31,3 +31,8 @@
     pushd /srv/http/schwartz.hillman.me/
     git --git-dir=/var/repo/schwartz.git --work-tree=. submodule update
 @endtask
+
+@task('scrape-guild', ['on' => 'web'])
+    pushd /srv/http/schwartz.hillman.me/
+    php artisan swgoh:guild {{ $code }}
+@endtask
