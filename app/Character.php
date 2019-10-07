@@ -2,12 +2,15 @@
 
 namespace App;
 
+use App\Util\KeyStats;
 use SwgohHelp\Enums\UnitStat;
 use SwgohHelp\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
 
 class Character extends Model
 {
+    use KeyStats;
+
     protected $fillable = [
         'member_id',
         'unit_name',
@@ -39,5 +42,8 @@ class Character extends Model
     }
     public function getSpeedAttribute() {
         return $this->stats['final'][UnitStat::UNITSTATSPEED()->getValue()] ?? 0;
+    }
+    public function getKeyStatsAttribute() {
+        return $this->keyStatsFor($this->unit_name);
     }
 }

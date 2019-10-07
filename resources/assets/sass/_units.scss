@@ -163,12 +163,16 @@
     flex-direction: column;
     align-items: center;
 
-    > span.zeta-list, .speed {
+    .stat-container {
+        display: flex;
+    }
+
+    > span.zeta-list, .stat-wrapper {
         display: flex;
         align-items: baseline;
         justify-content: center;
 
-        .zeta, &.speed {
+        .zeta, & .stat {
             font-size: 10px;
             margin-left: 4px;
             border-radius: 50%;
@@ -181,8 +185,13 @@
                 width: 16px;
             }
 
-            &.speed {
-                margin-top: 4px;
+        }
+
+        &.stat-wrapper {
+            margin-top: 4px;
+            align-items: center;
+
+            .stat {
                 padding: 0 4px;
                 border-radius: 8px;
             }

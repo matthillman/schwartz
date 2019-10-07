@@ -199,32 +199,36 @@
   top: 5px;
 }
 
-.mod-set-image {
-  $icon-grid-size: 23px;
-  display: inline-block;
-  position: relative;
-  background: url('/images/mods/mod-icons.png');
-  $bg-size-x: 8 * $icon-grid-size;
-  $bg-size-y: 5 * $icon-grid-size;
-  background-size: $bg-size-x $bg-size-y;
-  width: $icon-grid-size;
-  height: $icon-grid-size;
+@mixin mod-set-image($icon-grid-size, $class: '') {
+  .mod-set-image#{$class} {
+    display: inline-block;
+    position: relative;
+    background: url('/images/mods/mod-icons.png');
+    $bg-size-x: 8 * $icon-grid-size;
+    $bg-size-y: 5 * $icon-grid-size;
+    background-size: $bg-size-x $bg-size-y;
+    width: $icon-grid-size;
+    height: $icon-grid-size;
 
-  &.health     { background-position-x: -1 * 0 * $icon-grid-size; }
-  &.offense    { background-position-x: -1 * 1 * $icon-grid-size; }
-  &.defense    { background-position-x: -1 * 2 * $icon-grid-size; }
-  &.speed      { background-position-x: -1 * 3 * $icon-grid-size; }
-  &.critchance { background-position-x: -1 * 4 * $icon-grid-size; }
-  &.critdamage { background-position-x: -1 * 5 * $icon-grid-size; }
-  &.potency    { background-position-x: -1 * 6 * $icon-grid-size; }
-  &.tenacity   { background-position-x: -1 * 7 * $icon-grid-size; }
+    &.health     { background-position-x: -1 * 0 * $icon-grid-size; }
+    &.offense    { background-position-x: -1 * 1 * $icon-grid-size; }
+    &.defense    { background-position-x: -1 * 2 * $icon-grid-size; }
+    &.speed      { background-position-x: -1 * 3 * $icon-grid-size; }
+    &.critchance { background-position-x: -1 * 4 * $icon-grid-size; }
+    &.critdamage { background-position-x: -1 * 5 * $icon-grid-size; }
+    &.potency    { background-position-x: -1 * 6 * $icon-grid-size; }
+    &.tenacity   { background-position-x: -1 * 7 * $icon-grid-size; }
 
-  &.tier-1 { background-position-y: -1 * 0 * $icon-grid-size; }
-  &.tier-2 { background-position-y: -1 * 1 * $icon-grid-size; }
-  &.tier-3 { background-position-y: -1 * 2 * $icon-grid-size; }
-  &.tier-4 { background-position-y: -1 * 3 * $icon-grid-size; }
-  &.tier-5 { background-position-y: -1 * 4 * $icon-grid-size; }
+    &.tier-1 { background-position-y: -1 * 0 * $icon-grid-size; }
+    &.tier-2 { background-position-y: -1 * 1 * $icon-grid-size; }
+    &.tier-3 { background-position-y: -1 * 2 * $icon-grid-size; }
+    &.tier-4 { background-position-y: -1 * 3 * $icon-grid-size; }
+    &.tier-5 { background-position-y: -1 * 4 * $icon-grid-size; }
+  }
 }
+
+@include mod-set-image(23px);
+@include mod-set-image(15px, '.mini');
 
 .btn {
   border-radius: 8px;
