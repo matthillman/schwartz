@@ -35,11 +35,14 @@
         </div>
 
     </div>
-    <span>
+    <span class="zeta-list">
     @foreach($character->zetas as $zeta)
         <span class="zeta">{{ $zeta->class[0] }}</span>
     @endforeach
+    @if ($character->speed > 0)
+    @endif
     </span>
+    <span class="speed">{{ $character->speed }}</span>
 </span>
 @else
 <span missing>

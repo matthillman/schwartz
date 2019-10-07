@@ -2,6 +2,7 @@
 
 namespace App;
 
+use SwgohHelp\Enums\UnitStat;
 use SwgohHelp\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,7 +19,7 @@ class Character extends Model
         'stats',
     ];
 
-    protected $appends = [ 'alignment' ];
+    protected $appends = [ 'alignment', 'speed' ];
 
     protected $casts = [
         'stats' => 'array'
@@ -35,5 +36,8 @@ class Character extends Model
     }
     public function getAlignmentAttribute() {
         return strtolower((new Alignment($this->unit->alignment))->getKey());
+    }
+    public function getSpeedAttribute() {
+        return $this->stats['final'][UnitStat::UNITSTATSPEED()->getValue()] ?? 0;
     }
 }

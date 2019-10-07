@@ -163,20 +163,29 @@
     flex-direction: column;
     align-items: center;
 
-    > span:last-child {
+    > span.zeta-list, .speed {
         display: flex;
         align-items: baseline;
         justify-content: center;
 
-        .zeta {
+        .zeta, &.speed {
             font-size: 10px;
             margin-left: 4px;
             border-radius: 50%;
             background: rgba($color: black, $alpha: 0.6);
             color: white;
             font-weight: bold;
-            width: 16px;
             height: 16px;
+
+            &.zeta {
+                width: 16px;
+            }
+
+            &.speed {
+                margin-top: 4px;
+                padding: 0 4px;
+                border-radius: 8px;
+            }
         }
     }
 }
