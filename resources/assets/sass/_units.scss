@@ -148,12 +148,25 @@
         }
     }
     [highlight="power"] & [power] {
+        background: none;
         background-color: red;
         &[power="1"] {
             background-color: rgba($color: rebeccapurple, $alpha: 0.5);
         }
-        &[power="2"] {
+        &[power="2"], &[power="3"] {
             background-color: rgba($color: #eadb39, $alpha: 0.5);
+        }
+    }
+
+    [highlight="power-stars"] & [stars] {
+        background-color: red;
+        &[stars="7"] {
+            &[power="1"], &[power="2"] {
+                background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+            }
+            &[power="3"] {
+                background-color: rgba($color: #eadb39, $alpha: 0.5);
+            }
         }
     }
 }

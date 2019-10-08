@@ -100,7 +100,14 @@ class GuildController extends Controller
                 ];
                 $highlight = 'stars';
                 break;
-
+            case 'gs':
+                $teams = [
+                    'Tier 1' => ['CAPITALNEGOTIATOR', 'CAPITALJEDICRUISER', 'JEDISTARFIGHTERANAKIN', 'UMBARANSTARFIGHTER', 'JEDISTARFIGHTERAHSOKATANO', 'ARC170CLONESERGEANT', 'ARC170REX', 'BLADEOFDORIN', 'JEDISTARFIGHTERCONSULAR'],
+                    'Tier 2' => ['AHSOKATANO', 'C3POLEGENDARY', 'GENERALKENOBI', 'PADMEAMIDALA', 'SHAAKTI'],
+                    'Tier 4' => ['ASAJVENTRESS', 'B1BATTLEDROIDV2', 'B2SUPERBATTLEDROID', 'DROIDEKA', 'MAGNAGUARD'],
+                ];
+                $highlight = 'power-stars';
+                break;
             default:
                 $teams = [];
                 break;

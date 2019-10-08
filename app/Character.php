@@ -22,7 +22,7 @@ class Character extends Model
         'stats',
     ];
 
-    protected $appends = [ 'alignment', 'speed' ];
+    protected $appends = [ 'alignment', 'speed', 'is_ship', 'highlight_power' ];
 
     protected $casts = [
         'stats' => 'array'
@@ -46,4 +46,27 @@ class Character extends Model
     public function getKeyStatsAttribute() {
         return $this->keyStatsFor($this->unit_name);
     }
+    public function getIsShipAttribute() {
+        return $this->combat_type !== 1;
+    }
+    public function getHighlightPowerAttribute() {
+        if ($this->is_ship) {
+            return $this->power >= 40000 ? 3 : 0;
+        }
+
+        if ($this->power >= 17700) {
+            return 3;
+        }
+
+        if ($this->power >= 17500) {
+            return 2;
+        }
+
+        if ($this->power >= 16500) {
+            return 1;
+        }
+
+        return 0;
+    }
+
 }

@@ -1,7 +1,7 @@
 @if (isset($character))
 <span gear="{{ $character->gear_level }}"
     stars="{{ $character->rarity }}"
-    power="{{ $character->power > 17500 ? 2 : ($character->power > 16500 ? 1 : 0) }}"
+    power="{{ $character->highlight_power }}"
     class="character {{ $character->alignment }}"
 >
     <div class="portrait">

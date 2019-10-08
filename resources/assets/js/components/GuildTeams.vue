@@ -10,6 +10,7 @@
         data: function() {
             return {
                 teams: [
+                    {label: 'General Skywalker', value: 'gs'},
                     {label: 'Geo TB', value: 'geo'},
                     {label: 'TW', value: 'tw'},
                     {label: 'Legendaries', value: 'legendary'},
