@@ -54,6 +54,8 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
 
     Route::get('/units', 'UnitController@index')->name('units');
     Route::get('/guilds', 'GuildController@listGuilds')->name('guilds');
+    Route::get('guild/{guild}', 'GuildController@guildGP')->name('guild.guild');
+    Route::get('guild/{guild}/mods', 'GuildController@guildMods')->name('guild.modsList');
     Route::put('/guild/{guild}/refresh', 'GuildController@scrapeGuild')->name('guild.refresh');
     Route::get('/guild/{guild}/{team}/{mode?}', 'GuildController@listMembers')->name('guild.members');
 
@@ -68,3 +70,5 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
 
     Route::get('/waiting', 'HomeController@waiting')->name('waiting');
 });
+
+Route::get('/member/{allyCode}/{team}', 'MemberController@listTeams')->name('member.teams');

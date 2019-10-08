@@ -225,3 +225,12 @@
         flex-wrap: nowrap;
     }
 }
+@supports (-moz-appearance:none) {
+    .member-list table td {
+        height: 100%;
+
+        > * {
+            height: auto;
+        }
+    }
+}
