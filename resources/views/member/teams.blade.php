@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card stripes">
-                <div>
+                <div class="note">
                     Highlighting based on <strong>{{$highlight}}</strong>
                 </div>
 

@@ -17,7 +17,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="note">
                     Highlighting based on <strong>{{$highlight}}</strong>
                 </div>
 

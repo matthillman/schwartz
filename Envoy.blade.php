@@ -30,6 +30,8 @@
 @task('update-submodules', ['on' => 'web'])
     pushd /srv/http/schwartz.hillman.me/
     git --git-dir=/var/repo/schwartz.git --work-tree=. submodule update
+    pushd resources/bot
+    npm install
 @endtask
 
 @task('scrape-guild', ['on' => 'web'])
