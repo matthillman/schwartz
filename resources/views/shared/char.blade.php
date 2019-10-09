@@ -4,9 +4,16 @@
     power="{{ $character->highlight_power }}"
     class="character {{ $character->alignment }}"
 >
-    <div class="portrait">
-        <img class="character round" src="/images/units/{{ $character->unit_name }}.png">
-        <div class="gear g{{ $character->gear_level }}" style="--gear-image: url('/images/units/gear/gear-icon-g{{ $character->gear_level }}.png')"></div>
+    <div class="portrait{{ $character->is_ship ? ' ship' : '' }}{{ $character->is_capital_ship ? ' capital' : ''}}">
+        @if ($character->is_ship)
+            <div class="ship-wrapper">
+                <img class="character" src="/images/units/{{ $character->unit_name }}.png">
+            </div>
+            <div class="gear g{{ $character->gear_level }}" style="--gear-image: url('/images/units/gear/{{ $character->is_capital_ship ? 'capital-' : ''}}ship-frame.svg')"></div>
+        @else
+            <img class="character round" src="/images/units/{{ $character->unit_name }}.png">
+            <div class="gear g{{ $character->gear_level }}" style="--gear-image: url('/images/units/gear/gear-icon-g{{ $character->gear_level }}.png')"></div>
+        @endif
         <div class="stars">
         @for ($i = 1; $i <=7; $i++)
             @if ($character->rarity >= $i)

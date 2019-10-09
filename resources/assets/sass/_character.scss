@@ -1,4 +1,5 @@
 $base: 80px;
+$shipBase: 54px;
 
 .portrait {
     margin: 0px;
@@ -8,7 +9,14 @@ $base: 80px;
     box-sizing: border-box;
     font-family: Verdana;
 
-    > .character {
+    &.ship {
+        width: 1.62 * $shipBase;
+        height: $shipBase + (50px / 400px * $base) + (20px / 400px * $base);
+        display: flex;
+        flex-direction: column;
+    }
+
+    > .character, .ship-wrapper > .character {
         position: absolute;
         margin: 0px;
         top: 45px / 400px * $base;
@@ -19,6 +27,33 @@ $base: 80px;
         background: #000000;
 
         &.round { border-radius: 50%; }
+    }
+
+    &.ship {
+        > .ship-wrapper {
+            overflow: hidden;
+            position: relative;
+            height: 100%;
+            width: 100%;
+            margin-top: 30px / 400px * $base;
+            background: black;
+
+            .character {
+                height: auto;
+                width: 100%;
+                transform: translate(0, -18%) scale(0.85);
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+            }
+        }
+
+        &.capital > .ship-wrapper {
+            .character {
+                transform: translate(0, -25%);
+            }
+        }
     }
 
     > .gear {
@@ -48,6 +83,25 @@ $base: 80px;
             .neutral & {
                 background-position: 0% 104%;
             }
+        }
+    }
+
+    &.ship {
+        > .gear {
+            top: 14px;
+            left: -1px;
+            bottom: -1px;
+            right: -1px;
+            width: auto;
+            height: auto;
+            background-size: contain;
+        }
+
+        &.capital > .gear {
+            top: 11px;
+            left: -4px;
+            bottom: -4px;
+            right: -4px;
         }
     }
 
@@ -118,6 +172,21 @@ $base: 80px;
         }
     }
 
+    &.ship > .stars {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        order: -1;
+
+        > .full.full,  > .empty.empty {
+            transform: rotate(0);
+            top: 0;
+            left: 0;
+            position: relative;
+        }
+    }
+
     > .zetas {
         position: absolute;
         bottom: 10px / 400px * $base;
@@ -172,6 +241,31 @@ $base: 80px;
             left: 2px / 400px * $base;
             font-size: 56px / 400px * $base;
             text-shadow: 0 1px 0 black;
+        }
+    }
+
+    &.ship {
+        > .level {
+            right: 1px;
+            bottom: 0px;
+            left: unset;
+            background: none;
+            border: none;
+            height: auto;
+            width: auto;
+            line-height: 1;
+
+            > .value {
+                position: relative;
+                height: auto;
+                top: 0;
+                left: 0;
+                font-size: 45px / 400px * $base;
+            }
+        }
+
+        &.capital > .level {
+            right: 0;
         }
     }
 

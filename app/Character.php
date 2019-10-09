@@ -22,7 +22,7 @@ class Character extends Model
         'stats',
     ];
 
-    protected $appends = [ 'alignment', 'speed', 'is_ship', 'highlight_power' ];
+    protected $appends = [ 'alignment', 'speed', 'is_ship', 'is_capital_ship', 'highlight_power' ];
 
     protected $casts = [
         'stats' => 'array'
@@ -48,6 +48,9 @@ class Character extends Model
     }
     public function getIsShipAttribute() {
         return $this->combat_type !== 1;
+    }
+    public function getIsCapitalShipAttribute() {
+        return $this->is_ship && starts_with($this->unit_name, 'CAPITAL');
     }
     public function getHighlightPowerAttribute() {
         if ($this->is_ship) {
