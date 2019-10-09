@@ -17,13 +17,14 @@
                     </div>
                 </div>
 
-                <div class="note">
-                    Highlighting based on <strong>{{$highlight}}</strong>
-                </div>
-
                 @foreach($teams as $title => $team)
                     <div class="card-body" highlight="{{$highlight}}">
-                        <h1>{{ $title }}</h1>
+                        <div class="row justify-content-between align-items-center">
+                            <h1>{{ $title }}</h1>
+                            <div class="note">
+                                Highlighting based on <strong>{{$highlight}}</strong>
+                            </div>
+                        </div>
                         @include('shared.member_table', [
                             'characters' => $team
                         ])

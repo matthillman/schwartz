@@ -17,17 +17,19 @@
                     </div>
                 </div>
 
-                <div class="note">
-                    Highlighting based on <strong>{{$highlight}}</strong>
-                </div>
-
                 @foreach($members as $member)
                     <div class="card-body" highlight="{{$highlight}}">
-                        <h1>
-                            <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
-                                {{ $member->player }}
-                            </a>
-                        </h1>
+                        <div class="row justify-content-between align-items-center">
+                            <h1>
+                                <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
+                                    {{ $member->player }}
+                                </a>
+                            </h1>
+
+                            <div class="note">
+                                Highlighting based on <strong>{{$highlight}}</strong>
+                            </div>
+                        </div>
 
                         @foreach($teams as $title => $team)
                             @include('shared.unit_table', [

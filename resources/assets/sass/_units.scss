@@ -1,6 +1,9 @@
 .container.guild-members.guild-members {
     width: 1500px;
 }
+[highlight] > div.row {
+    margin: 0;
+}
 .unit-list, .guild-list {
     .row {
         margin-bottom: 8px;
@@ -212,10 +215,20 @@
     }
 }
 
-.note {
-    padding: 4px 0 0 4px;
-}
+.footer-logo {
+    padding-top: 8px;
 
+    .logo {
+        background: rgba($color: black, $alpha: 0.8);
+        padding: 2px 4px 4px;
+        box-sizing: content-box;
+        border-radius: 12px;
+        svg {
+            fill: $sw-yellow;
+        }
+    }
+
+}
 .row.row.top.top {
     align-items: flex-start;
 }

@@ -5,16 +5,19 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card stripes">
-                <div class="note">
-                    Highlighting based on <strong>{{$highlight}}</strong>
-                </div>
 
                     <div class="card-body" highlight="{{$highlight}}">
-                        <h1>
-                            <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
-                                {{ $member->player }}
-                            </a>
-                        </h1>
+                        <div class="row justify-content-between align-items-baseline">
+                            <h1>
+                                <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
+                                    {{ $member->player }}
+                                </a>
+                            </h1>
+
+                            <div class="note">
+                                Highlighting based on <strong>{{$highlight}}</strong>
+                            </div>
+                        </div>
 
                         @foreach($teams as $title => $team)
                             @include('shared.unit_table', [
@@ -22,6 +25,10 @@
                                 'characters' => $team
                             ])
                         @endforeach
+
+                        <div class="row justify-content-end footer-logo">
+                            <div class="logo">@include('shared.logo')</div>
+                        </div>
                     </div>
 
             </div>
