@@ -69,6 +69,7 @@ trait Squads {
                 break;
             case 'gs':
                 $teams = [
+                    'Anakin' => ['GENERALSKYWALKER'],
                     'Tier 1' => ['CAPITALNEGOTIATOR', 'CAPITALJEDICRUISER', 'JEDISTARFIGHTERANAKIN', 'UMBARANSTARFIGHTER', 'JEDISTARFIGHTERAHSOKATANO', 'ARC170CLONESERGEANT', 'ARC170REX', 'BLADEOFDORIN', 'JEDISTARFIGHTERCONSULAR'],
                     'Tier 2' => ['AHSOKATANO', 'C3POLEGENDARY', 'GENERALKENOBI', 'PADMEAMIDALA', 'SHAAKTI'],
                     'Tier 4' => ['ASAJVENTRESS', 'B1BATTLEDROIDV2', 'B2SUPERBATTLEDROID', 'DROIDEKA', 'MAGNAGUARD'],
