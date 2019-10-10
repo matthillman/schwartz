@@ -32,6 +32,10 @@ Route::middleware('client')->get('/guild/scrape/{id}', function(Request $request
     return response()->json([]);
 });
 
+Route::middleware('client')->get('/registration/{id}', function (Request $request, $id) {
+    return response()->json(swgoh()->registration([$id]));
+});
+
 Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Request $request, $first, $second) {
     if (preg_match('/^\d{3}-?\d{3}-?\d{3}$/', $first)) {
         $ally = preg_replace('/[^0-9]/', '', $first);
