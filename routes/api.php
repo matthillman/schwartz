@@ -36,6 +36,14 @@ Route::middleware('client')->get('/registration/{id}', function (Request $reques
     return response()->json(swgoh()->registration([$id]));
 });
 
+Route::middleware('client')->post('/registration/{id}/{discord}', function (Request $request, $id, $discord) {
+    return response()->json(swgoh()->registration([], [[$id, $discord]]));
+});
+
+Route::middleware('client')->delete('/registration/{id}', function (Request $request, $id) {
+    return response()->json(swgoh()->registration([], [], [$id]));
+});
+
 Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Request $request, $first, $second) {
     if (preg_match('/^\d{3}-?\d{3}-?\d{3}$/', $first)) {
         $ally = preg_replace('/[^0-9]/', '', $first);
@@ -63,13 +71,14 @@ Route::middleware('client')->get('/tw/compare/{first}/{second}', function (Reque
     }
 
     $chars = [
-        'DARTHTRAYA' =>          'Traya',
+        'GENERALSKYWALKER' =>    'General Skywalker',
         'DARTHREVAN' =>          'Darth Revan',
         'DARTHMALAK' =>          'Malak',
         'JEDIKNIGHTREVAN' =>     'Revan',
         'PADMEAMIDALA' =>        'Padmé',
         'GRIEVOUS' =>            'Grievous',
         'GEONOSIANBROODALPHA' => 'Geo Alpha',
+        'DARTHTRAYA' =>          'Traya',
         'ANAKINKNIGHT'        => 'Anakin',
     ];
 
