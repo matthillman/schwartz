@@ -57,6 +57,16 @@ trait Squads {
                 ];
                 $highlight = 'power';
                 break;
+            case 'lsgeo':
+                $teams = [
+                    'Padmé' => ['PADMEAMIDALA', 'ANAKINKNIGHT', 'AHSOKATANO', 'GENERALKENOBI', 'C3POLEGENDARY'],
+                    'General Skywalker' => ['GENERALSKYWALKER', 'CT7567', 'CT5555', 'CT210408'],
+                    'Clones' => ['SHAAKTI', 'CC2224', 'CLONESERGEANTPHASEI'],
+                    'Revan' => ['JEDIKNIGHTREVAN', 'BASTILASHAN', 'JOLEEBINDO', 'HERMITYODA', 'GRANDMASTERYODA'],
+                    'Jedi' => ['MACEWINDU', 'PLOKOON', 'KITFISTO', 'LUMINARAUNDULI', 'BARRISSOFFEE'],
+                ];
+                $highlight = 'power';
+                break;
             case 'tb':
                 $teams = [
                     'Phoenix' => ['HERASYNDULLAS3', 'EZRABRIDGERS3', 'SABINEWRENS3', 'CHOPPERS3', 'KANANJARRUSS3', 'ZEBS3'],
