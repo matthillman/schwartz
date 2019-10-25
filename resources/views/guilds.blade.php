@@ -78,9 +78,10 @@
                                 <div class="small-note">{{ intval(floor($guild->gp / 1000000)) }}M</div>
                             </div>
 
-                            <guild-teams :id="{{ $guild->id }}"></guild-teams>
-
-                            <form method="GET" action="{{ route('guild.gp', ['guild' => $guild->id]) }}">
+                            <form method="GET" action="{{ route('guild.modsList', ['guild' => $guild->id]) }}">
+                                <button type="submit" class="btn btn-primary btn-icon"><span class="mod-set-image speed tier-5"></span></button>
+                            </form>
+                            <form method="GET" action="{{ route('guild.guild', ['guild' => $guild->id]) }}">
                                 <button type="submit" class="btn btn-primary btn-icon"><i class="icon ion-ios-people"></i></button>
                             </form>
                             <a href="{{ $guild->url }}" target="_gg" class="gg-link">
@@ -91,6 +92,11 @@
                                 @csrf
                                 <button type="submit" class="btn btn-primary btn-icon"><i class="icon ion-ios-refresh-circle"></i></button>
                             </form>
+                        </div>
+                        <div class="row guild-team-list">
+                        @foreach ($squads as $squad)
+                            <a class="btn" href="{{ route('guild.members', ['guild' => $guild->id, 'team' => $squad['value']]) }}">{{ $squad['label'] }}</a>
+                        @endforeach
                         </div>
                     @endforeach
                     </div>
