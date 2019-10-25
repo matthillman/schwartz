@@ -93,4 +93,17 @@ trait Squads {
 
         return [$highlight, $teams];
     }
+
+    public function squadList() {
+        return [
+            ['label' => 'General Skywalker', 'value' => 'gs'],
+            ['label' => 'Geo TB', 'value' => 'geo'],
+            ['label' => 'LS Geo TB', 'value' => 'lsgeo'],
+            ['label' => 'TW', 'value' => 'tw'],
+            ['label' => 'Legendaries', 'value' => 'legendary'],
+            ['label' => 'Darth Malak', 'value' => 'malak'],
+            ['label' => 'Hoth TB', 'value' => 'tb'],
+            ['label' => 'STR', 'value' => 'str'],
+        ];
+    }
 }

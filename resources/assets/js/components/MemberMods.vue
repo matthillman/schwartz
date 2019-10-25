@@ -1,12 +1,15 @@
 <template>
 	<div class="list">
-        <div class="control-wrapper">
+        <div class="control-wrapper" v-if="guildList.length > 1">
             <div class="segmented-control">
                 <span v-for="(guild, index) in guildList" :key="guild.id"
                     @click="select(index)"
                     :class="{selected: selected === index}"
                 >{{ guild.name | acronymize }}</span>
             </div>
+        </div>
+        <div class="flex-center align-items-center" v-if="guildList.length === 1">
+            <h1>{{ guildList[0].name }}</h1>
         </div>
         <div class="flex-center spacing">
             <div><span>6•:</span> {{ items | sumProp('six_dot') | numberWithCommas }}</div>

@@ -14,7 +14,8 @@ class GuildController extends Controller
 
     public function listGuilds() {
         return view('guilds', [
-            'guilds' => Guild::orderBy('schwartz', 'desc')->orderBy('gp', 'desc')->get()
+            'guilds' => Guild::orderBy('schwartz', 'desc')->orderBy('gp', 'desc')->get(),
+            'squads' => $this->squadList(),
         ]);
     }
 

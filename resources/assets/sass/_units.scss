@@ -11,9 +11,10 @@
         align-items: center;
         padding: 4px 16px;
 
-        &:not(:last-child) {
-            border-bottom: 1px solid grey;
-        }
+    }
+    &.unit-list .row:not(:last-child),
+    &.guild-list .column:not(:last-child) {
+        border-bottom: 1px solid grey;
     }
 }
 .unit-list {
@@ -33,7 +34,7 @@
     }
 }
 .guild-list {
-    .row {
+    .row:first-of-type {
         > * {
             flex-grow: 0;
 
@@ -43,6 +44,20 @@
 
             &:first-child {
                 flex-grow: 1;
+            }
+        }
+    }
+
+    .guild-team-list {
+        justify-content: center;
+        align-items: center;
+        .btn {
+            background-color: $gray-500;
+            border-color: $secondary;
+            color: $white;
+            display: inline-flex;
+            &:hover {
+                background-color: $gray-800;
             }
         }
     }
