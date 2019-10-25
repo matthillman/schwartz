@@ -39,10 +39,10 @@
         <span v-for="zeta in character.zetas" :key="zeta.id" class="zeta">{{ zeta.class[0] }}</span>
     </span>
     <div class="stat-container">
-        <div v-for="(stat, key) in character.key_stats" :key="key" class="stat-wrapper"><span class="stat">{{ stat }}</span><span class="mod-set-image tier-5 mini" :class="[key]"></span></div>
+        <div v-for="(stat, key) in character.key_stats" :key="key" class="stat-wrapper"><span class="stat"><span>{{ stat }}</span><span class="mod-set-image tier-5 mini" :class="[key]"></span></span></div>
     </div>
     <div class="stat-container" v-if="!Object.keys(character.key_stats).includes(keyStat.key)">
-        <div class="stat-wrapper"><span class="stat">{{ formatStat(character.stats.final[keyStat.value]) }}</span><span class="mod-set-image tier-5 mini" :class="[keyStat.key]"></span></div>
+        <div class="stat-wrapper"><span class="stat"><span>{{ formatStat(character.stats.final[keyStat.value]) }}</span><span class="mod-set-image tier-5 mini" :class="[keyStat.key]"></span></span></div>
     </div>
 </span>
 </template>

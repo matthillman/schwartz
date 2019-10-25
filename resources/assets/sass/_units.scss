@@ -223,8 +223,14 @@
             align-items: center;
 
             .stat {
-                padding: 0 4px;
+                padding: 1px 4px;
                 border-radius: 8px;
+                display: flex;
+                align-items: center;
+
+                :first-child {
+                    margin-right: 4px;
+                }
             }
         }
     }
