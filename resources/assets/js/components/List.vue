@@ -1,6 +1,6 @@
 <template>
 	<div class="list-table">
-	    <table>
+	    <table class="sortable">
 	        <thead>
 	            <tr>
 	                <th v-for="(column, index) in columns"

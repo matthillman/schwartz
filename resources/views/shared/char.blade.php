@@ -3,6 +3,19 @@
     stars="{{ $character->rarity }}"
     power="{{ $character->highlight_power }}"
     class="character {{ $character->alignment }}"
+    @foreach ([
+        'UNITSTATSPEED',
+        'UNITSTATATTACKDAMAGE',
+        'UNITSTATABILITYPOWER',
+        'UNITSTATCRITICALDAMAGE',
+        'UNITSTATATTACKCRITICALRATING',
+        'UNITSTATABILITYCRITICALRATING',
+        'UNITSTATMAXHEALTH',
+        'UNITSTATRESISTANCE',
+        'UNITSTATACCURACY',
+    ] as $stat)
+    {{ $stat }}="{{ $character->$stat }}"
+    @endforeach
 >
     <div class="portrait{{ $character->is_ship ? ' ship' : '' }}{{ $character->is_capital_ship ? ' capital' : ''}}">
         @if ($character->is_ship)
@@ -46,8 +59,6 @@
     @foreach($character->zetas as $zeta)
         <span class="zeta">{{ $zeta->class[0] }}</span>
     @endforeach
-    @if ($character->speed > 0)
-    @endif
     </span>
     <div class="stat-container">
         <div class="stat-wrapper"><span class="stat">{{ $character->speed }}</span><span class="mod-set-image speed tier-5 mini"></span></div>

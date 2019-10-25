@@ -31,7 +31,9 @@ trait KeyStats {
     public function keyStatsFor($unit) {
         return $this->getKeyStats()->filter(function ($stat, $key) use ($unit) {
             return $key === $unit;
-        })->mapWithKeys(function ($stat) {
+        })
+        ->prepend(UnitStat::UNITSTATSPEED())
+        ->mapWithKeys(function ($stat) {
             $val = $this->stats['final'][$stat->getValue()];
             return [$stat->displayString() => $this->isPercentStat($stat) ? ($val * 100) . "%" : $val ];
         });

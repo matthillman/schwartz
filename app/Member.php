@@ -14,7 +14,7 @@ class Member extends Model
      * @var array
      */
     protected $appends = [
-        'guild_name', 
+        'guild_name',
         'gear_12', 'gear_13',
         // 'speed_10', 'speed_15', 'speed_20', 'speed_25',
         // 'offense_100',
@@ -26,6 +26,15 @@ class Member extends Model
 
     public function mods() {
         return $this->hasManyThrough(Mod::class, ModUser::class, 'name', 'mod_user_id', 'ally_code', 'id');
+    }
+
+    public function characterSet(array $characters) { // List of base_ids
+        return collect([
+            'url' => $this->url,
+            'ally_code' => $this->ally_code,
+            'player' => $this->player,
+            'characters' => $this->characters->whereIn('unit_name', $characters)->values()
+        ]);
     }
 
     private function modStats() {

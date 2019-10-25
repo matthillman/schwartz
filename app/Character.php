@@ -22,7 +22,7 @@ class Character extends Model
         'stats',
     ];
 
-    protected $appends = [ 'alignment', 'speed', 'is_ship', 'is_capital_ship', 'highlight_power' ];
+    protected $appends = [ 'alignment', 'speed', 'is_ship', 'is_capital_ship', 'highlight_power', 'key_stats' ];
 
     protected $casts = [
         'stats' => 'array'
@@ -37,11 +37,14 @@ class Character extends Model
     public function unit() {
         return $this->belongsTo(Unit::class, 'unit_name', 'base_id');
     }
+    public function mods() {
+        return $this->member->mods()->where('location', $this->unit_name);
+    }
     public function getAlignmentAttribute() {
         return strtolower((new Alignment($this->unit->alignment))->getKey());
     }
     public function getSpeedAttribute() {
-        return $this->stats['final'][UnitStat::UNITSTATSPEED()->getValue()] ?? 0;
+        return $this->UNITSTATSPEED;
     }
     public function getKeyStatsAttribute() {
         return $this->keyStatsFor($this->unit_name);
@@ -70,6 +73,14 @@ class Character extends Model
         }
 
         return 0;
+    }
+
+    public function __get($key)
+    {
+        if (UnitStat::isValidKey($key)) {
+            return $this->getAttribute('stats')['final'][UnitStat::$key()->getValue()] ?? 0;
+        }
+        return parent::__get($key);
     }
 
 }

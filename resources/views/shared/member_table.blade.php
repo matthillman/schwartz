@@ -1,35 +1,5 @@
-<div class="member-list">
-    <table>
-        <thead>
-            <tr>
-                <th>Member</th>
-            @foreach($characters as $character)
-                <th>
-                    {{ $units->firstWhere('base_id', $character)->name }}
-                </th>
-            @endforeach
-            </tr>
-        </thead>
-        <tbody>
-    @foreach($members as $member)
-        <tr>
-            <td>
-                <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
-                    {{ $member->player }}
-                </a>
-                <div class="small-note">Power: {{ $member->characters->whereIn('unit_name', $characters)->sum('power') }}</div>
-            </td>
-        @foreach($characters as $character)
-            <td>
-                <div class="team-set">
-                @include('shared.char', [
-                    'character' => $member->characters->firstWhere('unit_name', $character),
-                ])
-                </div>
-            </td>
-        @endforeach
-        </tr>
-    @endforeach
-        </tbody>
-    </table>
-</div>
+<team-sort
+    units="{{ $units->filter(function($u) use ($characters) { return in_array($u->base_id, $characters); })->values()->toJson() }}"
+    members="{{ $members->map(function($m) use ($characters) { return $m->characterSet($characters); })->toJson() }}"
+>
+</team-sort>

@@ -18,17 +18,19 @@
                 </div>
 
                 @foreach($teams as $title => $team)
-                    <div class="card-body" highlight="{{$highlight}}">
+                <div class="card-body" highlight="{{$highlight}}">
+                    <team-sort
+                        units="{{ $units->filter(function($u) use ($team) { return in_array($u->base_id, $team); })->values()->toJson() }}"
+                        members="{{ $members->map(function($m) use ($team) { return $m->characterSet($team); })->toJson() }}"
+                    >
                         <div class="row justify-content-between align-items-center">
                             <h1>{{ $title }}</h1>
                             <div class="note">
                                 Highlighting based on <strong>{{$highlight}}</strong>
                             </div>
                         </div>
-                        @include('shared.member_table', [
-                            'characters' => $team
-                        ])
-                    </div>
+                    </team-sort>
+                </div>
                 @endforeach
 
             </div>
