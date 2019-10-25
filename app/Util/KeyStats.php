@@ -34,7 +34,7 @@ trait KeyStats {
         })
         ->prepend(UnitStat::UNITSTATSPEED())
         ->mapWithKeys(function ($stat) {
-            $val = array_get($this->stats, 'final'.$stat->getValue(), 0);
+            $val = array_get($this->stats['final'], $stat->getValue(), 0);
             return [$stat->displayString() => $this->isPercentStat($stat) ? ($val * 100) . "%" : $val ];
         });
     }
