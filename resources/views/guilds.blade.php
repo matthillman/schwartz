@@ -41,7 +41,7 @@
                             </div>
 
                             <form method="GET" action="{{ route('guild.modsList', ['guild' => $guild->id]) }}">
-                                <button type="submit" class="btn btn-primary btn-icon"><span class="mod-set-image speed tier-1"></span></button>
+                                <button type="submit" class="btn btn-primary btn-icon"><span class="mod-set-image speed tier-6"></span></button>
                             </form>
                             <form method="GET" action="{{ route('guild.guild', ['guild' => $guild->id]) }}">
                                 <button type="submit" class="btn btn-primary btn-icon"><i class="icon ion-ios-people"></i></button>
@@ -79,7 +79,7 @@
                             </div>
 
                             <form method="GET" action="{{ route('guild.modsList', ['guild' => $guild->id]) }}">
-                                <button type="submit" class="btn btn-primary btn-icon"><span class="mod-set-image speed tier-1"></span></button>
+                                <button type="submit" class="btn btn-primary btn-icon"><span class="mod-set-image speed tier-6"></span></button>
                             </form>
                             <form method="GET" action="{{ route('guild.guild', ['guild' => $guild->id]) }}">
                                 <button type="submit" class="btn btn-primary btn-icon"><i class="icon ion-ios-people"></i></button>
