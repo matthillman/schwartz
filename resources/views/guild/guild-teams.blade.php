@@ -20,8 +20,8 @@
                 @foreach($teams as $title => $team)
                 <div class="card-body" highlight="{{$highlight}}">
                     <team-sort
-                        units="{{ $units->filter(function($u) use ($team) { return in_array($u->base_id, $team); })->values()->toJson() }}"
-                        members="{{ $members->map(function($m) use ($team) { return $m->characterSet($team); })->toJson() }}"
+                        units="{{ $team->values()->toJson() }}"
+                        members="{{ $members->map(function($m) use ($team) { return $m->characterSet($team->pluck('base_id')->all()); })->toJson() }}"
                     >
                         <div class="row justify-content-between align-items-center">
                             <h1>{{ $title }}</h1>

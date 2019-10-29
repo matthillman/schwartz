@@ -32,7 +32,8 @@
                 </td>
                 <td v-for="unit in unitData" :key="unit.base_id">
                     <div class="team-set">
-                        <character :character="member.characters.filter(c => c.unit_name === unit.base_id)[0]" :keyStat="sorted"></character>
+                        <character v-if="characterForMember(unit, member)" :character="characterForMember(unit, member)" :keyStat="sorted"></character>
+                        <span missing v-if="!characterForMember(unit, member)">None</span>
                     </div>
                 </td>
             </tr>
@@ -53,11 +54,6 @@
         components: {
             'character': require('./Character.vue').default
         },
-        computed: {
-            unitData: function() { return JSON.parse(this.units); },
-            memberData: function() { return JSON.parse(this.members); },
-            baseIDs: function() { return Object.values(this.unitData).map(u => u.base_id); },
-        },
         data: function() {
             return {
                 stats: [
@@ -76,9 +72,16 @@
                 sortCharacter: null,
                 reversed: false,
                 sortedMembers: [],
+                unitData: [],
+                memberData: [],
+                baseIDs: [],
             };
         },
         mounted: function() {
+            this.unitData = JSON.parse(this.units);
+            this.memberData = JSON.parse(this.members);
+            this.baseIDs = Object.values(this.unitData).map(u => u.base_id);
+
             this.sortCharacter = this.unitData[0].base_id;
             this.sorted = this.stats[0];
         },
@@ -102,6 +105,9 @@
                }
                this.sortedMembers = sorted;
             },
+            characterForMember: function(unit, member) {
+                return member.characters.filter(c => c.unit_name === unit.base_id)[0]
+            }
         },
         created: function() {
             this.unwatchSort = this.$watch(() => `${this.sortCharacter}:${this.sorted.value}:${this.reversed}`, this.sortMembers);

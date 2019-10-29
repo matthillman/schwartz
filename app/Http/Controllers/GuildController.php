@@ -42,10 +42,16 @@ class GuildController extends Controller
 
         list($highlight, $teams) = $this->getSquadsFor($team);
 
+        $units = Unit::all();
+        $teams = collect($teams)->mapWithKeys(function($team, $title) use ($units) {
+            return [$title => collect($team)->map(function($unit) use ($units) {
+                return $units->first(function($u) use ($unit) { return $u->base_id === $unit; });
+            })];
+        });
+
         $view = $mode === 'members' ? 'member-teams' : 'guild-teams';
         return view("guild.$view", [
             'members' => $guild->members()->with('characters.zetas')->orderBy('player')->get(),
-            'units' => Unit::all(),
             'teams' => $teams,
             'highlight' => $highlight,
             'team' => $team,
