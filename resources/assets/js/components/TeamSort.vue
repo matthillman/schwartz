@@ -14,7 +14,7 @@
             <thead>
                 <tr>
                     <th>Member</th>
-                    <th v-for="unit in unitData" :key="unit.base_id"
+                    <th v-for="unit in units" :key="unit.base_id"
                         @click="sortBy(unit.base_id)"
                         class="clickable"
                         :class="{sorted: sortCharacter === unit.base_id, reverse: sortCharacter === unit.base_id && reversed}"
@@ -30,7 +30,7 @@
                     </a>
                     <div class="small-note">Power: {{ member.characters.filter(c => baseIDs.includes(c.unit_name)).reduce((t, c) => t + c.power, 0) }}</div>
                 </td>
-                <td v-for="unit in unitData" :key="unit.base_id">
+                <td v-for="unit in units" :key="unit.base_id">
                     <div class="team-set">
                         <character v-if="characterForMember(unit, member)" :character="characterForMember(unit, member)" :keyStat="sorted"></character>
                         <span missing v-if="!characterForMember(unit, member)">None</span>
@@ -48,8 +48,8 @@
 
     export default {
         props: {
-            units: String,
-            members: String,
+            units: Array,
+            members: Array,
         },
         components: {
             'character': require('./Character.vue').default
@@ -72,17 +72,13 @@
                 sortCharacter: null,
                 reversed: false,
                 sortedMembers: [],
-                unitData: [],
-                memberData: [],
                 baseIDs: [],
             };
         },
         mounted: function() {
-            this.unitData = JSON.parse(this.units);
-            this.memberData = JSON.parse(this.members);
-            this.baseIDs = Object.values(this.unitData).map(u => u.base_id);
+            this.baseIDs = Object.values(this.units).map(u => u.base_id);
 
-            this.sortCharacter = this.unitData[0].base_id;
+            this.sortCharacter = this.units[0].base_id;
             this.sorted = this.stats[0];
         },
         methods: {
@@ -91,7 +87,7 @@
             	this.sortCharacter = base_id;
             },
             sortMembers: function() {
-                let sorted = this.memberData.sort((a, b) => {
+                let sorted = this.members.sort((a, b) => {
                     let charA = a.characters.find(c => c.unit_name === this.sortCharacter);
                     let charB = b.characters.find(c => c.unit_name === this.sortCharacter);
 

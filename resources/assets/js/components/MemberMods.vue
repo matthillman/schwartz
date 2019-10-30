@@ -1,15 +1,15 @@
 <template>
 	<div class="list">
-        <div class="control-wrapper" v-if="guildList.length > 1">
+        <div class="control-wrapper" v-if="guilds.length > 1">
             <div class="segmented-control">
-                <span v-for="(guild, index) in guildList" :key="guild.id"
+                <span v-for="(guild, index) in guilds" :key="guild.id"
                     @click="select(index)"
                     :class="{selected: selected === index}"
                 >{{ guild.name | acronymize }}</span>
             </div>
         </div>
-        <div class="flex-center align-items-center" v-if="guildList.length === 1">
-            <h1>{{ guildList[0].name }}</h1>
+        <div class="flex-center align-items-center" v-if="guilds.length === 1">
+            <h1>{{ guilds[0].name }}</h1>
         </div>
         <div class="flex-center spacing">
             <div><span>6•:</span> {{ items | sumProp('six_dot') | numberWithCommas }}</div>
@@ -24,6 +24,15 @@
 	    	:items="items"
 	    	v-on:sort="sort"
 	    ></list>
+
+        <modal v-if="syncing" @close="syncing = null" no-close>
+            <h3 slot="header">Querying Mods</h3>
+            <div slot="body">
+                <div class="flex-center">
+                    Waiting and parsing and such
+                </div>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -35,8 +44,12 @@
 
     export default {
         mounted() {
-            this.guildList = JSON.parse(this.guilds);
-            this.refresh();
+            if (this.mods && this.mods.length) {
+                this.items = this.mods;
+                this.sort(this.columns[1].prop, true);
+            } else {
+                this.refresh();
+            }
         },
         filters: {
             acronymize: acronymize,
@@ -59,13 +72,12 @@
 		            { prop: 'offense_100', label: 'Offense 100+', transform: numberWithCommas },
                 ],
                 selected: 0,
-                guildList: [],
+                syncing: false,
             }
         },
         props: {
-            guilds: {
-                type: String
-            }
+            guilds: Array,
+            mods: Array,
         },
         methods: {
             select: function(index) {
@@ -73,7 +85,8 @@
                 this.refresh();
             },
             refresh: function() {
-                axios.get(`/${this.route}/${this.guildList[this.selected].id}`)
+                this.syncing = true;
+                axios.get(`/${this.route}/${this.guilds[this.selected].id}`)
                     .then(res => {
                         this.items = res.data;
                         this.sort(this.columns[1].prop, true);
@@ -101,6 +114,7 @@
 				if (reversed) {
 					this.items = this.items.reverse();
 				}
+                this.syncing = false;
             },
         }
     }

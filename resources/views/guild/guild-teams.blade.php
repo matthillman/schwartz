@@ -20,8 +20,8 @@
                 @foreach($teams as $title => $team)
                 <div class="card-body" highlight="{{$highlight}}">
                     <team-sort
-                        units="{{ $team->values()->toJson() }}"
-                        members="{{ $members->map(function($m) use ($team) { return $m->characterSet($team->pluck('base_id')->all()); })->toJson() }}"
+                        v-bind:units="{{ $team->values()->toJson() }}"
+                        v-bind:members="{{ $members->map(function($m) use ($team) { return $m->characterSet($team->pluck('base_id')->all()); })->toJson() }}"
                     >
                         <div class="row justify-content-between align-items-center">
                             <h1>{{ $title }}</h1>

@@ -10,7 +10,12 @@
                 <div class="card-header"><h2>Guilds</h2></div>
 
                 <div class="card-body">
-                    <member-mods guilds="{{ $guilds->toJson() }}"></member-mods>
+                    <member-mods
+                        v-bind:guilds="{{ $guilds->toJson() }}"
+                        @if (isset($mods))
+                        v-bind:mods="{{ $mods->toJson() }}"
+                        @endif
+                    ></member-mods>
                 </div>
 
             </div>
