@@ -34,7 +34,7 @@
                         @foreach($teams as $title => $team)
                             @include('shared.unit_table', [
                                 'team' => $title,
-                                'characters' => $team
+                                'characters' => $team->pluck('base_id')->all()
                             ])
                         @endforeach
                     </div>
