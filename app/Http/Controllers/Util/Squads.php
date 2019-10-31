@@ -42,7 +42,7 @@ trait Squads {
                     'CLS Scoundrels' => ['COMMANDERLUKESKYWALKER', 'HANSOLO', 'CHEWBACCALEGENDARY', 'ENFYSNEST', 'L3_37', 'OLDBENKENOBI', 'SCARIFREBEL'],
                     'Geonosians' => ['GEONOSIANBROODALPHA', 'GEONOSIANSOLDIER', 'GEONOSIANSPY', 'POGGLETHELESSER', 'SUNFAC'],
                     'Padmé' => ['PADMEAMIDALA', 'ANAKINKNIGHT', 'AHSOKATANO', 'GENERALKENOBI', 'C3POLEGENDARY', 'SHAAKTI', 'R2D2_LEGENDARY'],
-                    'General Skywalker' => ['GENERALSKYWALKER', 'CT7567', 'CT5555', 'CT210408', 'AHSOKATANO', 'SHAAKTI', 'CLONESERGEANTPHASEI', 'CC2224'],
+                    'General Skywalker' => ['GENERALSKYWALKER', 'CT7567', 'CT5555', 'CT210408', 'AHSOKATANO', 'SHAAKTI', 'CLONESERGEANTPHASEI', 'BARRISSOFFEE'],
                     'Bounty Hunters' => ['JANGOFETT', 'BOSSK', 'BOBAFETT', 'ZAMWESELL', 'DENGAR', 'GREEDO', 'EMBO'],
                 ];
                 break;
