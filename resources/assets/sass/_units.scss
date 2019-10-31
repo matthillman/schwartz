@@ -96,6 +96,11 @@
 
     table {
         width: 100%;
+        table-layout: fixed;
+
+        tr > :first-child {
+            width: 175px;
+        }
 
         td {
             height: 1px;
@@ -193,9 +198,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
 
     .stat-container {
         display: flex;
+        max-width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     > span.zeta-list, .stat-wrapper {

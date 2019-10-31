@@ -137,6 +137,10 @@
 
 .set-filter {
     justify-content: space-between;
+
+    .btn {
+        white-space: nowrap;
+    }
 }
 </style>
 
