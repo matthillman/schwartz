@@ -307,7 +307,7 @@
 }
 
 popover {
-    [slot] {
+    [slot="content"] {
         display: none;
     }
 }
