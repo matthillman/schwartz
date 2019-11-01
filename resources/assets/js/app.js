@@ -36,12 +36,15 @@ const VueSelect = require('vue-select');
 Vue.component('v-select', VueSelect.VueSelect);
 const VueSlider = require('vue-slider-component');
 Vue.component('vue-slider', VueSlider);
+import VuePopover from 'vue-popover';
+Vue.component('popover', VuePopover);
 
 const app = new Vue({
     el: '#app'
 });
 
 import Toasted from 'vue-toasted';
+import { UV_UDP_REUSEADDR } from 'constants';
 
 Vue.use(Toasted, {
     iconPack : 'custom-class'

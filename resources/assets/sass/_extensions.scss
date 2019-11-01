@@ -305,3 +305,78 @@
 .v-select.dropdown .form-control {
     height: inherit;
 }
+
+.popover {
+    border: 0;
+
+    button.btn.btn.btn-primary {
+        outline: none;
+        box-shadow: none;
+        transition-property: border-radius;
+        transition-duration: 25ms;
+        transition-timing-function: ease-out;
+    }
+
+    .popover__container {
+        background: white;
+        border-radius: 8px;
+        border-top-left-radius: 0;
+        // top: 46px;
+        box-shadow: 0 0 2px black;
+        width: 0;
+        height: 0;
+        opacity: 0;
+        transition-property: width, height, opacity;
+        transition-duration: 25ms;
+        transition-timing-function: ease-out;
+
+        // &::after {
+        //     content: '';
+        //     border-width: 8px;
+        //     border-style: solid;
+        //     border-color: transparent;
+        //     border-bottom-color: rgba($color: #000000, $alpha: 0.3);
+
+        //     position: absolute;
+        //     top: -16px;
+        //     left: 10px;
+        // }
+
+        ul {
+            margin: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            border-top-left-radius: 0;
+        }
+
+        a {
+            display: inline-block;
+            width: 100%;
+            padding: 8px 8px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $primary;
+                color: white;
+                text-decoration: none;
+            }
+        }
+    }
+
+    &.open {
+        z-index: 2000;
+
+        .popover__face {
+            button.btn {
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+        }
+
+        .popover__container {
+            width: 150px;
+            height: auto;
+            opacity: 1;
+        }
+    }
+}

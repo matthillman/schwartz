@@ -5,6 +5,7 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 @import '~ionicons/dist/scss/ionicons';
+@import '~vue-popover/dist/styles';
 
 html, body {
   color: $text;
@@ -167,7 +168,7 @@ body{
   display: inline-block;
   border-color: $swgoh-orange;
   background-color: $swgoh-orange;
-  border-radius: 4px;
+  border-radius: 8px;
 
   svg {
     height: 100%;
@@ -212,11 +213,26 @@ body{
 
 .icon {
   font-size: 24px;
+
+  .with-text & {
+    font-size: 18px;
+    margin-top: 1px;
+  }
 }
 
 .btn.btn-icon {
-  padding: 2px 4px;
+  padding: 4px 6px;
   line-height: 1;
+  display: flex;
+  align-items: center;
+
+  & > :not(:first-child) {
+    margin-left: 4px;
+  }
+
+  &.with-text {
+    padding: 0.375rem 0.75rem;
+  }
 }
 
 .control-wrapper {
