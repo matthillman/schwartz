@@ -25,8 +25,8 @@
 
             <tr v-for="member in sortedMembers" :key="member.ally_code">
                 <td>
-                    <a :href="`https://swgoh.gg${member.url}}`" target="_gg">
-                        {{ member.player }}
+                    <a :href="`https://swgoh.gg${member.url}`" target="_gg">
+                        <span>{{ member.player }}</span>
                     </a>
                     <div class="small-note">Power: {{ member.characters.filter(c => baseIDs.includes(c.unit_name)).reduce((t, c) => t + c.power, 0) }}</div>
                 </td>

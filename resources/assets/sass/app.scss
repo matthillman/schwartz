@@ -185,6 +185,40 @@ body{
   }
 }
 
+a:not(.gg-link) {
+  &[target="_gg"] {
+    position: relative;
+
+    &:hover {
+      text-decoration: none;
+      span {
+        text-decoration: underline;
+      }
+      &::after {
+        content: '';
+        background-image: url(/images/bb8.svg);
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        background-repeat: no-repeat;
+        text-decoration: none;
+        margin-left: 4px;
+
+        h1 & {
+          width: 28px;
+          height: 28px;
+        }
+      }
+    }
+  }
+}
+
+.row.align-items-center {
+  h1 {
+    margin-bottom: 0;
+  }
+}
+
 .card {
   margin-top: 16px;
 

@@ -4,13 +4,13 @@
 <div class="container guild-members">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card stripes">
+            <div class="card">
 
                     <div class="card-body" highlight="{{$highlight}}">
                         <div class="row justify-content-between align-items-baseline">
                             <h1>
                                 <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
-                                    {{ $member->player }}
+                                    <span>{{ $member->player }}</span>
                                 </a>
                             </h1>
 

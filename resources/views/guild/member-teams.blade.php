@@ -20,21 +20,26 @@
                 @foreach($members as $member)
                     <div class="card-body" highlight="{{$highlight}}">
                         <div class="row justify-content-between align-items-center">
-                            <h1>
-                                <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
-                                    {{ $member->player }}
-                                </a>
-                            </h1>
+                            <div class="row align-items-center">
+                                <form method="GET" action="{{ route('member.teams', ['allyCode' => $member->ally_code, 'team' => $team]) }}">
+                                    <button type="submit" class="btn btn-primary btn-icon inverted"><i class="icon ion-ios-link"></i></button>
+                                </form>
+                                <h1>
+                                    <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
+                                        <span>{{ $member->player }}</span>
+                                    </a>
+                                </h1>
+                            </div>
 
                             <div class="note">
                                 Highlighting based on <strong>{{$highlight}}</strong>
                             </div>
                         </div>
 
-                        @foreach($teams as $title => $team)
+                        @foreach($teams as $title => $squad)
                             @include('shared.unit_table', [
                                 'team' => $title,
-                                'characters' => $team->pluck('base_id')->all()
+                                'characters' => $squad->pluck('base_id')->all()
                             ])
                         @endforeach
                     </div>
