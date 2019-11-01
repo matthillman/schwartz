@@ -309,6 +309,10 @@
 .popover {
     border: 0;
 
+    [slot] {
+        display: none;
+    }
+
     button.btn.btn.btn-primary {
         outline: none;
         box-shadow: none;
