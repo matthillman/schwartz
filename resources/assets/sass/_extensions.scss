@@ -306,12 +306,14 @@
     height: inherit;
 }
 
-.popover {
-    border: 0;
-
+popover {
     [slot] {
         display: none;
     }
+}
+
+.popover {
+    border: 0;
 
     button.btn.btn.btn-primary {
         outline: none;
