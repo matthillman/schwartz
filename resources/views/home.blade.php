@@ -4,7 +4,7 @@
 <div class="container home">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            {{-- <div class="card">
                 <div class="card-header">Guides</div>
 
                 <div class="card-body">
@@ -31,6 +31,56 @@
                         <a href="{{ route('guilds') }}">Guild Teams</a>
                         <a href="{{ route('schwartz.guilds') }}">Schwartz guilds GP List</a>
                         <a href="{{ route('schwartz.mods') }}">Schwartz guilds Mod List</a>
+                    </div>
+                </div>
+            </div> --}}
+
+            <div class="card">
+                <div class="card-header">Tools</div>
+
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+                <div class="card-body">
+                    <div class="icon-grid">
+
+                        <div class="item">
+                            <div class="icon-wrapper"><a href="{{ route('guilds') }}"><div class="image"><i class="icon ion-ios-people"></i></div></a></div>
+                            <div class="label"><a href="{{ route('guilds') }}">Guilds</a></div>
+                        </div>
+
+                        <div class="item">
+                            <div class="icon-wrapper"><a href="{{ route('auth.mods') }}"><div class="image"><div class="icon mod-image diamond speed tier-6 gold giant"></div></div></a></div>
+                            <div class="label"><a href="{{ route('auth.mods') }}">Mod Set Maker</a></div>
+                        </div>
+
+                        <div class="item">
+                            <div class="icon-wrapper"><a href="{{ route('tw-teams.index') }}"><div class="image"><i class="icon ion-ios-help-buoy"></i></div></a></div>
+                            <div class="label"><a href="{{ route('tw-teams.index') }}">TW Team Counters</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Schwartz Guilds</div>
+
+                <div class="card-body">
+                    <div class="icon-grid">
+
+                        <div class="item">
+                            <div class="icon-wrapper"><a href="{{ route('schwartz.guilds') }}"><div class="image"><i class="icon ion-ios-list"></i></div></a></div>
+                            <div class="label"><a href="{{ route('schwartz.guilds') }}">GP List</a></div>
+                        </div>
+
+                        <div class="item">
+                            <div class="icon-wrapper"><a href="{{ route('schwartz.guilds') }}"><div class="image"><div class="icon mod-image arrow health tier-6 gold giant"></div></div></a></div>
+                            <div class="label"><a href="{{ route('schwartz.mods') }}">Mods</a></div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -63,26 +113,6 @@
                     @empty
                         <div>No pending users</div>
                     @endforelse
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">Recruiting</div>
-
-                <div class="card-body">
-                    <table>
-                        <tbody>
-                        @forelse($recruits as $recruit)
-                            <tr>
-                                <td><a href="{{ $recruit->url }}" target="_blank">{{ $recruit->discord }}</a></td>
-                                <td>{{ $recruit->referral }}</td>
-                                <td>{{ $recruit->pitch }}</td>
-                            </tr>
-                        @empty
-                            <tr><td>No information requests</td></tr>
-                        @endforelse
-                        </tbody>
-                    </table>
                 </div>
             </div>
 @endauth
