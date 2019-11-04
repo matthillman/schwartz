@@ -30,8 +30,10 @@ class PullUnits extends Command
      */
     public function handle()
     {
+        $this->info("Starting unit pull…");
         $units = swgoh()->getUnitData(['obtainable' => true, 'obtainableTime' => 0]);
 
+        $this->info("Units fetched, inserting…");
         DB::transaction(function() use ($units) {
             $units->each(function($unit_data) {
                 $unit = Unit::firstOrNew(['base_id' => $unit_data['baseId']]);
@@ -49,8 +51,10 @@ class PullUnits extends Command
             });
         });
 
+        $this->info("Starting zeta pull…");
         $zetas = swgoh()->getZetaData();
 
+        $this->info("Zetas fetched, inserting…");
         DB::transaction(function() use ($units, $zetas) {
             $zetas->each(function($data) use ($units) {
                 $character = $units->first(function($unit) use ($data) {
@@ -72,6 +76,7 @@ class PullUnits extends Command
             });
         });
 
+        $this->info("Done.");
         return 0;
     }
 }
