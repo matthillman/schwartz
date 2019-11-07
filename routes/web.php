@@ -33,6 +33,10 @@ Route::get('/p/{user}/{param?}', function($user, $param) {
 Route::get('podcast.rss', function() {
     return redirect()->away("http://feeds.soundcloud.com/users/soundcloud:users:536817606/sounds.rss");
 });
+Route::get('discord/{id}', function($id) {
+    $response = guzzle()->get("https://discordapp.com/api/guilds/${id}/widget.json");
+    return $response->getBody();
+});
 
 Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::group(['middleware' => ['active']], function() {
@@ -71,4 +75,5 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::get('/waiting', 'HomeController@waiting')->name('waiting');
 });
 
+Route::get('/schwartz_list', 'GuildController@schwartzGuildsImportList')->name('schwartz.import');
 Route::get('/member/{allyCode}/{team}', 'MemberController@listTeams')->name('member.teams');

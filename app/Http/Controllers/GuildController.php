@@ -67,6 +67,13 @@ class GuildController extends Controller
         ]);
     }
 
+    public function schwartzGuildsImportList() {
+        $guilds = Guild::where('schwartz', 1)->orderBy('gp', 'desc')->get();
+        return view('import-list', [
+            'guilds' => $guilds,
+        ]);
+    }
+
     public function schwartzGuildMods() {
         $guilds = Guild::where('schwartz', 1)->orderBy('gp', 'desc')->get();
         return view('member-mods', [
