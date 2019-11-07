@@ -12,8 +12,8 @@
                 <div class="card-body">
                     <table>
                         <thead>
-                            <th>Guild</th>
-                            <th>ID</th>
+                            <th>Name</th>
+                            <th>guild_id</th>
                             <th>GP</th>
                         </thead>
                         <tbody>
