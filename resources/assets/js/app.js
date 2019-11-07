@@ -31,6 +31,7 @@ Vue.component('tw-form', require('./components/TWForm.vue').default);
 Vue.component('guild-teams', require('./components/GuildTeams.vue').default);
 Vue.component('mod-preference', require('./components/Preference.vue').default);
 Vue.component('team-sort', require('./components/TeamSort.vue').default);
+Vue.component('discord-widget', require('./components/DiscordWidget.vue').default);
 
 const VueSelect = require('vue-select');
 Vue.component('v-select', VueSelect.VueSelect);

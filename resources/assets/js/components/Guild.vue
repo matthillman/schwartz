@@ -1,11 +1,13 @@
 <template>
-    <a class="guild" v-bind:href="url" target="_blank">
-        <img v-bind:src="'/images/guilds/' + icon + '.png'">
+    <a class="guild" :href="url" target="_blank">
+        <img :src="icon">
         <div class="info">
             <div class="name">{{name}}</div>
             <div class="sub">
                 <div class="gp">{{gp}} GP</div>
-                <div class="raid">{{raid}}</div>
+                <div class="tb">{{tb}}★</div>
+                <div class="focus">{{focus}} Focused</div>
+                <div class="raids">{{raids}}</div>
             </div>
         </div>
     </a>
@@ -18,7 +20,9 @@
             url: String,
             icon: String,
             gp: String,
-            raid: String,
+            tb: String,
+            focus: String,
+            raids: String,
         },
     }
 </script>
@@ -34,17 +38,13 @@
     margin-bottom: 16px;
     border-radius: 8px;
 
-    &:hover {
-        opacity: 0.8;
-    }
-
     img {
         height: 75px;
         width: 75px;
         margin: 0 16px;
     }
 
-    transition-property: transform, background-color;
+    transition-property: transform, background-color, opacity;
     transition-duration: 600ms;
     transition-timing-function: ease;
     transition-delay: 0;
@@ -53,6 +53,11 @@
         transform: translate3d(0, 0, 0);
         transition-delay: 900ms;
         background-color: rgba(255, 255, 255, 0.8);
+        opacity: 1;
+    }
+
+    &.guild:hover {
+        opacity: 0.8;
     }
 
     .info {
@@ -62,7 +67,7 @@
         align-items: flex-start;
         font-size: 16px;
         flex-grow: 1;
-        margin: 0 16px;
+        margin: 0 16px 0 0;
 
         .name {
             font-size: 24px;

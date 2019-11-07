@@ -9,6 +9,11 @@ if (!function_exists('handbook')) {
 		return route('handbook', ['name' => $name]);
 	}
 }
+if (!function_exists('google_sheets')) {
+	function google_sheets() {
+		return app('google_sheets');
+	}
+}
 
 // if (!function_exists('guzzle')) {
 //     /**

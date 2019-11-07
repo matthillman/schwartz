@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use DB;
+use Storage;
 use App\Mod;
 use App\Zeta;
 use App\Guild;
@@ -211,8 +212,19 @@ class PullGuild extends Command
 
         $guild->name = $parser->name();
         $guild->gp = $parser->gp();
+        $guild->icon = $parser->data['bannerLogo'];
+        $guild->colors = $parser->data['bannerColor'];
         $guild->save();
         $this->info("Guild saved.");
+
+        $publicStore = Storage::disk('public');
+
+        if (!$publicStore->exists("$guild->icon.png")) {
+            $this->info("Fetching icon from swgoh.gg");
+            guzzle()->get("https://swgoh.gg/static/img/assets/tex.$guild->icon.png", [
+                'sink' => storage_path("app/public/$guild->icon.png"),
+            ]);
+        }
 
         $removeCount = $guild->members()->whereNotIn('id', $updated)->count();
         $this->info("Removing all guild members not updated (${removeCount})");

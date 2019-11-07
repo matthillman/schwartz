@@ -33,5 +33,3 @@
     </div>
 </div>
 @endsection
-
-@include('shared.guild_listener')

@@ -9,6 +9,7 @@
         "doctrine/dbal": "^2.7",
         "fabpot/goutte": "^3.2",
         "fideloper/proxy": "^4.0",
+        "google/apiclient": "^2.4",
         "graham-campbell/markdown": "^10.0",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "5.6.*",

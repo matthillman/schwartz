@@ -30,10 +30,12 @@
                 <guild
                     :name="'{{ $guild->name }}'"
                     :url="'{{ $guild->url }}'"
-                    :icon="'{{ $guild->icon_name }}'"
+                    :icon="'{{ asset("storage/$guild->icon.png") }}'"
                     :gp="'{{ intval(floor($guild->gp / 1000000)) }}M'"
-                    :raid="'{{ $guild->raid_tag }}'"
-                ></guild>
+                    :tb="'{{ $guild->stars }}'"
+                    :focus="'{{ $guild->focus }}'"
+                    :raids="'{{ $guild->raids }}'"
+                    ></guild>
                 @endforeach
             </div>
         </div>
@@ -45,8 +47,13 @@
             </div>
             <div class="content-title">Join Us</div>
             <div>
-                <p>Connect to The Scwartzies recruiting</p>
-                <iframe src="https://discordapp.com/widget?id=576216200158248969&theme=dark&username=Frax#4201&chetmanly#3351" width="350" height="250" allowtransparency="true" frameborder="0"></iframe>
+                <p>Connect to The Scwartzies</p>
+                <discord-widget
+                    :server="'316691456204996608'"
+                    :invite="'eDcrMfs'"
+                >
+                    @include('shared.discord')
+                </discord-widget>
             </div>
         </div>
     </welcome-parallax>
