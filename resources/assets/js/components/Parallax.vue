@@ -91,7 +91,7 @@
                 console.warn(`Has change got ${this.currentSlide} from ${window.location.hash}`, this.hashes);
             },
             doScroll(delta) {
-                if (Math.abs(delta) < this.scrollSensitivity) { return; }
+                if (Math.abs(delta) < this.scrollSensitivity || this.ticking || this.touchInProgress) { return; }
                 this.ticking = true;
                 this.touchInProgress = true;
 
