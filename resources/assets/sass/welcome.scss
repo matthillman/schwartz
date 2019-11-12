@@ -4,118 +4,220 @@
 @import '~bootstrap/scss/bootstrap';
 
 body {
-  font-family: $font-family-sans-serif;
+    font-family: $font-family-sans-serif;
 }
 
 $hero-width: 500px;
-$number-of-guilds: 11;
 
 .logo.hero {
-  width: $hero-width;
-  fill: $sw-yellow;
+    width: $hero-width;
+    fill: $sw-yellow;
 }
 
 .description {
-  margin-top: 16px;
-  color: $sw-yellow;
-  width: $hero-width;
-  a {
+    margin-top: 16px;
     color: $sw-yellow;
-    font-weight: bold;
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
+    width: $hero-width;
+
+    a {
+        color: $sw-yellow;
+        font-weight: bold;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
-  }
 }
 
 .nav-links {
-  margin-top: 16px;
-  width: $hero-width;
-  display: flex;
-  justify-content: space-evenly;
-  a {
-    color: white;
-    font-weight: bold;
-    background: #fce34d;
-    border-radius: 12px;
-    text-decoration: none;
-    flex-grow: 1;
-    flex-basis: 50%;
-    padding: 16px;
-    margin: 0 8px;
-    font-size: 24px;
-    &:hover {
-      opacity: 0.8;
+    margin-top: 16px;
+    width: $hero-width;
+    display: flex;
+    justify-content: space-evenly;
+
+    a {
+        color: white;
+        font-weight: bold;
+        background: #fce34d;
+        border-radius: 12px;
+        text-decoration: none;
+        flex-grow: 1;
+        flex-basis: 50%;
+        padding: 16px;
+        margin: 0 8px;
+        font-size: 24px;
+
+        &:hover {
+            opacity: 0.8;
+        }
     }
-  }
 }
 
 .guild-list {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-content: center;
-  align-items: center;
-  width: 1016px;
-  flex-wrap: wrap;
-  margin: 0 auto;
-
-  @for $i from 1 to ($number-of-guilds + 1) {
-    .guild:nth-child(#{$i}), &.test.test .guild.guild:nth-child(#{$i}) {
-      transform: translate3d(0, ceil($i / 2) * -1 * (75px + 16px), 0);
-      z-index: $number-of-guilds - $i + 1;
-      background-color: rgba(255, 255, 255, 1);
-      opacity: 0;
-    }
-  }
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    width: 1016px;
+    flex-wrap: wrap;
+    margin: 0 auto;
 }
 
 .narrow-links {
-  display: none;
+    display: none;
+}
+
+.guild {
+    width: 500px;
+    height: 75px;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 16px;
+    border-radius: 8px;
+
+    img {
+        height: 75px;
+        width: 75px;
+        margin: 0 16px;
+    }
+
+    transition-property: transform, background-color, opacity;
+    transition-duration: 600ms;
+    transition-timing-function: ease;
+    transition-delay: 0;
+
+    .down-scroll + *:not(.down-scroll) & {
+        transform: translate3d(0, 0, 0);
+        transition-delay: 900ms;
+        background-color: rgba(255, 255, 255, 0.8);
+        opacity: 1;
+    }
+
+    &.guild:hover {
+        opacity: 0.8;
+        text-decoration: none;
+        color: rgba(0, 0, 0, 1);
+    }
+    .info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        font-size: 16px;
+        flex-grow: 1;
+        margin: 0 16px 0 0;
+
+        .name {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .sub {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+    }
 }
 
 @media (max-width: 600px) {
-  .narrow-links {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    width: 100%;
+    $headingSize: 6vh;
 
-    display: flex;
-    justify-content: space-around;
-    z-index: 100;
-
-    a {
-      color: white;
-      font-weight: bold;
-      background: rgba($color: white, $alpha: 0.25);
-      border-radius: 12px;
-      text-decoration: none;
-      flex-grow: 1;
-      flex-basis: 50%;
-      padding: 8px;
-      margin: 4px;
-      font-size: 16px;
-      text-transform: uppercase;
-      text-align: center;
-
-      &:hover {
-        opacity: 1;
-      }
+    :root {
+        --guild-height: calc(100% - #{$headingSize});
+        --guild-item-height: calc((var(--guild-height) / var(--number-of-guilds)) - 16px);
     }
-  }
 
-  .logo.hero, .description, .nav-links, .guild-list {
-    width: calc(100% - 16px);
-  }
+    .narrow-links {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
 
-  .nav-links a {
-    font-size: 16px;
-  }
+        display: flex;
+        justify-content: space-around;
+        z-index: 100;
 
-  .content-title {
-    margin-top: 50px;
-  }
+        a {
+            color: white;
+            font-weight: bold;
+            background: rgba($color: white, $alpha: 0.25);
+            border-radius: 12px;
+            text-decoration: none;
+            flex-grow: 1;
+            flex-basis: 50%;
+            padding: 8px;
+            margin: 4px;
+            font-size: 16px;
+            text-transform: uppercase;
+            text-align: center;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
+
+    .logo.hero,
+    .description,
+    .nav-links,
+    .guild-list {
+        width: calc(100% - 16px);
+    }
+
+    .guild-list {
+        height: var(--guild-height);
+    }
+
+    .nav-links a {
+        font-size: 16px;
+    }
+
+    .parallax-container > section:not(:first-of-type) .content {
+        &-wrapper {
+            justify-content: flex-start;
+
+            .col-form-label,
+            .form-control,
+            .btn {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .parallax-container.parallax-container > section .content {
+        &-title {
+            margin-top: 50px;
+            font-size: $headingSize;
+            line-height: 1.2;
+        }
+    }
+
+    .guild {
+        width: 100%;
+        height: var(--guild-item-height);
+        align-items: center;
+
+        img {
+            height: 44px;
+            width: 44px;
+            margin: 0 8px;
+        }
+
+        .info {
+            font-size: 18px;
+            margin: 0 8px;
+            justify-content: space-between;
+
+            .name {
+                font-size: calc(1vh + 1vw + 1vmin);
+                margin-bottom: 4px;
+            }
+        }
+    }
 }

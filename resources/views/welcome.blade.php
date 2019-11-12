@@ -4,6 +4,7 @@
 @section('viewport', '600')
 
 @push('styles')
+    @include('shared.guild_list_css', ['guilds' => $guilds])
     <link href="{{ asset('css/welcome.css') }}" rel="stylesheet">
 @endpush
 

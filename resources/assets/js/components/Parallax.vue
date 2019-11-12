@@ -223,21 +223,4 @@ body.no-scroll {
     }
 }
 
-@media (max-width: 600px) {
-    .parallax-container > section:not(:first-of-type) .content {
-        &-wrapper {
-            justify-content: flex-start;
-
-            .col-form-label, .form-control, .btn {
-                font-size: 14px;
-            }
-        }
-    }
-    .parallax-container > section .content {
-        &-title {
-            font-size: 6vh;
-            line-height: 1.2;
-        }
-    }
-}
 </style>
