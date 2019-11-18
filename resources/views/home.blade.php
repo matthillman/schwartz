@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="item">
-                            <div class="icon-wrapper"><a href="{{ route('schwartz.guilds') }}"><div class="image"><div class="icon mod-image arrow health tier-6 gold giant"></div></div></a></div>
+                            <div class="icon-wrapper"><a href="{{ route('schwartz.mods') }}"><div class="image"><div class="icon mod-image arrow health tier-6 gold giant"></div></div></a></div>
                             <div class="label"><a href="{{ route('schwartz.mods') }}">Mods</a></div>
                         </div>
 
