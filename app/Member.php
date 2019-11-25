@@ -16,6 +16,7 @@ class Member extends Model
     protected $appends = [
         'guild_name',
         'gear_12', 'gear_13',
+        'relic_5', 'relic_6', 'relic_7',
         // 'speed_10', 'speed_15', 'speed_20', 'speed_25',
         // 'offense_100',
     ];
@@ -73,6 +74,16 @@ class Member extends Model
         return $this->characters()->where('gear_level', '=', 13);
     }
 
+    public function relic5() {
+        return $this->characters()->where('relic', '=', 5 + 2);
+    }
+    public function relic6() {
+        return $this->characters()->where('relic', '=', 6 + 2);
+    }
+    public function relic7() {
+        return $this->characters()->where('relic', '=', 7 + 2);
+    }
+
     public function guild() {
         return $this->belongsTo(Guild::class)->withDefault();
     }
@@ -87,6 +98,18 @@ class Member extends Model
 
     public function getGear13Attribute() {
         return $this->gear13()->count();
+    }
+
+    public function getRelic5Attribute() {
+        return $this->relic5()->count();
+    }
+
+    public function getRelic6Attribute() {
+        return $this->relic6()->count();
+    }
+
+    public function getRelic7Attribute() {
+        return $this->relic7()->count();
     }
 
     public function getSpeed10Attribute() {
