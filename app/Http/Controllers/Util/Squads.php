@@ -42,7 +42,7 @@ trait Squads {
                     'CLS Scoundrels' => ['COMMANDERLUKESKYWALKER', 'HANSOLO', 'CHEWBACCALEGENDARY', 'ENFYSNEST', 'L3_37', 'OLDBENKENOBI', 'SCARIFREBEL'],
                     'Geonosians' => ['GEONOSIANBROODALPHA', 'GEONOSIANSOLDIER', 'GEONOSIANSPY', 'POGGLETHELESSER', 'SUNFAC'],
                     'Padmé' => ['PADMEAMIDALA', 'ANAKINKNIGHT', 'AHSOKATANO', 'GENERALKENOBI', 'C3POLEGENDARY', 'SHAAKTI', 'R2D2_LEGENDARY'],
-                    'General Skywalker' => ['GENERALSKYWALKER', 'CT7567', 'CT5555', 'CT210408', 'AHSOKATANO', 'SHAAKTI', 'CLONESERGEANTPHASEI', 'BARRISSOFFEE'],
+                    'General Skywalker' => ['GENERALSKYWALKER', 'CT7567', 'CT5555', 'CT210408', 'ARCTROOPER501ST', 'AHSOKATANO', 'SHAAKTI', 'CLONESERGEANTPHASEI', 'BARRISSOFFEE'],
                     'Bounty Hunters' => ['JANGOFETT', 'BOSSK', 'BOBAFETT', 'ZAMWESELL', 'DENGAR', 'GREEDO', 'EMBO'],
                 ];
                 break;
@@ -60,7 +60,7 @@ trait Squads {
             case 'lsgeo':
                 $teams = [
                     'Padmé' => ['PADMEAMIDALA', 'ANAKINKNIGHT', 'AHSOKATANO', 'GENERALKENOBI', 'C3POLEGENDARY'],
-                    'General Skywalker' => ['GENERALSKYWALKER', 'CT7567', 'CT5555', 'CT210408'],
+                    'General Skywalker' => ['GENERALSKYWALKER', 'CT7567', 'CT5555', 'CT210408', 'ARCTROOPER501ST'],
                     'Clones' => ['SHAAKTI', 'CC2224', 'CLONESERGEANTPHASEI'],
                     'Revan' => ['JEDIKNIGHTREVAN', 'BASTILASHAN', 'JOLEEBINDO', 'HERMITYODA', 'GRANDMASTERYODA'],
                     'Jedi' => ['MACEWINDU', 'PLOKOON', 'KITFISTO', 'LUMINARAUNDULI', 'BARRISSOFFEE'],
