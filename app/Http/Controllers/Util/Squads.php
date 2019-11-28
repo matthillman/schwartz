@@ -46,6 +46,12 @@ trait Squads {
                     'Bounty Hunters' => ['JANGOFETT', 'BOSSK', 'BOBAFETT', 'ZAMWESELL', 'DENGAR', 'GREEDO', 'EMBO'],
                 ];
                 break;
+            case 'tw_mods':
+                $teams = [
+                    'Padmé' => ['PADMEAMIDALA', 'C3POLEGENDARY', 'GENERALKENOBI', 'AHSOKATANO', 'R2D2_LEGENDARY'],
+                ];
+                $highlight = 'mods';
+                break;
             case 'geo':
                 $teams = [
                     'Seperatists' => ['COUNTDOOKU', 'NUTEGUNRAY', 'ASAJVENTRESS', 'WATTAMBOR'],

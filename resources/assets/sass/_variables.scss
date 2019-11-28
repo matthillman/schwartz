@@ -28,3 +28,18 @@ $mod-colors: (
      #a35eff,
      $sw-yellow,
 );
+
+$rainbow-colors: (
+     "red": #990000,
+     "orange": #cc9900,
+     "yellow": #cccc00,
+     "green": #33cc00,
+     "blue": #336699,
+     "purple": #9900cc,
+);
+
+:root {
+     @each $name, $code in $rainbow-colors {
+          --rainbow-#{$name}: #{$code};
+     }
+}

@@ -62,7 +62,7 @@
     </span>
     <div class="stat-container">
         @foreach($character->key_stats as $key => $stat)
-            <div class="stat-wrapper"><span class="stat"><span>{{ $stat }}</span> <span class="mod-set-image {{ $key }} tier-5 mini"></span></span></div>
+            <div class="stat-wrapper"><span class="stat"><span>{{ $stat[1] }}</span> <span class="mod-set-image {{ $stat[0] }} tier-5 mini"></span></span></div>
         @endforeach
     </div>
 </span>

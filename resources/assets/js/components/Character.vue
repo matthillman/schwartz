@@ -2,6 +2,7 @@
 <span :gear="character.gear_level"
     :stars="character.rarity"
     :power="character.highlight_power"
+    :mod-grade="Object.values(character.stat_grade).reduce((c, v) => Math.min(c, v))"
     class="character"
     :class="[character.alignment]"
 >
@@ -39,9 +40,9 @@
         <span v-for="zeta in character.zetas" :key="zeta.id" class="zeta">{{ zeta.class[0] }}</span>
     </span>
     <div class="stat-container">
-        <div v-for="(stat, key) in character.key_stats" :key="key" class="stat-wrapper"><span class="stat"><span>{{ stat }}</span><span class="mod-set-image tier-5 mini" :class="[key]"></span></span></div>
+        <div v-for="(stat, key) in character.key_stats" :key="key" class="stat-wrapper"><span class="stat" :grade="character.stat_grade[key]"><span>{{ stat[1] }}</span><span class="mod-set-image tier-5 mini" :class="[stat[0]]"></span></span></div>
     </div>
-    <div class="stat-container" v-if="!Object.keys(character.key_stats).includes(keyStat.key)">
+    <div class="stat-container" v-if="!Object.keys(character.key_stats).map(k => +k).includes(keyStat.value)">
         <div class="stat-wrapper"><span class="stat"><span>{{ formatStat(character.stats.final[keyStat.value]) }}</span><span class="mod-set-image tier-5 mini" :class="[keyStat.key]"></span></span></div>
     </div>
 </span>

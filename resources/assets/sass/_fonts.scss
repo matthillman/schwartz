@@ -1,3 +1,10 @@
 
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700");
+
+@font-face {
+	font-family: 'ITC Machine Standard';
+	font-style: normal;
+	font-weight: 400;
+	src: local('MachineStd'), url("/fonts/MachineStd.otf") format('opentype');
+}
