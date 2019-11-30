@@ -108,7 +108,19 @@ class Character extends Model
                         }
                         $rStat = $rChar->$key;
                         $comparison = $related[$unit];
-                        return $this->statCompare($value, $comparison[0], $comparison[1]) ? $rank : 1;
+                        $rVal = $rStat;
+                        if (is_array($comparison[1])) {
+                            foreach ($comparison[1] as $compPair) {
+                                $operator = $compPair[0];
+                                $adjustment = $compPair[1];
+                                $rVal = $this->adjustStat($rVal, $operator, $adjustment);
+                            }
+                        } else {
+                            $operator = '+';
+                            $adjustment = $comparison[1];
+                            $rVal = $this->adjustStat($rStat, $operator, $adjustment);
+                        }
+                        return $this->statCompare($value, $comparison[0], $rVal) ? $rank : 1;
                     }, $rank);
                 }
             } else {

@@ -2,7 +2,7 @@
 <span :gear="character.gear_level"
     :stars="character.rarity"
     :power="character.highlight_power"
-    :mod-grade="Object.values(character.stat_grade).reduce((c, v) => Math.min(c, v))"
+    :mod-grade="statGrade"
     class="character"
     :class="[character.alignment]"
 >
@@ -58,6 +58,12 @@ function range(size, startAt = 0) {
 
 export default {
     props: ['character', 'keyStat'],
+    computed: {
+        statGrade: function() {
+            let statValues = Object.values(this.character.stat_grade);
+            return statValues.length ? statValues.reduce((c, v) => Math.min(c, v)) : null;
+        },
+    },
     methods: {
         range,
         formatStat: function(value) {

@@ -36,6 +36,39 @@ trait RecommendsStats {
                         ]
                     ],
                 ],
+
+                'JEDIKNIGHTREVAN' => [
+                    UnitStat::UNITSTATSPEED()->getKey() => [
+                        'values' => [291, 296, 302],
+                        'related' => [
+                            'BASTILASHAN' => ['>', [['+', 40], ['÷', 0.95], ['-', 40]]],
+                            'HERMITYODA'  => ['<',  0],
+                        ]
+                    ],
+                ],
+                'ANAKINKNIGHT' => [
+                    UnitStat::UNITSTATSPEED()->getKey() => [
+                        'values' => [255, 260, 265],
+                        'related' => [
+                            'BASTILASHAN' => ['<=', [['+', 40], ['÷', 0.95], ['*', 0.89], ['-', 40]]],
+                        ]
+                    ],
+                ],
+                'BASTILASHAN' => [
+                    UnitStat::UNITSTATSPEED()->getKey() => [275, 280, 285],
+                ],
+                'HERMITYODA' => [
+                    UnitStat::UNITSTATSPEED()->getKey() => [
+                        'values' => [292, 297, 303],
+                        'related' => [
+                            'BASTILASHAN' => ['>', [['+', 40], ['÷', 0.95], ['-', 40]]],
+                        ]
+                    ],
+                ],
+                'JOLEEBINDO' => [
+                    UnitStat::UNITSTATRESISTANCE()->getKey() => [1, 1.25, 1.5],
+                ],
+
             ]);
         }
 
@@ -50,6 +83,17 @@ trait RecommendsStats {
         return collect($this->getStatRecommendations()->filter(function ($stat, $key) use ($unit) {
             return $key === $unit;
         })->get($unit));
+    }
+
+    private function adjustStat($base, $operator, $value) {
+        switch ($operator) {
+            case '+': return $base + $value;
+            case '-': return $base - $value;
+            case '*': return $base * $value;
+            case '÷': return intval($base / $value);
+
+            default: return false;
+        }
     }
 
     private function statCompare($left, $operator, $right) {
