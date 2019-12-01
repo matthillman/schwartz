@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -9,19 +10,27 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-Vue.component("content-wrapper", {
-    functional: true,
-    render(createElement, context) {
-        let node = context.props.node;
-        node.data.class = Object.assign(node.data.class || {}, {
-            'content-wrapper': true
-        });
-        return node;
-    }
+Vue.component('content-wrapper', {
+	functional: true,
+	render(createElement, context) {
+		let node = context.props.node;
+		node.data.class = Object.assign(node.data.class || {}, {
+			'content-wrapper': true
+		});
+		return node;
+	}
+});
+
+Vue.directive('highlight', function(el, binding) {
+	console.warn(el, binding.arg);
+	if (binding.arg) {
+		el.setAttribute('highlight', binding.arg);
+	}
 });
 
 Vue.component('modal', require('./components/Modal.vue').default);
 Vue.component('mods', require('./components/Mods.vue').default);
+Vue.component('character', require('./components/Character.vue').default);
 Vue.component('guild', require('./components/Guild.vue').default);
 Vue.component('list', require('./components/List.vue').default);
 Vue.component('members', require('./components/Members.vue').default);
@@ -32,6 +41,7 @@ Vue.component('guild-teams', require('./components/GuildTeams.vue').default);
 Vue.component('mod-preference', require('./components/Preference.vue').default);
 Vue.component('team-sort', require('./components/TeamSort.vue').default);
 Vue.component('discord-widget', require('./components/DiscordWidget.vue').default);
+Vue.component('highlight-widget', require('./components/HighlightWidget.vue').default);
 
 const VueSelect = require('vue-select');
 Vue.component('v-select', VueSelect.VueSelect);
@@ -40,13 +50,19 @@ Vue.component('vue-slider', VueSlider);
 import VuePopover from 'vue-popover';
 Vue.component('popover', VuePopover);
 
+let data = {
+	highlight: 'mods',
+};
+
 const app = new Vue({
-    el: '#app'
+	el: '#app',
+	data
 });
 
+
+
 import Toasted from 'vue-toasted';
-import { UV_UDP_REUSEADDR } from 'constants';
 
 Vue.use(Toasted, {
-    iconPack : 'custom-class'
+	iconPack : 'custom-class'
 });

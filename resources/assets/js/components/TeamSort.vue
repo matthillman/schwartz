@@ -51,9 +51,6 @@
             units: Array,
             members: Array,
         },
-        components: {
-            'character': require('./Character.vue').default
-        },
         data: function() {
             return {
                 stats: [

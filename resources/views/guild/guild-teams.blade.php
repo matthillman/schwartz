@@ -18,16 +18,15 @@
                 </div>
 
                 @foreach($teams as $title => $team)
-                <div class="card-body" highlight="{{$highlight}}">
+                <div class="card-body" highlight="{{ $highlight }}" v-highlight:[highlight]>
                     <team-sort
                         v-bind:units="{{ $team->values()->toJson() }}"
                         v-bind:members="{{ $members->map(function($m) use ($team) { return $m->characterSet($team->pluck('base_id')->all()); })->toJson() }}"
                     >
                         <div class="row justify-content-between align-items-center">
                             <h1>{{ $title }}</h1>
-                            <div class="note">
-                                Highlighting based on <strong>{{$highlight}}</strong>
-                            </div>
+
+                            <highlight-widget :starting="'{{$highlight}}'"></highlight-widget>
                         </div>
                     </team-sort>
                 </div>

@@ -92,41 +92,36 @@ class Character extends Model
     public function getStatGradeAttribute() {
         return $this->stat_recommendation->mapWithKeys(function ($levels, $key) {
             $value = $this->$key;
-            $rank = 0;
+            $rankings = isset($levels['values']) ? $levels['values'] : $levels;
+            $highest = collect($rankings)->reverse()->first(function ($v) use ($value) { return $v <= $value; });
+            $rank = is_null($highest) ? 0 : (array_search($highest, $rankings) + 2);
 
-            if (isset($levels['values'])) {
-                $highest = collect($levels['values'])->reverse()->first(function ($v) use ($value) { return $v <= $value; });
-                $rank = is_null($highest) ? 0 : (array_search($highest, $levels) + 2);
-
-                if ($rank > 0) {
-                    $related = collect($levels['related']);
-                    $member = $this->member;
-                    $rank = $related->keys()->reduce(function($rank, $unit) use ($related, $member, $key, $value) {
-                        $rChar = $member->characters()->where('unit_name', $unit)->first();
-                        if (is_null($rChar)) {
-                            return 1;
+            if (isset($levels['values']) && $rank > 0) {
+                $related = collect($levels['related']);
+                $member = $this->member;
+                $rank = $related->keys()->reduce(function($rank, $unit) use ($related, $member, $key, $value) {
+                    $rChar = $member->characters()->where('unit_name', $unit)->first();
+                    if (is_null($rChar)) {
+                        return 1;
+                    }
+                    $rStat = $rChar->$key;
+                    $comparison = $related[$unit];
+                    $rVal = $rStat;
+                    if (is_array($comparison[1])) {
+                        foreach ($comparison[1] as $compPair) {
+                            $operator = $compPair[0];
+                            $adjustment = $compPair[1];
+                            $rVal = $this->adjustStat($rVal, $operator, $adjustment);
                         }
-                        $rStat = $rChar->$key;
-                        $comparison = $related[$unit];
-                        $rVal = $rStat;
-                        if (is_array($comparison[1])) {
-                            foreach ($comparison[1] as $compPair) {
-                                $operator = $compPair[0];
-                                $adjustment = $compPair[1];
-                                $rVal = $this->adjustStat($rVal, $operator, $adjustment);
-                            }
-                        } else {
-                            $operator = '+';
-                            $adjustment = $comparison[1];
-                            $rVal = $this->adjustStat($rStat, $operator, $adjustment);
-                        }
-                        return $this->statCompare($value, $comparison[0], $rVal) ? $rank : 1;
-                    }, $rank);
-                }
-            } else {
-                $highest = collect($levels)->reverse()->first(function ($v) use ($value) { return $v <= $value; });
-                $rank = is_null($highest) ? 0 : (array_search($highest, $levels) + 2);
+                    } else {
+                        $operator = '+';
+                        $adjustment = $comparison[1];
+                        $rVal = $this->adjustStat($rStat, $operator, $adjustment);
+                    }
+                    return $this->statCompare($value, $comparison[0], $rVal) ? $rank : 1;
+                }, $rank);
             }
+
             return [UnitStat::$key()->getValue() => $rank];
         });
     }

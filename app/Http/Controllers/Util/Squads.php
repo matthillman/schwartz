@@ -49,6 +49,7 @@ trait Squads {
             case 'tw_mods':
                 $teams = [
                     'Padmé' => ['PADMEAMIDALA', 'C3POLEGENDARY', 'GENERALKENOBI', 'AHSOKATANO', 'R2D2_LEGENDARY'],
+                    'Revan' => ['JEDIKNIGHTREVAN', 'ANAKINKNIGHT', 'BASTILASHAN', 'HERMITYODA', 'JOLEEBINDO'],
                 ];
                 $highlight = 'mods';
                 break;

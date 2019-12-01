@@ -18,7 +18,7 @@
                 </div>
 
                 @foreach($members as $member)
-                    <div class="card-body" highlight="{{$highlight}}">
+                    <div class="card-body" highlight="{{$highlight}}" v-highlight:[highlight]>
                         <div class="row justify-content-between align-items-center">
                             <div class="row align-items-center">
                                 <form method="GET" action="{{ route('member.teams', ['allyCode' => $member->ally_code, 'team' => $team]) }}">
@@ -31,9 +31,7 @@
                                 </h1>
                             </div>
 
-                            <div class="note">
-                                Highlighting based on <strong>{{$highlight}}</strong>
-                            </div>
+                            <highlight-widget :starting="{{$highlight}}"></highlight-widget>
                         </div>
 
                         @foreach($teams as $title => $squad)

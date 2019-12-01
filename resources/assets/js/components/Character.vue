@@ -57,7 +57,13 @@ function range(size, startAt = 0) {
 }
 
 export default {
-    props: ['character', 'keyStat'],
+    props: {
+        character: Object,
+        keyStat: {
+            type: Object,
+            default: function() { return { value: 5 }; },
+        },
+    },
     computed: {
         statGrade: function() {
             let statValues = Object.values(this.character.stat_grade);
