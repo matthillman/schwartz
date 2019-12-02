@@ -4,8 +4,6 @@
 <div class="container home">
     <div class="row justify-content-center">
         <div class="col-md-12">
-
-@auth('admin')
             <div class="card">
                 <div class="card-header"><h2>Add a guild</h2></div>
 
@@ -25,7 +23,6 @@
                     </form>
                 </div>
             </div>
-@endauth
 
             <div class="card">
                 <div class="card-header"><h2>Schwartz Guilds</h2></div>
