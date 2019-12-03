@@ -41,7 +41,7 @@ trait RecommendsStats {
                     UnitStat::UNITSTATSPEED()->getKey() => [
                         'values' => [291, 296, 302],
                         'related' => [
-                            'BASTILASHAN' => ['>', [['+', 40], ['÷', 0.95], ['-', 40]]],
+                            'BASTILASHAN' => ['>=', [['+', 40], ['÷', 0.95], ['-', 40]]],
                             'HERMITYODA'  => ['<',  0],
                         ]
                     ],
@@ -90,7 +90,7 @@ trait RecommendsStats {
             case '+': return $base + $value;
             case '-': return $base - $value;
             case '*': return $base * $value;
-            case '÷': return intval($base / $value);
+            case '÷': return $base / $value;
 
             default: return false;
         }
@@ -99,8 +99,8 @@ trait RecommendsStats {
     private function statCompare($left, $operator, $right) {
         switch ($operator) {
             case '>': return $left > $right;
-            case '<': return $left > $right;
-            case '=': return $left === $right;
+            case '<': return $left < $right;
+            case '=': return $left == $right;
             case '>=': return $left >= $right;
             case '<=': return $left <= $right;
 

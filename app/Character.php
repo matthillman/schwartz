@@ -131,6 +131,8 @@ class Character extends Model
                         $adjustment = $comparison[1];
                         $rVal = $this->adjustStat($rStat, $operator, $adjustment);
                     }
+                    $rVal = intval($rVal);
+
                     return $this->statCompare($value, $comparison[0], $rVal) ? $rank : 1;
                 }, $rank);
             }
