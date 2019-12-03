@@ -40,6 +40,17 @@ class RelicController extends Controller
         $relics = collect($this->getRecommendations())->mapWithKeys(function($chars, $level) use ($member) {
             return [$level => collect($chars)->map(function($char) use ($member) {
                 $c = $member->characters()->where('unit_name', $char['unit'])->first();
+                if (is_null($c)) {
+                    $c = new Character([
+                        'unit_name' => $char['unit'],
+                        'gear_level' => 1,
+                        'power' => 0,
+                        'level' => 1,
+                        'combat_type' => 1,
+                        'rarity' => 0,
+                        'relic' => 0,
+                    ]);
+                }
                 return ['unit' => $c, 'priority' => $char['priority']];
             })];
         });
