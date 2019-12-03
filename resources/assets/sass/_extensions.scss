@@ -315,6 +315,30 @@ popover {
 .popover {
     border: 0;
 
+    .popover__container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 2px black;
+        width: 0;
+        height: 0;
+        opacity: 0;
+        transition-property: width, height, opacity;
+        transition-duration: 25ms;
+        transition-timing-function: ease-out;
+    }
+
+    &.open {
+        z-index: 2000;
+
+        .popover__container {
+            width: 150px;
+            height: auto;
+            opacity: 1;
+        }
+    }
+}
+
+.popover.teams {
     button.btn.btn.btn-primary {
         outline: none;
         box-shadow: none;
@@ -324,29 +348,7 @@ popover {
     }
 
     .popover__container {
-        background: white;
-        border-radius: 8px;
         border-top-left-radius: 0;
-        // top: 46px;
-        box-shadow: 0 0 2px black;
-        width: 0;
-        height: 0;
-        opacity: 0;
-        transition-property: width, height, opacity;
-        transition-duration: 25ms;
-        transition-timing-function: ease-out;
-
-        // &::after {
-        //     content: '';
-        //     border-width: 8px;
-        //     border-style: solid;
-        //     border-color: transparent;
-        //     border-bottom-color: rgba($color: #000000, $alpha: 0.3);
-
-        //     position: absolute;
-        //     top: -16px;
-        //     left: 10px;
-        // }
 
         ul {
             margin: 0;
@@ -370,8 +372,6 @@ popover {
     }
 
     &.open {
-        z-index: 2000;
-
         .popover__face {
             button.btn {
                 border-bottom-left-radius: 0;

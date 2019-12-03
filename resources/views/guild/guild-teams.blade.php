@@ -6,7 +6,10 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header row justify-content-between align-items-center">
-                    <h2>Guild Teams</h2>
+                    <div class="column">
+                        <h2>{{ $title }}</h2>
+                        <div class="note">{{ $guild->name }}</div>
+                    </div>
 
                     <div>
                         <form method="GET" action="{{ route('guild.members', ['guild' => $guild->id, 'team' => $team, 'mode' => 'members']) }}" >
@@ -16,6 +19,15 @@
                         </form>
                     </div>
                 </div>
+
+                @if (count($teamKeys) > 1)
+                <div class="squad-switcher row justify-content-between align-items-center">
+                    <a class="btn{{ $selected > count($teamKeys) ? ' selected' : '' }}" href="{{ route('guild.members', ['guild' => $guild->id, 'team' => $team ]) }}">All</a>
+                    @foreach ($teamKeys as $index => $key)
+                    <a class="btn{{ $selected === $index ? ' selected' : '' }}" href="{{ route('guild.members', ['guild' => $guild->id, 'team' => $team, 'mode' => 'guild', 'index' => $index]) }}">{{ $key }}</a>
+                    @endforeach
+                </div>
+                @endif
 
                 @foreach($teams as $title => $team)
                 <div class="card-body" highlight="{{ $highlight }}" v-highlight:[highlight]>

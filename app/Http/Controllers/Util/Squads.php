@@ -39,9 +39,10 @@ trait Squads {
                     'Darth Revan' => ['DARTHREVAN', 'BASTILASHANDARK', 'DARTHMALAK', 'HK47', 'SITHMARAUDER', 'SITHTROOPER'],
                     'GG' => ['GRIEVOUS', 'B2SUPERBATTLEDROID', 'MAGNAGUARD', 'B1BATTLEDROIDV2', 'DROIDEKA', 'NUTEGUNRAY', 'BB8', 'WATTAMBOR'],
                     'Nightsisters' => ['MOTHERTALZIN', 'ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'NIGHTSISTERSPIRIT', 'NIGHTSISTERACOLYTE'],
+                    'Padmé' => ['PADMEAMIDALA', 'C3POLEGENDARY', 'GENERALKENOBI', 'AHSOKATANO', 'R2D2_LEGENDARY', 'SHAAKTI'],
+                    'Revan' => ['JEDIKNIGHTREVAN', 'ANAKINKNIGHT', 'BASTILASHAN', 'HERMITYODA', 'JOLEEBINDO'],
                     'CLS Scoundrels' => ['COMMANDERLUKESKYWALKER', 'HANSOLO', 'CHEWBACCALEGENDARY', 'ENFYSNEST', 'L3_37', 'OLDBENKENOBI', 'SCARIFREBEL'],
                     'Geonosians' => ['GEONOSIANBROODALPHA', 'GEONOSIANSOLDIER', 'GEONOSIANSPY', 'POGGLETHELESSER', 'SUNFAC'],
-                    'Padmé' => ['PADMEAMIDALA', 'ANAKINKNIGHT', 'AHSOKATANO', 'GENERALKENOBI', 'C3POLEGENDARY', 'SHAAKTI', 'R2D2_LEGENDARY'],
                     'General Skywalker' => ['GENERALSKYWALKER', 'CT7567', 'CT5555', 'CT210408', 'ARCTROOPER501ST', 'AHSOKATANO', 'SHAAKTI', 'CLONESERGEANTPHASEI', 'BARRISSOFFEE'],
                     'Bounty Hunters' => ['JANGOFETT', 'BOSSK', 'BOBAFETT', 'ZAMWESELL', 'DENGAR', 'GREEDO', 'EMBO'],
                 ];
@@ -69,10 +70,16 @@ trait Squads {
                     'Padmé' => ['PADMEAMIDALA', 'ANAKINKNIGHT', 'AHSOKATANO', 'GENERALKENOBI', 'C3POLEGENDARY'],
                     'General Skywalker' => ['GENERALSKYWALKER', 'CT7567', 'CT5555', 'CT210408', 'ARCTROOPER501ST'],
                     'Clones' => ['SHAAKTI', 'CC2224', 'CLONESERGEANTPHASEI'],
-                    'Revan' => ['JEDIKNIGHTREVAN', 'BASTILASHAN', 'JOLEEBINDO', 'HERMITYODA', 'GRANDMASTERYODA'],
-                    'Jedi' => ['MACEWINDU', 'PLOKOON', 'KITFISTO', 'LUMINARAUNDULI', 'BARRISSOFFEE'],
+                    'Revan Jedi' => ['JEDIKNIGHTREVAN', 'BASTILASHAN', 'JOLEEBINDO', 'HERMITYODA'],
+                    'Key GR Jedi' => ['KIADIMUNDI', 'GRANDMASTERYODA', 'BARRISSOFFEE'],
+                    'GR Jedi' => ['MACEWINDU', 'PLOKOON', 'KITFISTO', 'LUMINARAUNDULI', 'QUIGONJINN', 'EETHKOTH', 'IMAGUNDI', 'JEDIKNIGHTCONSULAR'],
+                    'Other Jedi' => ['EZRABRIDGERS3', 'JUHANI', 'KANANJARRUSS3', 'OLDBENKENOBI'],
+                    'Negotiator' => ['CAPITALNEGOTIATOR', 'JEDISTARFIGHTERANAKIN', 'UMBARANSTARFIGHTER', 'JEDISTARFIGHTERAHSOKATANO', 'YWINGCLONEWARS'],
+                    'Mace' => ['CAPITALJEDICRUISER', 'ARC170CLONESERGEANT', 'ARC170REX', 'BLADEOFDORIN', 'JEDISTARFIGHTERCONSULAR'],
+                    'Ackbar' => ['CAPITALMONCALAMARICRUISER', 'MILLENNIUMFALCON', 'XWINGRED3', 'UWINGSCARIF', 'UWINGROGUEONE', 'GHOST', 'PHANTOM2', 'XWINGRED2'],
+                    'Other LS Ships' => ['MILLENNIUMFALCONPRISTINE', 'EBONHAWK', 'XWINGBLACKONE', 'XWINGRESISTANCE', 'MILLENNIUMFALCONEP7']
                 ];
-                $highlight = 'power';
+                $highlight = 'power-plus';
                 break;
             case 'tb':
                 $teams = [
@@ -99,6 +106,12 @@ trait Squads {
         }
 
         return [$highlight, $teams];
+    }
+
+    public function squadLabelFor($key) {
+        return collect($this->squadList())->first(function($pair) use ($key) {
+            return $pair['value'] === $key;
+        })['label'];
     }
 
     public function squadList() {

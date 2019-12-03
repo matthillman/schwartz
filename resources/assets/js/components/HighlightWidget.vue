@@ -3,7 +3,7 @@
         <span class="sort-label note">Highlight based on:</span>
         <div>
             <div class="btn" v-for="stat in stats" :key="stat" :class="{selected: selected && stat && selected == stat}" @click="updateSelected(stat)">
-                {{ stat }}
+                {{ labelFor(stat) }}
             </div>
         </div>
     </div>
@@ -16,6 +16,8 @@
             return {
                 stats: [
                     'power',
+                    'power-plus',
+                    'power-stars',
                     'gear',
                     'mods',
                 ],
@@ -30,6 +32,13 @@
                 this.$root.highlight = stat;
                 this.selected = stat;
             },
+            labelFor(stat) {
+                switch (stat) {
+                    case 'power-stars': return 'power/★';
+                    case 'power-plus': return 'power+';
+                    default: return stat;
+                }
+            }
         },
     }
 </script>

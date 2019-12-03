@@ -22,6 +22,7 @@ class Character extends Model
         'combat_type',
         'rarity',
         'stats',
+        'relic',
     ];
 
     protected $appends = [ 'alignment', 'speed', 'is_ship', 'is_capital_ship', 'highlight_power', 'key_stats', 'stat_grade' ];
@@ -40,7 +41,7 @@ class Character extends Model
         return $this->belongsTo(Unit::class, 'unit_name', 'base_id');
     }
     public function mods() {
-        return $this->member->mods()->where('location', $this->unit_name);
+        return $this->hasMany(CharacterMod::class);
     }
     public function getAlignmentAttribute() {
         return strtolower((new Alignment($this->unit->alignment))->getKey());
@@ -67,7 +68,19 @@ class Character extends Model
     }
     public function getHighlightPowerAttribute() {
         if ($this->is_ship) {
-            return $this->power >= 40000 ? 3 : 0;
+            return $this->power >= 40000 ? 6 : 0;
+        }
+
+        if ($this->power >= 23000) {
+            return 6;
+        }
+
+        if ($this->power >= 22000) {
+            return 5;
+        }
+
+        if ($this->power >= 21000) {
+            return 4;
         }
 
         if ($this->power >= 17700) {

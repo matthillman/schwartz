@@ -37,10 +37,18 @@ class GuildController extends Controller
         return redirect()->route('guilds')->with('guildStatus', "Guild scrape queued");
     }
 
-    public function listMembers($guild, $team, $mode = 'guild') {
+    public function listMembers($guild, $team, $mode = 'guild', int $index = PHP_INT_MAX) {
         $guild = Guild::findOrFail($guild);
 
         list($highlight, $teams) = $this->getSquadsFor($team);
+
+        $teamKeys = array_keys($teams);
+
+        if (is_int($index) && $index < count($teamKeys)) {
+            $teams = [
+                $teamKeys[$index] => $teams[$teamKeys[$index]],
+            ];
+        }
 
         $units = Unit::all();
         $teams = collect($teams)->mapWithKeys(function($team, $title) use ($units) {
@@ -51,12 +59,22 @@ class GuildController extends Controller
 
         $view = $mode === 'members' ? 'member-teams' : 'guild-teams';
         return view("guild.$view", [
-            'members' => $guild->members()->with('characters.zetas')->orderBy('player')->get(),
+            'members' => $guild->members()->with(['characters.zetas'])->orderBy('player')->get(),
             'teams' => $teams,
             'highlight' => $highlight,
             'team' => $team,
             'guild' => $guild,
+            'teamKeys' => $teamKeys,
+            'title' => $this->squadLabelFor($team),
+            'selected' => $index,
         ]);
+    }
+
+    public function characterMods($allyCode, $baseID) {
+        $member = Member::where('ally_code', $allyCode)->firstOrFail();
+        $character = $member->characters()->where('unit_name', $baseID)->firstOrFail();
+
+        return response()->json($character->mods);
     }
 
     public function schwartzGuilds() {

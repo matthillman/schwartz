@@ -22,7 +22,6 @@ Vue.component('content-wrapper', {
 });
 
 Vue.directive('highlight', function(el, binding) {
-	console.warn(el, binding.arg);
 	if (binding.arg) {
 		el.setAttribute('highlight', binding.arg);
 	}
@@ -51,7 +50,7 @@ import VuePopover from 'vue-popover';
 Vue.component('popover', VuePopover);
 
 let data = {
-	highlight: 'mods',
+	highlight: null,
 };
 
 const app = new Vue({

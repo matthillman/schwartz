@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'WelcomeController@index')->name('welcome');
+Route::get('/poster', 'WelcomeController@poster')->name('poster');
 Route::post('/', 'WelcomeController@store')->name('join.inquiry');
 
 Auth::routes();
@@ -61,7 +62,9 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::get('guild/{guild}', 'GuildController@guildGP')->name('guild.guild');
     Route::get('guild/{guild}/mods', 'GuildController@guildMods')->name('guild.modsList');
     Route::put('/guild/{guild}/refresh', 'GuildController@scrapeGuild')->name('guild.refresh');
-    Route::get('/guild/{guild}/{team}/{mode?}', 'GuildController@listMembers')->name('guild.members');
+    Route::get('/guild/{guild}/{team}/{mode?}/{index?}', 'GuildController@listMembers')->name('guild.members');
+
+    Route::get('/character_mods/{ally}/{unit}', 'GuildController@characterMods');
 
     Route::middleware(['auth:admin'])->group(function() {
         Route::post('/guilds', 'GuildController@addGuild')->name('guild.add');
@@ -77,3 +80,5 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
 
 Route::get('/schwartz_list', 'GuildController@schwartzGuildsImportList')->name('schwartz.import');
 Route::get('/member/{allyCode}/{team}', 'MemberController@listTeams')->name('member.teams');
+Route::get('/relics', 'RelicController@index')->name('relic.recommendations');
+Route::get('/relics/{ally}', 'RelicController@relicMember')->name('member.relic.recommendations');

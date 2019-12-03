@@ -4,14 +4,14 @@
             <div>{{ $guild->name }}</div>
             <div class="small-note">{{ intval(floor($guild->gp / 1000000)) }}M</div>
         </div>
-        <popover name="teams-{{ $guild->id }}">
+        <popover class="teams" name="teams-{{ $guild->id }}">
             <div slot="face">
                 <button class="btn btn-primary btn-icon with-text"><i class="icon ion-ios-list"></i><span>Teams</span></button>
             </div>
             <div slot="content">
                 <ul>
                 @foreach ($squads as $squad)
-                    <li><a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => $squad['value']]) }}">{{ $squad['label'] }}</a></li>
+                    <li><a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => $squad['value'], 'mode' => 'guild', 'index' => 0]) }}">{{ $squad['label'] }}</a></li>
                 @endforeach
                 </ul>
             </div>
