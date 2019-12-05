@@ -10,8 +10,20 @@ use Illuminate\Http\Request;
 class WelcomeController extends Controller
 {
     public function index() {
+        return view('welcome', [
+            'guilds' => $this->schwartzGuilds(),
+        ]);
+    }
+
+    public function poster() {
+        return view('poster', [
+            'guilds' => $this->schwartzGuilds(),
+        ]);
+    }
+
+    private function schwartzGuilds() {
         $sheetData = new SchwartzSheetData;
-        $guilds = Guild::where('schwartz', 1)->orderBy('gp', 'desc')->get()->map(function($guild) use ($sheetData) {
+        return Guild::where('schwartz', 1)->orderBy('gp', 'desc')->get()->map(function($guild) use ($sheetData) {
             $guildData = $sheetData->data($guild->guild_id);
             $guild->tb = $guildData->get('tb');
             $guild->stars = $guildData->get('stars');
@@ -19,9 +31,6 @@ class WelcomeController extends Controller
             $guild->raids = $guildData->get('raids');
             return $guild;
         });
-        return view('welcome', [
-            'guilds' => $guilds,
-        ]);
     }
 
     public function store(Request $request) {

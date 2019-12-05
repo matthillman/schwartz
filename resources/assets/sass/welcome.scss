@@ -124,6 +124,79 @@ $hero-width: 500px;
     }
 }
 
+.the-poster {
+    width: 640px;
+    background-image: url(/images/welcome/stars.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    perspective: 600px;
+
+    font-family: 'ITC Machine Standard';
+    text-align: center;
+    color: white;
+
+    h1 {
+        font-size: 72px;
+        text-shadow: 4px 4px 0 #2f4cc7;
+        transform: scaleY(4.5) rotateX(64deg);
+        margin: 24px 0 0;
+    }
+
+    h2 {
+        color: $sw-yellow;
+        font-size: 55px;
+        transform: scaleY(1.5);
+        margin: 12px 0 0;
+    }
+
+    img, table {
+        margin: 16px 16px 0;
+    }
+
+    img {
+        width: calc(100% - 2 * 16px);
+    }
+
+    table {
+        $border-style: 1px solid $white;
+        background: black;
+        border: $border-style;
+
+        thead {
+            tr {
+                border-bottom: $border-style;
+            }
+        }
+
+        td:first-of-type {
+            text-align: left;
+            padding-left: 16px;
+        }
+
+        th:not(:first-of-type), td:not(:first-of-type) {
+            border-left: $border-style;
+        }
+
+        th > div, td > div {
+            margin: 2px 0 -4px;
+        }
+    }
+
+    .discord-link {
+        font-size: 48px;
+        transform: scaleY(1.5);
+        text-shadow: 0 0 4px #2f4cc7;
+        margin-top: 12px;
+        .small {
+            font-size: 70%;
+            transform: scaleX(1.1);
+            display: inline-block;
+            margin: 0 1px;
+        }
+    }
+
+}
+
 @media (max-width: 600px) {
     $headingSize: 6vh;
 
