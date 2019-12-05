@@ -221,3 +221,14 @@ $hero-width: 500px;
         }
     }
 }
+
+.rainbow-colors {
+    $keys: map-keys($rainbow-colors);
+    $length: length($keys);
+    @each $name in $keys {
+        $index: index($keys, $name);
+        > :nth-child(#{$length}n - #{$length - $index}) {
+            color: var(--rainbow-#{$name});
+        }
+   }
+}

@@ -64,7 +64,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::put('/guild/{guild}/refresh', 'GuildController@scrapeGuild')->name('guild.refresh');
     Route::get('/guild/{guild}/{team}/{mode?}/{index?}', 'GuildController@listMembers')->name('guild.members');
 
-    Route::get('/character_mods/{ally}/{unit}', 'GuildController@characterMods');
+    Route::get('/character_mods/{id}', 'GuildController@characterMods');
 
     Route::middleware(['auth:admin'])->group(function() {
         Route::post('/guilds', 'GuildController@addGuild')->name('guild.add');

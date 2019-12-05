@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Artisan;
 use App\Unit;
 use App\Guild;
-use Illuminate\Http\Request;
+use App\Character;
 use App\Jobs\ProcessGuild;
+use Illuminate\Http\Request;
 
 class GuildController extends Controller
 {
@@ -70,9 +71,8 @@ class GuildController extends Controller
         ]);
     }
 
-    public function characterMods($allyCode, $baseID) {
-        $member = Member::where('ally_code', $allyCode)->firstOrFail();
-        $character = $member->characters()->where('unit_name', $baseID)->firstOrFail();
+    public function characterMods($characterID) {
+        $character = Character::findOrFail($characterID);
 
         return response()->json($character->mods);
     }

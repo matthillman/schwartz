@@ -32,7 +32,7 @@
                 </td>
                 <td v-for="unit in units" :key="unit.base_id">
                     <div class="team-set">
-                        <character v-if="characterForMember(unit, member)" :character="characterForMember(unit, member)" :keyStat="sorted"></character>
+                        <character v-if="characterForMember(unit, member)" :character="characterForMember(unit, member)" :member="member" :keyStat="sorted"></character>
                         <span missing v-if="!characterForMember(unit, member)">None</span>
                     </div>
                 </td>

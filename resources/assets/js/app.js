@@ -29,6 +29,7 @@ Vue.directive('highlight', function(el, binding) {
 
 Vue.component('modal', require('./components/Modal.vue').default);
 Vue.component('mods', require('./components/Mods.vue').default);
+Vue.component('mod', require('./components/Mod.vue').default);
 Vue.component('character', require('./components/Character.vue').default);
 Vue.component('guild', require('./components/Guild.vue').default);
 Vue.component('list', require('./components/List.vue').default);

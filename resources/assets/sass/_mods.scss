@@ -123,7 +123,7 @@
 }
 
 @mixin mod-image($grid-size, $class: '') {
-  .mod-image#{$class} {
+  .mod-image#{$class}.mod-image#{$class} {
     display: inline-block;
     position: relative;
     width: $grid-size;
@@ -166,6 +166,7 @@
       height: $icon-grid-size;
       display: block;
       position: absolute;
+      border: none;
     }
 
     &.arrow::after    { left: 1.69  * $icon-grid-size; top:  .77  * $icon-grid-size; }
@@ -312,6 +313,7 @@ div.btn, a.btn {
     display: flex;
     flex-direction: column;
     position: relative;
+    align-items: flex-start;
   }
   .primary,
   .secondary {
@@ -340,7 +342,7 @@ div.btn, a.btn {
       }
     }
   }
-  .character {
+  .mod-character {
     font-size: 10px;
     text-align: center;
   }
@@ -408,5 +410,6 @@ div.btn, a.btn {
   >* {
     flex-basis: 50%;
     text-transform: capitalize;
+    text-align: left;
   }
 }
