@@ -241,18 +241,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.popover.open {
-  .popover__container {
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    max-width: 100%;
-  }
-}
-</style>
-
 <style lang="scss" scoped>
 @import "../../sass/_variables";
 
