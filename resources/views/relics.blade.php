@@ -25,7 +25,7 @@
                         <div relic="1" priority="4">Low</div>
                         <div relic="1" priority="5">Situational</div>
                         @if (isset($member))
-                        <div relic="0" priority="5">Bad</div>
+                        <div relic="0" priority="0">Bad</div>
                         @endif
                     </div>
                 </div>

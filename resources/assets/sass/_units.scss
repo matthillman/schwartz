@@ -350,36 +350,38 @@
         background: none;
         background-color: red;
         border-style: solid;
-        border-width: 1px;
+        border-width: 5px;
         border-color: red;
         border-radius: 8px;
+        padding: 4px;
 
         .popover {
             background-color: unset;
             top: -3px;
         }
 
-        &[relic="1"] {
-            &[priority="5"] {
-                background-color: rgba($color: nth($mod-colors, 1), $alpha: 0.5);
-                border-color: nth($mod-colors, 1);
-            }
-            &[priority="4"] {
-                background-color: rgba($color: nth($mod-colors, 2), $alpha: 0.5);
-                border-color: nth($mod-colors, 2);
-            }
-            &[priority="3"] {
-                background-color: rgba($color: nth($mod-colors, 3), $alpha: 0.5);
-                border-color: nth($mod-colors, 3);
-            }
-            &[priority="2"] {
-                background-color: rgba($color: nth($mod-colors, 4), $alpha: 0.5);
-                border-color: nth($mod-colors, 4);
-            }
-            &[priority="1"] {
-                background-color: rgba($color: nth($mod-colors, 5), $alpha: 0.5);
-                border-color: nth($mod-colors, 5);
-            }
+        &[priority="5"] {
+            background-color: rgba($color: nth($mod-colors, 1), $alpha: 0.5);
+            border-color: nth($mod-colors, 1);
+        }
+        &[priority="4"] {
+            background-color: rgba($color: nth($mod-colors, 2), $alpha: 0.5);
+            border-color: nth($mod-colors, 2);
+        }
+        &[priority="3"] {
+            background-color: rgba($color: nth($mod-colors, 3), $alpha: 0.5);
+            border-color: nth($mod-colors, 3);
+        }
+        &[priority="2"] {
+            background-color: rgba($color: nth($mod-colors, 4), $alpha: 0.5);
+            border-color: nth($mod-colors, 4);
+        }
+        &[priority="1"] {
+            background-color: rgba($color: nth($mod-colors, 5), $alpha: 0.5);
+            border-color: nth($mod-colors, 5);
+        }
+        &[relic="0"] {
+            border-color: red;
         }
     }
 }

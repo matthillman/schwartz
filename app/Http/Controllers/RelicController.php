@@ -16,17 +16,8 @@ class RelicController extends Controller
     public function index()
     {
         $relics = collect($this->getRecommendations())->mapWithKeys(function($chars, $level) {
-            return [$level => collect($chars)->map(function($char) use ($level) {
-                $c = new Character([
-                    'unit_name' => $char['unit'],
-                    'gear_level' => 13,
-                    'power' => 0,
-                    'level' => 85,
-                    'combat_type' => 1,
-                    'rarity' => 7,
-                    'relic' => $level + 2,
-                ]);
-                return ['unit' => $c, 'priority' => $char['priority']];
+            return [$level => collect($chars)->sortBy('priority')->values()->map(function($char) use ($level) {
+                return ['unit' => $this->charFor($char, $level), 'priority' => $char['priority']];
             })];
         });
         return view('relics', [
@@ -38,26 +29,33 @@ class RelicController extends Controller
     {
         $member = Member::where('ally_code', $allyCode)->firstOrFail();
         $relics = collect($this->getRecommendations())->mapWithKeys(function($chars, $level) use ($member) {
-            return [$level => collect($chars)->map(function($char) use ($member) {
-                $c = $member->characters()->where('unit_name', $char['unit'])->first();
-                if (is_null($c)) {
-                    $c = new Character([
-                        'unit_name' => $char['unit'],
-                        'gear_level' => 1,
-                        'power' => 0,
-                        'level' => 1,
-                        'combat_type' => 1,
-                        'rarity' => 0,
-                        'relic' => 0,
-                    ]);
-                }
-                return ['unit' => $c, 'priority' => $char['priority']];
+            return [$level => collect($chars)->sortBy('priority')->values()->map(function($char) use ($member) {
+                return ['unit' => $this->charFor($char, 0, $member), 'priority' => $char['priority']];
             })];
         });
         return view('relics', [
             'relics' => $relics,
             'member' => $member,
         ]);
+    }
+
+    private function charFor($unit, $level, $member = null) {
+        $memChar = null;
+        if (!is_null($member)) {
+            $memChar = $member->characters()->where('unit_name', $unit['unit'])->first();
+        }
+        if (is_null($memChar)) {
+            $memChar = new Character([
+                'unit_name' => $unit['unit'],
+                'gear_level' => is_null($member) ? 13 : 1,
+                'power' => 0,
+                'level' => is_null($member) ? 85 : 1,
+                'combat_type' => 1,
+                'rarity' => is_null($member) ? 7 : 0,
+                'relic' => is_null($member) ? $level + 2 : 0,
+            ]);
+        }
+        return $memChar;
     }
 
     private function getRecommendations() {
