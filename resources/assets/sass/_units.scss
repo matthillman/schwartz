@@ -1,3 +1,5 @@
+@import "variables";
+
 .container.guild-members.guild-members {
     width: 1500px;
 }
@@ -386,20 +388,28 @@
     }
 }
 
-.portrait-list-header-wrapper {
-
-    background: $gray-300;
-    margin-bottom: 4px;
+.portrait-list-header-wrapper.portrait-list-header-wrapper {
     border-radius: 8px;
+    border: 5px solid $sw-yellow;
+    background: url(/images/welcome/stars.jpg);
+    background-attachment: fixed;
+    box-shadow: 0 0 3px black;
+    border-radius: 8px;
+
+    [highlight] > &, & {
+        margin-bottom: 10px;
+    }
 
     .portrait-list-header.portrait {
         border-radius: 50%;
-        background-color: $white;
+        background-color: rgba($color: $sw-yellow, $alpha: 0.9);
+        overflow: hidden;
         > .character {
             background: none;
             font-size: 2.25rem;
             font-weight: bold;
             top: 12px;
+            color: $white;
             text-shadow: 0 1px 4px $gray-900;
         }
         > .gear.g13 {
