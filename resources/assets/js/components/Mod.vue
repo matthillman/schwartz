@@ -18,7 +18,7 @@
                 >{{ translateValue(type, value) }}{{ padType(type) }}</span>
             </div>
         </div>
-        <div v-if="mini" class="mod-character">{{ mod.location }}</div>
+        <div v-if="!mini" class="mod-character">{{ mod.location }}</div>
     </div>
 </template>
 
@@ -94,7 +94,7 @@
                     }
                 }
 
-                return value.replace(/%$/, '');
+                return value;
             },
         },
     }
