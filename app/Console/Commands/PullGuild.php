@@ -98,6 +98,9 @@ class PullGuild extends Command
             $this->comment("   Looping over units for {$member->player}…");
             $roster = collect($member_data['roster']);
             $mappedRoster = $roster->map(function($unit) use ($member, $modUser) {
+                if (is_null($unit['combatType'])) {
+                    $unit['combatType'] = 1;
+                }
                 $isChar = $unit['combatType'] === 1;
                 $character = [
                     'member_id' => $member->id,
