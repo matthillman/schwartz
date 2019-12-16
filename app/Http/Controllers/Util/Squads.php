@@ -62,6 +62,7 @@ trait Squads {
                     'Darth Revan' => ['DARTHREVAN', 'BASTILASHANDARK', 'DARTHMALAK', 'HK47', 'SITHMARAUDER'],
                     'Nightsisters' => ['MOTHERTALZIN', 'ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'NIGHTSISTERSPIRIT'],
                     'Traya' => ['DARTHTRAYA', 'DARTHNIHILUS', 'DARTHSION', 'SITHTROOPER'],
+                    'Key Ships' => ['CAPITALMALEVOLENCE', 'HYENABOMBER', 'VULTUREDROID', 'YWINGCLONEWARS'],
                 ];
                 $highlight = 'power';
                 break;
