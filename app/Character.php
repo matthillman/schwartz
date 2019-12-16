@@ -43,11 +43,33 @@ class Character extends Model
     public function mods() {
         return $this->hasMany(CharacterMod::class);
     }
+    public function getPowerAttribute($value) {
+        static $relicBonus = [ 0, 759, 1594, 2505, 3492, 4554, 6072, 7969 ];
+
+        if ($this->relic >= 2) {
+            return $value + $relicBonus[$this->relic - 2];
+        }
+
+        return $value;
+    }
     public function getAlignmentAttribute() {
         return strtolower((new Alignment($this->unit->alignment))->getKey());
     }
     public function getSpeedAttribute() {
         return $this->UNITSTATSPEED;
+    }
+    public function getBaseSpeedAttribute() {
+        return $this->baseAttribute(UnitStat::UNITSTATSPEED());
+    }
+    public function baseAttribute(UnitStat $stat) {
+        if ($this->member->exists()) {
+            $stats = $this->getAttribute('stats');
+            $finalStat = array_get($stats, 'final.'.$stat->getValue(), 0);
+            $modBonuses = array_get($stats, 'mods.'.$stat->getValue(), 0);
+
+            return $finalStat - $modBonuses;
+        }
+        return -1;
     }
     public function getKeyStatsAttribute() {
         return $this->keyStatsFor($this->unit_name)
