@@ -10,6 +10,16 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+const VueSelect = require('vue-select');
+Vue.component('v-select', VueSelect.VueSelect);
+const VueSlider = require('vue-slider-component');
+Vue.component('vue-slider', VueSlider);
+import VuePopover from 'vue-popover';
+Vue.component('popover', VuePopover);
+
+import { CoolSelectPlugin } from 'vue-cool-select';
+Vue.use(CoolSelectPlugin);
+
 Vue.component('content-wrapper', {
 	functional: true,
 	render(createElement, context) {
@@ -42,13 +52,8 @@ Vue.component('mod-preference', require('./components/Preference.vue').default);
 Vue.component('team-sort', require('./components/TeamSort.vue').default);
 Vue.component('discord-widget', require('./components/DiscordWidget.vue').default);
 Vue.component('highlight-widget', require('./components/HighlightWidget.vue').default);
+Vue.component('loading-indicator', require('./components/LoadingIndicator.vue').default);
 
-const VueSelect = require('vue-select');
-Vue.component('v-select', VueSelect.VueSelect);
-const VueSlider = require('vue-slider-component');
-Vue.component('vue-slider', VueSlider);
-import VuePopover from 'vue-popover';
-Vue.component('popover', VuePopover);
 
 let data = {
 	highlight: null,

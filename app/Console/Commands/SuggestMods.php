@@ -44,12 +44,12 @@ class SuggestMods extends Command
         // speed, critchance, critdamage, potency, tenacity, accuracy, critavoidance, offense, defense, health, protection
         // speed, critchance, potency, tenacity, offense, defense, health, protection, offense %, defense %, health %, protection %
         $ranking = [
-            'DARTHTRAYA' => [
+            'PADMEAMIDALA' => [
                 'sets' => [
                     [
-                        'offense' => 100,
-                        'speed' => 0,
-                        'crit_damage' => 80,
+                        'offense' => 0,
+                        'speed' => 100,
+                        'crit_damage' => 0,
                         'health' => 0,
                         'defense' => 0,
                         'crit_chance' => 0,
@@ -57,9 +57,9 @@ class SuggestMods extends Command
                         'potency' => 0,
                     ],
                     [
-                        'offense' => 100,
-                        'speed' => 0,
-                        'crit_damage' => 80,
+                        'offense' => 0,
+                        'speed' => 100,
+                        'crit_damage' => 0,
                         'health' => 0,
                         'defense' => 0,
                         'crit_chance' => 0,
@@ -77,18 +77,18 @@ class SuggestMods extends Command
                 'square' => ['UNITSTATOFFENSEPERCENTADDITIVE' => 100],
                 'diamond' => ['UNITSTATDEFENSEPERCENTADDITIVE' => 100],
                 'triangle' => [
-                    'UNITSTATCRITICALDAMAGE' => 100,
-                    'UNITSTATOFFENSEPERCENTADDITIVE' => 100,
-                    'UNITSTATMAXHEALTHPERCENTADDITIVE' => 20,
-                    'UNITSTATMAXSHIELDPERCENTADDITIVE' => 20,
+                    'UNITSTATCRITICALDAMAGE' => 0,
+                    'UNITSTATOFFENSEPERCENTADDITIVE' => 0,
+                    'UNITSTATMAXHEALTHPERCENTADDITIVE' => 100,
+                    'UNITSTATMAXSHIELDPERCENTADDITIVE' => 0,
                     'UNITSTATCRITICALCHANCEPERCENTADDITIVE' => 0,
                     'UNITSTATDEFENSEPERCENTADDITIVE' => 0,
                 ],
-                'circle' => ['UNITSTATMAXHEALTHPERCENTADDITIVE' => 100, 'UNITSTATMAXSHIELDPERCENTADDITIVE' => 80],
+                'circle' => ['UNITSTATMAXHEALTHPERCENTADDITIVE' => 100, 'UNITSTATMAXSHIELDPERCENTADDITIVE' => 10],
                 'cross' => [
-                    'UNITSTATOFFENSEPERCENTADDITIVE' => 100,
-                    'UNITSTATMAXSHIELDPERCENTADDITIVE' => 80,
-                    'UNITSTATMAXHEALTHPERCENTADDITIVE' => 80,
+                    'UNITSTATOFFENSEPERCENTADDITIVE' => 0,
+                    'UNITSTATMAXSHIELDPERCENTADDITIVE' => 10,
+                    'UNITSTATMAXHEALTHPERCENTADDITIVE' => 100,
                     'UNITSTATACCURACY' => 20,
                     'UNITSTATRESISTANCE' => 0,
                     'UNITSTATDEFENSEPERCENTADDITIVE' => 0,
@@ -104,24 +104,32 @@ class SuggestMods extends Command
                 ],
                 'secondary' => [
                     'speed' => 100,
-                    'critical_chance' => 20,
-                    'potency' => 10,
-                    'tenacity' => 20,
-                    'offense' => 70,
-                    'defense' => 100,
-                    'health' => 30,
-                    'protection' => 20,
-                    'offense_percent' => 15,
-                    'defense_percent' => 20,
-                    'health_percent' => 20,
-                    'protection_percent' => 20,
+                    'critical_chance' => 0,
+                    'potency' => 0,
+                    'tenacity' => 0,
+                    'offense' => 0,
+                    'defense' => 0,
+                    'health' => 90,
+                    'protection' => 0,
+                    'offense_percent' => 0,
+                    'defense_percent' => 0,
+                    'health_percent' => 50,
+                    'protection_percent' => 0,
                 ]
             ],
         ];
 
-        $user = ModUser::with('stats')->where(['name' => '552325555'])->first();
+        $target = [
+            'PADMEAMIDALA' => [
+                'UNITSTATSPEED' => 286,
+            ],
+        ];
 
-        $charRanking = $ranking['DARTHTRAYA'];
+        $user = ModUser::with('stats')->where(['name' => '552325555'])->first();
+        $member = Member::where('ally_code', '552325555')->first();
+        $memberUnit = $member->characters()->where('unit_name', 'PADMEAMIDALA');
+
+        $charRanking = $ranking['PADMEAMIDALA'];
         $result = [
             'square' => null,
             'diamond' => null,
@@ -151,28 +159,46 @@ class SuggestMods extends Command
 
         $done = 0;
         $firstPass = true;
+        $modQuery = $user->stats()->select('mod_stats.*');
+        foreach ($charRanking['secondary'] as $secondary => $rank) {
+            if ($rank > 0) {
+                $modQuery->leftJoin("mod_stat_${secondary}", "mod_stat_${secondary}.id", '=', 'mod_stats.id');
+                $modQuery->selectRaw("mod_stat_${secondary}.percentile * ". $rank / $charRanking['secondaryTotal'] ." as ${secondary}_score");
+            }
+        }
+        $allMods = $modQuery->get();
         do {
-            $mod = $user->stats
-                ->filter(function($mod) use ($charRanking, $result) {
-                    return in_array($mod->set, array_keys($charRanking['needed'])) && is_null($result[$mod->slot]);
-                })
-                ->filter(function($mod) use ($firstPass) {
-                    return !$firstPass || $mod->slot != 'arrow';
+            $this->line('Char ranking needed: ' . json_encode($charRanking['needed']));
+
+            $availableSets = array_keys($charRanking['needed']);
+            $availableSlots = collect($result)->filter(function ($r) { return is_null($r); })->keys()->all();
+            $modResults = $allMods
+                ->filter(function($mod) use ($availableSets, $availableSlots, $firstPass) {
+                    return in_array($mod->set, $availableSets) && in_array($mod->slot, $availableSlots) && (!$firstPass || $mod->slot != 'arrow');
                 })
                 ->map(function($mod) use ($charRanking) {
                     $mod->score = 0;
-                    foreach ($charRanking['sets'][$mod->set] as $set => $rank) {
-                        if ($rank > 0 && $mod->set == $set) {
-                            $mod->score += $charRanking['sets'][$mod->set] / 100;
-                            $mod->set_score = $charRanking['sets'][$mod->set] / 100;
+                    foreach ($charRanking['sets'] as $group) {
+                        if (isset($group[$mod->set])) {
+                            $rank = $group[$mod->set];
+                            if ($rank > 0) {
+                                $mod->score += $rank / 100;
+                                $mod->set_score = $rank / 100;
+                                break;
+                            }
                         }
+
                     }
 
                     return $mod;
                 })
                 ->filter(function($mod) {
                     return $mod->set_score > 0;
-                })
+                });
+
+            $this->line('Set filter resulted in ' . $modResults->count() . ' mods');
+
+            $modResults = $modResults
                 ->map(function($mod) use ($charRanking) {
                     foreach ($charRanking[$mod->slot] as $primary => $rank) {
                         if ($rank > 0 && $mod->primary_type == $primary) {
@@ -185,12 +211,14 @@ class SuggestMods extends Command
                 })
                 ->filter(function($mod) {
                     return $mod->primary_score > 0;
-                })
+                });
+            $this->line('Primary stat filter resulted in ' . $modResults->count() . ' mods');
+
+            $modResults = $modResults
                 ->map(function($mod) use ($charRanking) {
                     foreach ($charRanking['secondary'] as $secondary => $rank) {
-                        if ($rank > 0 && $mod->{$secondary} > 0) {
-                            $ranked = DB::table("mod_stat_${secondary}")->where('id', $mod->id)->value('percentile');
-                            $base = $ranked * $rank / $charRanking['secondaryTotal'];
+                        if ($rank > 0 && isset($mod->{"${secondary}_score"})) {
+                            $base = $mod->{"${secondary}_score"};
 
                             $ex = exp(($base / 100 * 4) - 4) * 100;
 
@@ -201,18 +229,22 @@ class SuggestMods extends Command
 
                     return $mod;
                 })
-                ->sortByDesc('score')
-                ->first();
+                ->sortByDesc('score');
+
+            $this->line('Secondary stat filter resulted in ' . $modResults->count() . ' mods');
+
+            $mod = $modResults->first();
+
+            if (is_null($mod)) {
+                dd($modResults);
+            }
 
             $this->line("Picked a mod: ". $mod->toJson());
 
             $charRanking['needed'][$mod->set] -= 1;
-            $thisOne = $charRanking['needed'][$mod->set];
-            foreach (array_keys($charRanking['needed']) as $set) {
-                $remaining = $charRanking['needed'][$set];
-                if ($remaining > $done || ($remaining == 4 && $thisOne == 3)) {
-                    unset($charRanking['needed'][$mod->set]);
-                }
+
+            if ($charRanking['needed'][$mod->set] == 0) {
+                unset($charRanking['needed'][$mod->set]);
             }
 
             $result[$mod->slot] = $mod;

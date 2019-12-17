@@ -17,6 +17,7 @@ class Mod extends Model
 
         'primary',
         'secondaries',
+        'raw',
     ];
 
     protected $hidden = [
@@ -25,8 +26,13 @@ class Mod extends Model
         'secondary_2_type', 'secondary_2_value',
         'secondary_3_type', 'secondary_3_value',
         'secondary_4_type', 'secondary_4_value',
+        'raw',
     ];
     protected $appends = ['primary', 'secondaries'];
+
+    protected $casts = [
+        'raw' => 'array',
+    ];
 
     public function getPrimaryAttribute($value) {
         return [

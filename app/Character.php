@@ -23,13 +23,17 @@ class Character extends Model
         'rarity',
         'stats',
         'relic',
+        'raw',
     ];
 
-    protected $appends = [ 'alignment', 'speed', 'is_ship', 'is_capital_ship', 'highlight_power', 'key_stats', 'stat_grade' ];
+    protected $appends = [ 'alignment', 'speed', 'is_ship', 'is_capital_ship', 'highlight_power', 'key_stats', 'stat_grade', 'base_speed' ];
 
     protected $casts = [
-        'stats' => 'array'
+        'stats' => 'array',
+        'raw' => 'array',
     ];
+
+    protected $hidden = [ 'raw' ];
 
     public function member() {
         return $this->belongsTo(Member::class);
@@ -43,6 +47,7 @@ class Character extends Model
     public function mods() {
         return $this->hasMany(CharacterMod::class);
     }
+
     public function getPowerAttribute($value) {
         static $relicBonus = [ 0, 759, 1594, 2505, 3492, 4554, 6072, 7969 ];
 

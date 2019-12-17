@@ -398,3 +398,12 @@ popover {
         color: #03688f;
     }
 }
+
+.IZ-select__item {
+  padding: 4px 8px;
+
+  &:hover {
+    background-color: $hover;
+    color: $white;
+  }
+}

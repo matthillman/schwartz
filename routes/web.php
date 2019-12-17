@@ -47,6 +47,8 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
         Route::get('/home/mods', 'ModsController@index')->name('auth.mods');
         Route::put('/home/mods/{user}', 'ModsController@pullUser')->name('auth.mods.user.pull');
         Route::get('/home/mods/{user}', 'ModsController@modsFor')->name('auth.mods.user');
+        Route::get('/home/units/{user}', 'ModsController@unitsFor')->name('auth.units.user');
+        Route::post('/home/stats', 'ModsController@calculateStats')->name('auth.unit.stats');
     });
 
     Route::name('approve.')->middleware(['auth:admin'])->group(function() {
