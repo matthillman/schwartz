@@ -67,7 +67,7 @@ class Character extends Model
         return $this->baseAttribute(UnitStat::UNITSTATSPEED());
     }
     public function baseAttribute(UnitStat $stat) {
-        if ($this->member->exists()) {
+        if (!is_null($this->member) && $this->member->exists()) {
             $stats = $this->getAttribute('stats');
             $finalStat = array_get($stats, 'final.'.$stat->getValue(), 0);
             $modBonuses = array_get($stats, 'mods.'.$stat->getValue(), 0);
