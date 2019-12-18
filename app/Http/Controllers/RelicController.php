@@ -66,6 +66,7 @@ class RelicController extends Controller
                 ['unit' => 'GENERALSKYWALKER', 'priority' => 1],
                 ['unit' => 'CT210408', 'priority' => 1],
                 ['unit' => 'CT5555', 'priority' => 1],
+                ['unit' => 'ARCTROOPER501ST', 'priority' => 1],
                 ['unit' => 'HANSOLO', 'priority' => 1],
             ],
             '5' => [
