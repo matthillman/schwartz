@@ -48,15 +48,15 @@ class Character extends Model
         return $this->hasMany(CharacterMod::class);
     }
 
-    public function getPowerAttribute($value) {
-        static $relicBonus = [ 0, 759, 1594, 2505, 3492, 4554, 6072, 7969 ];
+    // public function getPowerAttribute($value) {
+    //     static $relicBonus = [ 0, 759, 1594, 2505, 3492, 4554, 6072, 7969 ];
 
-        if ($this->relic >= 2) {
-            return $value + $relicBonus[$this->relic - 2];
-        }
+    //     if ($this->relic >= 2) {
+    //         return $value + $relicBonus[$this->relic - 2];
+    //     }
 
-        return $value;
-    }
+    //     return $value;
+    // }
     public function getAlignmentAttribute() {
         return strtolower((new Alignment($this->unit->alignment))->getKey());
     }

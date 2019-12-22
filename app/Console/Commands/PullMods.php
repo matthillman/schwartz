@@ -53,7 +53,7 @@ class PullMods extends Command
 
         if (!$user->hasChangesSince($profile['updated'])) {
             $this->line("Profile is up to date, returning");
-            return 0;
+            // return 0;
         }
 
         $user->last_scrape = new \DateTime;

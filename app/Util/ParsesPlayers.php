@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use Storage;
 use App\Mod;
 use App\Zeta;
 use App\Member;
@@ -24,6 +25,82 @@ trait ParsesPlayers {
         return $zetaList;
     }
 
+    private function getGPTables() {
+        static $gpTables;
+        if (is_null($gpTables)) {
+            $gpTables = json_decode(Storage::disk('local')->get('gameData.json'), true)['gpTables'];
+        }
+        return $gpTables;
+    }
+
+    function getAdjustedPower($unit, $characterLookup = []) {
+        if ($unit['combat_type'] == 1) {
+            return $this->getRelicAdjustedUnitGP($unit);
+        } else if ($unit['combat_type'] == 2) {
+            return $this->getShipGP($unit, $characterLookup);
+        }
+
+        return $unit['power'];
+    }
+
+    function getRelicAdjustedUnitGP($unit) {
+        if ($unit['combat_type'] != 1 || $unit['relic'] < 2) { return $unit['power']; }
+
+        static $relicBonus = [ 0, 759, 1594, 2505, 3492, 4554, 6072, 7969 ];
+        return $unit['power'] + $relicBonus[$unit['relic'] - 2];
+    }
+
+    function getShipGP($unit, $characterLookup) {
+        if ($unit['combat_type'] != 2) { return $unit['power']; }
+
+        $rawData = $unit['raw'];
+        $characterLookup = collect($characterLookup)->keyBy('unit_name');
+        $gpTable = $this->getGPTables();
+
+        $gpRarity = array_get($gpTable['crewRarityGP'], $rawData['rarity'], 0);
+        $gpCrewSize = array_get($gpTable['crewSizeFactor'], count($rawData['crew']), 0);
+        $gpLevel = array_get($gpTable['shipLevelGP'], $rawData['level'], 0);
+        list($gpAbility, $gpHardware) = collect($rawData['skills'])
+            ->reduce(function($total, $skill) use ($gpTable) {
+                if ($skill['tiers'] === 3 /* && combatType == 2*/) { // commenting here for future reference
+                    $total[1] += array_get($gpTable['abilitySpecialCR']['hardware'], $skill['tier'], 0);
+                } else {
+                    $total[0] += array_get($gpTable['shipAbilityLevelGP'], $skill['tier'], 0);
+                }
+
+                return $total;
+
+            }, [0, 0]);
+        $gpModifier = array_get($gpTable['shipRarityFactor'], $rawData['rarity'], 0);
+
+        $gpShipPower = 0;
+        $gpCrewPower = 0;
+        $gpCrew = 0;
+        $gpTotal = 0;
+
+        list($gpCrewPower, $gpCrew) = collect($rawData['crew'])
+            ->reduce(function($sums, $crewMember) use ($characterLookup, $gpModifier, $gpCrewSize) {
+                $crew = $characterLookup->get($crewMember['unitId']);
+                $cp = $crew['power'] * $gpModifier * $gpCrewSize;
+                return [$sums[0] + $cp, $sums[1] + $crew['power']];
+            }, [0, 0]);
+
+
+        if (count($rawData['crew']) == 0) {
+            // $gpPerAbilityModifier = $gpTable['crewlessAbilityFactor'][count($rawData['skills'] ?? 3)];
+            $gpCrew = ($gpLevel * 3.5 + $gpAbility * 5.74 + $gpHardware * 1.61) * $gpModifier;
+            $gpTotal = ($gpCrew + $gpLevel + $gpAbility + $gpHardware) * 1.5;
+        } else {
+            $gpCrew = $gpCrew * $gpModifier * $gpCrewSize;
+            $gpShipPower = ($gpCrew / 2) + (($gpLevel + $gpAbility + $gpHardware) * 1.5);
+            $gpTotal = $gpShipPower + $gpCrewPower;
+        }
+
+        $gpTotal = intval($gpTotal);
+
+        return $gpTotal;
+    }
+
     public function parseMember($member_data, $guild, $logPrefix = '   ') {
         $zetaList = $this->getZetaList();
         $member = Member::firstOrNew(['ally_code' => (string)$member_data['allyCode']]);
@@ -36,9 +113,10 @@ trait ParsesPlayers {
 
         $stats = collect($member_data['stats']);
 
-        $member->gp = $stats->where('index', PlayerStatsIndex::gp)->pluck('value')->first();
-        $member->character_gp = $stats->where('index', PlayerStatsIndex::charGP)->pluck('value')->first();
-        $member->ship_gp = $stats->where('index', PlayerStatsIndex::shipGP)->pluck('value')->first();
+        // Fucking game
+        // $member->gp = $stats->where('index', PlayerStatsIndex::gp)->pluck('value')->first();
+        // $member->character_gp = $stats->where('index', PlayerStatsIndex::charGP)->pluck('value')->first();
+        // $member->ship_gp = $stats->where('index', PlayerStatsIndex::shipGP)->pluck('value')->first();
 
         if (!is_null($guild)) {
             $member->guild()->associate($guild);
@@ -70,6 +148,9 @@ trait ParsesPlayers {
                 'stats' => $unit['stats'],
                 'raw' => collect($unit)->except('stats')->toArray(),
             ];
+            // if ($isChar) {
+            //     $character['power'] = $this->getAdjustedPower($character);
+            // }
             $mods = collect($unit['mods'] ?? [])->map(function($mod) use ($character, $modUser) {
                 $modItem = [
                     "uid" => $mod["id"],
@@ -102,6 +183,21 @@ trait ParsesPlayers {
 
         $chars = $mappedRoster->pluck('char');
         $mods = $mappedRoster->pluck('mods')->flatten(1);
+
+        // $characterUnits = $chars->where('combat_type', 1);
+        // $chars->transform(function($ship) use ($characterUnits) {
+        //     if ($ship['combat_type'] == 2) {
+        //         $ship['power'] = $this->getAdjustedPower($ship, $characterUnits);
+        //     }
+        //     return $ship;
+        // });
+
+        // Fucking game
+        $member->character_gp = $chars->where('combat_type', 1)->pluck('power')->sum();
+        $member->ship_gp = $chars->where('combat_type', 2)->pluck('power')->sum();
+        $member->gp = $member->character_gp + $member->ship_gp;
+
+        $this->info("${logPrefix}Updated player GP to {$member->gp} ({$member->character_gp} C, {$member->ship_gp} S)");
 
         $cCount = $chars->count();
         $this->info("${logPrefix}➡ Doing the character insert (${cCount} rows)");
