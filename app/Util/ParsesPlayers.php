@@ -196,6 +196,7 @@ trait ParsesPlayers {
         $member->character_gp = $chars->where('combat_type', 1)->pluck('power')->sum();
         $member->ship_gp = $chars->where('combat_type', 2)->pluck('power')->sum();
         $member->gp = $member->character_gp + $member->ship_gp;
+        $member->save();
 
         $this->info("${logPrefix}Updated player GP to {$member->gp} ({$member->character_gp} C, {$member->ship_gp} S)");
 

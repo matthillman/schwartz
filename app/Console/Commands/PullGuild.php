@@ -126,6 +126,9 @@ class PullGuild extends Command
                 $member->save();
             });
         });
+        $this->info("Updating guild GP totals");
+        $guild->gp = $guild->members->pluck('gp')->sum();
+        $guild->save();
         $this->info("Guild cleanup done.");
 
         $time = Carbon::now()->diffInSeconds($start);
