@@ -63,6 +63,8 @@ trait Squads {
                     'Darth Revan' => ['DARTHREVAN', 'BASTILASHANDARK', 'DARTHMALAK', 'HK47', 'SITHMARAUDER'],
                     'Nightsisters' => ['MOTHERTALZIN', 'ASAJVENTRESS', 'DAKA', 'NIGHTSISTERZOMBIE', 'NIGHTSISTERSPIRIT'],
                     'Traya' => ['DARTHTRAYA', 'DARTHNIHILUS', 'DARTHSION', 'SITHTROOPER'],
+                    'P4 SM' => ['NUTEGUNRAY', 'JANGOFETT', 'DROIDEKA', 'SUNFAC', 'WATTAMBOR'],
+                    'P4 Dooku' => ['COUNTDOOKU', 'GEONOSIANBROODALPHA', 'GEONOSIANSOLDIER', 'GEONOSIANSPY', 'POGGLETHELESSER'],
                     'Key Ships' => ['CAPITALMALEVOLENCE', 'HYENABOMBER', 'VULTUREDROID', 'YWINGCLONEWARS'],
                 ];
                 $highlight = 'power';
