@@ -21,6 +21,7 @@
                                     <span><strong>GP:</strong> <span>{{ number_format($member->gp) }}</span></span>
                                     <span><strong>Character:</strong> {{ number_format($member->character_gp) }}</span></span>
                                     <span><strong>Ship:</strong> <span>{{ number_format($member->ship_gp) }}</span></span>
+                                    <span><strong>Zetas:</strong> <span>{{ $member->zetas->count() }}</span></span>
                                 </div>
                                 <div class="row justify-content-between align-items-baseline">
                                     <span><strong>R7:</strong> <span>{{ $member->relic_7 }}</span></span>
