@@ -119,7 +119,7 @@ trait ParsesPlayers {
             $member->title = 'Patron';
         }
         if (is_null($member->portrait)) {
-            $member->title = 'NONE';
+            $member->portrait = 'NONE';
         }
 
         // $stats = collect($member_data['stats']);
