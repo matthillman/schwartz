@@ -114,10 +114,13 @@ trait ParsesPlayers {
         $member->arena = $member_data['arena'];
         $member->level = $member_data['level'];
         $member->title = array_get($member_data, 'titles.selected', 'Patron');
+        $member->portrait = array_get($member_data, 'portraits.selected', 'NONE');
         if (is_null($member->title)) {
             $member->title = 'Patron';
         }
-        $member->portrait = array_get($member_data, 'portraits.selected', 'NONE');
+        if (is_null($member->portrait)) {
+            $member->title = 'NONE';
+        }
 
         // $stats = collect($member_data['stats']);
         // Fucking game
