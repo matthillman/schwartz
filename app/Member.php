@@ -48,7 +48,24 @@ class Member extends Model
     }
 
     private function modsAtOrOver($threshold, $attribute = 'speed') {
-        return $this->modStats()->where($attribute, '>=', $threshold);
+        static $modCounts;
+        if (is_null($modCounts)) {
+            $modCounts = \DB::table('mod_stats')
+                ->join('mod_users', 'mod_stats.mod_user_id', '=', 'mod_users.id')
+                ->selectRaw("
+                    mod_users.name,
+                    sum(case when mod_stats.speed >= 25 then 1 else 0 end) as speed_25,
+                    sum(case when mod_stats.speed >= 20 then 1 else 0 end) as speed_20,
+                    sum(case when mod_stats.speed >= 15 then 1 else 0 end) as speed_15,
+                    sum(case when mod_stats.speed >= 10 then 1 else 0 end) as speed_10,
+                    sum(case when mod_stats.offense >= 100 then 1 else 0 end) as offense_100
+                ")
+                ->groupBy('mod_users.name')
+                ->where('mod_users.name', $this->ally_code)
+                ->first();
+        }
+
+        return $modCounts->{"{$attribute}_{$threshold}"};
     }
 
     public function modsSpeedGT10() {
@@ -125,23 +142,23 @@ class Member extends Model
     }
 
     public function getSpeed10Attribute() {
-        return $this->modsSpeedGT10()->count();
+        return $this->modsSpeedGT10();
     }
 
     public function getSpeed15Attribute() {
-        return $this->modsSpeedGT15()->count();
+        return $this->modsSpeedGT15();
     }
 
     public function getSpeed20Attribute() {
-        return $this->modsSpeedGT20()->count();
+        return $this->modsSpeedGT20();
     }
 
     public function getSpeed25Attribute() {
-        return $this->modsSpeedGT25()->count();
+        return $this->modsSpeedGT25();
     }
 
     public function getOffense100Attribute() {
-        return $this->modsOffenseGT100()->count();
+        return $this->modsOffenseGT100();
     }
 
     public function getZetasAttribute() {
