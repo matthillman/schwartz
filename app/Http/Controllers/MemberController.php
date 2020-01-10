@@ -10,6 +10,15 @@ class MemberController extends Controller
 {
     use Util\Squads;
 
+    public function show($allyCode) {
+        $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
+
+        return view('member.profile', [
+            'member' => $member,
+            'units' => Unit::all(),
+        ]);
+    }
+
     public function listTeams($allyCode, $team) {
         $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
 

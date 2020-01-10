@@ -1,0 +1,50 @@
+
+@import "variables";
+$base: 200px;
+
+.member-profile {
+
+    &.container {
+        width: 1000px;
+    }
+
+    .member-level {
+        height: 100px / 400px * $base;
+        width: 100px / 400px * $base;
+        font-size: 40px / 400px * $base;
+        text-align: center;
+        vertical-align: middle;
+        border: (10px / 400px * $base) solid #fff;
+        border-radius: 50px / 400px * $base;
+        border-radius: 100%/130% 130% (75px / 400px * $base) (75px / 400px * $base);
+        box-sizing: border-box;
+        background: #264257;
+
+        > .value {
+            position: relative;
+            color: #FFF;
+            height: 100px / 400px * $base;
+            top: 0px / 400px * $base;
+            left: 2px / 400px * $base;
+            font-size: 56px / 400px * $base;
+            text-shadow: 0 1px 0 black;
+        }
+    }
+
+    h2 {
+        margin-top: 16px;
+    }
+
+    .player-stats {
+        width: 50%;
+        padding: 8px;
+        border-radius: 8px;
+        background-color: $gray-300;
+
+        .row {
+            margin-left: 0;
+            margin-right: 0;
+            margin-bottom: 8px;
+        }
+    }
+}

@@ -2,6 +2,7 @@
 
 use App\Guild;
 use App\Member;
+use App\Jobs\ProcessUser;
 use App\Jobs\ProcessGuild;
 use Illuminate\Http\Request;
 use App\Jobs\ProcessGuildAlly;
@@ -29,6 +30,11 @@ Route::middleware('client')->get('/guild/scrape/{id}', function(Request $request
     } else {
         ProcessGuild::dispatch($id);
     }
+    return response()->json([]);
+});
+
+Route::middleware('client')->get('/member/scrape/{id}', function(Request $request, $id) {
+    ProcessUser::dispatch($id);
     return response()->json([]);
 });
 

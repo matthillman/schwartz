@@ -21,6 +21,11 @@ class Member extends Model
         // 'offense_100',
     ];
 
+    protected $casts = [
+        'arena' => 'array',
+    ];
+
+
     public function characters() {
         return $this->hasMany(Character::class);
     }
@@ -74,6 +79,9 @@ class Member extends Model
         return $this->characters()->where('gear_level', '=', 13);
     }
 
+    public function relic3() {
+        return $this->characters()->where('relic', '=', 3 + 2);
+    }
     public function relic5() {
         return $this->characters()->where('relic', '=', 5 + 2);
     }
@@ -98,6 +106,10 @@ class Member extends Model
 
     public function getGear13Attribute() {
         return $this->gear13()->count();
+    }
+
+    public function getRelic3Attribute() {
+        return $this->relic3()->count();
     }
 
     public function getRelic5Attribute() {

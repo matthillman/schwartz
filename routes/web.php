@@ -81,6 +81,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
 });
 
 Route::get('/schwartz_list', 'GuildController@schwartzGuildsImportList')->name('schwartz.import');
+Route::get('/member/{allyCode}', 'MemberController@show')->name('member.profile');
 Route::get('/member/{allyCode}/{team}', 'MemberController@listTeams')->name('member.teams');
 Route::get('/relics', 'RelicController@index')->name('relic.recommendations');
 Route::get('/relics/{ally}', 'RelicController@relicMember')->name('member.relic.recommendations');

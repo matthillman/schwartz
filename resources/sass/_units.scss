@@ -103,7 +103,7 @@
         width: 100%;
         table-layout: fixed;
 
-        tr > :first-child {
+        tr > .header {
             width: 175px;
         }
 
@@ -127,13 +127,13 @@
                 height: 100%;
             }
 
-            &:first-of-type > * {
+            &.header > * {
                 height: auto;
             }
         }
     }
 
-    .unit-table tbody td:first-of-type {
+    .unit-table tbody td.header {
         width: 125px;
 
         > div:first-child {
@@ -176,6 +176,9 @@
         }
     }
 
+    [highlight="none"] & [gear] {
+        background: linear-gradient(to top, #1c4068, #162833);
+    }
     [highlight="stars"] & [stars] {
         background-color: red;
         &[stars="7"] {

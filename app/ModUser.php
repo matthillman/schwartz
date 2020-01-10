@@ -21,6 +21,10 @@ class ModUser extends Model
         return $this->hasMany(ModStat::class);
     }
 
+    public function member() {
+        return $this->belongsTo(Member::class, 'name', 'ally_code');
+    }
+
     public function hasChangesSince($date) {
         return is_null($this->last_scrape) || $date->greaterThan($this->last_scrape);
     }

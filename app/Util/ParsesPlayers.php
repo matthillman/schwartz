@@ -111,8 +111,12 @@ trait ParsesPlayers {
         $member->url = "/p/{$ally}/characters/";
         $member->player = $member_data['name'];
 
-        $stats = collect($member_data['stats']);
+        $member->arena = $member_data['arena'];
+        $member->level = $member_data['level'];
+        $member->title = $member_data['titles']['selected'];
+        $member->portrait = $member_data['portraits']['selected'];
 
+        // $stats = collect($member_data['stats']);
         // Fucking game
         // $member->gp = $stats->where('index', PlayerStatsIndex::gp)->pluck('value')->first();
         // $member->character_gp = $stats->where('index', PlayerStatsIndex::charGP)->pluck('value')->first();

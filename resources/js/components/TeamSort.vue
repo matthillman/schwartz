@@ -13,7 +13,7 @@
         <table class="sortable">
             <thead>
                 <tr>
-                    <th>Member</th>
+                    <th class="header">Member</th>
                     <th v-for="unit in units" :key="unit.base_id"
                         @click="sortBy(unit.base_id)"
                         class="clickable"
@@ -24,7 +24,7 @@
             <tbody>
 
             <tr v-for="member in sortedMembers" :key="member.ally_code">
-                <td>
+                <td class="header">
                     <a :href="`https://swgoh.gg${member.url}`" target="_gg">
                         <span>{{ member.player }}</span>
                     </a>
