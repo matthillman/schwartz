@@ -2,7 +2,7 @@
     <character
         :character="{{ $character->toJson() }}"
         @if (isset($member))
-        :member="{{ $member->toJson() }}"
+        :member="{{ collect($member->only('player'))->toJson() }}"
         @endif
         {{ isset($noStats) ? " no-stats" : '' }}
         {{ isset($noMods) ? " no-mods" : '' }}
