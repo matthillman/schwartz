@@ -71,12 +71,20 @@ class PullGuild extends Command
         $this->info("Starting API pull…");
 
         $updated = [];
+        do {
+            if (count($updated)) {
+                $updated = [];
+            }
 
-        $parser->scrape(function($member_data) use ($guild, &$updated) {
-            $updated[] = $this->parseMember($member_data, $guild);
-        }, /* pullMods: */ true);
+            $parser->scrape(function($member_data) use ($guild, &$updated) {
+                $updated[] = $this->parseMember($member_data, $guild);
+            }, /* pullMods: */ true);
 
-        $this->info("API pull finished.");
+            $time = Carbon::now()->diffInSeconds($start);
+            $this->info("API pull finished, took {$time} seconds.");
+            $updateCount = count($updated);
+            $this->info("Updated {$updateCount} members, expecting to update {$parser->members()->count()}");
+        } while (count($updated) < $parser->members()->count());
 
         $this->info("Saving basic info.");
         $guild->url = $parser->url();
