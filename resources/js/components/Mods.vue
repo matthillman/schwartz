@@ -56,7 +56,7 @@
                         :placeholder="set.destination ? '' : 'Select Unit'"
                         item-value="unit_name"
                         item-text="unit_name"
-                        @select="syncState()"
+                        @select="destinateUpdatedFor(set)"
                     >
                         <template slot="item" slot-scope="{ item: character }">
                             <div class="portrait-preview">
@@ -541,6 +541,7 @@
                 if (this.currentSet == set) {
                     this.currentSet = null;
                 }
+                this.shapes.forEach(shape => this.mods[set[shape]].modSet = null);
                 this.syncState();
                 this.removeSet = null;
             },
@@ -549,6 +550,9 @@
             },
             addToActiveSet(mod) {
                 let set = this.sets.filter(set => set.id == this.currentSet)[0];
+                this.addModToSet(mod, set)
+            },
+            addModToSet(mod, set) {
                 if (!set) { return; }
                 let prevMod = set[mod.slot];
                 if (prevMod && this.mods[prevMod]) {
@@ -569,7 +573,7 @@
                         prevSet.speedSet -= 1;
                     }
                 }
-                mod.modSet = this.currentSet;
+                mod.modSet = set.id;
                 set[mod.slot] = mod.uid;
                 if (mod.set == "speed") {
                     set.speedSet += 1;
@@ -674,6 +678,18 @@
                 this.only = this.only == attribute ? null : attribute;
             },
 
+            destinateUpdatedFor(set) {
+                if (!this.shapes.reduce((hasAMod, shape) => set[shape] !== null || hasAMod, false)) {
+                    let unit = this.unitFor(set);
+
+                    if (unit) {
+                        let mods = Object.values(this.mods).filter(mod => mod.location == unit.unit.name && mod.modSet == null);
+
+                        mods.forEach(mod => this.addModToSet(mod, set));
+                    }
+                }
+                this.syncState();
+            },
             syncState() {
                 let storage = window.localStorage;
                 storage.mods = JSON.stringify(this.mods);
