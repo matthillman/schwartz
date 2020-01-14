@@ -56,7 +56,7 @@
                         :placeholder="set.destination ? '' : 'Select Unit'"
                         item-value="unit_name"
                         item-text="unit_name"
-                        @select="destinateUpdatedFor(set)"
+                        @select="destinationUpdatedFor(set)"
                     >
                         <template slot="item" slot-scope="{ item: character }">
                             <div class="portrait-preview">
@@ -541,7 +541,7 @@
                 if (this.currentSet == set) {
                     this.currentSet = null;
                 }
-                this.shapes.forEach(shape => this.mods[set[shape]].modSet = null);
+                this.shapes.forEach(shape => set[shape] && (this.mods[set[shape]].modSet = null));
                 this.syncState();
                 this.removeSet = null;
             },
@@ -678,12 +678,12 @@
                 this.only = this.only == attribute ? null : attribute;
             },
 
-            destinateUpdatedFor(set) {
+            destinationUpdatedFor(set) {
                 if (!this.shapes.reduce((hasAMod, shape) => set[shape] !== null || hasAMod, false)) {
                     let unit = this.unitFor(set);
 
                     if (unit) {
-                        let mods = Object.values(this.mods).filter(mod => mod.location == unit.unit.name && mod.modSet == null);
+                        let mods = Object.values(this.mods).filter(mod => mod.location == unit.unit.name && !mod.modSet);
 
                         mods.forEach(mod => this.addModToSet(mod, set));
                     }
