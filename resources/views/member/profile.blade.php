@@ -32,6 +32,7 @@
                                     <span><strong>G12:</strong> <span>{{ $member->gear_12 }}</span></span>
                                 </div>
                                 <div class="row justify-content-between align-items-baseline">
+                                    <span><strong>6•:</strong> <span>{{ $member->six_dot }}</span></span>
                                     <span><strong>25+:</strong> <span>{{ $member->speed_25 }}</span></span>
                                     <span><strong>20+:</strong> <span>{{ $member->speed_20 }}</span></span>
                                     <span><strong>15+:</strong> <span>{{ $member->speed_15 }}</span></span>

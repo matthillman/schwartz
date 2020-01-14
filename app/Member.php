@@ -54,6 +54,7 @@ class Member extends Model
                 ->join('mod_users', 'mod_stats.mod_user_id', '=', 'mod_users.id')
                 ->selectRaw("
                     mod_users.name,
+                    sum(case when mod_stats.pips >= 6 then 1 else 0 end) as dot_6,
                     sum(case when mod_stats.speed >= 25 then 1 else 0 end) as speed_25,
                     sum(case when mod_stats.speed >= 20 then 1 else 0 end) as speed_20,
                     sum(case when mod_stats.speed >= 15 then 1 else 0 end) as speed_15,
@@ -66,6 +67,10 @@ class Member extends Model
         }
 
         return $modCounts->{"{$attribute}_{$threshold}"};
+    }
+
+    public function mods6dot() {
+        return $this->modsAtOrOver(6, 'dot');
     }
 
     public function modsSpeedGT10() {
@@ -139,6 +144,10 @@ class Member extends Model
 
     public function getRelic7Attribute() {
         return $this->relic7()->count();
+    }
+
+    public function getSixDotAttribute() {
+        return $this->mods6dot();
     }
 
     public function getSpeed10Attribute() {
