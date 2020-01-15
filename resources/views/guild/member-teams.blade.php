@@ -31,13 +31,14 @@
                                 </h1>
                             </div>
 
-                            <highlight-widget :starting="{{$highlight}}"></highlight-widget>
+                            <highlight-widget :starting="'{{$highlight}}'"></highlight-widget>
                         </div>
 
                         @foreach($teams as $title => $squad)
                             @include('shared.unit_table', [
                                 'team' => $title,
-                                'characters' => $squad->pluck('base_id')->all()
+                                'characters' => $squad->pluck('base_id')->all(),
+                                'member_characters' => $member->characterSet($squad->pluck('base_id')->all())['characters'],
                             ])
                         @endforeach
                     </div>
