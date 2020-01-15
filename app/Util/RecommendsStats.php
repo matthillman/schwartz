@@ -15,7 +15,12 @@ trait RecommendsStats {
                     UnitStat::UNITSTATMAXHEALTH()->getKey() => [55000, 57500, 60000],
                 ],
                 'C3POLEGENDARY' => [
-                    UnitStat::UNITSTATSPEED()->getKey() => [260, 265, 269],
+                    UnitStat::UNITSTATSPEED()->getKey() => [
+                        'values' => [260, 265, 269],
+                        'related' => [
+                            'PADMEAMIDALA'  => ['=',  -21],
+                        ]
+                    ],
                     UnitStat::UNITSTATMAXHEALTH()->getKey() => [50000, 52500, 55000],
                 ],
                 'GENERALKENOBI' => [
