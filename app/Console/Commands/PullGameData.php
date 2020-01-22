@@ -75,6 +75,7 @@ class PullGameData extends Command
                         ],
                         'sink' => storage_path("app/game_data/".last(explode('/', $file))),
                     ]);
+                    sleep(1);
                     $this->line("  ⬅ Fetched.");
                 } catch (ClientException $e) {
                     $this->error("  🛑 Error fetching {$file}: ".$e->getMessage());

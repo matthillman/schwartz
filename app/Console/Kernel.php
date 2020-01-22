@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('swgoh:units')->daily();
+        $schedule->command('swgoh:game-data')->daily();
 
         Guild::where('schwartz', true)->each(function($guild, $index) use ($schedule) {
             $schedule->job(new ProcessGuild($guild->guild_id))->dailyAt('06:0' . (5 + $index));
