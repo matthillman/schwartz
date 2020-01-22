@@ -39,23 +39,28 @@ class PullGameData extends Command
         $start = Carbon::now();
         $this->info("Starting download…");
 
-        $metadata = collect(json_decode(Storage::disk('game_data')->get('metadata.json'), true));
-        $newMetadata = collect();
-        try {
-            $newMetadataResponse = guzzle()->get("https://swgoh.shittybots.me/api/data/metadata.json", [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Content-Type' => 'application/json',
-                    'shittybot' => config('services.shitty_bot.token'),
-                ],
-            ]);
-            $newMetadata = collect(json_decode($newMetadataResponse->getBody(), true));
-        } catch (ClientException $e) {
-            $this->error("  🛑 Error fetching new metadata, bailing: ".$e->getMessage());
-            return 1;
+        $skipFetch = false;
+        if (Storage::disk('game_data')->exists('metadata.json')) {
+            $metadata = collect(json_decode(Storage::disk('game_data')->get('metadata.json'), true));
+            $newMetadata = collect();
+            try {
+                $newMetadataResponse = guzzle()->get("https://swgoh.shittybots.me/api/data/metadata.json", [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                        'shittybot' => config('services.shitty_bot.token'),
+                    ],
+                ]);
+                $newMetadata = collect(json_decode($newMetadataResponse->getBody(), true));
+            } catch (ClientException $e) {
+                $this->error("  🛑 Error fetching new metadata, bailing: ".$e->getMessage());
+                return 1;
+            }
+
+            $skipFetch = !is_null($metadata->get('latestGamedataVersion')) && $metadata->get('latestGamedataVersion') === $newMetadata->get('latestGamedataVersion');
         }
 
-        if (false && !is_null($metadata->get('latestGamedataVersion')) && $metadata->get('latestGamedataVersion') === $newMetadata->get('latestGamedataVersion')) {
+        if ($skipFetch) {
             $this->info('No new game data, done');
         } else {
             $this->info("Fetching data files…");
