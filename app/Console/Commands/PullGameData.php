@@ -13,7 +13,7 @@ use App\Util\JsonObjectConsumer;
 
 use GuzzleHttp\Exception\ClientException;
 
-class PullUnits extends Command
+class PullGameData extends Command
 {
     /**
      * The name and signature of the console command.
