@@ -43,18 +43,25 @@ class PullMods extends Command
         $this->line("Starting mod scrape for user [$arg]");
         $user = ModUser::firstOrNew(['name' => "$arg"]);
 
-        $profile = swgoh()->getPlayer($user->name)
-            ->map(function($json) {
-                $json['updated'] = Carbon::createFromTimestamp($json['updated']);
+        if (config('services.shitty_bot.active')) {
+            $this->info('Using swgoh.shittybots.me');
+            $profile = shitty_bot()->getPlayer($user->name);
+            $profile['updated'] = Carbon::createFromTimestamp($profile['LastUpdated']);
+        } else {
+            $this->info('Using api.swgoh.help');
+            $profile = swgoh()->getPlayer($user->name)
+                ->map(function($json) {
+                    $json['updated'] = Carbon::createFromTimestamp($json['updated']);
 
-                return $json;
-            })
-            ->first();
-
-        if (!$user->hasChangesSince($profile['updated'])) {
-            $this->line("Profile is up to date, returning");
-            // return 0;
+                    return $json;
+                })
+                ->first();
         }
+
+        // if (!$user->hasChangesSince($profile['updated'])) {
+        //     $this->line("Profile is up to date, returning");
+        //     return 0;
+        // }
 
         $user->last_scrape = new \DateTime;
         $user->save();

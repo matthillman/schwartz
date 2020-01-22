@@ -1,0 +1,7 @@
+*
+!.gitignore
+!en/
+!en/auth.php
+!en/pagination.php
+!en/passwords.php
+!en/validation.php

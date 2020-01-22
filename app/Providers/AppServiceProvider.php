@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Horizon;
 use App\Database\UpsertBuilder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('user', function ($permission) {
             return auth()->user()->$permission;
         });
+        Blade::if('bot', function() {
+            return stripos(request()->header('schwartz'), 'bot') !== false;
+        });
     }
 
     /**
@@ -41,6 +45,24 @@ class AppServiceProvider extends ServiceProvider
         Builder::macro('upsert', function(array $values, $conflict) {
             $builder = new UpsertBuilder($this);
             return $this->connection->insert($builder->getQuery($values, $conflict));
+        });
+
+        Collection::macro('flipWithKeys', function() {
+            $results = [];
+
+            foreach ($this->items as $key => $value) {
+                if (!isset($results[$value])) {
+                    $results[$value] = [];
+                }
+
+                $results[$value][] = $key;
+            }
+
+            return new static($results);
+        });
+
+        $this->app->bind('shitty_bot', function () {
+            return new \App\Util\API\ShittyAPI;
         });
 
         $this->app->bind('google_sheets', function () {

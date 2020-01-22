@@ -17,32 +17,20 @@
                     </div>
                 </div>
 
-                @foreach($members as $member)
-                    <div class="card-body" highlight="{{$highlight}}" v-highlight:[highlight]>
-                        <div class="row justify-content-between align-items-center">
-                            <div class="row align-items-center">
-                                <form method="GET" action="{{ route('member.teams', ['allyCode' => $member->ally_code, 'team' => $team]) }}">
-                                    <button type="submit" class="btn btn-primary btn-icon inverted"><i class="icon ion-ios-link"></i></button>
-                                </form>
-                                <h1>
-                                    <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
+                <div class="card-body">
+                    <div class="masonry-grid">
+                        @foreach($members as $member)
+                            <form method="GET" action="{{ route('member.teams', ['allyCode' => $member->ally_code, 'team' => $team]) }}">
+                                <button type="submit" class="btn btn-primary btn-icon inverted">
+                                    <i class="icon ion-ios-link"></i>
+                                    <h1>
                                         <span>{{ $member->player }}</span>
-                                    </a>
-                                </h1>
-                            </div>
-
-                            <highlight-widget :starting="'{{$highlight}}'"></highlight-widget>
-                        </div>
-
-                        @foreach($teams as $title => $squad)
-                            @include('shared.unit_table', [
-                                'team' => $title,
-                                'characters' => $squad->pluck('base_id')->all(),
-                                'member_characters' => $member->characterSet($squad->pluck('base_id')->all())['characters'],
-                            ])
+                                    </h1>
+                                </button>
+                            </form>
                         @endforeach
                     </div>
-                @endforeach
+                </div>
 
             </div>
         </div>

@@ -67,3 +67,27 @@
 		width: 100%;
 	}
 }
+
+.masonry-grid {
+    display: flex;
+    flex-wrap: wrap;
+
+    > * {
+        background-color: $gray-100;
+        margin: 0 16px 16px 0;
+        text-align: center;
+        flex: 1 0 auto;
+
+        white-space: nowrap;
+
+        > * {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        &:hover {
+            background-color: $gray-400;
+        }
+    }
+}

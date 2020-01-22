@@ -50,4 +50,9 @@ return [
         'url' => env('SWGOH_HELP_STATS_URL'),
     ],
 
+    'shitty_bot' => [
+        'token' => env('SHITTY_BOT_TOKEN'),
+        'active' => env('SHITTY_BOT_ACTIVE', false),
+    ]
+
 ];

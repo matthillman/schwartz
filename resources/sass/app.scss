@@ -342,6 +342,7 @@ a:not(.gg-link) {
 
 table.sortable {
   th {
+    vertical-align: bottom;
     span {
       display: flex;
       align-items: center;
@@ -373,6 +374,22 @@ table.sortable {
 
     &.reverse span::after {
       transform: rotate(180deg);
+    }
+  }
+}
+
+.guild-stats .list-table {
+  table.sortable {
+    max-width: 100%;
+
+    span::after {
+      position: relative;
+      left: 8px;
+      margin-left: 0;
+    }
+
+    td:not(:first-of-type) {
+      padding-right: 18px;
     }
   }
 }

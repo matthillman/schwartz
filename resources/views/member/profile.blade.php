@@ -46,13 +46,25 @@
                         <h2>Arena</h2>
                         @include('shared.arena_table', [
                             'arena' => 'Squad',
-                            'rank' => $member->arena['char']['rank'],
-                            'team' => $member->arena['char']['squad'],
+                            'rank' => array_get($member->arena, 'char', $member->arena[0])['rank'],
+                            'team' => collect(array_get($member->arena, 'char.squad', $member->arena[0]['squad']['cellList']))->map(function($u) {
+                                if (!isset($u['defId'])) {
+                                    list($baseId, ) = explode(':', $u['unitDefId']);
+                                    return ['defId' => $baseId];
+                                }
+                                return ['defId' => $u['defId']];
+                            }),
                         ])
                         @include('shared.arena_table', [
                             'arena' => 'Fleet',
-                            'rank' => $member->arena['ship']['rank'],
-                            'team' => $member->arena['ship']['squad'],
+                            'rank' => array_get($member->arena, 'ship', $member->arena[1])['rank'],
+                            'team' => collect(array_get($member->arena, 'char.ship', $member->arena[0]['squad']['cellList']))->map(function($u) {
+                                if (!isset($u['defId'])) {
+                                    list($baseId, ) = explode(':', $u['unitDefId']);
+                                    return ['defId' => $baseId];
+                                }
+                                return ['defId' => $u['defId']];
+                            }),
                         ])
 
                         <h2>Key Characters</h2>

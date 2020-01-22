@@ -24,7 +24,9 @@ class Member extends Model
     protected $casts = [
         'arena' => 'array',
     ];
-
+    protected $hidden = [
+        'raw',
+    ];
 
     public function characters() {
         return $this->hasMany(Character::class);
@@ -45,6 +47,10 @@ class Member extends Model
 
     private function modStats() {
         return $this->hasManyThrough(ModStat::class, ModUser::class, 'name', 'mod_user_id', 'ally_code', 'id');
+    }
+
+    public function raw() {
+        return $this->hasOne(MembersRaw::class);
     }
 
     private function modsAtOrOver($threshold, $attribute = 'speed') {

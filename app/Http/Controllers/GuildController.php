@@ -60,7 +60,11 @@ class GuildController extends Controller
 
         $view = $mode === 'members' ? 'member-teams' : 'guild-teams';
         return view("guild.$view", [
-            'members' => $guild->members()->with(['characters.zetas'])->orderBy('player')->get(),
+            'members' => $guild->members()
+                ->select('id', 'player', 'gp', 'character_gp', 'ship_gp', 'ally_code', 'level')
+                ->with(['characters' => function($query) use ($teams) {
+                    $query->whereIn('unit_name', $teams->flatten()->pluck('base_id'));
+                }])->orderBy('player')->get(),
             'teams' => $teams,
             'highlight' => $highlight,
             'team' => $team,
@@ -126,5 +130,24 @@ class GuildController extends Controller
         $guild = Guild::findOrFail($guild);
 
         return response()->json($guild->mod_data);
+    }
+
+    public function compareGuilds($first, $second) {
+        if (preg_match('/^\d{3}-?\d{3}-?\d{3}$/', $first)) {
+            $ally = preg_replace('/[^0-9]/', '', $first);
+            $member = Member::where(['ally_code' => $ally])->firstOrFail();
+            $guild1 = $member->guild()->firstOrFail();
+        } else {
+            $guild1 = \App\Guild::where(['guild_id' => $first])->firstOrFail();
+        }
+        if (preg_match('/^\d{3}-?\d{3}-?\d{3}$/', $second)) {
+            $ally2 = preg_replace('/[^0-9]/', '', $second);
+            $member2 = Member::where(['ally_code' => $ally2])->firstOrFail();
+            $guild2 = $member2->guild()->firstOrFail();
+        } else {
+            $guild2 = \App\Guild::where(['guild_id' => $second])->firstOrFail();
+        }
+
+        dd(Guild::getCompareCharacters(), Guild::getCompareData($guild1, $guild2));
     }
 }

@@ -13,7 +13,8 @@ use App\Character;
 use Carbon\Carbon;
 use App\CharacterZeta;
 use Illuminate\Console\Command;
-use SwgohHelp\Parsers\GuildParser;
+use App\Util\API\GuildParser as ShittyParser;
+use SwgohHelp\Parsers\GuildParser as SWGOHParser;
 
 use SwgohHelp\Enums\ModSet;
 use SwgohHelp\Enums\ModSlot;
@@ -49,11 +50,14 @@ class PullGuild extends Command
         $isAllyCode = $this->option('ally');
         $start = Carbon::now();
         $guildID = $this->argument('guild');
+        $guild = null;
         if ($isAllyCode) {
             $guildID = preg_replace('/[^0-9]/', '', $guildID);
             $member = Member::firstOrNew(['ally_code' => $guildID]);
             $guild = $member->guild;
-        } else {
+        }
+
+        if (is_null($guild) || !$guild->exists) {
             $guild = Guild::firstOrNew(['guild_id' => $guildID]);
         }
         $name = $guild->name ?? ($isAllyCode ? 'ALLY CODE ' : 'GUILD ') . $guildID;
@@ -67,7 +71,14 @@ class PullGuild extends Command
             $guild->save();
         }
 
-        $parser = new GuildParser($guildID, $isAllyCode);
+
+        if (config('services.shitty_bot.active')) {
+            $this->info('Using swgoh.shittybots.me');
+            $parser = new ShittyParser($guildID, $isAllyCode);
+        } else {
+            $this->info('Using api.swgoh.help');
+            $parser = new SWGOHParser($guildID, $isAllyCode);
+        }
         $this->info("Starting API pull…");
 
         $updated = [];
@@ -112,8 +123,8 @@ class PullGuild extends Command
 
         $guild->name = $parser->name();
         $guild->gp = $parser->gp();
-        $guild->icon = $parser->data['bannerLogo'];
-        $guild->colors = $parser->data['bannerColor'];
+        $guild->icon = array_get($parser->data, 'bannerLogo', array_get($parser->data, 'bannerLogoId'));
+        $guild->colors = array_get($parser->data, 'bannerColor', array_get($parser->data, 'bannerColorId'));
         $guild->save();
         $this->info("Guild saved.");
 
@@ -135,7 +146,7 @@ class PullGuild extends Command
             });
         });
         $this->info("Updating guild GP totals");
-        $guild->gp = $guild->members->pluck('gp')->sum();
+        $guild->gp = $guild->members()->sum('gp');
         $guild->save();
         $this->info("Guild cleanup done.");
 

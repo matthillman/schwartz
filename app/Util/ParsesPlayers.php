@@ -2,12 +2,16 @@
 
 namespace App\Util;
 
+use DB;
 use Storage;
 use App\Mod;
 use App\Zeta;
+use App\Unit;
 use App\Member;
 use App\ModUser;
 use App\Character;
+use App\MembersRaw;
+use App\StatModList;
 use App\CharacterZeta;
 
 use SwgohHelp\Enums\ModSet;
@@ -16,6 +20,8 @@ use SwgohHelp\Enums\UnitStat;
 use SwgohHelp\Enums\PlayerStatsIndex;
 
 trait ParsesPlayers {
+
+    private $logPrefix = '';
 
     private function getZetaList() {
         static $zetaList;
@@ -101,15 +107,114 @@ trait ParsesPlayers {
         return $gpTotal;
     }
 
+    public function translate($member_data) {
+        if (!config('services.shitty_bot.active')) {
+            $this->info($this->logPrefix . 'Skipping Translation');
+            return $member_data;
+        }
+        $this->info($this->logPrefix . 'Doing Translation');
+        $translated = collect($member_data)->only(
+            'name',
+            'level',
+            'allyCode',
+            'playerId',
+            'guildName',
+            'guildBannerColor',
+            'guildBannerLogo'
+        )->toArray();
+
+        $translated['titles'] = [
+            'selected' => array_get($member_data, 'selectedPlayerTitle.id'),
+            'unlocked' => collect($member_data['unlockedPlayerTitleList'])->pluck('id'),
+        ];
+
+        $translated['portraits'] = [
+            'selected' => array_get($member_data, 'selectedPlayerPortrait.id'),
+            'unlocked' => collect($member_data['unlockedPlayerPortraitList'])->pluck('id'),
+        ];
+
+        $translated['stats'] = $member_data['profileStatList'];
+        $translated['arena'] = $member_data['pvpProfileList'];
+
+        $translated['roster'] = collect($member_data['rosterUnitList'])->map(function($unit) {
+            list($baseId, ) = explode(':', $unit['definitionId']);
+            $unitData = Unit::where(['base_id' => $baseId])->firstOrFail();
+
+            $r = [
+                'defId' => $unitData->base_id,
+                'nameKey' => $unitData->name,
+                'rarity' => $unit['currentRarity'],
+                'level' => $unit['currentLevel'],
+                'gear' => $unit['currentTier'],
+                'combatType' => $unitData->combat_type,
+                'crew' => $unitData->crew_list,
+                'gp' => 0,
+                'relic' => array_get($unit, 'relic', []),
+                'equipped' => array_get($unit, 'equipmentList', []),
+                'skills' => collect(array_get($unit, 'skillList', []))->map(function($skill) {
+                    $skill['tier'] += 2;
+                    return $skill;
+                }),
+                'mods' => collect($unit['equippedStatModList'])->map(function($modData) {
+                    $modStat = StatModList::findOrFail($modData['definitionId']);
+                    return [
+                        'id' => $modData['id'],
+                        'definitionId' => $modData['definitionId'],
+                        'level' => $modData['level'],
+                        'tier' => $modData['tier'],
+                        'slot' => $modStat->slot,
+                        'set' => $modStat->set,
+                        'pips' => $modStat->rarity,
+                        'primaryStat' => [
+                            'unitStat' => $modData['primaryStat']['stat']['unitStatId'],
+                            'value' =>  $modData['primaryStat']['stat']['unscaledDecimalValue'] / $this->statMultiplierFor($modData['primaryStat']['stat']['unitStatId']),
+                        ],
+                        'secondaryStat' => collect($modData['secondaryStatList'])->map(function($secondary) {
+                            return [
+                                'unitStat' => $secondary['stat']['unitStatId'],
+                                'value' => $secondary['stat']['unscaledDecimalValue'] / $this->statMultiplierFor($secondary['stat']['unitStatId']),
+                                'roll' => $secondary['statRolls'],
+                            ];
+                        }),
+                    ];
+                }),
+            ];
+            return $r;
+        });
+
+        return $translated;
+    }
+
+    private function statMultiplierFor($stat) {
+        switch ($stat) {
+            case 1:  // Health
+            case 5:  // Speed
+            case 28: // Protection
+            case 41: // Offense
+            case 42: // Defense
+              // Flat stats
+              return 100000000;
+            default:
+              // Percent stats
+              return 1000000;
+          }
+    }
+
     public function parseMember($member_data, $guild, $logPrefix = '   ') {
+        $this->logPrefix = $logPrefix;
         $zetaList = $this->getZetaList();
         $member = Member::firstOrNew(['ally_code' => (string)$member_data['allyCode']]);
+
+        $raw_member_data = $member_data;
+
+        $member_data = $this->translate($member_data);
 
         $member_data = stats()->addStatsTo([$member_data])->first();
 
         $ally = $member_data['allyCode'];
         $member->url = "/p/{$ally}/characters/";
         $member->player = $member_data['name'];
+        $member->player_id = array_get($member_data, 'playerId', '');
 
         $member->arena = $member_data['arena'];
         $member->level = $member_data['level'];
@@ -132,6 +237,9 @@ trait ParsesPlayers {
             $member->guild()->associate($guild);
         }
         $member->save();
+        $mr = MembersRaw::firstOrNew(['member_id' => $member->id]);
+        $mr->data = $raw_member_data;
+        $mr->save();
 
         $modUser = ModUser::firstOrNew(['name' => (string)$ally]);
         $modUser->last_scrape = new \DateTime;
@@ -213,9 +321,16 @@ trait ParsesPlayers {
         $cCount = $chars->count();
         $this->info("${logPrefix}➡ Doing the character insert (${cCount} rows)");
         Character::upsert($chars->toArray(), "(member_id, unit_name)");
+
+        $this->info("${logPrefix}➡ Trimming raw data");
+        DB::delete('delete from characters_raw where character_id in (select id from characters where member_id = ?);', [$member->id]);
+        $this->info("${logPrefix}➡ Inserting new raw data");
+        DB::insert('insert into characters_raw (character_id, data) select id, raw from characters where member_id = ?', [$member->id]);
+        $this->info("${logPrefix}➡ Trimming char table");
+        DB::update('update characters set raw = ? where member_id = ?', ['[]', $member->id]);
         $this->info("${logPrefix}⬅ Done with character insert.");
 
-        $skills = $roster->pluck('skills')->flatten(1)->where('isZeta', true)->where('tier', 8)->pluck('id');
+        $skills = $roster->pluck('skills')->flatten(1)->where('tier', 8)->pluck('id');
         $memberChars = $member->characters()->get();
         $zetas = $zetaList->whereIn('skill_id', $skills)->map(function($zeta) use ($memberChars) {
             $character = $memberChars->where('unit_name', $zeta->character_id)->first();

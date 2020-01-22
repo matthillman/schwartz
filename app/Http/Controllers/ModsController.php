@@ -36,10 +36,9 @@ class ModsController extends Controller
         return response()->json(
             Member::where('ally_code', $user)->firstOrFail()
                 ->characters()
-                ->with('unit')
                 ->where('combat_type', 1)
                 ->get()
-                ->sortBy('unit.name')
+                ->sortBy('display_name')
                 ->values()
                 // ->mapWithKeys(function($unit) {
                 //     return [$unit['unit_name'] => $unit];
@@ -51,7 +50,7 @@ class ModsController extends Controller
         $unitID = request()->input('unit');
         $modIDs = request()->input('mods');
 
-        $unitData = Character::findOrFail($unitID)->raw;
+        $unitData = Character::findOrFail($unitID)->rawData->data;
         $unitData['mods'] = collect($modIDs)->map(function($modID) {
             return CharacterMod::where('uid', $modID)->firstOrFail()->raw;
         })->toArray();

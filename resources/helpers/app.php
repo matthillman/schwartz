@@ -14,6 +14,11 @@ if (!function_exists('google_sheets')) {
 		return app('google_sheets');
 	}
 }
+if (!function_exists('shitty_bot')) {
+	function shitty_bot() {
+		return app('shitty_bot');
+	}
+}
 
 // if (!function_exists('guzzle')) {
 //     /**

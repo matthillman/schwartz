@@ -37,7 +37,6 @@
 
             <div class="card">
                 <div class="card-header">Tools</div>
-
                 @if (session('status'))
                     <div class="alert alert-success">
                         {{ session('status') }}

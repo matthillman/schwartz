@@ -26,11 +26,20 @@ class Character extends Model
         'raw',
     ];
 
-    protected $appends = [ 'alignment', 'speed', 'is_ship', 'is_capital_ship', 'highlight_power', 'key_stats', 'stat_grade', 'base_speed' ];
+    protected $appends = [
+        'alignment',
+        'speed',
+        'is_ship',
+        'is_capital_ship',
+        'highlight_power',
+        'key_stats',
+        'stat_grade',
+        'base_speed',
+        'display_name',
+    ];
 
     protected $casts = [
         'stats' => 'array',
-        'raw' => 'array',
     ];
 
     protected $hidden = [ 'raw' ];
@@ -48,6 +57,10 @@ class Character extends Model
         return $this->hasMany(CharacterMod::class);
     }
 
+    public function rawData() {
+        return $this->hasOne(CharactersRaw::class);
+    }
+
     // public function getPowerAttribute($value) {
     //     static $relicBonus = [ 0, 759, 1594, 2505, 3492, 4554, 6072, 7969 ];
 
@@ -60,6 +73,9 @@ class Character extends Model
     public function getAlignmentAttribute() {
         return strtolower((new Alignment($this->unit->alignment))->getKey());
     }
+    public function getDisplayNameAttribute() {
+        return $this->unit->name;
+    }
     public function getSpeedAttribute() {
         return $this->UNITSTATSPEED;
     }
@@ -67,14 +83,11 @@ class Character extends Model
         return $this->baseAttribute(UnitStat::UNITSTATSPEED());
     }
     public function baseAttribute(UnitStat $stat) {
-        if (!is_null($this->member) && $this->member->exists()) {
-            $stats = $this->getAttribute('stats');
-            $finalStat = array_get($stats, 'final.'.$stat->getValue(), 0);
-            $modBonuses = array_get($stats, 'mods.'.$stat->getValue(), 0);
+        $stats = $this->getAttribute('stats');
+        $finalStat = array_get($stats, 'final.'.$stat->getValue(), 0);
+        $modBonuses = array_get($stats, 'mods.'.$stat->getValue(), 0);
 
-            return $finalStat - $modBonuses;
-        }
-        return -1;
+        return $finalStat - $modBonuses;
     }
     public function getKeyStatsAttribute() {
         return $this->keyStatsFor($this->unit_name)

@@ -48,6 +48,16 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'game_data' => [
+            'driver' => 'local',
+            'root' => storage_path('app/game_data'),
+        ],
+
+        'languages' => [
+            'driver' => 'local',
+            'root' => storage_path('app/lang'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
