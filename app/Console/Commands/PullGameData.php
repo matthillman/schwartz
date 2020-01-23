@@ -84,7 +84,7 @@ class PullGameData extends Command
 
             $this->info("Building language files…");
 
-            // When/if I need multiple langauage support…
+            // When/if I need multiple language support…
             // collect(Storage::disk('game_data')->files())
             //     ->filter(function($file) {
             //         return preg_match('/[A-Z]{3}_[A-Z]{2}\.json/', $file);
