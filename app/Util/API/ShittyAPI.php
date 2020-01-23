@@ -69,7 +69,7 @@ class ShittyAPI {
             $parser = new Parser(StreamWrapper::getResource($raw), $listener);
             $parser->parse();
         } catch (ParsingError $e) {
-            throw new \Exception((string)$raw, 0, $e);
+            throw new APIException((string)$raw, 0, $e);
         }
 
         return collect($listener->getJson());
