@@ -253,10 +253,7 @@ trait ParsesPlayers {
             if (is_null($unit['combatType'])) {
                 $unit['combatType'] = 1;
             }
-            $isChar = $unit['combatType'] == 1;
-            if ($isChar) {
-                $this->line("Relic level" . array_get($unit, 'relic.currentTier', 0));
-            }
+            // $isChar = $unit['combatType'] == 1;
             $character = [
                 'member_id' => $member->id,
                 'unit_name' => $unit['defId'],
