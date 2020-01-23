@@ -35,8 +35,9 @@ class ShittyAPI {
     }
 
     public function callAPI($api, $payload, $query = '', Callable $memberCallback = null) {
+        $URL = $this->buildAPIUrl($api, $payload, $query);
         try {
-            $response = $this->getHttpClient()->get($this->buildAPIUrl($api, $payload, $query), [
+            $response = $this->getHttpClient()->get($URL, [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
@@ -69,7 +70,7 @@ class ShittyAPI {
             $parser = new Parser(StreamWrapper::getResource($raw), $listener);
             $parser->parse();
         } catch (ParsingError $e) {
-            throw new APIException((string)$raw, 0, $e);
+            throw new APIException((string)$raw . " -> using [$URL]", 0, $e);
         }
 
         return collect($listener->getJson());
