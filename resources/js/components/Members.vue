@@ -62,7 +62,7 @@
                 route: 'gp',
                 items: [],
                 columns: [
-		            { prop: 'player', label: 'Member', href: 'url' },
+		            { prop: 'player', label: 'Member', href: 'profile_url' },
 		            { prop: 'gp', label: 'Galactic Power', transform: numberWithCommas },
 		            { prop: 'character_gp', label: 'Character GP', transform: numberWithCommas },
 		            { prop: 'ship_gp', label: 'Ship GP', transform: numberWithCommas },

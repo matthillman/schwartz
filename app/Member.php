@@ -15,6 +15,7 @@ class Member extends Model
      */
     protected $appends = [
         'guild_name',
+        'profile_url',
         'gear_12', 'gear_13',
         'relic_5', 'relic_6', 'relic_7',
         // 'speed_10', 'speed_15', 'speed_20', 'speed_25',
@@ -73,6 +74,10 @@ class Member extends Model
         }
 
         return $modCounts->{"{$attribute}_{$threshold}"};
+    }
+
+    public function getProfileUrlAttribute() {
+        return route('member.profile', ['allyCode' => $this->ally_code]);
     }
 
     public function mods6dot() {

@@ -253,7 +253,10 @@ trait ParsesPlayers {
             if (is_null($unit['combatType'])) {
                 $unit['combatType'] = 1;
             }
-            $isChar = $unit['combatType'] === 1;
+            $isChar = $unit['combatType'] == 1;
+            if ($isChar) {
+                $this->line("Relic level" . array_get($unit, 'relic.currentTier', 0));
+            }
             $character = [
                 'member_id' => $member->id,
                 'unit_name' => $unit['defId'],
@@ -262,7 +265,7 @@ trait ParsesPlayers {
                 'level' => $unit['level'],
                 'combat_type' => $unit['combatType'],
                 'rarity' => $unit['rarity'],
-                'relic' => $isChar ? $unit['relic']['currentTier'] : 0,
+                'relic' => array_get($unit, 'relic.currentTier', 0),
                 'stats' => $unit['stats'],
                 'raw' => collect($unit)->except('stats')->toArray(),
             ];
