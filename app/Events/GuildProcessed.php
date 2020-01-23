@@ -16,6 +16,13 @@ class GuildProcessed implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+    * The name of the queue on which to place the event.
+    *
+    * @var string
+    */
+    public $broadcastQueue = 'notifications';
+
     protected $guild;
     /**
      * Create a new event instance.
