@@ -46,8 +46,8 @@
                         <h2>Arena</h2>
                         @include('shared.arena_table', [
                             'arena' => 'Squad',
-                            'rank' => array_get($member->arena, 'char', $member->arena[0])['rank'],
-                            'team' => collect(array_get($member->arena, 'char.squad', $member->arena[0]['squad']['cellList']))->map(function($u) {
+                            'rank' => array_get($member->arena, 'char', head($member->arena))['rank'],
+                            'team' => collect(array_get($member->arena, 'char.squad', array_get(head($member->arena), 'squad.cellList')))->map(function($u) {
                                 if (!isset($u['defId'])) {
                                     list($baseId, ) = explode(':', $u['unitDefId']);
                                     return ['defId' => $baseId];
@@ -57,8 +57,8 @@
                         ])
                         @include('shared.arena_table', [
                             'arena' => 'Fleet',
-                            'rank' => array_get($member->arena, 'ship', $member->arena[1])['rank'],
-                            'team' => collect(array_get($member->arena, 'char.ship', $member->arena[0]['squad']['cellList']))->map(function($u) {
+                            'rank' => array_get($member->arena, 'ship', last($member->arena))['rank'],
+                            'team' => collect(array_get($member->arena, 'ship.squad', array_get(last($member->arena), 'squad.cellList')))->map(function($u) {
                                 if (!isset($u['defId'])) {
                                     list($baseId, ) = explode(':', $u['unitDefId']);
                                     return ['defId' => $baseId];

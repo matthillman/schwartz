@@ -50,6 +50,7 @@ class PullGuild extends Command
         $isAllyCode = $this->option('ally');
         $start = Carbon::now();
         $guildID = $this->argument('guild');
+        $isAllyCode = $isAllyCode || preg_match('/^\d{3}-?\d{3}-?\d{3}$/', $guildID);
         $guild = null;
         if ($isAllyCode) {
             $guildID = preg_replace('/[^0-9]/', '', $guildID);
