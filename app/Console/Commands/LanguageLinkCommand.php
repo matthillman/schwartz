@@ -4,7 +4,7 @@ namespace Illuminate\Foundation\Console;
 
 use Illuminate\Console\Command;
 
-class StorageLinkCommand extends Command
+class LanguageLinkCommand extends Command
 {
     /**
      * The console command signature.
