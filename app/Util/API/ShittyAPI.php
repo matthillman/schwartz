@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use JsonStreamingParser\Parser;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\StreamWrapper;
+use JsonStreamingParser\ParsingError;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use JsonStreamingParser\Listener\InMemoryListener;
@@ -46,15 +47,6 @@ class ShittyAPI {
             $raw = $response->getBody();
             $response = null;
             unset($response);
-            if (is_null($memberCallback)) {
-                $listener = new InMemoryListener;
-            } else {
-                $listener = new GuildListener($memberCallback);
-            }
-            $parser = new Parser(StreamWrapper::getResource($raw), $listener);
-            $parser->parse();
-
-            return collect($listener->getJson());
         } catch (ClientException | ServerException $e) {
             // $response = $e->getResponse();
             // $body = json_decode($response->getBody(), true);
@@ -67,6 +59,20 @@ class ShittyAPI {
 
             throw $e;
         }
+        if (is_null($memberCallback)) {
+            $listener = new InMemoryListener;
+        } else {
+            $listener = new GuildListener($memberCallback);
+        }
+
+        try {
+            $parser = new Parser(StreamWrapper::getResource($raw), $listener);
+            $parser->parse();
+        } catch (ParsingError $e) {
+            throw new \Exception((string)$raw, 0, $e);
+        }
+
+        return collect($listener->getJson());
     }
 
     protected function buildAPIUrl($path, $payload, $query = '') {
