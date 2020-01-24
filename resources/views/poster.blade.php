@@ -33,6 +33,6 @@
         @endforeach
         </tbody>
     </table>
-    <div class="discord-link">HTTPS://DISCORD.GG/<span class="small">e</span>D<span class="small">cr</span>M<span class="small">fs</span></span></div>
+    <div class="discord-link">HTTPS://DISCORD.GG/KZ5<span class="small">tv</span>RU</div>
 </div>
 @endsection
