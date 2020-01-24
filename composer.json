@@ -19,6 +19,7 @@
         "laravel/horizon": "^1.2",
         "laravel/passport": "^6.0",
         "laravel/socialite": "^3.0",
+        "laravel/telescope": "^2.1",
         "laravel/tinker": "^1.0",
         "matthillman/swgoh-help": "dev-master",
         "myclabs/php-enum": "^1.6",

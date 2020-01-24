@@ -26,6 +26,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('telescope:prune')->daily();
+
         $schedule->command('swgoh:game-data')->daily();
 
         Guild::where('schwartz', true)->each(function($guild, $index) use ($schedule) {
