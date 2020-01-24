@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
@@ -57,20 +58,52 @@ class Member extends Model
     private function modsAtOrOver($threshold, $attribute = 'speed') {
         static $modCounts;
         if (is_null($modCounts)) {
-            $modCounts = \DB::table('mod_stats')
-                ->join('mod_users', 'mod_stats.mod_user_id', '=', 'mod_users.id')
-                ->selectRaw("
-                    mod_users.name,
-                    sum(case when mod_stats.pips >= 6 then 1 else 0 end) as dot_6,
-                    sum(case when mod_stats.speed >= 25 then 1 else 0 end) as speed_25,
-                    sum(case when mod_stats.speed >= 20 then 1 else 0 end) as speed_20,
-                    sum(case when mod_stats.speed >= 15 then 1 else 0 end) as speed_15,
-                    sum(case when mod_stats.speed >= 10 then 1 else 0 end) as speed_10,
-                    sum(case when mod_stats.offense >= 100 then 1 else 0 end) as offense_100
-                ")
-                ->groupBy('mod_users.name')
-                ->where('mod_users.name', $this->ally_code)
-                ->first();
+            // $modCounts = DB::table('mod_stats')
+            //     ->join('mod_users', 'mod_stats.mod_user_id', '=', 'mod_users.id')
+            //     ->selectRaw("
+            //         mod_users.name,
+            //         sum(case when mod_stats.pips >= 6 then 1 else 0 end) as dot_6,
+            //         sum(case when mod_stats.speed >= 25 then 1 else 0 end) as speed_25,
+            //         sum(case when mod_stats.speed >= 20 then 1 else 0 end) as speed_20,
+            //         sum(case when mod_stats.speed >= 15 then 1 else 0 end) as speed_15,
+            //         sum(case when mod_stats.speed >= 10 then 1 else 0 end) as speed_10,
+            //         sum(case when mod_stats.offense >= 100 then 1 else 0 end) as offense_100
+            //     ")
+            //     ->groupBy('mod_users.name')
+            //     ->where('mod_users.name', $this->ally_code)
+            //     ->first();
+
+            $modCounts = head(DB::select("
+                select
+                    name,
+                    sum((pips >= 6)::int) as dot_6,
+                    sum((speed >= 25)::int) as speed_25,
+                    sum((speed >= 20)::int) as speed_20,
+                    sum((speed >= 15)::int) as speed_15,
+                    sum((speed >= 10)::int) as speed_10,
+                    sum((offense >= 100)::int) as offense_100
+                from (
+                    select
+                        mod_users.name,
+                        mods.pips,
+                        CASE
+                            WHEN secondary_1_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_1_value)::numeric
+                            WHEN secondary_2_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_2_value)::numeric
+                            WHEN secondary_3_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_3_value)::numeric
+                            WHEN secondary_4_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_4_value)::numeric
+                            ELSE 0 END as speed,
+                        CASE
+                            WHEN secondary_1_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_1_value)::numeric
+                            WHEN secondary_2_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_2_value)::numeric
+                            WHEN secondary_3_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_3_value)::numeric
+                            WHEN secondary_4_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_4_value)::numeric
+                            ELSE 0 END as offense
+                    from mods
+                    inner join mod_users on mods.mod_user_id = mod_users.id
+                    where mod_users.name = :ally
+                ) mod_totals
+                group by name
+                ", ['ally' => $this->ally_code]));
         }
 
         return $modCounts->{"{$attribute}_{$threshold}"};
