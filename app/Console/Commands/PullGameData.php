@@ -57,6 +57,7 @@ class PullGameData extends Command
                 return 1;
             }
 
+            $this->line("Current version: ". $metadata->get('latestGamedataVersion') . ", Server version: " . $newMetadata->get('latestGamedataVersion'));
             $skipFetch = !is_null($metadata->get('latestGamedataVersion')) && $metadata->get('latestGamedataVersion') === $newMetadata->get('latestGamedataVersion');
         }
 
@@ -163,10 +164,10 @@ class PullGameData extends Command
 
                         $baseId = $charRef['baseId'];
 
-                        $zeta = Zeta::where([
+                        $zeta = Zeta::firstOrNew([
                             'skill_id' => $data['id'],
                             'character_id' => $baseId
-                        ])->first();
+                        ]);
 
                         $zeta->name = $name;
                         $zeta->class = $class;
