@@ -45,8 +45,10 @@ class PullMods extends Command
 
         if (config('services.shitty_bot.active')) {
             $this->info('Using swgoh.shittybots.me');
-            $profile = shitty_bot()->getPlayer($user->name);
-            $profile['updated'] = Carbon::createFromTimestamp($profile['LastUpdated']);
+            $fetchId = empty($user->member->player_id) ? $user->name : $user->member->player_id;
+            $this->info("Fetching with ${fetchId}");
+            $profile = shitty_bot()->getPlayer($fetchId);
+            $profile['updated'] = isset($profile['LastUpdated']) ? Carbon::createFromTimestamp($profile['LastUpdated'] / 1000) : Carbon::now();
         } else {
             $this->info('Using api.swgoh.help');
             $profile = swgoh()->getPlayer($user->name)
