@@ -1,309 +1,343 @@
 $base: 80px;
-$shipBase: 54px;
 
-.portrait {
-    margin: 0px;
-    position: relative;
-    height: $base;
-    width: $base;
-    box-sizing: border-box;
-    font-family: Verdana;
-
-    &.ship {
-        width: 1.62 * $shipBase;
-        height: $shipBase + (50px / 400px * $base) + (20px / 400px * $base);
-        display: flex;
-        flex-direction: column;
-    }
-
-    > .character, .ship-wrapper > .character {
-        position: absolute;
+@mixin portrait($base, $class: '') {
+    $shipBase: $base * 54px / 80px;
+    .portrait#{$class} {
         margin: 0px;
-        top: 45px / 400px * $base;
-        left: 30px / 400px * $base;
-        height: 340px / 400px * $base;
-        width: 340px / 400px * $base;
+        position: relative;
+        height: $base;
+        width: $base;
         box-sizing: border-box;
-        background: #000000;
+        font-family: Verdana;
 
-        &.round { border-radius: 50%; }
-    }
+        &.ship {
+            width: 1.62 * $shipBase;
+            height: $shipBase + (50px / 400px * $base) + (20px / 400px * $base);
+            display: flex;
+            flex-direction: column;
+        }
 
-    &.ship {
-        > .ship-wrapper {
-            overflow: hidden;
-            position: relative;
-            height: 100%;
-            width: 100%;
-            margin-top: 30px / 400px * $base;
-            background: black;
+        > .character, .ship-wrapper > .character {
+            position: absolute;
+            margin: 0px;
+            top: 45px / 400px * $base;
+            left: 30px / 400px * $base;
+            height: 340px / 400px * $base;
+            width: 340px / 400px * $base;
+            box-sizing: border-box;
+            background: #000000;
 
-            .character {
-                height: auto;
+            &.round { border-radius: 50%; }
+        }
+
+        &.ship {
+            > .ship-wrapper {
+                overflow: hidden;
+                position: relative;
+                height: 100%;
                 width: 100%;
-                transform: translate(0, -18%) scale(0.85);
+                margin-top: 30px / 400px * $base;
+                background: black;
+
+                .character {
+                    height: auto;
+                    width: 100%;
+                    transform: translate(0, -18%) scale(0.85);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                }
+            }
+
+            &.capital > .ship-wrapper {
+                .character {
+                    transform: translate(0, -25%);
+                }
+            }
+        }
+
+        > .gear {
+            position: absolute;
+            margin: 0px;
+            top: 45px / 400px * $base;
+            left: 30px / 400px * $base;
+            height: 340px / 400px * $base;
+            width: 340px / 400px * $base;
+            box-sizing: border-box;
+            background-image: var(--gear-image);
+            background-repeat: no-repeat;
+            background-size: 100%;
+
+            &.g13 {
+                top: 20px / 400px * $base;
+                left: -10px / 400px * $base;
+                height: 400px / 400px * $base;
+                width: 420px / 400px * $base;
+
+                .light & {
+                    background-position: 0% 0%;
+                }
+                .dark & {
+                    background-position: 0% 50.5%;
+                }
+                .neutral & {
+                    background-position: 0% 101%;
+                }
+            }
+        }
+
+        &.ship {
+            > .gear {
+                top: 14px;
+                left: -1px;
+                bottom: -1px;
+                right: -1px;
+                width: auto;
+                height: auto;
+                background-size: contain;
+            }
+
+            &.capital > .gear {
+                top: 11px;
+                left: -4px;
+                bottom: -4px;
+                right: -4px;
+            }
+        }
+
+        > .stars {
+            position: relative;
+            display: block;
+            width: 200px / 400px * $base;
+            font-size: 0;
+            text-align: center;
+            margin: 0px;
+            padding: 0px;
+
+            > .full {
+                color: #F6D913;
+                width: 50px / 400px * $base;
+                height: 50px / 400px * $base;
+                position: absolute;
+                display: inline-block;
+            }
+            > .empty {
+                color: #AAA;
+                width: 50px / 400px * $base;
+                height: 50px / 400px * $base;
+                position: absolute;
+                display: inline-block;
+            }
+
+
+            > *:nth-child(1) {
+                left: 0px;
+                top: 105px / 400px * $base;
+                transform: rotate(-62deg);
+            }
+
+            > *:nth-child(2) {
+                left: 40px / 400px * $base;
+                top: 48px / 400px * $base;
+                transform: rotate(-43deg);
+            }
+
+            > *:nth-child(3) {
+                left: 100px / 400px * $base;
+                top: 12px / 400px * $base;
+                transform: rotate(-18deg);
+            }
+
+            > *:nth-child(4) {
+                left: 175px / 400px * $base;
+                top: 0px;
+            }
+
+            > *:nth-child(5) {
+                left: 250px / 400px * $base;
+                top: 12px / 400px * $base;
+                transform: rotate(18deg);
+            }
+
+            > *:nth-child(6) {
+                left: 310px / 400px * $base;
+                top: 48px / 400px * $base;
+                transform: rotate(43deg);
+            }
+
+            > *:nth-child(7) {
+                left: 350px / 400px * $base;
+                top: 105px / 400px * $base;
+                transform: rotate(62deg);
+            }
+        }
+
+        &.ship > .stars {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            order: -1;
+
+            > .full.full,  > .empty.empty {
+                transform: rotate(0);
                 top: 0;
-                right: 0;
-                bottom: 0;
                 left: 0;
+                position: relative;
             }
         }
 
-        &.capital > .ship-wrapper {
-            .character {
-                transform: translate(0, -25%);
+        > .zetas {
+            position: absolute;
+            bottom: 10px / 400px * $base;
+            left: 0px;
+            height: 160px / 400px * $base;
+            width: 160px / 400px * $base;
+            text-align: center;
+            font-size: 50px / 400px * $base;
+            text-align: center;
+
+            > img {
+                position: relative;
+                bottom: 0px;
+                height: 160px / 400px * $base;
+                width: 160px / 400px * $base;
+            }
+
+            > .value {
+                position: absolute;
+                color: #FFF;
+                font-weight: 700;
+                top: 40px / 400px * $base;
+                left: 52.5px / 400px * $base;
+                height: 60px / 400px * $base;
+                width: 60px / 400px * $base;
+                text-align: center;
+                vertical-align: middle;
+                text-shadow: 0 1px 0 #7028c9;
             }
         }
-    }
 
-    > .gear {
-        position: absolute;
-        margin: 0px;
-        top: 45px / 400px * $base;
-        left: 30px / 400px * $base;
-        height: 340px / 400px * $base;
-        width: 340px / 400px * $base;
-        box-sizing: border-box;
-        background-image: var(--gear-image);
-        background-repeat: no-repeat;
-        background-size: 100%;
+        > .level {
+            position: absolute;
+            bottom: 10px / 400px * $base;
+            left: 150px / 400px * $base;
+            height: 100px / 400px * $base;
+            width: 100px / 400px * $base;
+            font-size: 40px / 400px * $base;
+            text-align: center;
+            vertical-align: middle;
+            border: (10px / 400px * $base) solid #fff;
+            border-radius: 50px / 400px * $base;
+            border-radius: 100%/130% 130% (75px / 400px * $base) (75px / 400px * $base);
+            box-sizing: border-box;
+            background: #264257;
 
-        &.g13 {
-            top: 20px / 400px * $base;
-            left: -10px / 400px * $base;
-            height: 400px / 400px * $base;
-            width: 420px / 400px * $base;
+            > .value {
+                position: relative;
+                color: #FFF;
+                height: 100px / 400px * $base;
+                top: 0px / 400px * $base;
+                left: 2px / 400px * $base;
+                font-size: 56px / 400px * $base;
+                text-shadow: 0 1px 0 black;
+            }
+        }
+
+        &.ship {
+            > .level {
+                right: 1px;
+                bottom: 0px;
+                left: unset;
+                background: none;
+                border: none;
+                height: auto;
+                width: auto;
+                line-height: 1;
+
+                > .value {
+                    position: relative;
+                    height: auto;
+                    top: 0;
+                    left: 0;
+                    font-size: 45px / 400px * $base;
+                }
+            }
+
+            &.capital > .level {
+                right: 0;
+            }
+        }
+
+
+        > .relic {
+            position: absolute;
+            bottom: -1px;
+            right: 0px;
+            height: 180px / 400px * $base;
+            width: 180px / 400px * $base;
+            text-align: center;
+            font-size: 50px / 400px * $base;
+            text-align: center;
+            background-image: url('/images/units/abilities/relic.png');
+            background-repeat: no-repeat;
+            background-size: 100%;
 
             .light & {
                 background-position: 0% 0%;
             }
             .dark & {
-                background-position: 0% 50.5%;
+                background-position: 0% 51%;
             }
             .neutral & {
-                background-position: 0% 101%;
+                background-position: 0% 102%;
+            }
+
+            > .value {
+                position: absolute;
+                color: #FFF;
+                font-weight: 700;
+                top: 45px / 400px * $base;
+                left: 0px / 400px * $base;
+                // height: 60px / 400px * $base;
+                // width: 60px / 400px * $base;
+                width: 100%;
+                text-align: center;
+                vertical-align: middle;
+                text-shadow: 0 1px 0 black;
             }
         }
-    }
 
-    &.ship {
-        > .gear {
-            top: 14px;
-            left: -1px;
-            bottom: -1px;
-            right: -1px;
-            width: auto;
-            height: auto;
-            background-size: contain;
+        &.relic-only {
+            height: 180px / 400px * $base;
+            width: 180px / 400px * $base;
         }
 
-        &.capital > .gear {
-            top: 11px;
-            left: -4px;
-            bottom: -4px;
-            right: -4px;
-        }
-    }
-
-    > .stars {
-        position: relative;
-        display: block;
-        width: 200px / 400px * $base;
-        font-size: 0;
-        text-align: center;
-        margin: 0px;
-        padding: 0px;
-
-        > .full {
-            color: #F6D913;
-            width: 50px / 400px * $base;
-            height: 50px / 400px * $base;
-            position: absolute;
-            display: inline-block;
-        }
-        > .empty {
-            color: #AAA;
-            width: 50px / 400px * $base;
-            height: 50px / 400px * $base;
-            position: absolute;
-            display: inline-block;
-        }
-
-
-        > *:nth-child(1) {
-            left: 0px;
-            top: 105px / 400px * $base;
-            transform: rotate(-62deg);
-        }
-
-        > *:nth-child(2) {
-            left: 40px / 400px * $base;
-            top: 48px / 400px * $base;
-            transform: rotate(-43deg);
-        }
-
-        > *:nth-child(3) {
-            left: 100px / 400px * $base;
-            top: 12px / 400px * $base;
-            transform: rotate(-18deg);
-        }
-
-        > *:nth-child(4) {
-            left: 175px / 400px * $base;
-            top: 0px;
-        }
-
-        > *:nth-child(5) {
-            left: 250px / 400px * $base;
-            top: 12px / 400px * $base;
-            transform: rotate(18deg);
-        }
-
-        > *:nth-child(6) {
-            left: 310px / 400px * $base;
-            top: 48px / 400px * $base;
-            transform: rotate(43deg);
-        }
-
-        > *:nth-child(7) {
-            left: 350px / 400px * $base;
-            top: 105px / 400px * $base;
-            transform: rotate(62deg);
-        }
-    }
-
-    &.ship > .stars {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        order: -1;
-
-        > .full.full,  > .empty.empty {
-            transform: rotate(0);
-            top: 0;
-            left: 0;
-            position: relative;
-        }
-    }
-
-    > .zetas {
-        position: absolute;
-        bottom: 10px / 400px * $base;
-        left: 0px;
-        height: 160px / 400px * $base;
-        width: 160px / 400px * $base;
-        text-align: center;
-        font-size: 50px / 400px * $base;
-        text-align: center;
-
-        > img {
-            position: relative;
-            bottom: 0px;
+        &.zeta-only {
             height: 160px / 400px * $base;
             width: 160px / 400px * $base;
         }
 
-        > .value {
-            position: absolute;
-            color: #FFF;
-            font-weight: 700;
-            top: 40px / 400px * $base;
-            left: 52.5px / 400px * $base;
-            height: 60px / 400px * $base;
-            width: 60px / 400px * $base;
-            text-align: center;
-            vertical-align: middle;
-            text-shadow: 0 1px 0 #7028c9;
-        }
-    }
-
-    > .level {
-        position: absolute;
-        bottom: 10px / 400px * $base;
-        left: 150px / 400px * $base;
-        height: 100px / 400px * $base;
-        width: 100px / 400px * $base;
-        font-size: 40px / 400px * $base;
-        text-align: center;
-        vertical-align: middle;
-        border: (10px / 400px * $base) solid #fff;
-        border-radius: 50px / 400px * $base;
-        border-radius: 100%/130% 130% (75px / 400px * $base) (75px / 400px * $base);
-        box-sizing: border-box;
-        background: #264257;
-
-        > .value {
-            position: relative;
-            color: #FFF;
-            height: 100px / 400px * $base;
-            top: 0px / 400px * $base;
-            left: 2px / 400px * $base;
-            font-size: 56px / 400px * $base;
-            text-shadow: 0 1px 0 black;
-        }
-    }
-
-    &.ship {
-        > .level {
-            right: 1px;
-            bottom: 0px;
-            left: unset;
-            background: none;
-            border: none;
-            height: auto;
-            width: auto;
-            line-height: 1;
-
-            > .value {
-                position: relative;
-                height: auto;
-                top: 0;
-                left: 0;
-                font-size: 45px / 400px * $base;
-            }
-        }
-
-        &.capital > .level {
-            right: 0;
-        }
-    }
-
-
-    > .relic {
-        position: absolute;
-        bottom: -1px;
-        right: 0px;
-        height: 180px / 400px * $base;
-        width: 180px / 400px * $base;
-        text-align: center;
-        font-size: 50px / 400px * $base;
-        text-align: center;
-        background-image: url('/images/units/abilities/relic.png');
-        background-repeat: no-repeat;
-        background-size: 100%;
-
-        .light & {
-            background-position: 0% 0%;
-        }
-        .dark & {
-            background-position: 0% 52%;
-        }
-        .neutral & {
-            background-position: 0% 104%;
+        &.centered {
+            margin: 0 auto;
         }
 
         > .value {
             position: absolute;
-            color: #FFF;
+            color: #fff;
             font-weight: 700;
-            top: 40px / 400px * $base;
-            left: 60px / 400px * $base;
-            height: 60px / 400px * $base;
-            width: 60px / 400px * $base;
+            font-size: 120px / 400px * $base;
+            top: 110px / 400px * $base;
+            left: 0px / 400px * $base;
+            width: 100%;
             text-align: center;
             vertical-align: middle;
             text-shadow: 0 1px 0 black;
         }
     }
 }
+
+@include portrait(80px);
+@include portrait(65px, '.medium');
+@include portrait(36px, '.mini');

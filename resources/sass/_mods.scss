@@ -196,6 +196,7 @@
 
 @include mod-image(45px);
 @include mod-image(20px, '.mini');
+@include mod-image(90px, '.large');
 @include mod-image(120px, '.giant');
 
 .mod-image.mini {

@@ -421,6 +421,42 @@
     }
 }
 
+.char-name {
+    font-weight: 600;
+    font-size: .7em;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.char-image-square {
+    display: inline-block;
+    background-color: white;
+    border-radius: 50%;
+    border: 3px double #bfd5ff;
+    box-shadow: 0 0 3px #0071d6;
+    margin: 4px auto 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 100%;
+
+    > img {
+        width: 100%;
+        background-color: black;
+        box-shadow: inset 0 0 3px #0071d6;
+    }
+
+    &.dark {
+        border-color: #ffcfd0;
+        box-shadow: 0 0 3px #f70019;
+
+        > img {
+            box-shadow: inset 0 0 3px #f70019;
+        }
+    }
+}
+
 .footer-logo {
     padding-top: 8px;
 
@@ -455,5 +491,128 @@
         > * {
             height: auto;
         }
+    }
+}
+
+.gear-icon {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+
+    &::before {
+        content: "";
+        display: block;
+        background: url(/images/gear/gear-atlas.png) no-repeat;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 2;
+    }
+}
+
+@mixin gear-image($size, $yOffset, $class: '') {
+    .gear-icon#{$class} {
+        &, .gear-icon-img {
+            width: $size;
+            height: $size;
+        }
+
+        &.tier1::before {
+            background-position: (-1 * $size) $yOffset;
+        }
+
+        &.tier2::before, &.tier3::before {
+            background-position: (-2 * $size) $yOffset;
+        }
+
+        &.tier4::before, &.tier5::before, &.tier6::before {
+            background-position: (-3 * $size) $yOffset;
+        }
+
+        &.tier7::before, &.tier8::before, &.tier9::before, &.tier10::before {
+            background-position: (-4 * $size) $yOffset;
+        }
+
+        &.tier11::before {
+            background-position: (-5 * $size) $yOffset;
+        }
+
+        &.tier12::before, &.tier13::before {
+            background-position: (-6 * $size) $yOffset;
+        }
+    }
+}
+
+// No class version has to be first
+@include gear-image(50px, -144px);
+
+@include gear-image(80px,    0px, '.giant');
+@include gear-image(64px,  -80px, '.large');
+@include gear-image(40px, -194px, '.mini');
+@include gear-image(32px, -234px, '.micro');
+
+.gear-icon-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3
+}
+
+.gear-icon-inner {
+    display: block;
+    background: radial-gradient(#aaa,#000 80%);
+    border-radius: 13px 0 13px 7px;
+    overflow: hidden;
+
+    .gear-icon.large & {
+        border-radius: 20px 2px 20px 14px;
+    }
+
+    .tier1 & {
+        background: radial-gradient(#4391a3,#000 80%);
+    }
+
+    .tier2 &, .tier3 & {
+        background: radial-gradient(#4c9601,#000 80%);
+    }
+
+    .tier4 &, .tier5 &, .tier6 & {
+        background: radial-gradient(#004b65,#000 80%);
+    }
+
+    .tier7 &, .tier8 &, .tier9 &, .tier10 &, .tier11 & {
+        background: radial-gradient(#4700a7,#000 80%);
+    }
+
+    .tier12 & {
+        background: radial-gradient(#997300,#000 80%);
+    }
+
+    .tier13 & {
+        background: radial-gradient(#772c05,#000 80%);
+    }
+}
+
+.gear-icon-mk-level {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    color: #fff;
+    z-index: 10;
+    font-size: 8px;
+    text-shadow: 0 2px 2px #000;
+    background-color: rgba(0,0,0,.3);
+    padding: 3px 3px 0;
+    line-height: 1;
+
+    .gear-icon.large & {
+        font-size: 14px;
+        font-weight: 700;
+        right: 4px;
+        top: 4px
     }
 }

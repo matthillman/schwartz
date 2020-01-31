@@ -151,6 +151,8 @@ class PullGuild extends Command
         $guild->save();
         $this->info("Guild cleanup done.");
 
+        $this->call('swgoh:refresh-views');
+
         $time = Carbon::now()->diffInSeconds($start);
         $this->comment("Returning. Scrape took {$time} seconds.");
         return 0;

@@ -3,6 +3,7 @@
 namespace App;
 
 use DB;
+use SwgohHelp\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
 
 class Guild extends Model
@@ -16,48 +17,36 @@ class Guild extends Model
     }
 
     public static function getCompareCharacters() {
-        return [
-            'GENERALSKYWALKER' =>    'General Skywalker',
-            'DARTHREVAN' =>          'Darth Revan',
-            'DARTHMALAK' =>          'Malak',
-            'JEDIKNIGHTREVAN' =>     'Revan',
-            'PADMEAMIDALA' =>        'Padmé',
-            'GRIEVOUS' =>            'Grievous',
-            'GEONOSIANBROODALPHA' => 'Geo Alpha',
-            'DARTHTRAYA' =>          'Traya',
-            'ANAKINKNIGHT'        => 'Anakin',
-        ];;
+        static $chars;
+        if (is_null($chars)) {
+            $chars = collect([
+                'GENERALSKYWALKER' =>    'General Skywalker',
+                'DARTHREVAN' =>          'Darth Revan',
+                'DARTHMALAK' =>          'Malak',
+                'JEDIKNIGHTREVAN' =>     'Revan',
+                'PADMEAMIDALA' =>        'Padmé',
+                'GRIEVOUS' =>            'Grievous',
+                'GEONOSIANBROODALPHA' => 'Geo Alpha',
+                'DARTHTRAYA' =>          'Traya',
+                'ANAKINKNIGHT'        => 'Anakin',
+            ]);
+
+            $units = Unit::whereIn('base_id', $chars->keys())->get();
+
+            $chars = $chars->mapWithKeys(function($name, $id) use ($units) {
+                $unit = $units->where('base_id', $id)->first();
+                return [$id => ['name' => $name, 'alignment' => strtolower((new Alignment($unit->alignment))->getKey())]];
+            });
+        }
+
+        return $chars;
     }
 
     public static function getCompareData($guild1, $guild2) {
         $chars = static::getCompareCharacters();
 
-        $unitQueries = collect($chars)->map(function($name, $unitName) {
-            return [
-                "sum(case when characters.unit_name = '${unitName}' then 1 else 0 end) as ${unitName}",
-                "sum(case when characters.unit_name = '${unitName}' AND characters.gear_level = 11 then 1 else 0 end) as ${unitName}_11",
-                "sum(case when characters.unit_name = '${unitName}' AND characters.gear_level = 12 then 1 else 0 end) as ${unitName}_12",
-                "sum(case when characters.unit_name = '${unitName}' AND characters.gear_level = 13 then 1 else 0 end) as ${unitName}_13",
-                "sum(case when characters.unit_name = '${unitName}' AND characters.relic > 5 then 1 else 0 end) as ${unitName}_r_total",
-                "sum(case when characters.unit_name = '${unitName}' AND characters.relic = 7 then 1 else 0 end) as ${unitName}_r5",
-                "sum(case when characters.unit_name = '${unitName}' AND characters.relic = 8 then 1 else 0 end) as ${unitName}_r6",
-                "sum(case when characters.unit_name = '${unitName}' AND characters.relic = 9 then 1 else 0 end) as ${unitName}_r7",
-            ];
-        })->collapse()->implode(', '); // FIXME ->join when upgrading laravel
-
-        $data = DB::table('guilds') ->join('members', 'members.guild_id', '=', 'guilds.id') ->join('characters', 'characters.member_id', '=', 'members.id') ->selectRaw("
-                guilds.guild_id,
-                max(guilds.gp) as gp,
-                count(distinct members.id) as member_count,
-                sum(case when characters.gear_level = 13 then 1 else 0 end) as gear_13,
-                sum(case when characters.gear_level = 12 then 1 else 0 end) as gear_12,
-                sum(case when characters.gear_level = 11 then 1 else 0 end) as gear_11,
-                sum(case when characters.relic = 9 then 1 else 0 end) as relic_7,
-                sum(case when characters.relic = 8 then 1 else 0 end) as relic_6,
-                sum(case when characters.relic = 7 then 1 else 0 end) as relic_5,
-                ${unitQueries}
-            ") ->groupBy('guilds.guild_id')
-            ->whereIn('guilds.guild_id', [$guild1->guild_id, $guild2->guild_id])
+        $data = DB::table('guild_unit_counts')
+            ->whereIn('guild_id', [$guild1->guild_id, $guild2->guild_id])
             ->get();
 
         $g1Data = (array)$data->firstWhere('guild_id', $guild1->guild_id);
@@ -77,29 +66,24 @@ class Guild extends Model
         $g1Data['zetas'] = $g1Zetas['zetas'];
         $g2Data['zetas'] = $g2Zetas['zetas'];
 
-        $mods = DB::table('guilds')
-            ->join('members', 'members.guild_id', '=', 'guilds.id')
-            ->join('mod_users', 'mod_users.name', '=', 'members.ally_code')
-            ->join('mod_stats', 'mod_stats.mod_user_id', '=', 'mod_users.id')
-            ->selectRaw("
-                guilds.guild_id,
-                sum(case when pips = 6 then 1 else 0 end) as six_dot,
-                sum(case when speed >= 10 then 1 else 0 end) as ten_plus,
-                sum(case when speed >= 15 then 1 else 0 end) as fifteen_plus,
-                sum(case when speed >= 20 then 1 else 0 end) as twenty_plus,
-                sum(case when speed >= 25 then 1 else 0 end) as twenty_five_plus,
-                sum(case when offense >= 100 then 1 else 0 end) as one_hundred_offense
-            ") ->groupBy('guilds.guild_id')
-            ->whereIn('guilds.guild_id', [$guild1->guild_id, $guild2->guild_id])
+        $mods = DB::table('guild_mod_counts')
+            ->whereIn('guild_id', [$guild1->guild_id, $guild2->guild_id])
             ->get();
 
         $g1Mods = (array)$mods->firstWhere('guild_id', $guild1->guild_id);
         $g2Mods = (array)$mods->firstWhere('guild_id', $guild2->guild_id);
 
-        $g1Data['mods'] = $g1Mods;
-        $g2Data['mods'] = $g2Mods;
+        foreach ($g1Mods as $key => $count) {
+            $g1Data['mods_' . $key] = $count;
+        }
+        foreach ($g2Mods as $key => $count) {
+            $g2Data['mods_' . $key] = $count;
+        }
 
-        return collect([$guild1->id => $g1Data, $guild2->id => $g2Data]);
+        $g1Data['name'] = $guild1->name;
+        $g2Data['name'] = $guild2->name;
+
+        return collect([$guild1->guild_id => $g1Data, $guild2->guild_id => $g2Data]);
     }
 
     public function getModDataAttribute() {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Artisan;
 use App\Unit;
 use App\Guild;
+use App\Member;
 use App\Character;
 use App\Jobs\ProcessGuild;
 use Illuminate\Http\Request;
@@ -138,16 +139,37 @@ class GuildController extends Controller
             $member = Member::where(['ally_code' => $ally])->firstOrFail();
             $guild1 = $member->guild()->firstOrFail();
         } else {
-            $guild1 = \App\Guild::where(['guild_id' => $first])->firstOrFail();
+            $guild1 = Guild::where(['guild_id' => $first])->firstOrFail();
         }
         if (preg_match('/^\d{3}-?\d{3}-?\d{3}$/', $second)) {
             $ally2 = preg_replace('/[^0-9]/', '', $second);
             $member2 = Member::where(['ally_code' => $ally2])->firstOrFail();
             $guild2 = $member2->guild()->firstOrFail();
         } else {
-            $guild2 = \App\Guild::where(['guild_id' => $second])->firstOrFail();
+            $guild2 = Guild::where(['guild_id' => $second])->firstOrFail();
         }
 
-        dd(Guild::getCompareCharacters(), Guild::getCompareData($guild1, $guild2));
+        $compareData = Guild::getCompareData($guild1, $guild2);
+        $g1 = $compareData->first();
+        $g2 = $compareData->last();
+        $g1_id = $g1['guild_id'];
+
+        $winners = collect($g1)->mapWithKeys(function($g1Val, $key) use ($g1_id, $g2) {
+            return [$key => $g1Val > $g2[$key] ? $g1_id : ($g1Val < $g2[$key] ? $g2['guild_id'] : 0)];
+        });
+
+        $g1RTotal = $g1['relic_7'] + $g1['relic_6'] + $g1['relic_5'];
+        $g2RTotal = $g2['relic_7'] + $g2['relic_6'] + $g2['relic_5'];
+        $winners['r_total'] = $g1RTotal > $g2RTotal ? $g1_id : ($g1RTotal < $g2RTotal ? $g2['guild_id'] : 0);
+
+        $g1total = $g1['gear_13'] + $g1['gear_12'] + $g1['gear_11'];
+        $g2total = $g2['gear_13'] + $g2['gear_12'] + $g2['gear_11'];
+        $winners['g_total'] = $g1total > $g2total ? $g1_id : ($g1total < $g2total ? $g2['guild_id'] : 0);
+
+        return view('guild.compare', [
+            'character_list' => Guild::getCompareCharacters(),
+            'data' => $compareData,
+            'winner' => $winners,
+        ]);
     }
 }

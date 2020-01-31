@@ -70,6 +70,8 @@ class PullMods extends Command
 
         $this->parseMember($profile, null, '🥯 ');
 
+        $this->call('swgoh:refresh-views');
+
         $this->line("Mods pulled, returning");
 
         return 0;

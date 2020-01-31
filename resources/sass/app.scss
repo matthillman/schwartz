@@ -241,6 +241,10 @@ a:not(.gg-link) {
       background: $gray-200;
     }
   }
+
+  &.row {
+    flex-direction: row;
+  }
 }
 
 .prospective-user {
@@ -391,6 +395,94 @@ table.sortable {
     td:not(:first-of-type) {
       padding-right: 18px;
     }
+  }
+}
+
+.guild-compare {
+  .card {
+    background: url(/images/welcome/stars.jpg);
+    background-attachment: fixed;
+    background-size: cover;
+    color: $light-text;
+
+    .card-body {
+      padding: 8px;
+      margin: 4px 8px;
+      background-color: rgba($color: $white, $alpha: 0.125);
+      border-radius: 4px;
+
+      &:first-of-type {
+        margin-top: 8px;
+      }
+
+      &:last-of-type {
+        margin-bottom: 8px;
+      }
+
+      .col-md-5, .col-md-2 {
+        padding: 0 4px;
+      }
+
+      .col-md-2 {
+        flex: 0 0 98px;
+        max-width: 98px;
+
+        > * {
+          margin: 0 auto;
+          display: block;
+        }
+      }
+
+      .col-md-5 {
+        flex: 0 0 calc((100% - 98px) / 2);
+        max-width: calc((100% - 98px) / 2);
+      }
+
+      .col-md-5 + .col-md-2 {
+        margin-top: 8px;
+      }
+
+      table {
+        border-collapse: separate;
+        table-layout: fixed;
+
+        td, th {
+          background-color: rgba($color: #000, $alpha: 0.4);
+          border: 1px solid transparent;
+          background-clip: content-box;
+          border-collapse: collapse;
+          border-radius: 4px;
+
+          &[winner] {
+            background-color: rgba($color: $white, $alpha: 0.1);
+          }
+          .zeta-image {
+            height: 23px;
+          }
+        }
+
+        tbody {
+          font-size: 12px;
+        }
+        tbody + thead::before {
+          content: '\200C';
+          line-height: 4px;
+          font-size: 0;
+          display: block;
+        }
+      }
+    }
+
+    .footer-logo {
+      margin: 0 8px 8px;
+    }
+  }
+}
+.gear-table {
+  width: 100%;
+
+  th, td {
+    text-align: center;
   }
 }
 
