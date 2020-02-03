@@ -23,7 +23,7 @@ trait ParsesPlayers {
 
     private $logPrefix = '';
 
-    private function getZetaList() {
+    private static function getZetaList() {
         static $zetaList;
         if (is_null($zetaList)) {
             $zetaList = Zeta::all();
@@ -31,7 +31,7 @@ trait ParsesPlayers {
         return $zetaList;
     }
 
-    private function getGPTables() {
+    private static function getGPTables() {
         static $gpTables;
         if (is_null($gpTables)) {
             $gpTables = json_decode(Storage::disk('local')->get('gameData.json'), true)['gpTables'];
@@ -39,80 +39,80 @@ trait ParsesPlayers {
         return $gpTables;
     }
 
-    function getAdjustedPower($unit, $characterLookup = []) {
-        if ($unit['combat_type'] == 1) {
-            return $this->getRelicAdjustedUnitGP($unit);
-        } else if ($unit['combat_type'] == 2) {
-            return $this->getShipGP($unit, $characterLookup);
-        }
+    // function getAdjustedPower($unit, $characterLookup = []) {
+    //     if ($unit['combat_type'] == 1) {
+    //         return $this->getRelicAdjustedUnitGP($unit);
+    //     } else if ($unit['combat_type'] == 2) {
+    //         return $this->getShipGP($unit, $characterLookup);
+    //     }
 
-        return $unit['power'];
-    }
+    //     return $unit['power'];
+    // }
 
-    function getRelicAdjustedUnitGP($unit) {
-        if ($unit['combat_type'] != 1 || $unit['relic'] < 2) { return $unit['power']; }
+    // function getRelicAdjustedUnitGP($unit) {
+    //     if ($unit['combat_type'] != 1 || $unit['relic'] < 2) { return $unit['power']; }
 
-        static $relicBonus = [ 0, 759, 1594, 2505, 3492, 4554, 6072, 7969 ];
-        return $unit['power'] + $relicBonus[$unit['relic'] - 2];
-    }
+    //     static $relicBonus = [ 0, 759, 1594, 2505, 3492, 4554, 6072, 7969 ];
+    //     return $unit['power'] + $relicBonus[$unit['relic'] - 2];
+    // }
 
-    function getShipGP($unit, $characterLookup) {
-        if ($unit['combat_type'] != 2) { return $unit['power']; }
+    // function getShipGP($unit, $characterLookup) {
+    //     if ($unit['combat_type'] != 2) { return $unit['power']; }
 
-        $rawData = $unit['raw'];
-        $characterLookup = collect($characterLookup)->keyBy('unit_name');
-        $gpTable = $this->getGPTables();
+    //     $rawData = $unit['raw'];
+    //     $characterLookup = collect($characterLookup)->keyBy('unit_name');
+    //     $gpTable = static::getGPTables();
 
-        $gpRarity = array_get($gpTable['crewRarityGP'], $rawData['rarity'], 0);
-        $gpCrewSize = array_get($gpTable['crewSizeFactor'], count($rawData['crew']), 0);
-        $gpLevel = array_get($gpTable['shipLevelGP'], $rawData['level'], 0);
-        list($gpAbility, $gpHardware) = collect($rawData['skills'])
-            ->reduce(function($total, $skill) use ($gpTable) {
-                if ($skill['tiers'] === 3 /* && combatType == 2*/) { // commenting here for future reference
-                    $total[1] += array_get($gpTable['abilitySpecialCR']['hardware'], $skill['tier'], 0);
-                } else {
-                    $total[0] += array_get($gpTable['shipAbilityLevelGP'], $skill['tier'], 0);
-                }
+    //     $gpRarity = array_get($gpTable['crewRarityGP'], $rawData['rarity'], 0);
+    //     $gpCrewSize = array_get($gpTable['crewSizeFactor'], count($rawData['crew']), 0);
+    //     $gpLevel = array_get($gpTable['shipLevelGP'], $rawData['level'], 0);
+    //     list($gpAbility, $gpHardware) = collect($rawData['skills'])
+    //         ->reduce(function($total, $skill) use ($gpTable) {
+    //             if ($skill['tiers'] === 3 /* && combatType == 2*/) { // commenting here for future reference
+    //                 $total[1] += array_get($gpTable['abilitySpecialCR']['hardware'], $skill['tier'], 0);
+    //             } else {
+    //                 $total[0] += array_get($gpTable['shipAbilityLevelGP'], $skill['tier'], 0);
+    //             }
 
-                return $total;
+    //             return $total;
 
-            }, [0, 0]);
-        $gpModifier = array_get($gpTable['shipRarityFactor'], $rawData['rarity'], 0);
+    //         }, [0, 0]);
+    //     $gpModifier = array_get($gpTable['shipRarityFactor'], $rawData['rarity'], 0);
 
-        $gpShipPower = 0;
-        $gpCrewPower = 0;
-        $gpCrew = 0;
-        $gpTotal = 0;
+    //     $gpShipPower = 0;
+    //     $gpCrewPower = 0;
+    //     $gpCrew = 0;
+    //     $gpTotal = 0;
 
-        list($gpCrewPower, $gpCrew) = collect($rawData['crew'])
-            ->reduce(function($sums, $crewMember) use ($characterLookup, $gpModifier, $gpCrewSize) {
-                $crew = $characterLookup->get($crewMember['unitId']);
-                $cp = $crew['power'] * $gpModifier * $gpCrewSize;
-                return [$sums[0] + $cp, $sums[1] + $crew['power']];
-            }, [0, 0]);
+    //     list($gpCrewPower, $gpCrew) = collect($rawData['crew'])
+    //         ->reduce(function($sums, $crewMember) use ($characterLookup, $gpModifier, $gpCrewSize) {
+    //             $crew = $characterLookup->get($crewMember['unitId']);
+    //             $cp = $crew['power'] * $gpModifier * $gpCrewSize;
+    //             return [$sums[0] + $cp, $sums[1] + $crew['power']];
+    //         }, [0, 0]);
 
 
-        if (count($rawData['crew']) == 0) {
-            // $gpPerAbilityModifier = $gpTable['crewlessAbilityFactor'][count($rawData['skills'] ?? 3)];
-            $gpCrew = ($gpLevel * 3.5 + $gpAbility * 5.74 + $gpHardware * 1.61) * $gpModifier;
-            $gpTotal = ($gpCrew + $gpLevel + $gpAbility + $gpHardware) * 1.5;
-        } else {
-            $gpCrew = $gpCrew * $gpModifier * $gpCrewSize;
-            $gpShipPower = ($gpCrew / 2) + (($gpLevel + $gpAbility + $gpHardware) * 1.5);
-            $gpTotal = $gpShipPower + $gpCrewPower;
-        }
+    //     if (count($rawData['crew']) == 0) {
+    //         // $gpPerAbilityModifier = $gpTable['crewlessAbilityFactor'][count($rawData['skills'] ?? 3)];
+    //         $gpCrew = ($gpLevel * 3.5 + $gpAbility * 5.74 + $gpHardware * 1.61) * $gpModifier;
+    //         $gpTotal = ($gpCrew + $gpLevel + $gpAbility + $gpHardware) * 1.5;
+    //     } else {
+    //         $gpCrew = $gpCrew * $gpModifier * $gpCrewSize;
+    //         $gpShipPower = ($gpCrew / 2) + (($gpLevel + $gpAbility + $gpHardware) * 1.5);
+    //         $gpTotal = $gpShipPower + $gpCrewPower;
+    //     }
 
-        $gpTotal = intval($gpTotal);
+    //     $gpTotal = intval($gpTotal);
 
-        return $gpTotal;
-    }
+    //     return $gpTotal;
+    // }
 
     public function translate($member_data) {
         if (!config('services.shitty_bot.active')) {
-            $this->info($this->logPrefix . 'Skipping Translation');
+            $this->info($this->logPrefix . 'Skipping Translation for ' . $member_data['allyCode']);
             return $member_data;
         }
-        $this->info($this->logPrefix . 'Doing Translation');
+        $this->info($this->logPrefix . 'Doing Translation for ' . $member_data['allyCode']);
         $translated = collect($member_data)->only(
             'name',
             'level',
@@ -200,14 +200,26 @@ trait ParsesPlayers {
           }
     }
 
-    public function parseMember($member_data, $guild, $logPrefix = '   ') {
+    public function parseMember($original, $guild, $logPrefix = '   ') {
         $this->logPrefix = $logPrefix;
-        $zetaList = $this->getZetaList();
-        $member = Member::firstOrNew(['ally_code' => (string)$member_data['allyCode']]);
+        $this->info($this->logPrefix . 'Starting parseMember for ' . $original['allyCode']);
+        $member = Member::firstOrNew(['ally_code' => (string)$original['allyCode']]);
 
-        $raw_member_data = $member_data;
+        // $raw_member_data = json_encode($original);
+        // $member->save();
 
-        $member_data = $this->translate($member_data);
+        // $this->info("${logPrefix}  ➡ Trimming raw member data");
+        // DB::delete('delete from members_raw where member_id = ?;', [$member->id]);
+        // $this->info("${logPrefix}  ➡ Inserting new raw member data");
+        // DB::insert('insert into members_raw (member_id, data) values (?, ?)', [$member->id, $raw_member_data]);
+
+        // $raw_member_data = null;
+        // unset($raw_member_data);
+
+        $member_data = $this->translate($original);
+
+        $original = null;
+        unset($original);
 
         $member_data = stats()->addStatsTo([$member_data])->first();
 
@@ -237,18 +249,15 @@ trait ParsesPlayers {
             $member->guild()->associate($guild);
         }
         $member->save();
-        $mr = MembersRaw::firstOrNew(['member_id' => $member->id]);
-        $mr->data = $raw_member_data;
-        $mr->save();
 
         $modUser = ModUser::firstOrNew(['name' => (string)$ally]);
         $modUser->last_scrape = new \DateTime;
         $modUser->save();
 
-        $updated[] = $member->id;
-
         $this->comment("${logPrefix}Looping over units for {$member->player}…");
         $roster = collect($member_data['roster']);
+        $member_data = null;
+        unset($member_data);
         $mappedRoster = $roster->map(function($unit) use ($member, $modUser) {
             if (is_null($unit['combatType'])) {
                 $unit['combatType'] = 1;
@@ -302,6 +311,21 @@ trait ParsesPlayers {
         $chars = $mappedRoster->pluck('char');
         $mods = $mappedRoster->pluck('mods')->flatten(1);
 
+        $mappedRoster = null;
+        unset($mappedRoster);
+
+        $mCount = $mods->count();
+        $this->info("${logPrefix}➡ Doing the mod insert for {$modUser->name} (${mCount} rows)");
+        $mods->chunk(min(ceil($mCount / 3), 400))->each(function($subset, $index) use ($logPrefix) {
+            $c = $subset->count();
+            $index += 1;
+            $this->info("${logPrefix}  ➡ Chunk ${index} (${c} rows)");
+            Mod::upsert($subset->toArray(), "(uid)");
+        });
+        $mods = null;
+        unset($mods);
+        $this->info("${logPrefix}⬅ Done with mod insert.");
+
         // $characterUnits = $chars->where('combat_type', 1);
         // $chars->transform(function($ship) use ($characterUnits) {
         //     if ($ship['combat_type'] == 2) {
@@ -322,6 +346,9 @@ trait ParsesPlayers {
         $this->info("${logPrefix}➡ Doing the character insert (${cCount} rows)");
         Character::upsert($chars->toArray(), "(member_id, unit_name)");
 
+        $chars = null;
+        unset($chars);
+
         $this->info("${logPrefix}➡ Trimming raw data");
         DB::delete('delete from characters_raw where character_id in (select id from characters where member_id = ?);', [$member->id]);
         $this->info("${logPrefix}➡ Inserting new raw data");
@@ -330,6 +357,7 @@ trait ParsesPlayers {
         DB::update('update characters set raw = ? where member_id = ?', ['[]', $member->id]);
         $this->info("${logPrefix}⬅ Done with character insert.");
 
+        $zetaList = static::getZetaList();
         $skills = $roster->pluck('skills')->flatten(1)->where('tier', 8)->pluck('id');
         $memberChars = $member->characters()->get();
         $zetas = $zetaList->whereIn('skill_id', $skills)->map(function($zeta) use ($memberChars) {
@@ -339,6 +367,12 @@ trait ParsesPlayers {
                 'character_id' => $character->id,
             ];
         });
+        $memberChars = null;
+        unset($memberChars);
+        $skills = null;
+        unset($skills);
+        $zetaList = null;
+        unset($zetaList);
 
         $zCount = $zetas->count();
         if ($zCount > 0) {
@@ -358,13 +392,18 @@ trait ParsesPlayers {
             $this->info("${logPrefix}No zetas to insert.");
         }
 
-        $mCount = $mods->count();
-        $this->info("${logPrefix}➡ Doing the mod insert for {$modUser->name} (${mCount} rows)");
-        Mod::upsert($mods->toArray(), "(uid)");
-        $this->info("${logPrefix}⬅ Done with mod insert.");
+        $roster = null;
+        unset($roster);
+        $zetas = null;
+        unset($zetas);
 
         $this->comment("${logPrefix}{$member->player} done.");
 
-        return $member->id;
+        $id = $member->id;
+
+        $member = null;
+        unset($member);
+
+        return $id;
     }
 }

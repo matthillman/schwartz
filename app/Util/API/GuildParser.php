@@ -33,11 +33,12 @@ class GuildParser {
 
         $this->rawData = shitty_bot()->getGuild($anAllyCode)->first();
         $this->data = $this->rawData['profile'];
+        unset($this->rawData['profile']);
 
         if (!is_null($memberCallback)) {
-            $this->members()->each(function($member) use ($memberCallback) {
+            foreach ($this->rawData['memberList'] as $member) {
                 call_user_func($memberCallback, shitty_bot()->getPlayer($member['playerId']));
-            });
+            }
         }
 
         return $this;

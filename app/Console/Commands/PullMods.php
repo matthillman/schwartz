@@ -23,14 +23,14 @@ class PullMods extends Command
      *
      * @var string
      */
-    protected $signature = 'swgoh:mods {user}';
+    protected $signature = 'swgoh:mods {--skip-views} {user}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Pull a user‘s mods from swogh.help';
+    protected $description = 'Pull a user‘s profile';
 
     /**
      * Execute the console command.
@@ -40,15 +40,26 @@ class PullMods extends Command
     public function handle()
     {
         $arg = $this->argument('user');
-        $this->line("Starting mod scrape for user [$arg]");
-        $user = ModUser::firstOrNew(['name' => "$arg"]);
+        $skipViewRefresh = $this->option('skip-views');
+        $this->line("Starting scrape for user [$arg]");
 
         if (config('services.shitty_bot.active')) {
             $this->info('Using swgoh.shittybots.me');
-            $fetchId = empty($user->member->player_id) ? $user->name : $user->member->player_id;
+
+            $isAllyCode = preg_match('/^\d{3}-?\d{3}-?\d{3}$/', $arg);
+            if (!$isAllyCode) {
+                $this->info("Input was not an ally code, trying it as a player ID");
+                $fetchId = $arg;
+            } else {
+                $user = ModUser::firstOrNew(['name' => "$arg"]);
+                $fetchId = empty($user->member->player_id) ? $user->name : $user->member->player_id;
+            }
+
             $this->info("Fetching with ${fetchId}");
             $profile = shitty_bot()->getPlayer($fetchId);
             $profile['updated'] = isset($profile['LastUpdated']) ? Carbon::createFromTimestamp($profile['LastUpdated'] / 1000) : Carbon::now();
+
+            $user = ModUser::firstOrNew(['name' => $profile['allyCode']]);
         } else {
             $this->info('Using api.swgoh.help');
             $profile = swgoh()->getPlayer($user->name)
@@ -70,7 +81,9 @@ class PullMods extends Command
 
         $this->parseMember($profile, null, '🥯 ');
 
-        $this->call('swgoh:refresh-views');
+        if (!$skipViewRefresh) {
+            $this->call('swgoh:refresh-views');
+        }
 
         $this->line("Mods pulled, returning");
 

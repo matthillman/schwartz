@@ -1,6 +1,9 @@
 <div class="column">
     <div class="row">
-        <div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" v-model="guildCompare" value="{{ $guild->guild_id }}" :disabled="guildCompare.length >= 2 && !guildCompare.includes('{{ $guild->guild_id }}')">
+        </div>
+        <div class="grow">
             <div>{{ $guild->name }}</div>
             <div class="small-note">{{ intval(floor($guild->gp / 1000000)) }}M</div>
         </div>

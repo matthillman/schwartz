@@ -31,6 +31,15 @@ class GuildController extends Controller
         return redirect()->route('guilds')->with('guildStatus', "Guild added");
     }
 
+    public function postGuildCompare(Request $request) {
+        $validated = $request->validate([
+            'guild1' => 'required|integer',
+            'guild2' => 'required|integer',
+        ]);
+
+        return redirect()->route('guild.compare', $validated);
+    }
+
     public function scrapeGuild($guild) {
         $guild = Guild::findOrFail($guild);
 

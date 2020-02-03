@@ -69,11 +69,17 @@ class ShittyAPI {
         try {
             $parser = new Parser(StreamWrapper::getResource($raw), $listener);
             $parser->parse();
+            $parser = null;
+            unset($parser);
         } catch (ParsingError $e) {
             throw new APIException((string)$raw . " -> using [$URL]", 0, $e);
         }
 
-        return collect($listener->getJson());
+        $data = collect($listener->getJson());
+        $listener = null;
+        unset($listener);
+
+        return $data;
     }
 
     protected function buildAPIUrl($path, $payload, $query = '') {
