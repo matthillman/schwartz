@@ -5,6 +5,7 @@ namespace App;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use NotificationChannels\Discord\Discord;
 
 class User extends Authenticatable
 {
@@ -44,5 +45,22 @@ class User extends Authenticatable
         }
 
         $this->save();
+    }
+
+    public function getDiscordPrivateChannelIdAttribute($value) {
+        if (is_null($value)) {
+            $channelID = app(Discord::class)->getPrivateChannel($this->discord_id);
+            $this->discord_private_channel_id = $channelID;
+            $this->save();
+
+            return $channelID;
+        }
+
+        return $value;
+    }
+
+    public function routeNotificationForDiscord()
+    {
+        return $this->discord_private_channel_id;
     }
 }

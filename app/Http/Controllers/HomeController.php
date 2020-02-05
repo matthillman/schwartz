@@ -49,6 +49,12 @@ class HomeController extends Controller
         return view('waiting');
     }
 
+    public function notify(Request $request) {
+        Auth::user()->notify(new \App\Notifications\DiscordMessage("This is a test message. 🍺"));
+
+        return back()->withInput();
+    }
+
     public function approveUser(Request $request, $id) {
         $user = User::findOrFail($id);
         $user->active = true;

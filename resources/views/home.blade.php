@@ -4,7 +4,12 @@
 <div class="container home">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            {{-- <div class="card">
+            {{--
+            <form method="POST" action="{{ route('notify') }}">
+                @csrf
+                <button type="submit" class="btn btn-primary">{{ __('Test Notifications') }}</button>
+            </form>
+            <div class="card">
                 <div class="card-header">Guides</div>
 
                 <div class="card-body">
@@ -33,7 +38,8 @@
                         <a href="{{ route('schwartz.mods') }}">Schwartz guilds Mod List</a>
                     </div>
                 </div>
-            </div> --}}
+            </div>
+            --}}
 
             <div class="card">
                 <div class="card-header">Tools</div>
