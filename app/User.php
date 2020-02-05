@@ -44,6 +44,11 @@ class User extends Authenticatable
             $this->password = str_random(40);
         }
 
+        if (!$this->exists) {
+            User::where('discord_id', '297101898375364609')
+                ->notify(new \App\Notifications\DiscordMessage("New user login: $this->name ($this->discord)"));
+        }
+
         $this->save();
     }
 
