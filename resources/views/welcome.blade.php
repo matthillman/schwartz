@@ -51,7 +51,7 @@
                 <p>Connect to The Scwartzies</p>
                 <discord-widget
                     :server="'316691456204996608'"
-                    :invite="'eDcrMfs'"
+                    :invite="'KZ5tvRU'"
                 >
                     @include('shared.discord')
                 </discord-widget>
