@@ -1,7 +1,14 @@
 @extends('layouts.app')
 @section('body-class', 'no-bg')
+@push('styles')
+<style type="text/css">
+:root {
+    --compare-count: {{ $data->count() }};
+}
+</style>
+@endpush
 @section('content')
-<div class="container guild-compare">
+<div class="container comparison-container">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">

@@ -37,10 +37,6 @@ Vue.directive('highlight', function(el, binding) {
 	}
 });
 
-Vue.directive('guild-compare', function(el, binding) {
-	console.warn(el, binding);
-});
-
 Vue.component('modal', require('./components/Modal.vue').default);
 Vue.component('mods', require('./components/Mods.vue').default);
 Vue.component('mod', require('./components/Mod.vue').default);

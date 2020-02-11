@@ -398,7 +398,12 @@ table.sortable {
   }
 }
 
-.guild-compare {
+.comparison-container {
+  &.container {
+    --outer-width: calc( 98px + (var(--compare-count, 2) * 300px) + 16px + 16px + 30px + 2px);
+    width: var(--outer-width);
+    max-width: var(--outer-width);
+  }
   .card {
     background: url(/images/welcome/stars.jpg);
     background-attachment: fixed;
@@ -434,8 +439,8 @@ table.sortable {
       }
 
       .col-md-5 {
-        flex: 0 0 calc((100% - 98px) / 2);
-        max-width: calc((100% - 98px) / 2);
+        flex: 0 0 calc((100% - 98px) / var(--compare-count, 2));
+        max-width: calc((100% - 98px) / var(--compare-count, 2));
       }
 
       .col-md-5 + .col-md-2 {
