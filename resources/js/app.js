@@ -10,6 +10,8 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+Vue.config.ignoredElements = [/^ion-/]
+
 const VueSelect = require('vue-select');
 Vue.component('v-select', VueSelect.VueSelect);
 const VueSlider = require('vue-slider-component');

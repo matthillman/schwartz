@@ -53,7 +53,7 @@
                     <div class="icon-grid">
 
                         <div class="item">
-                            <div class="icon-wrapper"><a href="{{ route('guilds') }}"><div class="image"><i class="icon ion-ios-people"></i></div></a></div>
+                            <div class="icon-wrapper"><a href="{{ route('guilds') }}"><div class="image"><ion-icon name="people" size="huge"></ion-icon></div></a></div>
                             <div class="label"><a href="{{ route('guilds') }}">Guilds</a></div>
                         </div>
 
@@ -63,7 +63,7 @@
                         </div>
 
                         <div class="item">
-                            <div class="icon-wrapper"><a href="{{ route('tw-teams.index') }}"><div class="image"><i class="icon ion-ios-help-buoy"></i></div></a></div>
+                            <div class="icon-wrapper"><a href="{{ route('tw-teams.index') }}"><div class="image"><ion-icon name="help-buoy" size="huge"></ion-icon></div></a></div>
                             <div class="label"><a href="{{ route('tw-teams.index') }}">TW Team Counters</a></div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                     <div class="icon-grid">
 
                         <div class="item">
-                            <div class="icon-wrapper"><a href="{{ route('schwartz.guilds') }}"><div class="image"><i class="icon ion-ios-list"></i></div></a></div>
+                            <div class="icon-wrapper"><a href="{{ route('schwartz.guilds') }}"><div class="image"><ion-icon name="list" size="huge"></ion-icon></div></a></div>
                             <div class="label"><a href="{{ route('schwartz.guilds') }}">GP List</a></div>
                         </div>
 

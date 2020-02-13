@@ -22,7 +22,7 @@
                         @foreach($members as $member)
                             <form method="GET" action="{{ route('member.teams', ['allyCode' => $member->ally_code, 'team' => $team]) }}">
                                 <button type="submit" class="btn btn-primary btn-icon inverted">
-                                    <i class="icon ion-ios-link"></i>
+                                    <ion-icon name="link" size="medium"></ion-icon>
                                     <h1>
                                         <span>{{ $member->player }}</span>
                                     </h1>

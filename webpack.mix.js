@@ -12,7 +12,7 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-    .extract(['jquery', 'popper.js', 'lodash', 'axios', 'ionicons'])
+    .extract()
     .js('resources/js/guild.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .sass('resources/sass/login.scss', 'public/css')

@@ -11,7 +11,7 @@
     >
       <div
         class="portrait"
-        :class="{ ship: character.is_ship, 'capital': character.is_capital_ship }"
+        :class="[{ ship: character.is_ship, 'capital': character.is_capital_ship }, classes]"
       >
         <div v-if="character.is_ship" class="ship-wrapper">
           <img class="character" :src="`/images/units/${ character.unit_name }.png`">
@@ -157,6 +157,10 @@ export default {
     noMods: {
       type: Boolean,
       default: false
+    },
+    classes: {
+      type: String,
+      default: '',
     }
   },
   data: function() {

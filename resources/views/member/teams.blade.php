@@ -9,7 +9,7 @@
                     <div class="card-body" highlight="{{$highlight}}" v-highlight:[highlight]>
                         <div class="row justify-content-between align-items-baseline">
                             <h1>
-                                <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
+                                <a href="{{ route('member.profile', ['allyCode' => $member->ally_code]) }}">
                                     <span>{{ $member->player }}</span>
                                 </a>
                             </h1>

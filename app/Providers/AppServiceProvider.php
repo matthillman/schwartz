@@ -33,6 +33,9 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('bot', function() {
             return stripos(request()->header('schwartz'), 'bot') !== false;
         });
+        Blade::if('person', function() {
+            return stripos(request()->header('schwartz'), 'bot') === false;
+        });
     }
 
     /**

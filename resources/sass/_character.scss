@@ -12,7 +12,7 @@ $base: 80px;
 
         &.ship {
             width: 1.62 * $shipBase;
-            height: $shipBase + (50px / 400px * $base) + (20px / 400px * $base);
+            height: $shipBase + (50px / 400px * $base) + (35px / 400px * $base);
             display: flex;
             flex-direction: column;
         }
@@ -89,7 +89,7 @@ $base: 80px;
 
         &.ship {
             > .gear {
-                top: 14px;
+                top: 111px / 400px * $shipBase;
                 left: -1px;
                 bottom: -1px;
                 right: -1px;
@@ -99,7 +99,7 @@ $base: 80px;
             }
 
             &.capital > .gear {
-                top: 11px;
+                top: 104px / 400px * $shipBase;;
                 left: -4px;
                 bottom: -4px;
                 right: -4px;
@@ -339,5 +339,6 @@ $base: 80px;
 }
 
 @include portrait(80px);
+@include portrait(65.84px, '.ship-80');
 @include portrait(65px, '.medium');
 @include portrait(36px, '.mini');

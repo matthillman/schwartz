@@ -89,6 +89,9 @@ class Character extends Model
 
         return $finalStat - $modBonuses;
     }
+    public function modBonus(UnitStat $stat) {
+        return array_get($this->getAttribute('stats'), 'mods.'.$stat->getValue(), 0);
+    }
     public function getKeyStatsAttribute() {
         return $this->keyStatsFor($this->unit_name)
             ->merge(

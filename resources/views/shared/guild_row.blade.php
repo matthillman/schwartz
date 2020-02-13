@@ -9,7 +9,7 @@
         </div>
         <popover class="teams" name="teams-{{ $guild->id }}">
             <div slot="face">
-                <button class="btn btn-primary btn-icon with-text"><i class="icon ion-ios-list"></i><span>Teams</span></button>
+                <button class="btn btn-primary btn-icon with-text"><ion-icon name="list" size="medium"></ion-icon><span>Teams</span></button>
             </div>
             <div slot="content">
                 <ul>
@@ -24,7 +24,7 @@
             <button type="submit" class="btn btn-primary btn-icon"><span class="mod-set-image speed tier-6"></span></button>
         </form>
         <form method="GET" action="{{ route('guild.guild', ['guild' => $guild->id]) }}">
-            <button type="submit" class="btn btn-primary btn-icon"><i class="icon ion-ios-people"></i></button>
+            <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="people" size="medium"></ion-icon></button>
         </form>
         <a href="{{ $guild->url }}" target="_gg" class="gg-link">
             @include('shared.bb8')
@@ -32,7 +32,7 @@
         <form method="POST" action="{{ route('guild.refresh', ['guild' => $guild->id]) }}">
             @method('PUT')
             @csrf
-            <button type="submit" class="btn btn-primary btn-icon"><i class="icon ion-ios-refresh-circle"></i></button>
+            <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="refresh" size="medium"></ion-icon></button>
         </form>
     </div>
 </div>

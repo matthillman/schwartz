@@ -85,6 +85,7 @@ Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
     Route::get('/relics', 'RelicController@index')->name('relic.recommendations');
     Route::get('/relics/{ally}', 'RelicController@relicMember')->name('member.relic.recommendations');
     Route::get('/compare/{guild1}/{guild2}', 'GuildController@compareGuilds')->name('guild.compare');
+    Route::get('/member/compare', 'MemberController@compareMembers')->name('member.compare');
     Route::get('/member/{allyCode}', 'MemberController@show')->name('member.profile');
     Route::get('/member/{allyCode}/{team}', 'MemberController@listTeams')->name('member.teams');
 });

@@ -19,6 +19,23 @@ if (!function_exists('shitty_bot')) {
 		return app('shitty_bot');
 	}
 }
+if (!function_exists('format_stat')) {
+	function format_stat($value, $stat) {
+		static $percent_stats = [
+			'UNITSTATCRITICALDAMAGE',
+			'UNITSTATATTACKCRITICALRATING',
+			'UNITSTATABILITYCRITICALRATING',
+			'UNITSTATRESISTANCE',
+			'UNITSTATACCURACY'
+		];
+
+		if ($stat instanceof \SwgohHelp\Enums\UnitStat) {
+			$stat = $stat->getKey();
+		}
+
+		return in_array($stat, $percent_stats) ? sprintf("%.1f%%", $value * 100) : number_format($value);
+	}
+}
 
 // if (!function_exists('guzzle')) {
 //     /**

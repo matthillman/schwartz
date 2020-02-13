@@ -26,5 +26,6 @@
 </head>
 <body class="@yield('body-class', '')">
     @yield('body')
+    <script type="module" src="https://unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.esm.js"></script>
 </body>
 </html>

@@ -3,43 +3,18 @@
 namespace App;
 
 use DB;
-use SwgohHelp\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
 
 class Guild extends Model
 {
+    use Util\MetaChars;
+
     protected $fillable = ['guild_id'];
 
     protected $appends = [];
 
     public function members() {
         return $this->hasMany(Member::class);
-    }
-
-    public static function getCompareCharacters() {
-        static $chars;
-        if (is_null($chars)) {
-            $chars = collect([
-                'GENERALSKYWALKER' =>    'General Skywalker',
-                'DARTHREVAN' =>          'Darth Revan',
-                'DARTHMALAK' =>          'Malak',
-                'JEDIKNIGHTREVAN' =>     'Revan',
-                'PADMEAMIDALA' =>        'Padmé',
-                'GRIEVOUS' =>            'Grievous',
-                'GEONOSIANBROODALPHA' => 'Geo Alpha',
-                'DARTHTRAYA' =>          'Traya',
-                'ANAKINKNIGHT'        => 'Anakin',
-            ]);
-
-            $units = Unit::whereIn('base_id', $chars->keys())->get();
-
-            $chars = $chars->mapWithKeys(function($name, $id) use ($units) {
-                $unit = $units->where('base_id', $id)->first();
-                return [$id => ['name' => $name, 'alignment' => strtolower((new Alignment($unit->alignment))->getKey())]];
-            });
-        }
-
-        return $chars;
     }
 
     public static function getCompareData($guild1, $guild2) {

@@ -33,6 +33,8 @@ class RefreshViews extends Command
         $this->line("guild_unit_counts done");
         DB::statement("REFRESH MATERIALIZED VIEW guild_mod_counts");
         $this->line("guild_mod_counts done");
+        DB::statement("REFRESH MATERIALIZED VIEW member_stats");
+        $this->line("member_stats done");
         $this->info("Done.");
     }
 }

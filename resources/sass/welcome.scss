@@ -1,3 +1,4 @@
+@import "bootstrap-fix";
 @import "fonts";
 @import "variables";
 
@@ -144,8 +145,16 @@ $hero-width: 500px;
         margin: 24px 0 0;
     }
 
+    .logo {
+        margin: 12px 8px;
+        svg {
+            fill: $sw-yellow;
+        }
+    }
+
     h2 {
-        color: $sw-yellow;
+        color: $white;
+        text-shadow: 4px 4px 0 #2f4cc7;
         font-size: 55px;
         transform: scaleY(1.5);
         margin: 12px 0 0;
@@ -163,6 +172,7 @@ $hero-width: 500px;
         $border-style: 1px solid $white;
         background: black;
         border: $border-style;
+        margin-bottom: 12px;
 
         thead {
             tr {

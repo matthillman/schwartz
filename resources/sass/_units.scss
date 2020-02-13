@@ -281,6 +281,7 @@
 
         &.zeta-list {
             text-align: center;
+            text-transform: uppercase;
         }
 
         .zeta, & .stat {
@@ -430,6 +431,13 @@
     text-overflow: ellipsis;
 }
 
+.char-image-wrapper {
+    display: inline-block;
+    margin: 4px auto 0;
+    overflow: hidden;
+    width: 100%;
+}
+
 .char-image-square {
     display: inline-block;
     background-color: white;
@@ -440,6 +448,21 @@
     overflow: hidden;
     box-sizing: border-box;
     width: 100%;
+
+    &.small {
+        width: 32px;
+        height: 32px;
+    }
+
+    &.ship {
+        border-radius: 4px;
+        width: 10vh;
+
+        > img {
+            position: relative;
+            top: -30%;
+        }
+    }
 
     > img {
         width: 100%;

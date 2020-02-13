@@ -8,9 +8,11 @@
 
 @section('body')
 <div class="the-poster card">
-    <h1>The Schwartz Alliance</h1>
+    <div class="logo">
+        @include('shared.logo')
+    </div>
     <h2>Recruiting Dedicated Players</h2>
-    <img src="/images/welcome/spaceballs.png">
+    <img src="/images/welcome/background2.jpg">
     <table>
         <thead>
             <tr>
@@ -33,6 +35,5 @@
         @endforeach
         </tbody>
     </table>
-    <div class="discord-link">HTTPS://DISCORD.GG/KZ5<span class="small">tv</span>RU</div>
 </div>
 @endsection

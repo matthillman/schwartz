@@ -6,6 +6,7 @@
         @endif
         {{ isset($noStats) ? " no-stats" : '' }}
         {{ isset($noMods) ? " no-mods" : '' }}
+        {{ isset($size) ? " :classes=\"$size\"" : ''}}
     ></character>
 @else
 <span missing class="column justify-content-center align-items-center fill-height">
