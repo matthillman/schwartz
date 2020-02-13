@@ -315,6 +315,8 @@ trait ParsesPlayers {
         unset($mappedRoster);
 
         $mCount = $mods->count();
+        $this->info("${logPrefix}➡ Resetting mod locations for {$modUser->name}");
+        DB::update("update mods set location = '' where mod_user_id = ?", [$modUser->id]);
         $this->info("${logPrefix}➡ Doing the mod insert for {$modUser->name} (${mCount} rows)");
         $mods->chunk(min(ceil($mCount / 3), 400))->each(function($subset, $index) use ($logPrefix) {
             $c = $subset->count();
