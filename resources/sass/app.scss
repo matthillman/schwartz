@@ -283,6 +283,10 @@ a:not(.gg-link) {
 .card {
   margin-top: 16px;
 
+  &:last-of-type {
+    margin-bottom: 16px;
+  }
+
   .card-header {
     margin: 0;
   }

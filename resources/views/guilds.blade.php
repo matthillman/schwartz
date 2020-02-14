@@ -44,7 +44,7 @@
 
                 <div class="card-body">
                     <div class="guild-list">
-                    @foreach($guilds->where('schwartz', true) as $guild)
+                    @foreach($schwartz as $guild)
                         @include('shared.guild_row', [ 'guild' => $guild, 'squads' => $squads])
                     @endforeach
                     </div>
@@ -56,9 +56,13 @@
 
                 <div class="card-body">
                     <div class="guild-list">
-                    @foreach($guilds->where('schwartz', false) as $guild)
+                    @foreach($guilds as $guild)
                         @include('shared.guild_row', [ 'guild' => $guild, 'squads' => $squads])
                     @endforeach
+                    </div>
+
+                    <div class="flex-center">
+                    {{ $guilds->links() }}
                     </div>
                 </div>
             </div>
