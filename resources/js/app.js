@@ -55,6 +55,7 @@ Vue.component('team-sort', require('./components/TeamSort.vue').default);
 Vue.component('discord-widget', require('./components/DiscordWidget.vue').default);
 Vue.component('highlight-widget', require('./components/HighlightWidget.vue').default);
 Vue.component('loading-indicator', require('./components/LoadingIndicator.vue').default);
+Vue.component('horizon-jobs', require('./components/Horizon.vue').default);
 
 
 let data = {

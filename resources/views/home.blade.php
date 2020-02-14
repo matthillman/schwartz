@@ -111,8 +111,8 @@
                     </div>
                 </div>
 
-                <div class="card-body">
-
+                <div class="card-body flush">
+                    <horizon-jobs></horizon-jobs>
                 </div>
             </div>
             <div class="card">

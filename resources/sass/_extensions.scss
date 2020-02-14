@@ -40,6 +40,8 @@ popover {
 }
 
 .popover.teams {
+    position: relative;
+
     button.btn.btn.btn-primary {
         outline: none;
         box-shadow: none;
