@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', '—Guild List')
 @section('viewport', '830')
 
 @section('content')

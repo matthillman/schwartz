@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('body-class', 'no-bg')
+@section('title')—{{ $guild->name }} (Member Teams)@endsection
 @section('content')
 <div class="container guild-members">
     <div class="row justify-content-center">

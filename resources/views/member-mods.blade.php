@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('title', '—Guild Mods')
 @section('viewport', '830')
 
 @section('content')

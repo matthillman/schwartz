@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('body-class', 'no-bg')
+@section('title', '—Member Compare')
 @push('styles')
 <style type="text/css">
 :root {

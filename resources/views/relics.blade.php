@@ -1,6 +1,13 @@
 @extends('layouts.app')
 @section('viewport', '830')
 @section('body-class', 'no-bg')
+@section('title')—
+@isset($member)
+{{$member->player}} Relic Status
+@else
+Relic Reccomendations
+@endisset
+@endsection
 @section('content')
 <div class="container narrow-list">
     <div class="row justify-content-center">
@@ -8,12 +15,12 @@
             <div class="card">
                 <div class="card-header row justify-content-between align-items-center">
                     <div class="column">
-                        @if (isset($member))
+                        @isset($member))
                         <h2>{{ $member->player }}</h2>
                         <div class="note">Relic Status</div>
                         @else
                         <h2>Relic Reccomendations</h2>
-                        @endif
+                        @endisset
                     </div>
                 </div>
 

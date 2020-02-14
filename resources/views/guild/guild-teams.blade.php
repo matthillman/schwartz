@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title')—{{ $guild->name }}@endsection
 @section('body-class', 'no-bg')
 @section('content')
 <div class="container guild-members">

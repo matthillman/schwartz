@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', '—Guild Compare')
 @section('body-class', 'no-bg')
 @push('styles')
 <style type="text/css">

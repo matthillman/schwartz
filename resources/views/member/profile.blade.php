@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('body-class', 'no-bg')
+@section('title')—{{ $member->player }}@endsection
 @section('content')
 <div class="container member-profile">
     <div class="row justify-content-center">
