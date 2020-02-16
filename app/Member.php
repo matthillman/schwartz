@@ -3,10 +3,12 @@
 namespace App;
 
 use DB;
+use ScoutElastic\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
+    use Searchable;
     use Util\MetaChars;
 
     protected $fillable = ['url', 'ally_code'];
@@ -30,6 +32,37 @@ class Member extends Model
     ];
     protected $hidden = [
         'raw',
+    ];
+
+    protected $indexConfigurator = Indexes\MemberIndexConfigurator::class;
+
+    protected $searchRules = [
+        //
+    ];
+
+    protected $mapping = [
+        'properties' => [
+            'ally_code' => [
+                'type' => 'text',
+                'fields' => [
+                    'raw' => [
+                        'type' => 'keyword',
+                    ],
+                ]
+            ],
+            'player' => [
+                'type' => 'text',
+                'fields' => [
+                    'raw' => [
+                        'type' => 'keyword',
+                    ],
+                    'english' => [
+                      'type' => 'text',
+                      'analyzer' => 'english',
+                    ],
+                ]
+            ],
+        ]
     ];
 
     public function characters() {
@@ -78,64 +111,77 @@ class Member extends Model
             "level" => $this->level,
             "title" => $this->title,
             "portrait" => $this->portrait,
-            "squad_rank" => $this->arena[0]['rank'],
-            "fleet_rank" => $this->arena[1]['rank'],
+            "squad_rank" => array_get($this->arena, '0.rank', 0),
+            "fleet_rank" => array_get($this->arena, '1.rank', 0),
         ];
     }
 
     public function getProfileUrlAttribute() {
-        return route('member.profile', ['allyCode' => $this->ally_code]);
+        return route('member.profile', $this->ally_code);
     }
 
     public function getGuildNameAttribute() {
+        if (is_null($this->guild)) { return ''; }
         return $this->guild->name;
     }
 
     public function getGear12Attribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->gear_twelve;
     }
 
     public function getGear13Attribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->gear_thirteen;
     }
 
     public function getRelic3Attribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->relic_three;
     }
 
     public function getRelic5Attribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->relic_five;
     }
 
     public function getRelic6Attribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->relic_six;
     }
 
     public function getRelic7Attribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->relic_seven;
     }
 
     public function getSixDotAttribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->six_dot;
     }
 
     public function getSpeed10Attribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->ten_plus;
     }
 
     public function getSpeed15Attribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->fifteen_plus;
     }
 
     public function getSpeed20Attribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->twenty_plus;
     }
 
     public function getSpeed25Attribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->twenty_five_plus;
     }
 
     public function getOffense100Attribute() {
+        if (is_null($this->stats)) { return 0; }
         return $this->stats->one_hundred_offense;
     }
 

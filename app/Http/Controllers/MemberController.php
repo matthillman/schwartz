@@ -42,7 +42,13 @@ class MemberController extends Controller
                 return $member->toCompareData();
             })
         ;
-        $winners = $members->first()->keys()->mapWithKeys(function($key) use ($members) {
+        $keys = $members->map(function($m) { return $m->keys(); })
+            ->reduce(function($m1, $m2) {
+                return $m1->merge($m2);
+            }, collect())
+            ->unique();
+
+        $winners = $keys->mapWithKeys(function($key) use ($members) {
             return [$key => $members->reduce(function($first, $second) use ($key) {
                 $firstValue = $first->count() ? $first->first()->get($key) : null;
                 $secondValue = $second->get($key);
