@@ -93,7 +93,7 @@
                 </div>
 
                 <div class="card-body row">
-                    <div class="col-md-12 row justify-content-center align-items-center">
+                    <div class="col-md-12 section-header row justify-content-center align-items-center">
                         <span class="gear-icon tier12 micro">
                             <span class="gear-icon-inner">
                                 <img class="gear-icon-img" src="/images/gear/tex.equip_powercellinjector.png" alt="Power Cell Injector (Plasma)">
@@ -190,7 +190,7 @@
                 </div>
 
                 <div class="card-body row">
-                    <div class="col-md-12 row justify-content-center align-items-center">
+                    <div class="col-md-12 section-header row justify-content-center align-items-center">
                         <div class="image"><div class="icon mod-image diamond speed tier-6 gold micro"></div></div>
                         <h2 class="section-head">Mods</h2>
                     </div>
@@ -248,7 +248,7 @@
                 @endperson
 
                 <div class="card-body row">
-                    <div class="col-md-12 row justify-content-center align-items-center">
+                    <div class="col-md-12 section-header row justify-content-center align-items-center">
                         <div class="image">
                             <div class="char-image-square small light">
                                 <img src="/images/units/GENERALKENOBI.png">
@@ -318,7 +318,7 @@
                 </div>
 
                 <div class="card-body row">
-                    <div class="col-md-12 row justify-content-center align-items-center">
+                    <div class="col-md-12 section-header row justify-content-center align-items-center">
                         <div class="image">
                             <div class="char-image-square ship small light">
                                 <img src="/images/units/CAPITALNEGOTIATOR.png">

@@ -526,7 +526,7 @@ table.sortable {
         max-width: calc(var(--single-col-width) - 88px);
       }
 
-      .col-md-5 + .col-md-2, .col-md-12 + .col-md-5 {
+      .col-md-5 + .col-md-2, .col-md-12:not(.section-header) + .col-md-5 {
         margin-top: 8px;
       }
 
