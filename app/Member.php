@@ -3,12 +3,10 @@
 namespace App;
 
 use DB;
-use ScoutElastic\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
-    use Searchable;
     use Util\MetaChars;
 
     protected $fillable = ['url', 'ally_code'];
@@ -32,37 +30,6 @@ class Member extends Model
     ];
     protected $hidden = [
         'raw',
-    ];
-
-    protected $indexConfigurator = Indexes\MemberIndexConfigurator::class;
-
-    protected $searchRules = [
-        //
-    ];
-
-    protected $mapping = [
-        'properties' => [
-            'ally_code' => [
-                'type' => 'text',
-                'fields' => [
-                    'raw' => [
-                        'type' => 'keyword',
-                    ],
-                ]
-            ],
-            'player' => [
-                'type' => 'text',
-                'fields' => [
-                    'raw' => [
-                        'type' => 'keyword',
-                    ],
-                    'english' => [
-                      'type' => 'text',
-                      'analyzer' => 'english',
-                    ],
-                ]
-            ],
-        ]
     ];
 
     public function characters() {
