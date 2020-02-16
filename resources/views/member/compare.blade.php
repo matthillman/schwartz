@@ -258,6 +258,13 @@
                     </div>
                 @foreach ($character_list as $id => $character)
                     @foreach ($data as $member_id => $member)
+                        @empty($member->get(strtolower($id)))
+                        <div class="col-md-5">
+                            <div class="row justify-content-center align-items-center locked-message">
+                                <strong>{{ $character['name'] }} Not Unlocked</strong>
+                            </div>
+                        </div>
+                        @else
                         <div class="col-md-1">
                             <div class="char-image-wrapper">
                             @include('shared.char', [
@@ -305,6 +312,7 @@
                                 </body>
                             </table>
                         </div>
+                        @endempty
                     @endforeach
                 @endforeach
                 </div>
