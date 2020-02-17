@@ -3,15 +3,48 @@
 namespace App;
 
 use DB;
+use ScoutElastic\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 class Guild extends Model
 {
+    use Searchable;
     use Util\MetaChars;
 
     protected $fillable = ['guild_id'];
 
     protected $appends = [];
+
+    protected $indexConfigurator = Search\Indexes\GuildIndexConfigurator::class;
+
+    protected $searchRules = [
+        Search\Rules\WildcardSearchRule::class,
+    ];
+
+    protected $mapping = [
+        'properties' => [
+            'guild_id' => [
+                'type' => 'text',
+                'fields' => [
+                    'raw' => [
+                        'type' => 'keyword',
+                    ],
+                ]
+            ],
+            'name' => [
+                'type' => 'text',
+                'fields' => [
+                    'raw' => [
+                        'type' => 'keyword',
+                    ],
+                    'english' => [
+                      'type' => 'text',
+                      'analyzer' => 'english',
+                    ],
+                ]
+            ],
+        ]
+    ];
 
     public function members() {
         return $this->hasMany(Member::class);

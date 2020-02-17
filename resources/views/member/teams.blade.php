@@ -10,7 +10,7 @@
                     <div class="card-body" highlight="{{$highlight}}" v-highlight:[highlight]>
                         <div class="row justify-content-between align-items-baseline">
                             <h1>
-                                <a href="{{ route('member.profile', ['allyCode' => $member->ally_code]) }}">
+                                <a href="{{ route('member.profile', ['ally' => $member->ally_code]) }}">
                                     <span>{{ $member->player }}</span>
                                 </a>
                             </h1>

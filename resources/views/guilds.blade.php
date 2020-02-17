@@ -53,17 +53,45 @@
 
             <div class="card">
                 <div class="card-header"><h2>Other Guilds</h2></div>
+                <div class="card-body guild-list">
+                <search :url="'{{ route('search.guilds') }}'" v-slot="result">
+                    <div class="row">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" v-model="guildCompare" :value="result.item.guild_id" :disabled="guildCompare.length >= 2 && !guildCompare.includes(result.item.guild_id)">
+                        </div>
+                        <div class="grow">
+                            <div>@{{ result.item.name }}</div>
+                            <div class="small-note">@{{ Math.floor(result.item.gp / 1000000) }}M</div>
+                        </div>
+                        <popover class="teams" :name="`teams-${ result.item.id }`">
+                            <div slot="face">
+                                <button class="btn btn-primary btn-icon with-text"><ion-icon name="list" size="medium"></ion-icon><span>Teams</span></button>
+                            </div>
+                            <div slot="content">
+                                <ul>
+                                @foreach ($squads as $squad)
+                                    <li><a :href="`/guild/${result.item.id}/{{ $squad['value'] }}/0`">{{ $squad['label'] }}</a></li>
+                                @endforeach
+                                </ul>
+                            </div>
+                        </popover>
 
-                <div class="card-body">
-                    <div class="guild-list">
-                    @foreach($guilds as $guild)
-                        @include('shared.guild_row', [ 'guild' => $guild, 'squads' => $squads])
-                    @endforeach
+                        <form method="GET" :action="`/guild/${result.item.id}/mods`">
+                            <button type="submit" class="btn btn-primary btn-icon"><span class="mod-set-image speed tier-6"></span></button>
+                        </form>
+                        <form method="GET" :action="`/guild/${result.item.id}`">
+                            <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="people" size="medium"></ion-icon></button>
+                        </form>
+                        <a :href="result.item.url" target="_gg" class="gg-link">
+                            @include('shared.bb8')
+                        </a>
+                        <form method="POST" :action="`/guild/${result.item.id}/refresh`">
+                            @method('PUT')
+                            @csrf
+                            <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="refresh" size="medium"></ion-icon></button>
+                        </form>
                     </div>
-
-                    <div class="flex-center">
-                    {{ $guilds->links() }}
-                    </div>
+                </search>
                 </div>
             </div>
         </div>

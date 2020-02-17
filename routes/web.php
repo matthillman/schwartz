@@ -79,6 +79,8 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::get('/waiting', 'HomeController@waiting')->name('waiting');
 
     Route::post('notify', 'HomeController@notify')->name('notify');
+
+    Route::get('/guild-search', 'SearchController@searchGuilds')->name('search.guilds');
 });
 
 Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
@@ -86,8 +88,8 @@ Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
     Route::get('/relics/{ally}', 'RelicController@relicMember')->name('member.relic.recommendations');
     Route::get('/compare/{guild1}/{guild2}', 'GuildController@compareGuilds')->name('guild.compare');
     Route::get('/member/compare', 'MemberController@compareMembers')->name('member.compare');
-    Route::get('/member/{allyCode}', 'MemberController@show')->name('member.profile');
-    Route::get('/member/{allyCode}/{team}', 'MemberController@listTeams')->name('member.teams');
+    Route::get('/member/{ally}', 'MemberController@show')->name('member.profile');
+    Route::get('/member/{ally}/{team}', 'MemberController@listTeams')->name('member.teams');
 });
 
 Route::get('/schwartz_list', 'GuildController@schwartzGuildsImportList')->name('schwartz.import');

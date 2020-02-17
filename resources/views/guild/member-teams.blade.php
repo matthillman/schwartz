@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <div class="masonry-grid">
                         @foreach($members as $member)
-                            <form method="GET" action="{{ route('member.teams', ['allyCode' => $member->ally_code, 'team' => $team]) }}">
+                            <form method="GET" action="{{ route('member.teams', ['ally' => $member->ally_code, 'team' => $team]) }}">
                                 <button type="submit" class="btn btn-primary btn-icon inverted">
                                     <ion-icon name="link" size="medium"></ion-icon>
                                     <h1>

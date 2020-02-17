@@ -17,8 +17,9 @@
         padding: 4px 16px;
 
     }
+
     &.unit-list .row:not(:last-child),
-    &.guild-list .column:not(:last-child) {
+    &.guild-list .column:not(:last-child), &.guild-list .column.border-bottom {
         border-bottom: 1px solid grey;
     }
 }
