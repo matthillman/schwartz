@@ -54,7 +54,7 @@
             <div class="card">
                 <div class="card-header"><h2>Other Guilds</h2></div>
                 <div class="card-body guild-list">
-                <search :url="'{{ route('search.guilds') }}'" v-slot="result">
+                <search :url="'{{ route('search.guilds') }}'" :help-note="`Searches guild name and guild ID`" v-slot="result">
                     <div class="row">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="checkbox" v-model="guildCompare" :value="result.item.guild_id" :disabled="guildCompare.length >= 2 && !guildCompare.includes(result.item.guild_id)">

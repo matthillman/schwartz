@@ -81,6 +81,8 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::post('notify', 'HomeController@notify')->name('notify');
 
     Route::get('/guild-search', 'SearchController@searchGuilds')->name('search.guilds');
+    Route::get('/unit-search', 'SearchController@searchUnits')->name('search.units');
+    Route::get('/member-unit-search/{ally}', 'SearchController@searchMemberUnits')->name('search.member.units');
 });
 
 Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {

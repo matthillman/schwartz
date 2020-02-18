@@ -27,15 +27,18 @@
     .row {
         > * {
             flex-grow: 1;
-        }
-        :first-child {
-            flex-basis: 200px;
-            text-align: right;
-            margin-right: 8px;
-            flex-grow: 0;
-        }
-        :last-child {
-            flex-grow: 0;
+            &:first-child {
+                flex-basis: 200px;
+                text-align: right;
+                margin-right: 8px;
+                flex-grow: 0;
+            }
+            &:nth-child(2) {
+                max-width: calc(100% - 208px - 35px);
+            }
+            &:last-child {
+                flex-grow: 0;
+            }
         }
     }
 }

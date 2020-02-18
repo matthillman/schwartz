@@ -46,18 +46,13 @@ class Unit extends Model
         ]
     ];
 
-    public function toSearchableArray() {
-        $array = $this->toArray();
-
-        $array['description'] = __('messages.'.$array['description']);
-
-        return $array;
-    }
-
     public function preference() {
         return $this->hasOne(UnitModPreference::class, 'unit_id', 'base_id');
     }
     public function getNameAttribute($value) {
+        return __('messages.'.$value);
+    }
+    public function getDescriptionAttribute($value) {
         return __('messages.'.$value);
     }
 }

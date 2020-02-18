@@ -13,15 +13,19 @@
                             <div><h3>ID</h3></div>
                             <div><h3>Name</h3></div>
                         </div>
-                    @foreach($units as $unit)
-                        <div class="row">
-                            <div>{{ $unit->base_id }}</div>
-                            <div>{{ $unit->name }}</div>
-                            <a href="{{ $unit->url }}" target="_gg" class="gg-link">
-                                @include('shared.bb8')
-                            </a>
-                        </div>
-                    @endforeach
+
+                        <search :url="'{{ route('search.units') }}'" :help-note="`Searches base_id, name and description`" v-slot="result">
+                            <div class="row">
+                                <div>@{{ result.item.base_id }}</div>
+                                <div class="column">
+                                    <div>@{{ result.item.name }}</div>
+                                    <div class="small-note">@{{ result.item.description }}</div>
+                                </div>
+                                <a :href="result.item.url" target="_gg" class="gg-link">
+                                    @include('shared.bb8')
+                                </a>
+                            </div>
+                        </search>
                     </div>
                 </div>
             </div>
