@@ -87,6 +87,7 @@
                 }
                 if (primary) {
                     switch(stat) {
+                        case 'UNITSTATMAXSHIELDPERCENTADDITIVE':
                         case 'UNITSTATOFFENSEPERCENTADDITIVE':
                         case 'UNITSTATDEFENSEPERCENTADDITIVE':
                         case 'UNITSTATMAXHEALTHPERCENTADDITIVE':
