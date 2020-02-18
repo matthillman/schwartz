@@ -105,7 +105,6 @@ export default {
 
             this.searching = false;
             this.results = response.data;
-            console.warn(this.pageWindow());
         }, 250),
 
         pageWindow() {
