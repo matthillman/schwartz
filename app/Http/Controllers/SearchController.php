@@ -34,7 +34,10 @@ class SearchController extends Controller
 
     public function searchMemberUnits(Request $request, $ally) {
         $member = Member::where('ally_code', $ally)->firstOrFail();
-        $unit = Unit::search($request->search)->first();
+        $unit = Unit::where('base_id', strtoupper($request->search))->where('combat_type', 1)->first();
+        if (is_null($unit)) {
+            $unit = Unit::search($request->search)->where('combat_type', 1)->first();
+        }
 
         return response()->json($member->characters()->where('unit_name', $unit->base_id)->firstOrFail());
     }

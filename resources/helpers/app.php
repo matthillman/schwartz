@@ -21,12 +21,16 @@ if (!function_exists('shitty_bot')) {
 }
 if (!function_exists('format_stat')) {
 	function format_stat($value, $stat) {
+		if (!is_numeric($value)) {
+			return $value;
+		}
 		static $percent_stats = [
 			'UNITSTATCRITICALDAMAGE',
 			'UNITSTATATTACKCRITICALRATING',
 			'UNITSTATABILITYCRITICALRATING',
 			'UNITSTATRESISTANCE',
-			'UNITSTATACCURACY'
+			'UNITSTATACCURACY',
+			'UNITSTATCRITICALCHANCEPERCENTADDITIVE',
 		];
 
 		if ($stat instanceof \SwgohHelp\Enums\UnitStat) {

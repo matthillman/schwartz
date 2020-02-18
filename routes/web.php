@@ -80,9 +80,6 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
 
     Route::post('notify', 'HomeController@notify')->name('notify');
 
-    Route::get('/guild-search', 'SearchController@searchGuilds')->name('search.guilds');
-    Route::get('/unit-search', 'SearchController@searchUnits')->name('search.units');
-    Route::get('/member-unit-search/{ally}', 'SearchController@searchMemberUnits')->name('search.member.units');
 });
 
 Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
@@ -90,8 +87,12 @@ Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
     Route::get('/relics/{ally}', 'RelicController@relicMember')->name('member.relic.recommendations');
     Route::get('/compare/{guild1}/{guild2}', 'GuildController@compareGuilds')->name('guild.compare');
     Route::get('/member/compare', 'MemberController@compareMembers')->name('member.compare');
+    Route::get('/member/mods/{character}', 'MemberController@characterMods')->name('member.character_mods');
     Route::get('/member/{ally}', 'MemberController@show')->name('member.profile');
     Route::get('/member/{ally}/{team}', 'MemberController@listTeams')->name('member.teams');
+    Route::get('/guild-search', 'SearchController@searchGuilds')->name('search.guilds');
+    Route::get('/unit-search', 'SearchController@searchUnits')->name('search.units');
+    Route::get('/member-unit-search/{ally}', 'SearchController@searchMemberUnits')->name('search.member.units');
 });
 
 Route::get('/schwartz_list', 'GuildController@schwartzGuildsImportList')->name('schwartz.import');

@@ -92,6 +92,31 @@ class Character extends Model
     public function modBonus(UnitStat $stat) {
         return array_get($this->getAttribute('stats'), 'mods.'.$stat->getValue(), 0);
     }
+    public function modTotal($stat) {
+        if ($stat instanceof UnitStat) {
+            $total = $this->modBonus($stat);
+            $isSpeed = UnitStat::UNITSTATSPEED()->equals($stat);
+        } else {
+            $total = $this->mods->reduce(function ($total, $mod) use ($stat) {
+                return $total + array_get($mod->secondaries, $stat, 0);
+            }, 0);
+            $isSpeed = $stat == 'UNITSTATSPEED';
+        }
+
+        $speedSetCount = $this->mods->countBy(function($mod) {
+            return $mod->set;
+        })->get('speed');
+
+        if ($speedSetCount >= 4 && $isSpeed){
+            $total = "$total (+10%)";
+        }
+
+        if ($stat == 'UNITSTATCRITICALCHANCEPERCENTADDITIVE') {
+            $total = $total / 100;
+        }
+
+        return $total;
+    }
     public function getKeyStatsAttribute() {
         return $this->keyStatsFor($this->unit_name)
             ->merge(

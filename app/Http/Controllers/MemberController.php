@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Unit;
 use App\Member;
+use App\Character;
 use Illuminate\Http\Request;
+use SwgohHelp\Enums\UnitStat;
 
 class MemberController extends Controller
 {
@@ -30,6 +32,25 @@ class MemberController extends Controller
             'teams' => $teams,
             'highlight' => $highlight,
             'team' => $team,
+        ]);
+    }
+
+    public function characterMods($character) {
+        $c = Character::with(['member', 'unit', 'mods'])->findOrFail($character);
+
+        return view('member.character_mods', [
+            'character' => $c,
+            'attributes' => [
+                'speed' => UnitStat::UNITSTATSPEED(),
+                'tenacity' => UnitStat::UNITSTATRESISTANCE(),
+                'physical' => UnitStat::UNITSTATATTACKDAMAGE(),
+                'health' => UnitStat::UNITSTATMAXHEALTH(),
+                'special' => UnitStat::UNITSTATABILITYPOWER(),
+                'protection' => UnitStat::UNITSTATMAXSHIELD(),
+                'critical chance' => 'UNITSTATCRITICALCHANCEPERCENTADDITIVE',
+                'offense' => 'UNITSTATOFFENSE',
+                'defense' => 'UNITSTATDEFENSE',
+            ],
         ]);
     }
 
