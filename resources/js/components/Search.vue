@@ -30,8 +30,9 @@
                             <a class="page-link" href="#" @click.prevent="changePage(results.current_page - 1)" rel="prev" aria-label="Previous">&lsaquo;</a>
                         </li>
 
-                        <li v-for="page in results.last_page" :key="page" class="page-item" :class="{'active': page == results.current_page}">
-                            <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+                        <li v-for="page in pageWindow()" :key="page" class="page-item" :class="{'active': page == results.current_page, 'disabled': !Number.isInteger(page)}">
+                            <a v-if="Number.isInteger(page)" class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+                            <span v-else class="page-link">…</span>
                         </li>
 
 
@@ -104,7 +105,46 @@ export default {
 
             this.searching = false;
             this.results = response.data;
-        }, 250)
+            console.warn(this.pageWindow());
+        }, 250),
+
+        pageWindow() {
+            const windowSize = 2 /* on each side */ * 2;
+
+            if (!this.results || !this.results.last_page) {
+                return [];
+            }
+
+            if (this.results.last_page < windowSize + 6) {
+                return [...Array.from({length: this.results.last_page}, (x, i) => i + 1)];
+            }
+
+            if (this.results.current_page <= windowSize) {
+                return [
+                    ...Array.from({length: windowSize + 2}, (x, i) => i + 1),
+                    '…',
+                    this.results.last_page - 1,
+                    this.results.last_page,
+                ]
+            } else if (this.results.current_page > (this.results.last_page - windowSize)) {
+                return [
+                    1,
+                    2,
+                    '…',
+                    ...Array.from({length: windowSize + 2}, (x, i) => i + this.results.last_page - windowSize - 1),
+                ]
+            }
+
+            return [
+                1,
+                2,
+                'spacer1',
+                ...Array.from({length: windowSize + 1}, (x, i) => i + this.results.current_page - 2),
+                'spacer2',
+                this.results.last_page - 1,
+                this.results.last_page,
+            ]
+        }
     }
 }
 </script>
