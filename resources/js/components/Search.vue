@@ -21,10 +21,10 @@
         <div class="flex-center" v-if="results.current_page != 1 || results.next_page_url">
             <nav>
                 <ul class="pagination">
-                    <li v-if="results.current_page <= 1" class="page-item">
+                    <li v-if="results.current_page <= 1" class="page-item disabled">
                         <span class="page-link" aria-hidden="true">&laquo;</span>
                     </li>
-                    <li v-else class="page-item disabled" aria-disabled="true" aria-label="First">
+                    <li v-else class="page-item" aria-disabled="true" aria-label="First">
                         <a class="page-link" href="#" @click.prevent="changePage(1)" rel="first" aria-label="First">&laquo;</a>
                     </li>
                     <li v-if="results.current_page <= 1" class="page-item disabled" aria-disabled="true" aria-label="Previous">
