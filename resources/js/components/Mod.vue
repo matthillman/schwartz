@@ -15,7 +15,7 @@
                     :key="type"
                     :class="{good: isStatGood(value, type)}"
                     :type="translate(type)"
-                >{{ translateValue(type, value) }}{{ padType(type) }}</span>
+                >({{ mod.rolls[type] }}) {{ translateValue(type, value) }}{{ padType(type) }}</span>
             </div>
         </div>
         <div v-if="!mini" class="mod-character">{{ mod.location }}</div>

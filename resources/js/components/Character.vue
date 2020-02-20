@@ -79,6 +79,10 @@
           </span>
         </div>
       </div>
+
+        <div v-if="showName" class="name-wrapper">
+          {{ character.display_name }}
+        </div>
     </span>
 
     <modal v-if="modalMods" @close="modalMods = false">
@@ -155,6 +159,10 @@ export default {
       default: false
     },
     noMods: {
+      type: Boolean,
+      default: false
+    },
+    showName: {
       type: Boolean,
       default: false
     },
@@ -250,6 +258,13 @@ export default {
 
 .characters {
     height: 100%;
+}
+
+.name-wrapper {
+  font-weight: 700;
+  text-align: center;
+  line-height: 1;
+  margin-top: 4px;
 }
 
 </style>

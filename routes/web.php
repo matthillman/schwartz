@@ -89,6 +89,8 @@ Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
     Route::get('/member/compare', 'MemberController@compareMembers')->name('member.compare');
     Route::get('/member/mods/{character}', 'MemberController@characterMods')->name('member.character_mods');
     Route::get('/member/{ally}', 'MemberController@show')->name('member.profile');
+    Route::get('/member/{ally}/characters', 'MemberController@characters')->name('member.characters');
+    Route::get('/member/{ally}/character/{id}', 'MemberController@showCharacter')->name('member.character');
     Route::get('/member/{ally}/{team}', 'MemberController@listTeams')->name('member.teams');
     Route::get('/guild-search', 'SearchController@searchGuilds')->name('search.guilds');
     Route::get('/unit-search', 'SearchController@searchUnits')->name('search.units');

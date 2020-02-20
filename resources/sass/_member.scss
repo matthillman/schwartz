@@ -35,6 +35,12 @@ $base: 200px;
         margin-top: 16px;
     }
 
+    &.member-character {
+        h2 {
+            margin-top: 8px;
+        }
+    }
+
     .player-stats {
         width: 50%;
         padding: 8px;

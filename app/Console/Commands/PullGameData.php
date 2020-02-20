@@ -6,6 +6,7 @@ use DB;
 use Storage;
 use App\Unit;
 use App\Zeta;
+use App\Category;
 use Carbon\Carbon;
 use App\StatModList;
 use Illuminate\Console\Command;
@@ -20,7 +21,7 @@ class PullGameData extends Command
      *
      * @var string
      */
-    protected $signature = 'swgoh:game-data';
+    protected $signature = 'swgoh:game-data {--force} {--skip-download}';
 
     /**
      * The console command description.
@@ -38,6 +39,7 @@ class PullGameData extends Command
     {
         $start = Carbon::now();
         $this->info("Starting download…");
+        $force = $this->option('force');
 
         $skipFetch = false;
         if (Storage::disk('game_data')->exists('metadata.json')) {
@@ -61,27 +63,33 @@ class PullGameData extends Command
             $skipFetch = !is_null($metadata->get('latestGamedataVersion')) && $metadata->get('latestGamedataVersion') === $newMetadata->get('latestGamedataVersion');
         }
 
-        if ($skipFetch) {
+        if ($force) {
+            $this->info('Forcing game data update');
+        }
+
+        if ($skipFetch && !$force) {
             $this->info('No new game data, done');
         } else {
-            $this->info("Fetching data files…");
-            $this->getDataFileList()->each(function($file) {
-                try {
-                    $this->line("  ➡ Fetching {$file}…");
-                    guzzle()->get("https://swgoh.shittybots.me{$file}", [
-                        'headers' => [
-                            'Accept' => 'application/json',
-                            'Content-Type' => 'application/json',
-                            'shittybot' => config('services.shitty_bot.token'),
-                        ],
-                        'sink' => storage_path("app/game_data/".last(explode('/', $file))),
-                    ]);
-                    sleep(1);
-                    $this->line("  ⬅ Fetched.");
-                } catch (ClientException $e) {
-                    $this->error("  🛑 Error fetching {$file}: ".$e->getMessage());
-                }
-            });
+            if (!$this->option('skip-download')) {
+                $this->info("Fetching data files…");
+                $this->getDataFileList()->each(function($file) {
+                    try {
+                        $this->line("  ➡ Fetching {$file}…");
+                        guzzle()->get("https://swgoh.shittybots.me{$file}", [
+                            'headers' => [
+                                'Accept' => 'application/json',
+                                'Content-Type' => 'application/json',
+                                'shittybot' => config('services.shitty_bot.token'),
+                            ],
+                            'sink' => storage_path("app/game_data/".last(explode('/', $file))),
+                        ]);
+                        sleep(1);
+                        $this->line("  ⬅ Fetched.");
+                    } catch (ClientException $e) {
+                        $this->error("  🛑 Error fetching {$file}: ".$e->getMessage());
+                    }
+                });
+            }
 
             $this->info("Building language files…");
 
@@ -125,8 +133,17 @@ class PullGameData extends Command
                         $unit->url = $unit->url ?? '';
                         $unit->power = $unit->power ?? $data['basePower'];
                         $unit->crew_list = $data['crewList'] ?: [];
+                        $unit->relic_image = isset($data['relicDefinition']) ? $data['relicDefinition']['nameKey'] : '';
+                        $unit->category_list = $data['categoryIdList'];
 
                         $unit->save();
+
+                        if (!empty($unit->relic_image) && !Storage::disk('images')->exists("gear/$unit->relic_image.png")) {
+                            $this->info("Fetching relic image from swgoh.gg");
+                            guzzle()->get("https://swgoh.gg/static/img/assets/$unit->relic_image.png", [
+                                'sink' => base_path("public/images/gear/$unit->relic_image.png"),
+                            ]);
+                        }
 
                         $unitSkills[] = ['baseId' => $data['baseId'], 'skills' => collect($data['skillReferenceList'])->pluck('skillId')];
                     }
@@ -190,6 +207,20 @@ class PullGameData extends Command
                     $modStat->rarity = $data['rarity'];
 
                     $modStat->save();
+                    return true;
+                }
+                return false;
+            });
+
+            $this->info("Parsing category data…");
+            JsonObjectConsumer::parseGameData('categoryList.json', function($data) {
+                if (isset($data['descKey'])) {
+                    $category = Category::firstOrNew(['category_id' => $data['id']]);
+
+                    $category->description = $data['descKey'];
+                    $category->visible = $data['visible'];
+
+                    $category->save();
                     return true;
                 }
                 return false;

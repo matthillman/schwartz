@@ -15,6 +15,19 @@
                                     </a>
                                 </h1>
                                 <div class="note"><strong>Ally Code:</strong> <span>{{ $member->ally_code}}</span></div>
+
+                                @person
+                                <div class="row no-margin">
+                                    <form method="GET" action="{{ route('member.characters', ['ally' => $member->ally_code]) }}" >
+                                        <button type="submit" class="btn btn-primary">
+                                            <div class="flex-center">
+                                                <ion-icon name="people-circle-outline"></ion-icon>
+                                                <span>{{ __('Characters') }}</span>
+                                            </div>
+                                        </button>
+                                    </form>
+                                </div>
+                                @endperson
                             </div>
 
                             <div class="column player-stats">

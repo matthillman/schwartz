@@ -6,6 +6,7 @@
         @endif
         {{ isset($noStats) ? " no-stats" : '' }}
         {{ isset($noMods) ? " no-mods" : '' }}
+        {{ isset($showName) ? " show-name" : '' }}
         {{ isset($size) ? " :classes=\"$size\"" : ''}}
     ></character>
 @else

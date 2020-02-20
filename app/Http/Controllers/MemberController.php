@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Unit;
 use App\Member;
+use App\Category;
 use App\Character;
 use Illuminate\Http\Request;
 use SwgohHelp\Enums\UnitStat;
@@ -18,6 +19,74 @@ class MemberController extends Controller
         return view('member.profile', [
             'member' => $member,
             'units' => Unit::all(),
+        ]);
+    }
+
+    public function characters(Request $request, $allyCode) {
+        $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
+
+        return view('member.characters', [
+            'member' => $member,
+            'categories' => Category::visibleCategories(),
+            'selected_category' => Category::where('category_id', $request->category)->first(),
+        ]);
+    }
+
+    public function showCharacter($allyCode, $baseId) {
+        $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
+
+        return view('member.character', [
+            'member' => $member,
+            'character' => $member->characters()->with('zetas')->where('unit_name', $baseId)->firstOrFail(),
+            'stats_left' => [
+                'Base Attributes' => [
+                    'Strength (STR)' => 'UNITSTATSTRENGTH',
+                    'Agility (AGI)' => 'UNITSTATAGILITY',
+                    'Tactics (TAC)' => 'UNITSTATINTELLIGENCE',
+
+                    // Strength Growth (STR)
+                    // 21.8
+                    // Agility Growth (AGI)
+                    // 18.6
+                    // Tactics Growth (TAC)
+                    // 17.6
+                    'Mastery' => 'UNITSTATMASTERY',
+                ],
+                'General' => [
+                    'Health' => 'UNITSTATMAXHEALTH',
+                    'Protection' => 'UNITSTATMAXSHIELD',
+                    'Speed' => 'UNITSTATSPEED',
+                    'Critical Damage' => 'UNITSTATCRITICALDAMAGE',
+                    'Potency' => 'UNITSTATACCURACY',
+                    'Tenacity' => 'UNITSTATRESISTANCE',
+                    'Health Steal' => 'UNITSTATHEALTHSTEAL',
+                    'Defense Penetration' => 'UNITSTATSHIELDPENETRATION',
+                ],
+            ],
+            'stats_right' => [
+                'Physical Offense' => [
+                    'Damage' => 'UNITSTATATTACKDAMAGE',
+                    'Critical Chance' => 'UNITSTATATTACKCRITICALRATING',
+                    'Armor Penetration' => 'UNITSTATARMORPENETRATION',
+                    'Accuracy' => 'UNITSTATDODGENEGATERATING',
+                ],
+                'Physical Survivability' => [
+                    'Armor' => 'UNITSTATARMOR',
+                    'Dodge Chance' => 'UNITSTATDODGERATING',
+                    'Critical Avoidance' => 'UNITSTATATTACKCRITICALNEGATERATING',
+                ],
+                'Special Offense' => [
+                    'Damage' => 'UNITSTATABILITYPOWER',
+                    'Critical Chance' => 'UNITSTATABILITYCRITICALRATING',
+                    'Armor Penetration' => 'UNITSTATSUPPRESSIONPENETRATION',
+                    'Accuracy' => 'UNITSTATDEFLECTIONNEGATERATING',
+                ],
+                'Special Survivability' => [
+                    'Armor' => 'UNITSTATSUPPRESSION',
+                    'Dodge Chance' => 'UNITSTATDEFLECTIONRATING',
+                    'Critical Avoidance' => 'UNITSTATABILITYCRITICALNEGATERATING',
+                ],
+            ]
         ]);
     }
 

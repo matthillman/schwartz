@@ -91,6 +91,14 @@ body{
   justify-content: center;
 }
 
+.flex-grow {
+  flex-grow: 1;
+}
+
+.flex-stay {
+  flex-grow: 0;
+}
+
 .fill-height {
   height: 100%;
 }
@@ -630,6 +638,15 @@ table.sortable {
   right: 0;
   background: rgba($color: $white, $alpha: 0.75);
   z-index: 2000;
+}
+
+.row.no-margin {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.back-button {
+  margin-right: 8px;
 }
 
 @import "grid";

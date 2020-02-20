@@ -285,7 +285,7 @@
                                     </th>
                                     <td colspan="3" {{ $winner[strtolower($id.'_'.$stat_list->first()['stat']->getKey())]->contains($member_id) ? 'winner' : '' }}>
                                         <span>{{ $member->get(strtolower($id.'_'.$stat_list->first()['stat']->getKey())) }}</span>
-                                        <span>(+{{ format_stat($member->get(strtolower($id))->modBonus($stat_list->first()['stat']), $stat_list->first()['stat']) }})</span>
+                                        <span>(+{{ format_stat($member->get(strtolower($id))->modBonus($stat_list->first()['stat']) ?: 0, $stat_list->first()['stat']) }})</span>
                                     </td>
                                 </thead>
                                 <thead>

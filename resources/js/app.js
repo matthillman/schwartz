@@ -66,7 +66,15 @@ let data = {
 
 const app = new Vue({
 	el: '#app',
-	data
+	data,
+	methods: {
+		go(to) {
+			window.location = to;
+		},
+		back() {
+			window.history.back();
+		}
+	},
 });
 
 

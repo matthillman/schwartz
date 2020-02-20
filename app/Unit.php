@@ -13,6 +13,7 @@ class Unit extends Model
 
     protected $casts = [
         'crew_list' => 'array',
+        'category_list' => 'array',
     ];
 
     protected $indexConfigurator = Search\Indexes\UnitIndexConfigurator::class;

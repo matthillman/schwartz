@@ -338,7 +338,235 @@ $base: 80px;
     }
 }
 
+@mixin relic-portrait($base, $class: '') {
+    .relic-portrait#{$class}  {
+        position: relative;
+        display: inline-block;
+        width: $base;
+
+        .backdrop {
+            position: relative;
+            height: $base;
+            background: url(/images/gear/relic-backdrop-atlas.png) transparent no-repeat;
+            background-size: $base;
+            border-radius: 50%;
+        }
+
+        &.light .backdrop {
+            background-position: 0 0;
+            background-color: #0d1a28;
+        }
+
+        &.dark .backdrop {
+            background-position: 0 50%;
+            background-color: #27080c;
+        }
+
+        &.neutral .backdrop {
+            background-position: 0 100%;
+            background-color: #222;
+        }
+
+        img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 80%;
+            height: 80%;
+        }
+        .name {
+            font-weight: 700;
+            text-align: center;
+            padding: 0 10px;
+            line-height: 1.2;
+            margin-top: 5px;
+        }
+
+        .tier {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: $base * 3 / 20;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: -1px -1px 0 #000,2px -1px 0 #000,2px 2px 0 #000,-1px 2px 0 #000,2px 3px 0 #000,1px 3px 0 #000,2px 3px 0 #000
+        }
+
+        &.locked::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba($color: $black, $alpha: 0.6);
+            border-radius: 50%;
+            background-image: url(/images/gear/lock.png);
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: 33%;
+        }
+    }
+}
+
 @include portrait(80px);
+@include portrait(150px, '.giant');
+@include portrait(100px, '.large');
 @include portrait(65.84px, '.ship-80');
 @include portrait(65px, '.medium');
 @include portrait(36px, '.mini');
+
+@include relic-portrait(160px);
+@include relic-portrait(64px, '.mini');
+@include relic-portrait(96px, '.small');
+@include relic-portrait(150px, '.medium');
+@include relic-portrait(256px, '.large');
+
+.character-list {
+    .characters.characters {
+        width: 100%;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid $gray-400;
+    }
+
+
+    a.character-wrapper {
+        margin-bottom: 8px;
+        padding: 0 4px;
+
+        &, &:hover {
+            color: $text;
+            text-decoration: none;
+        }
+
+        &:hover .characters.characters {
+            border: 1px solid $gray-900;
+        }
+    }
+}
+
+.character-profile {
+    > .col-md-6 {
+        padding: 0 4px;
+
+        &:first-child {
+            padding-left: 8px;
+        }
+        &:last-child {
+            padding-right: 8px;
+        }
+    }
+    .portrait-wrapper {
+        padding: 16px calc(((100% - 208px * 2) / 2) + ((208px - 150px) / 2));
+        margin: 0;
+        background-image: radial-gradient(ellipse at bottom center, #17345b, #0d1a28);
+    }
+
+    .character-info-wrapper {
+        max-width: 500px;
+        border: 1px solid $gray-500;
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 0 auto;
+
+        .mod-details {
+            background-image: radial-gradient(ellipse at top center, #17345b, #0d1a28);
+
+            > :nth-child(odd) {
+                .mod .info {
+                    flex-direction: row-reverse;
+                    .data {
+                        align-items: flex-end;
+                        margin-right: 8px;
+                    }
+                }
+            }
+
+            .mod {
+                background: rgba($color: #1e4269, $alpha: 0.6);
+
+                .data {
+                    color: $gray-200;
+                    text-shadow: 1px 1px 0 $gray-900;
+                }
+
+                .primary {
+                    font-weight: 700;
+                    font-size: 14px;
+                    color: $white;
+                }
+
+                .good {
+                    color: #5bb9ab;
+                    font-weight: 600;
+                }
+
+                .mod-character {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .stat-list {
+        background: #1e2941;
+        padding: 0;
+        border: 1px solid $gray-500;
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 0 auto;
+        flex-basis: 50%;
+
+        font-weight: 400;
+        color: $white;
+        text-shadow: 1px 1px 0 $gray-900;
+
+        .row {
+            margin: 0;
+            &:not(:last-child) {
+                margin-bottom: 4px;
+            }
+
+            > * {
+                padding: 6px 8px;
+            }
+
+            &:nth-child(odd) {
+                background: #1e4269;
+            }
+
+            &:nth-child(even) {
+                background-color: #213752;
+            }
+        }
+
+        > :not(.row) + * > .stat-header {
+            margin-top: 4px;
+        }
+
+        .stat-header {
+            &.row {
+                background: #1e7696;
+
+                &.with-stat {
+                    background: #274764;
+                }
+            }
+
+            > :first-child {
+                font-size: 16px;
+                font-weight: 700;
+            }
+        }
+
+        .bonus {
+            font-weight: 500;
+            margin-left: 2px;
+            color: #5bb9ab;
+        }
+    }
+}

@@ -76,6 +76,9 @@ class Character extends Model
     public function getDisplayNameAttribute() {
         return $this->unit->name;
     }
+    public function getCategoryListAttribute() {
+        return $this->unit->category_list;
+    }
     public function getSpeedAttribute() {
         return $this->UNITSTATSPEED;
     }
@@ -89,12 +92,15 @@ class Character extends Model
 
         return $finalStat - $modBonuses;
     }
-    public function modBonus(UnitStat $stat) {
-        return array_get($this->getAttribute('stats'), 'mods.'.$stat->getValue(), 0);
+    public function modBonus($stat) {
+        if (is_string($stat)) {
+            $stat = UnitStat::$stat();
+        }
+        return array_get($this->getAttribute('stats'), 'mods.'.$stat->getValue(), null);
     }
     public function modTotal($stat) {
         if ($stat instanceof UnitStat) {
-            $total = $this->modBonus($stat);
+            $total = $this->modBonus($stat) ?: 0;
             $isSpeed = UnitStat::UNITSTATSPEED()->equals($stat);
         } else {
             $total = $this->mods->reduce(function ($total, $mod) use ($stat) {

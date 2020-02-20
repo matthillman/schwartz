@@ -2,6 +2,7 @@
 
 namespace App;
 
+use SwgohHelp\Enums\UnitStat;
 use Illuminate\Database\Eloquent\Model;
 
 class Mod extends Model
@@ -28,7 +29,7 @@ class Mod extends Model
         'secondary_4_type', 'secondary_4_value',
         'raw',
     ];
-    protected $appends = ['primary', 'secondaries'];
+    protected $appends = ['primary', 'secondaries', 'rolls'];
 
     protected $casts = [
         'raw' => 'array',
@@ -52,6 +53,17 @@ class Mod extends Model
 
         return $secondaries;
     }
+
+    public function getRollsAttribute() {
+        $rolls = [];
+
+        foreach ($this->raw['secondaryStat'] as $secondary) {
+            $rolls[(new UnitStat($secondary['unitStat']))->getKey()] = $secondary['roll'];
+        }
+
+        return $rolls;
+    }
+
     public function setPrimaryAttribute($value) {
         $this->attributes['primary_type'] = $value['type'];
         $this->attributes['primary_value'] = $value['value'];

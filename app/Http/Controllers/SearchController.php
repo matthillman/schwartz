@@ -22,6 +22,17 @@ class SearchController extends Controller
                 ->paginate(config('view.page_size'));
     }
 
+    public function searchMembers(Request $request) {
+        if (strlen($request->search)) {
+            return Member::search($request->search)
+                ->orderBy('gp', 'desc')
+                ->paginate(config('view.page_size'));
+        }
+
+        return Member::orderBy('gp', 'desc')
+                ->paginate(config('view.page_size'));
+    }
+
     public function searchUnits(Request $request) {
         if (strlen($request->search)) {
             return Unit::search($request->search)

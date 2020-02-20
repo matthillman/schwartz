@@ -400,6 +400,10 @@ div.btn, a.btn {
 .mod-details {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  align-content: flex-start;
+
   .mod {
     width: 200px;
     margin: 8px;
