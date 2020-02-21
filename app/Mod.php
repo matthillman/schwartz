@@ -57,8 +57,10 @@ class Mod extends Model
     public function getRollsAttribute() {
         $rolls = [];
 
-        foreach ($this->raw['secondaryStat'] as $secondary) {
-            $rolls[(new UnitStat($secondary['unitStat']))->getKey()] = $secondary['roll'];
+        if (isset($this->raw['secondaryStat'])) {
+            foreach ($this->raw['secondaryStat'] as $secondary) {
+                $rolls[(new UnitStat($secondary['unitStat']))->getKey()] = $secondary['roll'];
+            }
         }
 
         return $rolls;
@@ -86,7 +88,7 @@ class Mod extends Model
 
         $char = Unit::where('base_id', $json['location'])->first();
 
-        $json['location'] = $char->name;
+        $json['location'] = $char ? $char->name : null;
 
         return $json;
     }

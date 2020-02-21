@@ -15,7 +15,7 @@
                     :key="type"
                     :class="{good: isStatGood(value, type)}"
                     :type="translate(type)"
-                >({{ mod.rolls[type] }}) {{ translateValue(type, value) }}{{ padType(type) }}</span>
+                >{{ getModRoll(type) }}{{ translateValue(type, value) }}{{ padType(type) }}</span>
             </div>
         </div>
         <div v-if="!mini" class="mod-character">{{ mod.location }}</div>
@@ -43,6 +43,14 @@
                     || (t == "defense" && +value >= 20)
                     || (t == "speed" && +value >= 15)
                 ;
+            },
+
+            getModRoll(type) {
+                if (this.mod.rolls) {
+                    console.warn(type, this.mod.rolls);
+                    return `(${this.mod.rolls[type]}) `;
+                }
+                return '';
             },
 
             translate: function(stat, primary) {

@@ -740,6 +740,10 @@
                         if (mod.secondaries.hasOwnProperty(secondary)) {
                             const element = mod.secondaries[secondary];
                             mod.secondaries[translate(secondary)] = translateValue(secondary, element);
+                            if (mod.rolls && mod.rolls[secondary]) {
+                                mod.rolls[translate(secondary)] = mod.rolls[secondary];
+                                delete mod.rolls[secondary];
+                            }
                             delete mod.secondaries[secondary];
                         }
                     }
@@ -884,6 +888,7 @@ h2 {
         flex-direction: column;
         flex-basis: 20%;
         flex-grow: 0;
+        overflow: hidden;
 
         > .column-title {
             display: flex;
