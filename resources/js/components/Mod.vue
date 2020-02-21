@@ -47,7 +47,6 @@
 
             getModRoll(type) {
                 if (this.mod.rolls) {
-                    console.warn(type, this.mod.rolls);
                     return `(${this.mod.rolls[type]}) `;
                 }
                 return '';
