@@ -21,7 +21,7 @@ class MemberController extends Controller
     public function compare(Request $request) {
         $members = array_map('trim', explode("\n", $request->members));
 
-        return redirect()->route('member.compare', ['members', implode(',', $members)]);
+        return redirect()->route('member.compare', ['members' => implode(',', $members)]);
     }
 
     public function addMember(Request $request) {
