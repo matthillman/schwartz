@@ -68,6 +68,11 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
 
     Route::get('/character_mods/{id}', 'GuildController@characterMods');
 
+    Route::get('/members', 'MemberController@index')->name('members');
+    Route::post('/members/compare', 'MemberController@compare')->name('members.post.compare');
+    Route::put('/member/{id}/refresh', 'MemberController@scrapeMember')->name('member.scrape');
+    Route::post('/member/add', 'MemberController@addMember')->name('member.add');
+
     Route::post('/guilds', 'GuildController@addGuild')->name('guild.add');
     Route::post('/guild/compare', 'GuildController@postGuildCompare')->name('guild.post.compare');
 
@@ -80,6 +85,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
 
     Route::post('notify', 'HomeController@notify')->name('notify');
 
+    Route::get('/jobs-by-tag', 'JobsController@jobsForTag')->name('jobs.by.tag');
 });
 
 Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
@@ -92,6 +98,7 @@ Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
     Route::get('/member/{ally}/characters', 'MemberController@characters')->name('member.characters');
     Route::get('/member/{ally}/character/{id}', 'MemberController@showCharacter')->name('member.character');
     Route::get('/member/{ally}/{team}', 'MemberController@listTeams')->name('member.teams');
+    Route::get('/member-search', 'SearchController@searchMembers')->name('search.members');
     Route::get('/guild-search', 'SearchController@searchGuilds')->name('search.guilds');
     Route::get('/unit-search', 'SearchController@searchUnits')->name('search.units');
     Route::get('/member-unit-search/{ally}', 'SearchController@searchMemberUnits')->name('search.member.units');

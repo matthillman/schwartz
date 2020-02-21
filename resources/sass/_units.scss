@@ -137,6 +137,10 @@
         }
     }
 
+    & + & table td {
+        border-top-width: 0;
+    }
+
     .unit-table tbody td.header {
         width: 125px;
 
@@ -181,7 +185,7 @@
     }
 
     [highlight="none"] & [gear] {
-        background: linear-gradient(to top, #1c4068, #162833);
+        background: linear-gradient(to top, #17345b, #0d1a28);
     }
     [highlight="stars"] & [stars] {
         background-color: red;

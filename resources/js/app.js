@@ -62,17 +62,56 @@ Vue.component('search', require('./components/Search.vue').default);
 let data = {
 	highlight: null,
 	guildCompare: [],
+	memberCompare: [],
+	memberCompareArray: [],
+	modJobStatusByAllyCode: {},
 };
 
 const app = new Vue({
 	el: '#app',
 	data,
+	watch: {
+		memberCompare: function(newVal) {
+			const newCompare = this.memberCompareArray.join('\n');
+
+			if (newCompare != newVal) {
+				this.memberCompareArray = newVal.split('\n');
+			}
+
+		},
+		memberCompareArray: function(newVal) {
+			const newCompare = newVal.join('\n');
+
+			if (newCompare != this.memberCompare) {
+				this.memberCompare = newCompare;
+			}
+		}
+	},
+	mounted() {
+		this.loadModJobStatus();
+	},
 	methods: {
 		go(to) {
 			window.location = to;
 		},
 		back() {
 			window.history.back();
+		},
+		loadModJobStatus() {
+			axios.get('/jobs-by-tag?tags=mods').then(result => {
+				this.modJobStatusByAllyCode = {};
+				result.data.forEach(job => {
+					let allyCodeTag = job.payload.tags.find(tag => tag.startsWith('ally_code:'));
+					if  (allyCodeTag) {
+						let allyCode = allyCodeTag.split(':')[1];
+						this.modJobStatusByAllyCode[allyCode] = job.status;
+					}
+				});
+
+				if (Object.values(this.modJobStatusByAllyCode).find(val => val == 'reserved' || val == 'pending')) {
+					setTimeout(() => this.loadModJobStatus(), 3000);
+				}
+			});
 		}
 	},
 });

@@ -1,11 +1,10 @@
 @extends('layouts.app')
-@section('body-class', 'no-bg')
 @section('title')—{{ $member->player }}@endsection
 @section('content')
 <div class="container member-profile">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card profile-card">
                     <div class="card-body" highlight="none">
                         <div class="row justify-content-between align-items-baseline">
                             <div class="column">
@@ -21,7 +20,7 @@
                                     <form method="GET" action="{{ route('member.characters', ['ally' => $member->ally_code]) }}" >
                                         <button type="submit" class="btn btn-primary">
                                             <div class="flex-center">
-                                                <ion-icon name="people-circle-outline"></ion-icon>
+                                                <ion-icon name="list"></ion-icon>
                                                 <span>{{ __('Characters') }}</span>
                                             </div>
                                         </button>

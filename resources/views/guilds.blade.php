@@ -16,8 +16,8 @@
                     <p>Enter either the ID of the guild from its swgoh.gg URL (e.g. 3577) or an ally code of someone in the guild</p>
                     <form method="POST" action="{{ route('guild.add') }}" >
                         @csrf
-                        <div class="row add-row">
-                            <input type="text" name="guild">
+                        <div class="row add-row input-group">
+                            <input class="form-control" type="text" name="guild">
                             <button type="submit" class="btn btn-primary">{{ __('Add Guild') }}</button>
                         </div>
                     </form>
@@ -29,10 +29,10 @@
                     <p>Check the boxes below or enter either the ID of each guild from its swgoh.gg URL (e.g. 3577) or an ally code of someone in the guild</p>
                     <form method="POST" action="{{ route('guild.post.compare') }}" >
                         @csrf
-                        <div class="row add-row">
-                            <input type="text" name="guild1" v-model="guildCompare[0]">
+                        <div class="row add-row input-group">
+                            <input class="form-control" type="text" name="guild1" v-model="guildCompare[0]">
                             <span class="align-self-center">vs</span>
-                            <input type="text" name="guild2" v-model="guildCompare[1]">
+                            <input class="form-control" type="text" name="guild2" v-model="guildCompare[1]">
                             <button type="submit" class="btn btn-primary">{{ __('Compare') }}</button>
                         </div>
                     </form>

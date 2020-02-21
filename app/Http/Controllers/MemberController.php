@@ -6,12 +6,36 @@ use App\Unit;
 use App\Member;
 use App\Category;
 use App\Character;
+use App\Jobs\ProcessUser;
 use Illuminate\Http\Request;
 use SwgohHelp\Enums\UnitStat;
 
 class MemberController extends Controller
 {
     use Util\Squads;
+
+    public function index() {
+        return view('members');
+    }
+
+    public function compare(Request $request) {
+        $members = array_map('trim', explode("\n", $request->members));
+
+        return redirect()->route('member.compare', ['members', implode(',', $members)]);
+    }
+
+    public function addMember(Request $request) {
+        ProcessUser::dispatch($request->member);
+
+        return redirect()->route('members')->with('memberStatus', "Member add queued");
+    }
+
+    public function scrapeMember(Request $request, $id) {
+        $member = Member::findOrFail($id);
+        ProcessUser::dispatch($member->ally_code);
+
+        return redirect()->route('members')->with('memberStatus', "Member scrape queued");
+    }
 
     public function show($allyCode) {
         $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();

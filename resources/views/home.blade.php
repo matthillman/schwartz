@@ -58,6 +58,11 @@
                         </div>
 
                         <div class="item">
+                            <div class="icon-wrapper"><a href="{{ route('members') }}"><div class="image"><ion-icon name="person" size="huge"></ion-icon></div></a></div>
+                            <div class="label"><a href="{{ route('members') }}">Players</a></div>
+                        </div>
+
+                        <div class="item">
                             <div class="icon-wrapper"><a href="{{ route('auth.mods') }}"><div class="image"><div class="icon mod-image diamond speed tier-6 gold giant"></div></div></a></div>
                             <div class="label"><a href="{{ route('auth.mods') }}">Mod Set Maker</a></div>
                         </div>

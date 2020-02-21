@@ -53,4 +53,27 @@ $base: 200px;
             margin-bottom: 8px;
         }
     }
+
+    .profile-card {
+        color: $white;
+        text-shadow: 1px 1px 0 $gray-900;
+        background-image: radial-gradient(ellipse at 25% center, #17345b, #0d1a28);
+
+        a {
+            color: $white;
+            &:not(.gg-link)[target=_gg]:hover::after {
+                background-image: url(/images/bb8-white.svg);
+            }
+        }
+
+        .player-stats {
+            background: rgba($color: #1e4269, $alpha: 0.6);
+            color: $gray-200;
+            text-shadow: 1px 1px 0 $gray-900;
+        }
+
+        .member-list table td {
+            border-color: $gray-700;
+        }
+    }
 }

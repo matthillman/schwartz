@@ -1,7 +1,7 @@
 <template>
     <div class="search-wrapper">
         <div class="row add-row">
-            <input type="text" value="" placeholder="Search" name="query" v-model="search">
+            <input class="form-control" type="text" value="" placeholder="Search" name="query" v-model="search">
             <div v-if="helpNote.length" class="small-note">{{ helpNote }}</div>
         </div>
         <div class="results-wrapper" v-if="results || searching">

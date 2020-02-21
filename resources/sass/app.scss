@@ -649,6 +649,10 @@ table.sortable {
   margin-right: 8px;
 }
 
+.no-resize {
+  resize: none;
+}
+
 @import "grid";
 @import "mods";
 @import "units";
