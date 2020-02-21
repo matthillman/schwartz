@@ -27,20 +27,6 @@
                         </div>
                     </form>
                 </div>
-
-
-                <div class="card-header"><h2>Add a Player</h2></div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('member.add') }}" >
-                        @csrf
-                        <div>Enter an ally code to add the player. Only needed if the guild has not been scraped previously.</div>
-                        <div class="row add-row input-group">
-                            <input class="form-control" type="text" name="member">
-                            <button type="submit" class="btn btn-primary">{{ __('Add Player') }}</button>
-                        </div>
-                    </form>
-                </div>
             </div>
 
             <div class="card">
@@ -82,6 +68,19 @@
                         </form>
                     </div>
                 </search>
+                </div>
+
+                <div class="card-header"><h2>Add a Player</h2></div>
+
+                <div class="card-body">
+                    <form method="POST" action="{{ route('member.add') }}" >
+                        @csrf
+                        <div>Enter an ally code to add the player. Only needed if the guild has not been scraped previously.</div>
+                        <div class="row add-row input-group">
+                            <input class="form-control" type="text" name="member">
+                            <button type="submit" class="btn btn-primary">{{ __('Add Player') }}</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

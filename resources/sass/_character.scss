@@ -354,7 +354,7 @@ $base: 80px;
 
         &.light .backdrop {
             background-position: 0 0;
-            background-color: #0d1a28;
+            background-color: $dark-navy;
         }
 
         &.dark .backdrop {
@@ -463,18 +463,18 @@ $base: 80px;
     .portrait-wrapper {
         padding: 16px calc(((100% - 208px * 2) / 2) + ((208px - 150px) / 2));
         margin: 0;
-        background-image: radial-gradient(ellipse at bottom center, #17345b, #0d1a28);
+        background-image: radial-gradient(ellipse at bottom center, $light-navy, $dark-navy);
     }
 
     .character-info-wrapper {
         max-width: 500px;
-        border: 1px solid $gray-500;
+        border: 1px solid $gray-800;
         border-radius: 4px;
         overflow: hidden;
         margin: 0 auto;
 
         .mod-details {
-            background-image: radial-gradient(ellipse at top center, #17345b, #0d1a28);
+            background-image: radial-gradient(ellipse at top center, $light-navy, $dark-navy);
 
             > :nth-child(odd) {
                 .mod .info {
@@ -487,7 +487,7 @@ $base: 80px;
             }
 
             .mod {
-                background: rgba($color: #1e4269, $alpha: 0.6);
+                background: rgba($color: $overlay-navy, $alpha: 0.6);
 
                 .data {
                     color: $gray-200;
@@ -515,7 +515,7 @@ $base: 80px;
     .stat-list {
         background: #1e2941;
         padding: 0;
-        border: 1px solid $gray-500;
+        border: 1px solid $gray-800;
         border-radius: 4px;
         overflow: hidden;
         margin: 0 auto;
@@ -536,7 +536,7 @@ $base: 80px;
             }
 
             &:nth-child(odd) {
-                background: #1e4269;
+                background: $overlay-navy;
             }
 
             &:nth-child(even) {

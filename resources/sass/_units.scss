@@ -185,7 +185,7 @@
     }
 
     [highlight="none"] & [gear] {
-        background: linear-gradient(to top, #17345b, #0d1a28);
+        background: linear-gradient(to top, $light-navy, $dark-navy);
     }
     [highlight="stars"] & [stars] {
         background-color: red;

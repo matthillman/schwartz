@@ -4,9 +4,9 @@
 <div class="container member-profile member-character">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header row justify-content-start align-items-baseline">
-                    <button type="button" @click="back" class="btn btn-dark btn-icon back-button">
+            <div class="card dark-back">
+                <div class="card-header glass-back row justify-content-start align-items-baseline">
+                    <button type="button" @@click="back" class="btn btn-dark btn-icon back-button">
                         <ion-icon name="chevron-back-circle" size="medium"></ion-icon>
                     </button>
                     <h2>{{ $member->player }}'s {{ $character->display_name }}</h2>

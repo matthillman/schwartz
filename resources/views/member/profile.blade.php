@@ -4,10 +4,10 @@
 <div class="container member-profile">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card profile-card">
+            <div class="card profile-card dark-back">
                     <div class="card-body" highlight="none">
-                        <div class="row justify-content-between align-items-baseline">
-                            <div class="column">
+                        <div class="row justify-content-between align-items-start">
+                            <div class="column align-items-start grow">
                                 <h1>
                                     <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
                                         <span>{{ $member->player }}</span>
@@ -15,21 +15,30 @@
                                 </h1>
                                 <div class="note"><strong>Ally Code:</strong> <span>{{ $member->ally_code}}</span></div>
 
-                                @person
-                                <div class="row no-margin">
-                                    <form method="GET" action="{{ route('member.characters', ['ally' => $member->ally_code]) }}" >
-                                        <button type="submit" class="btn btn-primary">
-                                            <div class="flex-center">
-                                                <ion-icon name="list"></ion-icon>
-                                                <span>{{ __('Characters') }}</span>
-                                            </div>
-                                        </button>
-                                    </form>
+                                <div class="row no-margin guild-info glass-back" @@click="go('/guild/{{ $member->guild->id }}')">
+                                    <span class="small-note space-right">Guild:</span>
+                                    <div class="column">
+                                        <h4>{{ $member->guild->name }}</h4>
+                                        <div class="small-note">{{ number_format($member->guild->gp) }}M</div>
+                                    </div>
+
                                 </div>
-                                @endperson
                             </div>
 
-                            <div class="column player-stats">
+                            @person
+                            <div class="column">
+                                <form method="GET" action="{{ route('member.characters', ['ally' => $member->ally_code]) }}" >
+                                    <button type="submit" class="btn btn-primary">
+                                        <div class="flex-center">
+                                            <ion-icon name="list"></ion-icon>
+                                            <span>{{ __('Characters') }}</span>
+                                        </div>
+                                    </button>
+                                </form>
+                            </div>
+                            @endperson
+
+                            <div class="column player-stats glass-back">
                                 <div class="row justify-content-between align-items-baseline">
                                     <span><strong>GP:</strong> <span>{{ number_format($member->gp) }}</span></span>
                                     <span><strong>Character:</strong> {{ number_format($member->character_gp) }}</span></span>

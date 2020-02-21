@@ -89,7 +89,7 @@
                                     @endif
                                 </div>
                                 <div class="col-md-1">
-                                    <button type="button" class="btn btn-danger" @click.prevent="slot.delete">Delete</button>
+                                    <button type="button" class="btn btn-danger" @@click.prevent="slot.delete">Delete</button>
                                 </div>
                             </div>
                             <div class="form-group row border-bottom">

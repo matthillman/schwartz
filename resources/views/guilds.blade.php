@@ -4,25 +4,16 @@
 <div class="container home">
     <div class="row justify-content-center">
         <div class="col-md-12">
+            @if (session('guildStatus'))
             <div class="card">
-                <div class="card-header"><h2>Add a guild</h2></div>
-
                 <div class="card-body">
-                @if (session('guildStatus'))
                     <div class="alert alert-success">
                         {{ session('guildStatus') }}
                     </div>
-                @endif
-                    <p>Enter either the ID of the guild from its swgoh.gg URL (e.g. 3577) or an ally code of someone in the guild</p>
-                    <form method="POST" action="{{ route('guild.add') }}" >
-                        @csrf
-                        <div class="row add-row input-group">
-                            <input class="form-control" type="text" name="guild">
-                            <button type="submit" class="btn btn-primary">{{ __('Add Guild') }}</button>
-                        </div>
-                    </form>
                 </div>
-
+            </div>
+            @endif
+            <div class="card">
                 <div class="card-header"><h2>Compare Guilds</h2></div>
 
                 <div class="card-body">
@@ -92,6 +83,18 @@
                         </form>
                     </div>
                 </search>
+                </div>
+                <div class="card-header"><h2>Add a guild</h2></div>
+
+                <div class="card-body">
+                    <p>Enter either the ID of the guild from its swgoh.gg URL (e.g. 3577) or an ally code of someone in the guild</p>
+                    <form method="POST" action="{{ route('guild.add') }}" >
+                        @csrf
+                        <div class="row add-row input-group">
+                            <input class="form-control" type="text" name="guild">
+                            <button type="submit" class="btn btn-primary">{{ __('Add Guild') }}</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

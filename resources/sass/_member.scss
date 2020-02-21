@@ -41,11 +41,23 @@ $base: 200px;
         }
     }
 
+    .guild-info {
+        cursor: pointer;
+        margin-top: 8px;
+        transition: background-color, 300ms, ease-in-out;
+
+        > :first-child {
+            margin-top: 8px;
+        }
+
+        &:hover {
+            background: rgba($color: $overlay-navy, $alpha: 0.8);
+        }
+    }
+
     .player-stats {
         width: 50%;
-        padding: 8px;
-        border-radius: 8px;
-        background-color: $gray-300;
+        margin-left: 8px;
 
         .row {
             margin-left: 0;
@@ -57,19 +69,17 @@ $base: 200px;
     .profile-card {
         color: $white;
         text-shadow: 1px 1px 0 $gray-900;
-        background-image: radial-gradient(ellipse at 25% center, #17345b, #0d1a28);
+
+        .modal-wrapper {
+            text-shadow: none;
+            color: $text;
+        }
 
         a {
             color: $white;
             &:not(.gg-link)[target=_gg]:hover::after {
                 background-image: url(/images/bb8-white.svg);
             }
-        }
-
-        .player-stats {
-            background: rgba($color: #1e4269, $alpha: 0.6);
-            color: $gray-200;
-            text-shadow: 1px 1px 0 $gray-900;
         }
 
         .member-list table td {

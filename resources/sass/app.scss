@@ -653,6 +653,22 @@ table.sortable {
   resize: none;
 }
 
+.glass-back {
+  background: rgba($color: $overlay-navy, $alpha: 0.6);
+  color: $gray-200;
+  text-shadow: 1px 1px 0 $gray-900;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.dark-back {
+  background-image: radial-gradient(ellipse at 25% center, $light-navy, $dark-navy);
+}
+
+.space-right {
+  margin-right: 8px;
+}
+
 @import "grid";
 @import "mods";
 @import "units";
