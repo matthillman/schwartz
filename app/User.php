@@ -29,6 +29,28 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function allyCodes() {
+        return $this->hasMany(AllyCodeMap::class, 'discord_id', 'discord_id');
+    }
+
+    public function accounts() {
+        return $this->hasManyThrough(Member::class, AllyCodeMap::class, 'discord_id', 'ally_code', 'discord_id', 'ally_code');
+    }
+
+    public function allyCodeForGuild($id = null) {
+        $server = $this->allyCodes()->where('server_id', $id)->first();
+
+        if (is_null($server)) {
+            $server = $this->allyCodes()->whereNull('server_id')->first();
+        }
+
+        return $server->ally_code;
+    }
+
+    public function accountForGuild($id = null) {
+        return Member::where(['ally_code' => $this->allyCodeForGuild($id)])->firstOrFail();
+    }
+
     public function updateFromOauthUser($user) {
         $this->discord = $user->getNickname();
         $this->name = $user->getName();

@@ -14,7 +14,8 @@
 Route::group(['middleware' => 'client'], function() {
     Route::get('/guild/scrape/{id}', 'APIController@scrapeGuild');
     Route::get('/member/scrape/{id}', 'APIController@scrapeMember');
-    Route::get('/registration/{id}', 'APIController@getAllyFromDiscord');
-    Route::post('/registration/{id}/{discord}', 'APIController@register');
-    Route::delete('/registration/{id}', 'APIController@deleteRegistration');
+    Route::get('/whois/{id}/', 'APIController@whois');
+    Route::get('/registration/{id}/{server?}', 'APIController@getAllyFromDiscord');
+    Route::post('/registration/{id}/{discord}/{server?}', 'APIController@register');
+    Route::delete('/registration/{id}/{server?}', 'APIController@deleteRegistration');
 });

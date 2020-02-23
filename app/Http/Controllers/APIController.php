@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Guild;
 use App\Member;
+use App\AllyCodeMap;
 use App\Jobs\ProcessUser;
 use App\Jobs\ProcessGuild;
 use Illuminate\Http\Request;
@@ -27,15 +29,45 @@ class APIController extends Controller
         return response()->json([]);
     }
 
-    public function getAllyFromDiscord(Request $request, $id) {
-        return response()->json(swgoh()->registration([$id]));
+    public function whois($id) {
+        return response()->json(AllyCodeMap::where(['discord_id' => $id])->get());
     }
 
-    public function register(Request $request, $id, $discord) {
-        return response()->json(swgoh()->registration([], [[$id, $discord]]));
+    public function getAllyFromDiscord(Request $request, $id, $server = null) {
+        $user = User::where(['discord_id' => $id])->first();
+        if (is_null($user)) {
+            $server = AllyCodeMap::where(['discord_id' => $id, 'server_id' => $server])->first();
+
+            if (is_null($server)) {
+                $server = AllyCodeMap::where(['discord_id' => $id])->whereNull('server_id')->first();
+            }
+
+            $allyCode = $server->ally_code;
+        } else {
+            $allyCode = $user->allyCodeForGuild($server);
+        }
+        if (!is_null($allyCode)) {
+            return response()->json([
+                'get' => [
+                    ['allyCode' => $allyCode, 'discordId' => $id]
+                ]
+            ]);
+        }
+        $info = swgoh()->registration([$id]);
+        AllyCodeMap::create(['discord_id' => $id, 'server_id' => $server, 'ally_code' => $info['get'][0]['allyCode']]);
+        return response()->json($info);
+    }
+
+    public function register(Request $request, $id, $discord, $server = null) {
+        $existing = User::where(['discord_id' => $id])->allyCodeForGuild($server);
+        if (is_null($existing)) {
+            $server = null;
+        }
+        AllyCodeMap::upsert(['ally_code' => $id, 'server_id' => $server, 'discord_id' => $discord], "(discord_id, server_id, ally_code)");
+        return response()->json([]);
     }
 
     public function deleteRegistration(Request $request, $id) {
-        return response()->json(swgoh()->registration([], [], [$id]));
+        // return response()->json(swgoh()->registration([], [], [$id]));
     }
 }
