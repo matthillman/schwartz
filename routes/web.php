@@ -59,7 +59,8 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::resource('tw-teams', 'TerritoryCountersController');
     Route::resource('character-mods', 'UnitModPreferenceController');
 
-    Route::get('/units', 'UnitController@index')->name('units');
+    Route::get('/units', 'MetadataController@units')->name('units');
+    Route::get('/categories', 'MetadataController@categories')->name('categories');
     Route::get('/guilds', 'GuildController@listGuilds')->name('guilds');
     Route::get('guild/{guild}', 'GuildController@guildGP')->name('guild.guild');
     Route::get('guild/{guild}/mods', 'GuildController@guildMods')->name('guild.modsList');
@@ -101,6 +102,7 @@ Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
     Route::get('/member-search', 'SearchController@searchMembers')->name('search.members');
     Route::get('/guild-search', 'SearchController@searchGuilds')->name('search.guilds');
     Route::get('/unit-search', 'SearchController@searchUnits')->name('search.units');
+    Route::get('/category-search', 'SearchController@searchCategories')->name('search.categories');
     Route::get('/member-unit-search/{ally}', 'SearchController@searchMemberUnits')->name('search.member.units');
 });
 

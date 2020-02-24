@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Unit;
 use App\Guild;
 use App\Member;
+use App\Category;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -40,6 +41,18 @@ class SearchController extends Controller
         }
 
         return Unit::orderBy('name')
+                ->paginate(50);
+    }
+    public function searchCategories(Request $request) {
+        if (strlen($request->search)) {
+            return Category::search($request->search)
+                ->where('visible', true)
+                ->paginate(50);
+        }
+
+        return Category::where('visible', true)
+                ->orderBy('category_id')
+                ->orderBy('description')
                 ->paginate(50);
     }
 
