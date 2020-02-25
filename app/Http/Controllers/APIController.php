@@ -42,7 +42,9 @@ class APIController extends Controller
                 $server = AllyCodeMap::where(['discord_id' => $id])->whereNull('server_id')->first();
             }
 
-            $allyCode = $server->ally_code;
+            if (!is_null($server)) {
+                $allyCode = $server->ally_code;
+            }
         } else {
             $allyCode = $user->allyCodeForGuild($server);
         }

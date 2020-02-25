@@ -15,7 +15,7 @@ Relic Reccomendations
             <div class="card">
                 <div class="card-header row justify-content-between align-items-center">
                     <div class="column">
-                        @isset($member))
+                        @isset($member)
                         <h2>{{ $member->player }}</h2>
                         <div class="note">Relic Status</div>
                         @else
