@@ -10,7 +10,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-Vue.config.ignoredElements = [/^ion-/]
+Vue.config.ignoredElements = [/^ion-/];
 
 const VueSelect = require('vue-select');
 Vue.component('v-select', VueSelect.VueSelect);
@@ -69,7 +69,7 @@ let data = {
 	modJobStatusByAllyCode: {},
 };
 
-const app = new Vue({
+new Vue({
 	el: '#app',
 	data,
 	watch: {

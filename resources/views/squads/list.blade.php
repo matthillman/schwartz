@@ -86,46 +86,70 @@
                     </form>
                 </div>
 
+                @if ($squads->count() > 0)
                 <div class="card-body squad-list-body">
 
-                    @foreach ($squads as $squad)
-                        <div class="row align-items-center squad-row">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" v-model="selectedSquadArray" :value="{{ $squad->id }}">
-                            </div>
-                            <div class="grow">
-                                <div>{{ $squad->display }}</div>
-                                <div class="small-note">{{ $squad->description }}</div>
-                            </div>
-                            <div class="row align-items-start no-margin">
-                                <span>Leader:</span>
-                                <div class="column char-image-column">
-                                    <div class="char-image-square medium {{ $units->where('base_id', $squad->leader_id)->first()->alignment }}">
-                                        <img src="/images/units/{{$squad->leader_id}}.png">
-                                    </div>
-                                    <div class="char-name">{{ $units->where('base_id', $squad->leader_id)->first()->name }}</div>
-                                </div>
-                            </div>
-                            <div class="row align-items-start no-margin">
-                                <span>Members:</span>
-                                @foreach (explode(',', $squad->additional_members) as $char_id)
-                                    <div class="column char-image-column">
-                                        <div class="char-image-square medium {{ $units->where('base_id', $char_id)->first()->alignment }}">
-                                            <img src="/images/units/{{$char_id}}.png">
+                    <table class="squad-table">
+                        <thead>
+                            <tr>
+                                <th class="blank">&nbsp;</th>
+                                <th><span>Team</span></th>
+                                <th><span>Leader</span></th>
+                                <th colspan="4"><span>Members</span></th>
+                                <th class="blank">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($squads as $squad)
+                                <tr class="squad-row">
+                                    <td class="blank">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" v-model="selectedSquadArray" :value="{{ $squad->id }}">
                                         </div>
-                                        <div class="char-name">{{ $units->where('base_id', $char_id)->first()->name }}</div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            <form method="POST" action="{{ route('squad.delete', ['id' => $squad->id ]) }}">
-                                @method('DELETE')
-                                @csrf
-                                <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="trash" size="medium"></ion-icon></button>
-                            </form>
-                        </div>
-                    @endforeach
+                                    </td>
+                                    <td>
+                                        <div class="description-wrapper">
+                                            <h5>{{ $squad->display }}</h5>
+                                            <div class="small-note">{{ $squad->description }}</div>
+                                        </div>
+                                    </td>
+                                    <td class="top">
+                                        <div class="column char-image-column">
+                                            <div class="char-image-square medium {{ $units->where('base_id', $squad->leader_id)->first()->alignment }}">
+                                                <img src="/images/units/{{$squad->leader_id}}.png">
+                                            </div>
+                                            <div class="char-name">{{ $units->where('base_id', $squad->leader_id)->first()->name }}</div>
+                                        </div>
+                                    </td>
+                                    @foreach (explode(',', $squad->additional_members) as $char_id)
+                                        <td class="top">
+                                            <div class="column char-image-column">
+                                                <div class="char-image-square medium {{ $units->where('base_id', $char_id)->first()->alignment }}">
+                                                    <img src="/images/units/{{$char_id}}.png">
+                                                </div>
+                                                <div class="char-name">{{ $units->where('base_id', $char_id)->first()->name }}</div>
+                                            </div>
+                                        </td>
+                                    @endforeach
+                                    <td class="blank">
+                                        <form class="column justify-content-center align-items-center" method="POST" action="{{ route('squad.delete', ['id' => $squad->id ]) }}">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="trash" size="medium"></ion-icon></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
 
                 </div>
+
+                @else
+                    <div class="card-body">
+                        <h4>No squads configured</h4>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
