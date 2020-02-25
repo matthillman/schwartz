@@ -3,6 +3,7 @@
 namespace App;
 
 use ScoutElastic\Searchable;
+use SwgohHelp\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
 
 class Unit extends Model
@@ -55,5 +56,8 @@ class Unit extends Model
     }
     public function getDescriptionAttribute($value) {
         return __('messages.'.$value);
+    }
+    public function getAlignmentAttribute($value) {
+        return strtolower((new Alignment($value))->getKey());
     }
 }

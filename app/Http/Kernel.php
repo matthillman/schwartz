@@ -58,6 +58,7 @@ class Kernel extends HttpKernel
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'client' => \Laravel\Passport\Http\Middleware\CheckClientCredentials::class,
+        'edit.teams' => \App\Http\Middleware\CanEditTeams::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'active' => \App\Http\Middleware\RedirectIfInactive::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,

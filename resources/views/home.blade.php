@@ -71,6 +71,13 @@
                             <div class="icon-wrapper"><a href="{{ route('tw-teams.index') }}"><div class="image"><ion-icon name="help-buoy" size="huge"></ion-icon></div></a></div>
                             <div class="label"><a href="{{ route('tw-teams.index') }}">TW Team Counters</a></div>
                         </div>
+
+                        @if (auth()->user()->edit_teams)
+                        <div class="item">
+                            <div class="icon-wrapper"><a href="{{ route('squads') }}"><div class="image"><ion-icon name="save" size="huge"></ion-icon></div></a></div>
+                            <div class="label"><a href="{{ route('squads') }}">Squad Management</a></div>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

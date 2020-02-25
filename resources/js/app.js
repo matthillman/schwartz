@@ -64,6 +64,8 @@ let data = {
 	guildCompare: [],
 	memberCompare: [],
 	memberCompareArray: [],
+	messageChannel: '678958338225995786',
+	selectedSquadArray: [],
 	modJobStatusByAllyCode: {},
 };
 
@@ -96,6 +98,9 @@ const app = new Vue({
 		},
 		back() {
 			window.history.back();
+		},
+		set(id, value) {
+			document.getElementById(id).value = value;
 		},
 		loadModJobStatus() {
 			axios.get('/jobs-by-tag?tags=mods').then(result => {

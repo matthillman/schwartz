@@ -87,6 +87,11 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::post('notify', 'HomeController@notify')->name('notify');
 
     Route::get('/jobs-by-tag', 'JobsController@jobsForTag')->name('jobs.by.tag');
+
+    Route::get('/squads', 'SquadController@index')->name('squads');
+    Route::post('/squads', 'SquadController@add')->name('squads.add');
+    Route::delete('/squad/{id}', 'SquadController@delete')->name('squad.delete');
+    Route::put('/squads/message/{channel}', 'SquadController@sendDiscordMessages')->name('squads.message');
 });
 
 Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {

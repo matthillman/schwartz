@@ -56,7 +56,7 @@ html, body {
   margin: 0;
 }
 
-body{
+body {
   background-color: #4f555d;
   background: url(/images/main.jpg);
   background-size: cover;
@@ -78,6 +78,11 @@ body{
 
 .full-height {
   height: 100vh;
+}
+
+
+.card-body {
+  padding: 15px;
 }
 
 .column {
@@ -675,3 +680,4 @@ table.sortable {
 @import "character";
 @import "extensions";
 @import "member";
+@import "squads";
