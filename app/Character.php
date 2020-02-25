@@ -71,7 +71,7 @@ class Character extends Model
     //     return $value;
     // }
     public function getAlignmentAttribute() {
-        return strtolower((new Alignment($this->unit->alignment))->getKey());
+        return $this->unit->alignment;
     }
     public function getDisplayNameAttribute() {
         return $this->unit->name;
