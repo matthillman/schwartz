@@ -35,6 +35,7 @@ class APIController extends Controller
 
     public function getAllyFromDiscord(Request $request, $id, $server = null) {
         $user = User::where(['discord_id' => $id])->first();
+        $allyCode = null;
         if (is_null($user)) {
             $server = AllyCodeMap::where(['discord_id' => $id, 'server_id' => $server])->first();
 
