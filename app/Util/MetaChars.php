@@ -27,7 +27,7 @@ trait MetaChars {
 
             $chars = $chars->mapWithKeys(function($name, $id) use ($units) {
                 $unit = $units->where('base_id', $id)->first();
-                return [$id => ['name' => $name, 'alignment' => strtolower((new Alignment($unit->alignment))->getKey())]];
+                return [$id => ['name' => $name, 'alignment' => strtolower($unit->alignment)]];
             });
         }
 
@@ -48,7 +48,7 @@ trait MetaChars {
 
             $chars = $chars->mapWithKeys(function($name, $id) use ($units) {
                 $unit = $units->where('base_id', $id)->first();
-                return [$id => ['name' => $name, 'alignment' => strtolower((new Alignment($unit->alignment))->getKey())]];
+                return [$id => ['name' => $name, 'alignment' => strtolower($unit->alignment)]];
             });
         }
 
@@ -68,7 +68,7 @@ trait MetaChars {
 
             $chars = $chars->mapWithKeys(function($name, $id) use ($units) {
                 $unit = $units->where('base_id', $id)->first();
-                return [$id => ['name' => $name, 'alignment' => strtolower((new Alignment($unit->alignment))->getKey())]];
+                return [$id => ['name' => $name, 'alignment' => strtolower($unit->alignment)]];
             });
         }
 
