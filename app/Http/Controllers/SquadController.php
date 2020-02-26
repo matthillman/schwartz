@@ -15,9 +15,18 @@ class SquadController extends Controller
     }
 
     public function index(Request $request) {
+
+        $squads = Squad::orderBy('display')->get();
+        $units = Unit::all()->sortBy('name')->values();
+
+        list($chars, $ships) = $squads->partition(function ($squad) use ($units) {
+            return $units->where('base_id', $squad->leader_id)->first()->combat_type == 1;
+        });
+
         return view('squads.list', [
-            'squads' => Squad::orderBy('display')->get(),
-            'units' => Unit::where('combat_type', 1)->get()->sortBy('name')->values(),
+            'ships' => $ships,
+            'chars' => $chars,
+            'units' => $units,
         ]);
     }
 

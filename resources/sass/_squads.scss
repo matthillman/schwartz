@@ -29,51 +29,6 @@
     .btn.btn-primary {
         width: 55px;
     }
-
-    .dropdown.v-select {
-        min-width: 200px;
-
-        .dropdown-toggle {
-            height: 36px;
-            padding: 0;
-        }
-
-        .vs__selected-options {
-            padding: 0;
-
-            .portrait-preview {
-                height: 34px;
-                max-height: 34px;
-            }
-        }
-
-        &.single .selected-tag {
-            margin: 0;
-            padding: 0;
-            border: none;
-        }
-
-
-    }
-    &.multiple .dropdown.v-select {
-        --select-width: calc(100% - 71px);
-        width: var(--select-width);
-
-        .dropdown-toggle {
-            min-height: 42px;
-            height: auto;
-            padding: 0;
-        }
-
-        .selected-tag {
-            margin: 2px 4px;
-            padding-left: 0;
-        }
-
-        .character-name {
-            text-align: left;
-        }
-    }
 }
 
 .squad-table {

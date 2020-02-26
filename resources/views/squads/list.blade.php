@@ -12,59 +12,14 @@
                         @csrf
                         <div class="row add-row input-group add-squad-row">
                             <input type="hidden" name="leader_id" value="" id="leader_id">
-                            <v-select
-                                :options="{{ $units->toJson() }}"
-                                :placeholder="`Leader`"
-                                :label="'name'"
-                                @@input="val => set('leader_id', val ? val.base_id : null)"
-                            >
-                                <template v-slot:option="option">
-                                    <div class="portrait-preview">
-                                        <img class="character" :src="`/images/units/${ option.base_id }.png`" />
-                                        <div class="character-name">
-                                            @{{ option.name }}
-                                        </div>
-                                    </div>
-                                </template>
-                                <template v-slot:selected-option="option">
-                                    <div class="portrait-preview">
-                                        <img class="character" :src="`/images/units/${ option.base_id }.png`" />
-                                        <div class="character-name">
-                                            @{{ option.name }}
-                                        </div>
-                                    </div>
-                                </template>
-                            </v-select>
+                            <unit-select :placeholder="`Leader`" @@input="val => set('leader_id', val ? val.base_id : null)"></unit-select>
                             <input class="form-control" type="text" placeholder="Squad Name" name="name">
                             <input class="form-control" type="text" placeholder="Squad Description" name="description">
                             <button type="submit" class="btn btn-primary">{{ __('Add') }}</button>
                         </div>
                         <div class="row add-row input-group add-squad-row multiple">
                             <input type="hidden" name="other_members" value="" id="other_members">
-                            <v-select
-                                multiple
-                                :options="{{ $units->toJson() }}"
-                                :placeholder="`Other Members`"
-                                :label="'name'"
-                                @@input="val => set('other_members', val.map(u => u.base_id).reduce((c, u) => [c, u].join(',')))"
-                            >
-                                <template v-slot:option="option">
-                                    <div class="portrait-preview">
-                                        <img class="character" :src="`/images/units/${ option.base_id }.png`" />
-                                        <div class="character-name">
-                                            @{{ option.name }}
-                                        </div>
-                                    </div>
-                                </template>
-                                <template v-slot:selected-option="option">
-                                    <div class="portrait-preview">
-                                        <img class="character" :src="`/images/units/${ option.base_id }.png`" />
-                                        <div class="character-name">
-                                            @{{ option.name }}
-                                        </div>
-                                    </div>
-                                </template>
-                            </v-select>
+                            <unit-select multiple :placeholder="`Other Members`" @@input="val => set('other_members', val.map(u => u.base_id).reduce((c, u) => [c, u].join(',')))"></unit-select>
                         </div>
                     </form>
                 </div>
@@ -86,66 +41,71 @@
                     </form>
                 </div>
 
-                @if ($squads->count() > 0)
-                <div class="card-body squad-list-body">
-
-                    <table class="squad-table">
-                        <thead>
-                            <tr>
-                                <th class="blank">&nbsp;</th>
-                                <th><span>Team</span></th>
-                                <th><span>Leader</span></th>
-                                <th colspan="4"><span>Members</span></th>
-                                <th class="blank">&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($squads as $squad)
-                                <tr class="squad-row">
-                                    <td class="blank">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" v-model="selectedSquadArray" :value="{{ $squad->id }}">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="description-wrapper">
-                                            <h5>{{ $squad->display }}</h5>
-                                            <div class="small-note">{{ $squad->description }}</div>
-                                        </div>
-                                    </td>
-                                    <td class="top">
-                                        <div class="column char-image-column">
-                                            <div class="char-image-square medium {{ $units->where('base_id', $squad->leader_id)->first()->alignment }}">
-                                                <img src="/images/units/{{$squad->leader_id}}.png">
-                                            </div>
-                                            <div class="char-name">{{ $units->where('base_id', $squad->leader_id)->first()->name }}</div>
-                                        </div>
-                                    </td>
-                                    @foreach (explode(',', $squad->additional_members) as $char_id)
-                                        <td class="top">
-                                            <div class="column char-image-column">
-                                                <div class="char-image-square medium {{ $units->where('base_id', $char_id)->first()->alignment }}">
-                                                    <img src="/images/units/{{$char_id}}.png">
-                                                </div>
-                                                <div class="char-name">{{ $units->where('base_id', $char_id)->first()->name }}</div>
+                @foreach ([$chars, $ships] as $squads)
+                    @if ($squads->count() > 0)
+                    <div class="card-body squad-list-body">
+                        <table class="squad-table">
+                            <thead>
+                                <tr>
+                                    <th class="blank">&nbsp;</th>
+                                    <th><span>Team</span></th>
+                                    <th><span>Leader</span></th>
+                                    <th colspan="{{ count($squads->max('other_members')) }}"><span>Members</span></th>
+                                    <th class="blank">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($squads as $squad)
+                                    <tr class="squad-row">
+                                        <td class="blank">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" v-model="selectedSquadArray" :value="{{ $squad->id }}">
                                             </div>
                                         </td>
-                                    @endforeach
-                                    <td class="blank">
-                                        <form class="column justify-content-center align-items-center" method="POST" action="{{ route('squad.delete', ['id' => $squad->id ]) }}">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="trash" size="medium"></ion-icon></button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                        <td>
+                                            <div class="description-wrapper">
+                                                <h5>{{ $squad->display }}</h5>
+                                                <div class="small-note">{{ $squad->description }}</div>
+                                            </div>
+                                        </td>
+                                        <td class="top">
+                                            <div class="column char-image-column">
+                                                <div class="char-image-square medium {{ $units->where('base_id', $squad->leader_id)->first()->alignment }}">
+                                                    <img src="/images/units/{{$squad->leader_id}}.png">
+                                                </div>
+                                                <div class="char-name">{{ $units->where('base_id', $squad->leader_id)->first()->name }}</div>
+                                            </div>
+                                        </td>
+                                        @foreach ($squad->other_members as $char_id)
+                                            <td class="top">
+                                                <div class="column char-image-column">
+                                                    <div class="char-image-square medium {{ $units->where('base_id', $char_id)->first()->alignment }}">
+                                                        <img src="/images/units/{{$char_id}}.png">
+                                                    </div>
+                                                    <div class="char-name">{{ $units->where('base_id', $char_id)->first()->name }}</div>
+                                                </div>
+                                            </td>
+                                        @endforeach
+                                        @for ($i = 0; $i < count($squads->max('other_members')) - count($squad->other_members); $i++)
+                                            <td>&nbsp;</td>
+                                        @endfor
+                                        <td class="blank">
+                                            <form class="column justify-content-center align-items-center" method="POST" action="{{ route('squad.delete', ['id' => $squad->id ]) }}">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="trash" size="medium"></ion-icon></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
 
-                </div>
+                    </div>
+                    @endif
+                @endforeach
 
-                @else
+                @if ($chars->count() == 0 && $ships->count() == 0)
                     <div class="card-body">
                         <h4>No squads configured</h4>
                     </div>

@@ -37,11 +37,13 @@ class SearchController extends Controller
     public function searchUnits(Request $request) {
         if (strlen($request->search)) {
             return Unit::search($request->search)
+                ->whereExists('category_list')
                 ->paginate(50);
         }
 
-        return Unit::orderBy('name')
-                ->paginate(50);
+        return Unit::whereRaw('json_array_length(category_list) > 0')
+            ->orderBy('name')
+            ->paginate(50);
     }
     public function searchCategories(Request $request) {
         if (strlen($request->search)) {

@@ -57,6 +57,7 @@ Vue.component('highlight-widget', require('./components/HighlightWidget.vue').de
 Vue.component('loading-indicator', require('./components/LoadingIndicator.vue').default);
 Vue.component('horizon-jobs', require('./components/Horizon.vue').default);
 Vue.component('search', require('./components/Search.vue').default);
+Vue.component('unit-select', require('./components/UnitSelect.vue').default);
 
 
 let data = {

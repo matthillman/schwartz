@@ -11,4 +11,8 @@ class Squad extends Model
     protected $casts = [
         'additional_members' => 'array',
     ];
+
+    public function getOtherMembersAttribute() {
+        return explode(',', $this->additional_members);
+    }
 }
