@@ -25,19 +25,11 @@ Route::prefix('login')->group(function() {
 Route::get('/mods', 'ModsController@index')->name('mods');
 Route::get('/mods/{user}', 'ModsController@pullUser')->name('mods.user');
 
-Route::get('/u/{user}/{param?}', function($user, $param) {
-    return redirect()->away("https://swgoh.gg/u/$user/$param");
-});
-Route::get('/p/{user}/{param?}', function($user, $param) {
-    return redirect()->away("https://swgoh.gg/p/$user/$param");
-});
-Route::get('podcast.rss', function() {
-    return redirect()->away("http://feeds.soundcloud.com/users/soundcloud:users:536817606/sounds.rss");
-});
-Route::get('discord/{id}', function($id) {
-    $response = guzzle()->get("https://discordapp.com/api/guilds/${id}/widget.json");
-    return $response->getBody();
-});
+Route::get('/u/{user}/{param?}', 'MetadataController@ggUser');
+Route::get('/p/{user}/{param?}', 'MetadataController@ggPlayer');
+
+Route::get('podcast.rss', 'MetadataController@podcastRSS');
+Route::get('discord/{id}', 'MetadataController@discordWidget');
 
 Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::group(['middleware' => ['active']], function() {
