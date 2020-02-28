@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Util;
 
+use App\SquadGroup;
+
 trait Squads {
     protected function getSquadsFor($key) {
         $highlight = "gear";
@@ -114,13 +116,17 @@ trait Squads {
     }
 
     public function squadLabelFor($key) {
-        return collect($this->squadList())->first(function($pair) use ($key) {
-            return $pair['value'] === $key;
+        return collect($this->squadList(true))->first(function($pair) use ($key) {
+            return $pair['value'] == $key;
         })['label'];
     }
 
-    public function squadList() {
-        return [
+    public function squadList($hideSeparators = false) {
+        $globalSquads = SquadGroup::global()->get()
+            ->map(function($group) {
+                return ['label' => $group->name, 'value' => $group->id];
+            });
+        $defaultSquads = [
             ['label' => 'General Skywalker', 'value' => 'gs'],
             ['label' => 'Geo TB', 'value' => 'geo'],
             ['label' => 'LS Geo TB', 'value' => 'lsgeo'],
@@ -130,5 +136,19 @@ trait Squads {
             ['label' => 'Hoth TB', 'value' => 'tb'],
             ['label' => 'STR', 'value' => 'str'],
         ];
+
+        $guildSquads = collect([]);
+        foreach (auth()->user()->accounts as $account) {
+            $s = SquadGroup::forGuild($account->guild)->get()
+                ->map(function($group) use ($account) {
+                    return ['label' => $group->name, 'value' => $group->id, 'guild' => $account->guild->id];
+                });
+            if (!$hideSeparators) {
+                $s->prepend(['label' => $account->guild->name, 'separator' => true, 'guild' => $account->guild->id]);
+            }
+            $guildSquads = $guildSquads->concat($s);
+        }
+
+        return $globalSquads->concat($defaultSquads)->concat($guildSquads);
     }
 }

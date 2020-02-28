@@ -71,7 +71,7 @@
 
         .char-image-column {
             margin: 0 auto;
-            width: 60px;
+            min-width: 60px;
 
             .char-name {
                 white-space: normal;

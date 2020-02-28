@@ -2,7 +2,7 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container">
+        <div class="modal-container" :class="{wider: this.wider}">
 
           <div class="modal-header">
             <slot name="header">
@@ -33,8 +33,9 @@ export default {
     noClose: {
       type: Boolean,
       default: false
-    }
-  }
+    },
+    wider: Boolean,
+  },
 }
 </script>
 
@@ -64,6 +65,10 @@ export default {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba($color: #000000, $alpha: 0.33);
   transition: all .3s ease;
+
+  &.wider {
+    width: 750px;
+  }
 }
 
 .modal-header h3 {

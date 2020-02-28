@@ -30,6 +30,22 @@
                 </div>
             </div>
 
+            @user('accounts')
+                <div class="card">
+                    <div class="card-header"><h2>Your Guilds</h2></div>
+
+                    <div class="card-body">
+                        <div class="guild-list">
+                        @forelse(auth()->user()->accounts->pluck('guild') as $guild)
+                            @include('shared.guild_row', [ 'guild' => $guild, 'squads' => $squads])
+                        @empty
+                            <div>No guilds found for the current user 😞</div>
+                        @endforelse
+                        </div>
+                    </div>
+                </div>
+            @enduser
+
             <div class="card">
                 <div class="card-header"><h2>Schwartz Guilds</h2></div>
 
@@ -61,7 +77,13 @@
                             <div slot="content">
                                 <ul>
                                 @foreach ($squads as $squad)
-                                    <li><a :href="`/guild/${result.item.id}/{{ $squad['value'] }}/0`">{{ $squad['label'] }}</a></li>
+                                    <li {{isset($squad['guild']) ? 'v-if="result.item.id === ' . $squad['guild'] . '"' : ''}}>
+                                        @if (array_get($squad, 'separator', false))
+                                        <strong>{{ $squad['label'] }}</strong>
+                                        @else
+                                        <a :href="`/guild/${result.item.id}/{{ $squad['value'] }}/0`">{{ $squad['label'] }}</a>
+                                        @endif
+                                    </li>
                                 @endforeach
                                 </ul>
                             </div>

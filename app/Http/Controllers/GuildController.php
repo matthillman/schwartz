@@ -7,8 +7,11 @@ use App\Unit;
 use App\Guild;
 use App\Member;
 use App\Character;
+use App\SquadGroup;
 use App\Jobs\ProcessGuild;
 use Illuminate\Http\Request;
+
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class GuildController extends Controller
 {
@@ -51,9 +54,17 @@ class GuildController extends Controller
     public function listMembers($guild, $team, $mode = 'guild', int $index = PHP_INT_MAX) {
         $guild = Guild::findOrFail($guild);
 
-        list($highlight, $teams) = $this->getSquadsFor($team);
-
-        $teamKeys = array_keys($teams);
+        if (is_int(intval($team))) {
+            $group = SquadGroup::findOrFail($team);
+            $highlight = 'gear';
+            $teams = $group->squads->mapWithKeys(function($squad) {
+                return [$squad->display => collect([$squad->leader_id])->concat($squad->other_members)->toArray()];
+            });
+            $teamKeys = $teams->keys();
+        } else {
+            list($highlight, $teams) = $this->getSquadsFor($team);
+            $teamKeys = array_keys($teams);
+        }
 
         if (is_int($index) && $index < count($teamKeys)) {
             $teams = [
@@ -79,7 +90,7 @@ class GuildController extends Controller
             'highlight' => $highlight,
             'team' => $team,
             'guild' => $guild,
-            'teamKeys' => $teamKeys,
+            'teamKeys' => collect($teamKeys)->map(function($k, $i) { return ['title' => $k, 'index' => $i]; }),
             'title' => $this->squadLabelFor($team),
             'selected' => $index,
         ]);
@@ -156,6 +167,10 @@ class GuildController extends Controller
             $guild2 = $member2->guild()->firstOrFail();
         } else {
             $guild2 = Guild::where(['guild_id' => $second])->firstOrFail();
+        }
+
+        if (in_array('not_scraped', [$guild1->url, $guild2->url])) {
+            throw new ModelNotFoundException;
         }
 
         $compareData = Guild::getCompareData($guild1, $guild2);

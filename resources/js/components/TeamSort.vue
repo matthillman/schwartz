@@ -1,13 +1,22 @@
 <template>
 <div>
     <slot v-if="sortedMembers.length"></slot>
-    <div class="set-filter row">
+    <div class="row stat-filter no-margin justify-content-start align-items-center">
         <span class="sort-label">Sort by:</span>
-        <div>
-            <div class="btn" v-for="stat in stats" :key="stat.value" :class="{selected: sorted && stat && sorted.value == stat.value}" @click="sorted = stat">
-                {{ stat.label }}
-            </div>
-        </div>
+        <v-select :options="stats" v-model="sorted" :clearable="false">
+            <template v-slot:option="stat">
+                <div class="row no-margin  align-items-center">
+                    <span class="mod-set-image tier-5 mini" :class="stat.key"></span>
+                    <span>{{ stat.label }}</span>
+                </div>
+            </template>
+            <template v-slot:selected-option="stat">
+                <div class="row no-margin align-items-center">
+                    <span class="mod-set-image tier-5 mini" :class="stat.key"></span>
+                    <span>{{ stat.label }}</span>
+                </div>
+            </template>
+        </v-select>
     </div>
     <div class="member-list">
         <table class="sortable">
@@ -128,16 +137,16 @@
     }
 }
 
+.stat-filter {
+    margin: 8px 0 0 8px;
+}
+
 .sort-label {
     margin-right: 8px;
 }
 
-.set-filter {
-    justify-content: space-between;
-
-    .btn {
-        white-space: nowrap;
-    }
+.v-select {
+    flex: 0 1 300px;
 }
 </style>
 

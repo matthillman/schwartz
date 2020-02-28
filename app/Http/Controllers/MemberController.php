@@ -6,6 +6,7 @@ use App\Unit;
 use App\Member;
 use App\Category;
 use App\Character;
+use App\SquadGroup;
 use App\Jobs\ProcessUser;
 use Illuminate\Http\Request;
 use SwgohHelp\Enums\UnitStat;
@@ -117,7 +118,15 @@ class MemberController extends Controller
     public function listTeams($allyCode, $team) {
         $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
 
-        list($highlight, $teams) = $this->getSquadsFor($team);
+        if (is_int(intval($team))) {
+            $group = SquadGroup::findOrFail($team);
+            $highlight = 'gear';
+            $teams = $group->squads->mapWithKeys(function($squad) {
+                return [$squad->display => collect([$squad->leader_id])->concat($squad->other_members)->toArray()];
+            });
+        } else {
+            list($highlight, $teams) = $this->getSquadsFor($team);
+        }
 
         return view("member.teams", [
             'member' => $member,

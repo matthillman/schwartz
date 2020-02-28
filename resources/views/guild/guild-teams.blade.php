@@ -21,13 +21,13 @@
                     </div>
                 </div>
 
-                @if (count($teamKeys) > 1)
-                <div class="squad-switcher row justify-content-between align-items-center">
-                    <a class="btn{{ $selected > count($teamKeys) ? ' selected' : '' }}" href="{{ route('guild.members', ['guild' => $guild->id, 'team' => $team ]) }}">All</a>
-                    @foreach ($teamKeys as $index => $key)
-                    <a class="btn{{ $selected === $index ? ' selected' : '' }}" href="{{ route('guild.members', ['guild' => $guild->id, 'team' => $team, 'mode' => 'guild', 'index' => $index]) }}">{{ $key }}</a>
-                    @endforeach
-                </div>
+                @if ($teamKeys->count() > 1)
+                <tab-list
+                    :all-route="`{{ route('guild.members', ['guild' => $guild->id, 'team' => $team ]) }}`"
+                    :tabs="{{ $teamKeys->toJson() }}"
+                    :selected="{{ $selected }}"
+                    @@changed="tab => go(`/guild/{{$guild->id}}/{{$team}}/guild/${tab.index}`)"
+                ></tab-list>
                 @endif
 
                 @foreach($teams as $title => $team)
@@ -36,7 +36,7 @@
                         v-bind:units="{{ $team->values()->toJson() }}"
                         v-bind:members="{{ $members->map(function($m) use ($team) { return $m->characterSet($team->pluck('base_id')->all()); })->toJson() }}"
                     >
-                        <div class="row justify-content-between align-items-center">
+                        <div class="row no-margin justify-content-between align-items-center">
                             <h1>{{ $title }}</h1>
 
                             <highlight-widget :starting="'{{$highlight}}'"></highlight-widget>

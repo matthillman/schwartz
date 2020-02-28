@@ -82,6 +82,8 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
 
     Route::get('/squads', 'SquadController@index')->name('squads');
     Route::post('/squads', 'SquadController@add')->name('squads.add');
+    Route::post('/squads/group', 'SquadController@addGroup')->name('squads.add.group');
+    Route::put('/squads/{squad}/publish', 'SquadController@publish')->name('squads.group.publish');
     Route::delete('/squad/{id}', 'SquadController@delete')->name('squad.delete');
     Route::put('/squads/message/{channel}', 'SquadController@sendDiscordMessages')->name('squads.message');
 });

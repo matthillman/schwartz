@@ -22,6 +22,9 @@ Vue.component('popover', VuePopover);
 import { CoolSelectPlugin } from 'vue-cool-select';
 Vue.use(CoolSelectPlugin);
 
+import VShowSlide from 'v-show-slide';
+Vue.use(VShowSlide);
+
 Vue.component('content-wrapper', {
 	functional: true,
 	render(createElement, context) {
@@ -58,10 +61,14 @@ Vue.component('loading-indicator', require('./components/LoadingIndicator.vue').
 Vue.component('horizon-jobs', require('./components/Horizon.vue').default);
 Vue.component('search', require('./components/Search.vue').default);
 Vue.component('unit-select', require('./components/UnitSelect.vue').default);
-
+Vue.component('tab-list', require('./components/TabList.vue').default);
+Vue.component('squad-tabs', require('./components/SquadTabs.vue').default);
+Vue.component('auto-checkbox', require('./components/AutoCheckbox.vue').default);
+Vue.component('collapsable', require('./components/Collapsable.vue').default);
 
 let data = {
 	highlight: null,
+	showGlobalModal: null,
 	guildCompare: [],
 	memberCompare: [],
 	memberCompareArray: [],

@@ -75,7 +75,7 @@
 .add-row {
     justify-content: flex-start;
     padding: 8px;
-    > * {
+    > :not(:last-child) {
         margin-right: 8px;
     }
 }

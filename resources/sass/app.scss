@@ -650,6 +650,12 @@ table.sortable {
   margin-right: 0;
 }
 
+.row.child-no-margin {
+  > * {
+    margin: 0;
+  }
+}
+
 .back-button {
   margin-right: 8px;
 }

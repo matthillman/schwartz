@@ -14,7 +14,15 @@
             <div slot="content">
                 <ul>
                 @foreach ($squads as $squad)
-                    <li><a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => $squad['value'], 'mode' => 'guild', 'index' => 0]) }}">{{ $squad['label'] }}</a></li>
+                    @if($guild->id === array_get($squad, 'guild') || !isset($squad['guild']))
+                    <li>
+                        @if (array_get($squad, 'separator', false))
+                        <strong>{{ $squad['label'] }}</strong>
+                        @else
+                        <a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => $squad['value'], 'mode' => 'guild', 'index' => 0]) }}">{{ $squad['label'] }}</a>
+                        @endif
+                    </li>
+                    @endif
                 @endforeach
                 </ul>
             </div>

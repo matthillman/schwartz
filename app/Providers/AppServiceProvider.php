@@ -36,6 +36,12 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('person', function() {
             return stripos(request()->header('schwartz'), 'bot') === false;
         });
+
+        $token = $this->app->make('config')->get('services.discord.token');
+
+        $this->app->when(\App\Util\Discord::class)
+            ->needs('$token')
+            ->give($token);
     }
 
     /**
