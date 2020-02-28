@@ -101,7 +101,9 @@
                                                 </div>
                                             </td>
                                         @empty
+                                            @if (count($squads->max('additional_members')) === 0)
                                             <td>&nbsp;</td>
+                                            @endif
                                         @endforelse
                                         @for ($i = 0; $i < count($squads->max('additional_members')) - count($squad->additional_members); $i++)
                                             <td>&nbsp;</td>
