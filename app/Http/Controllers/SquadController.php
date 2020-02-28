@@ -69,7 +69,7 @@ class SquadController extends Controller
         $squad->leader_id = $request->leader_id;
         $squad->display = $request->name;
         $squad->description = $request->description;
-        $squad->additional_members = explode(',', $request->other_members ?: '');
+        $squad->additional_members = array_filter(explode(',', $request->other_members ?: ''));
         $squad->squad_group_id = $request->group;
 
         $squad->save();
