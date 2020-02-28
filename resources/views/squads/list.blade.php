@@ -65,7 +65,7 @@
                                     <th class="blank">&nbsp;</th>
                                     <th><span>Team</span></th>
                                     <th><span>Leader</span></th>
-                                    <th colspan="{{ count($squads->max('other_members')) }}"><span>Members</span></th>
+                                    <th colspan="{{ count($squads->max('additional_members')) }}"><span>Members</span></th>
                                     <th class="blank">&nbsp;</th>
                                 </tr>
                             </thead>
@@ -91,7 +91,7 @@
                                                 <div class="char-name">{{ $units->where('base_id', $squad->leader_id)->first()->name }}</div>
                                             </div>
                                         </td>
-                                        @foreach ($squad->other_members as $char_id)
+                                        @forelse ($squad->additional_members as $char_id)
                                             <td class="top">
                                                 <div class="column char-image-column">
                                                     <div class="char-image-square medium {{ $units->where('base_id', $char_id)->first()->alignment }}">
@@ -100,8 +100,10 @@
                                                     <div class="char-name">{{ $units->where('base_id', $char_id)->first()->name }}</div>
                                                 </div>
                                             </td>
-                                        @endforeach
-                                        @for ($i = 0; $i < count($squads->max('other_members')) - count($squad->other_members); $i++)
+                                        @empty
+                                            <td>&nbsp;</td>
+                                        @endforelse
+                                        @for ($i = 0; $i < count($squads->max('additional_members')) - count($squad->additional_members); $i++)
                                             <td>&nbsp;</td>
                                         @endfor
                                         <td class="blank">

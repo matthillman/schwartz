@@ -118,11 +118,11 @@ class MemberController extends Controller
     public function listTeams($allyCode, $team) {
         $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
 
-        if (is_int(intval($team))) {
+        if (ctype_digit(strval($team))) {
             $group = SquadGroup::findOrFail($team);
             $highlight = 'gear';
             $teams = $group->squads->mapWithKeys(function($squad) {
-                return [$squad->display => collect([$squad->leader_id])->concat($squad->other_members)->toArray()];
+                return [$squad->display => collect([$squad->leader_id])->concat($squad->additional_members)->toArray()];
             });
         } else {
             list($highlight, $teams) = $this->getSquadsFor($team);
