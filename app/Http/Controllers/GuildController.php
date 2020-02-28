@@ -54,7 +54,7 @@ class GuildController extends Controller
     public function listMembers($guild, $team, $mode = 'guild', int $index = PHP_INT_MAX) {
         $guild = Guild::findOrFail($guild);
 
-        if (is_int(intval($team))) {
+        if (ctype_digit(strval($team))) {
             $group = SquadGroup::findOrFail($team);
             $highlight = 'gear';
             $teams = $group->squads->mapWithKeys(function($squad) {
