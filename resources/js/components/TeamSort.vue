@@ -74,7 +74,7 @@
                     {label: 'Tenacity', value: UnitStat.UNITSTATRESISTANCE, key: 'tenacity'},
                     {label: 'Potency', value: UnitStat.UNITSTATACCURACY, key: 'potency'},
                 ],
-                sorted: {value: null},
+                sorted: {label: 'Speed', value: UnitStat.UNITSTATSPEED, key: 'speed'},
                 sortCharacter: null,
                 reversed: false,
                 sortedMembers: [],

@@ -15,6 +15,7 @@
         data: function() {
             return {
                 stats: [
+                    'stars',
                     'power',
                     'power-plus',
                     'power-stars',
@@ -34,6 +35,7 @@
             },
             labelFor(stat) {
                 switch (stat) {
+                    case 'stars': return '★';
                     case 'power-stars': return 'power/★';
                     case 'power-plus': return 'power+';
                     default: return stat;
