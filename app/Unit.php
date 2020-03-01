@@ -48,6 +48,14 @@ class Unit extends Model
         ]
     ];
 
+    public function toSearchableArray() {
+        $array = $this->toArray();
+
+        $array['alignment'] = $this->attributes['alignment'];
+
+        return $array;
+    }
+
     public function preference() {
         return $this->hasOne(UnitModPreference::class, 'unit_id', 'base_id');
     }
