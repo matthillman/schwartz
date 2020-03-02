@@ -78,11 +78,9 @@ class APIController extends Controller
         $members = $request->input('response');
 
         foreach ($members as $member) {
-            $user = User::where('discord_id', $member['id'])->firstOrFail();
-            $currentRoles = $user->discord_roles->roles;
+            $currentRoles = DiscordRole::where('discord_id', $member['id'])->firstOrNew();
             $currentRoles[$member['guild']] = $member;
-            $user->discord_roles->roles = $currentRoles;
-            $user->push();
+            $currentRoles->save();
         }
 
         broadcast(new \App\Events\PermissionsUpdated($user));
