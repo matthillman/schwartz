@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class DiscordRole extends Model
 {
+    protected $fillable = [ 'discord_id' ];
+
     protected $casts = [
         'roles' => 'array',
     ];

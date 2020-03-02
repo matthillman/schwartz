@@ -79,7 +79,7 @@ class APIController extends Controller
         $members = $request->input('response');
 
         foreach ($members as $member) {
-            $currentRoles = DiscordRole::where('discord_id', $member['id'])->firstOrNew();
+            $currentRoles = DiscordRole::firstOrNew(['discord_id' => $member['id']]);
             $currentRoles[$member['guild']] = $member;
             $currentRoles->save();
         }
