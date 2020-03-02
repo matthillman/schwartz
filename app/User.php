@@ -90,6 +90,19 @@ class User extends Authenticatable
         return $value;
     }
 
+    public function getCanEditSquadsAttribute() {
+        if ($this->edit_teams) { return true; }
+
+        return $this->accounts
+            ->contains(function($account) {
+                if (!$account->guild) { return false; }
+                if (is_null($account->guild->server_id)) { return false; }
+                return collect($this->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) use ($account) {
+                    return preg_match($account->guild->officer_role_regex, $role['name']);
+                });
+            });
+    }
+
     public function routeNotificationForDiscord()
     {
         return $this->discord_private_channel_id;

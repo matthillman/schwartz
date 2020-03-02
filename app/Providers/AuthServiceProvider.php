@@ -63,8 +63,8 @@ class AuthServiceProvider extends ServiceProvider
                 ->contains(function($account) use ($squadGroup, $user) {
                     if (!$account->guild || $account->guild->id != $squadGroup->guild_id) { return false; }
                     if (is_null($account->guild->server_id)) { return false; }
-                    return collect($user->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) {
-                        return preg_match('/^officer/i', $role['name']);
+                    return collect($user->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) use ($account) {
+                        return preg_match($account->guild->officer_role_regex, $role['name']);
                     });
                 });
         });
@@ -81,8 +81,8 @@ class AuthServiceProvider extends ServiceProvider
                 ->contains(function($account) use ($guild, $user) {
                     if (!$account->guild || $account->guild->id != $guild->id) { return false; }
                     if (is_null($account->guild->server_id)) { return false; }
-                    return collect($user->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) {
-                        return preg_match('/^officer/i', $role['name']);
+                    return collect($user->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) use ($account) {
+                        return preg_match($account->guild->officer_role_regex, $role['name']);
                     });
                 });
         });

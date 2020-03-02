@@ -50,6 +50,10 @@ class Guild extends Model
         return $this->hasMany(Member::class);
     }
 
+    public function getOfficerRoleRegexAttribute() {
+        return '/^officer/i';
+    }
+
     public static function getCompareData($guild1, $guild2) {
         $chars = static::getCompareCharacters();
 

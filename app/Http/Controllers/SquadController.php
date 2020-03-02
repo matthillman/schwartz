@@ -28,8 +28,8 @@ class SquadController extends Controller
         $guilds = auth()->user()->accounts
             ->filter(function($account) {
                 if (!$account->guild  || is_null($account->guild->server_id)) { return false; }
-                return collect(auth()->user()->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) {
-                    return preg_match('/^officer/i', $role['name']);
+                return collect(auth()->user()->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) use ($account) {
+                    return preg_match($account->guild->officer_role_regex, $role['name']);
                 });
             })
             ->map(function ($a) { return ['label' => $a->guild_name, 'value' => $a->guild->id ]; });
