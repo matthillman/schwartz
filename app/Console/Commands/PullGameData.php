@@ -236,6 +236,7 @@ class PullGameData extends Command
 
     public function getDataFileList() {
         return collect([
+            "/api/data/crinolo_core",
             "/api/data/CHS_CN.json",
             "/api/data/CHT_CN.json",
             "/api/data/ENG_US.json",

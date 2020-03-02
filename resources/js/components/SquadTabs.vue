@@ -1,7 +1,7 @@
 <template>
 <div>
     <tab-list
-        :tabs="groups"
+        :tabs="tabs"
         :selected="selected"
         @changed="tabClicked"
     ></tab-list>
@@ -17,7 +17,42 @@
         </div>
         <div slot="footer">
             <div class="error" v-for="(error, id) of errors" :key="id">
-                {{ error.join("\n") }}
+                {{ error }}
+            </div>
+        </div>
+    </modal>
+    <modal v-if="showEditModal" @close="showEditModal = false">
+        <h3 slot="header">Edit Squad Groups</h3>
+        <div slot="body">
+            <div class="column justify-content-center">
+                <div v-for="group in tabs.filter(g => g.index > 1)" :key="group.index" class="row no-margin align-items-center justify-content-center">
+                    <auto-text-field
+                        :route="`/squads/group/${group.index}`"
+                        :label="`Name`"
+                        :value="group.title"
+                        @changed="val => update(group, val)"
+                    ></auto-text-field>
+                    <button class="btn btn-danger btn-icon" @click.prevent="deleteGroup = group"><ion-icon name="trash" size="medium"></ion-icon></button>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <div class="error" v-for="(error, id) of errors" :key="id">
+                {{ error }}
+            </div>
+        </div>
+    </modal>
+    <modal v-if="deleteGroup" @close="deleteGroup = false">
+        <h3 slot="header">Delete Squad Groups</h3>
+        <div slot="body">
+            <div>Are you sure you want to delete the group “{{ deleteGroup.title }}”??? You can't undo this.</div>
+        </div>
+        <div slot="footer">
+            <div slot="footer">
+                <div class="error" v-for="(error, id) of errors" :key="id">
+                    {{ error }}
+                </div>
+                <button class="btn btn-danger" @click="removeGroup(deleteGroup)">Delete</button>
             </div>
         </div>
     </modal>
@@ -34,15 +69,23 @@ export default {
     data() {
         return {
             showCreateModal: false,
+            showEditModal: false,
+            deleteGroup: null,
             squadGuild: null,
             name: null,
             errors: [],
+            tabs: [],
         }
+    },
+    mounted() {
+        this.tabs = this.groups;
     },
     methods: {
         tabClicked(tab) {
             if (tab.index == -1) {
                 this.showCreateModal = true;
+            } else if (tab.index == -2) {
+                this.showEditModal = true;
             } else {
                 this.$root.go(`/squads?group=${tab.index}`);
             }
@@ -54,11 +97,28 @@ export default {
                 this.$root.go(`/squads?group=${response.data.id}`);
             } catch (e) {
                 if (e.response.data.errors) {
-                    this.errors = e.response.data.errors;
+                    this.errors = Array.isArray(e.response.data.errors) ? e.response.data.errors : [e.response.data.errors];
                 } else {
                     this.errors = ["There was an error adding the squad group"];
                 }
             }
+        },
+        async removeGroup(group) {
+            this.errors = [];
+            try {
+                const response = await axios.delete(`/squads/group/${group.index}`);
+                this.$root.go(`/squads`);
+            } catch (e) {
+                if (e.response.data.errors) {
+                    this.errors = e.response.data.errors;
+                } else {
+                    this.errors = ["There was an error deleting the squad group"];
+                }
+            }
+        },
+        update(group, val) {
+            let toUpdate = this.tabs.find(g => g.index == group.index);
+            toUpdate.title = val;
         }
     }
 }

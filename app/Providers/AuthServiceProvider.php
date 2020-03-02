@@ -59,7 +59,14 @@ class AuthServiceProvider extends ServiceProvider
             }
             if ($squadGroup->id == 1 || $squadGroup->guild_id === 0) { return $user->edit_teams; }
 
-            return $user->accounts->pluck('guild')->pluck('id')->contains($squadGroup->guild_id);
+            return $user->accounts
+                ->contains(function($account) use ($squadGroup, $user) {
+                    if (!$account->guild || $account->guild->id != $squadGroup->guild_id) { return false; }
+                    if (is_null($account->guild->server_id)) { return false; }
+                    return collect($user->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) {
+                        return preg_match('/^officer/i', $role['name']);
+                    });
+                });
         });
 
         Gate::define('edit-guild', function ($user, $guild) {
@@ -70,7 +77,29 @@ class AuthServiceProvider extends ServiceProvider
                 $guild = Guild::findOrFail($guild);
             }
 
-            return $user->accounts->pluck('guild')->pluck('id')->contains($guild->id);
+            return $user->accounts
+                ->contains(function($account) use ($guild, $user) {
+                    if (!$account->guild || $account->guild->id != $guild->id) { return false; }
+                    if (is_null($account->guild->server_id)) { return false; }
+                    return collect($user->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) {
+                        return preg_match('/^officer/i', $role['name']);
+                    });
+                });
+        });
+
+        Gate::define('edit-guild-profile', function ($user, $guild) {
+            if ($guild === 0) {
+                return $user->admin;
+            }
+            if (!($guild instanceof Guild)) {
+                $guild = Guild::findOrFail($guild);
+            }
+
+            return $user->accounts->filter(function ($account) use ($guild) {
+                return $account->guild->id === $guild->id;
+            })->reduce(function ($r, $account) {
+                return $r || $account->member_level > 2;
+            }, false);
         });
     }
 }

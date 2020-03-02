@@ -77,13 +77,20 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::get('/waiting', 'HomeController@waiting')->name('waiting');
 
     Route::post('notify', 'HomeController@notify')->name('notify');
+    Route::post('update-roles', 'HomeController@updateRoles')->name('roles.update');
+    Route::post('get-guild', 'HomeController@getGuild')->name('get.guild');
+
+    Route::get('/guild-profile', 'GuildController@guildDiscordInfo')->name('guild.profile');
+    Route::put('/guild-profile/{guild}', 'GuildController@saveGuildInfo')->name('guild.profile.update');
 
     Route::get('/jobs-by-tag', 'JobsController@jobsForTag')->name('jobs.by.tag');
 
     Route::get('/squads', 'SquadController@index')->name('squads');
     Route::post('/squads', 'SquadController@add')->name('squads.add');
     Route::post('/squads/group', 'SquadController@addGroup')->name('squads.add.group');
-    Route::put('/squads/{squad}/publish', 'SquadController@publish')->name('squads.group.publish');
+    Route::put('/squads/group/{group}/publish', 'SquadController@publish')->name('squads.group.publish');
+    Route::delete('/squads/group/{group}', 'SquadController@deleteGroup')->name('squads.group.delete');
+    Route::put('/squads/group/{group}', 'SquadController@putGroup')->name('squads.group.update');
     Route::delete('/squad/{id}', 'SquadController@delete')->name('squad.delete');
     Route::put('/squads/message/{channel}', 'SquadController@sendDiscordMessages')->name('squads.message');
 });

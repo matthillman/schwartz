@@ -26,12 +26,19 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
+                            <a class="dropdown-item" href="{{ route('guild.profile') }}">
+                                {{ __('Edit Guild Info') }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('roles.update') }}" onclick="event.preventDefault(); document.getElementById('permissions-form').submit();">
+                                {{ __('Sync Discord Roles') }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
 
+                            <form id="permissions-form" action="{{ route('roles.update') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>

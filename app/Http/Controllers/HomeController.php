@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    use Util\UpdatesRoles;
+
     /**
      * Create a new controller instance.
      *
@@ -47,6 +49,10 @@ class HomeController extends Controller
     public function waiting()
     {
         return view('waiting');
+    }
+
+    public function updateRoles() {
+        return $this->doRoleUpdate(null, true);
     }
 
     public function notify(Request $request) {

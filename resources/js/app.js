@@ -64,6 +64,7 @@ Vue.component('unit-select', require('./components/UnitSelect.vue').default);
 Vue.component('tab-list', require('./components/TabList.vue').default);
 Vue.component('squad-tabs', require('./components/SquadTabs.vue').default);
 Vue.component('auto-checkbox', require('./components/AutoCheckbox.vue').default);
+Vue.component('auto-text-field', require('./components/AutoTextField.vue').default);
 Vue.component('collapsable', require('./components/Collapsable.vue').default);
 
 let data = {
@@ -128,8 +129,6 @@ new Vue({
 		}
 	},
 });
-
-
 
 import Toasted from 'vue-toasted';
 

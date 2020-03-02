@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Gate;
 use Artisan;
 use App\Unit;
 use App\Guild;
@@ -32,6 +33,26 @@ class GuildController extends Controller
         ProcessGuild::dispatch($validated['guild']);
 
         return redirect()->route('guilds')->with('guildStatus', "Guild added");
+    }
+
+    public function guildDiscordInfo() {
+        return view('guild.profile', [
+            'guilds' => auth()->user()->accounts->pluck('guild'),
+        ]);
+    }
+
+    public function saveGuildInfo(Request $request, $guildID) {
+        $validated = $request->validate([
+            'value' => 'required|string',
+        ]);
+
+        $guild = Guild::findOrFail($guildID);
+        Gate::authorize('edit-guild-profile', $guild);
+
+        $guild->server_id = $validated['value'];
+        $guild->save();
+
+        return response()->json(['success' => true]);
     }
 
     public function postGuildCompare(Request $request) {

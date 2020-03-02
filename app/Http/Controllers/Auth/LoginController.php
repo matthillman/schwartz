@@ -7,10 +7,13 @@ use Socialite;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Util\UpdatesRoles;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
+    use UpdatesRoles;
+
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -97,6 +100,6 @@ class LoginController extends Controller
 
         Auth::guard($guard)->login($auth_user, true);
 
-        return redirect()->intended('home');
+        return $this->doRoleUpdate($auth_user);
     }
 }

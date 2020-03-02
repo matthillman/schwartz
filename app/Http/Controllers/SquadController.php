@@ -25,7 +25,15 @@ class SquadController extends Controller
         });
 
         $guildIDs = auth()->user()->accounts->pluck('guild')->pluck('id');
-        $guilds = $request->user()->accounts->map(function ($a) { return ['label' => $a->guild_name, 'value' => $a->guild->id ]; });
+        $guilds = auth()->user()->accounts
+            ->filter(function($account) {
+                if (!$account->guild  || is_null($account->guild->server_id)) { return false; }
+                return collect(auth()->user()->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) {
+                    return preg_match('/^officer/i', $role['name']);
+                });
+            })
+            ->map(function ($a) { return ['label' => $a->guild_name, 'value' => $a->guild->id ]; });
+
 
         if (Gate::authorize('edit-global-squads')) {
             $guildIDs->prepend(0);
@@ -43,6 +51,13 @@ class SquadController extends Controller
                 return Gate::forUser(auth()->user())->allows('edit-squad', $squad);
             })
             ->map(function($g) { return [ 'title' => $g->name, 'index' => $g->id ]; });
+
+        $tabs->prepend([
+            'title' => 'Edit Groups',
+            'icon' => 'pencil-sharp',
+            'iconOnly' => true,
+            'index' => -2,
+        ]);
 
         $tabs->prepend([
             'title' => 'New Squad Group',
@@ -77,6 +92,13 @@ class SquadController extends Controller
         return redirect()->route('squads', ['group' => $request->group])->with('status', "Squad added");
     }
 
+    public function delete($id) {
+        $squad = Squad::findOrFail($id);
+        $squad->delete();
+
+        return redirect()->route('squads')->with('status', "Squad deleted");
+    }
+
     public function addGroup(Request $request) {
         $validated = $request->validate([
             'name' => 'required|string',
@@ -95,11 +117,28 @@ class SquadController extends Controller
         return response()->json($group);
     }
 
-    public function delete($id) {
-        $squad = Squad::findOrFail($id);
-        $squad->delete();
+    public function putGroup(Request $request, $squadGroup) {
+        $validated = $request->validate([
+            'value' => 'required|string',
+        ]);
 
-        return redirect()->route('squads')->with('status', "Squad deleted");
+        $group = SquadGroup::findOrFail($squadGroup);
+        Gate::authorize('edit-squad', $group);
+
+        $group->name = $validated['value'];
+        $group->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function deleteGroup(Request $request, $squadGroup) {
+        $group = SquadGroup::findOrFail($squadGroup);
+        Gate::authorize('edit-squad', $group);
+
+        $group->delete();
+
+        $request->session()->flash('status', "Squad group deleted");
+        return response()->json(['success' => true]);
     }
 
     public function publish(Request $request, $squadGroup) {

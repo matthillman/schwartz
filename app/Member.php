@@ -65,6 +65,10 @@ class Member extends Model
         ]
     ];
 
+    public function discord() {
+        return $this->hasOne(AllyCodeMap::class, 'ally_code', 'ally_code');
+    }
+
     public function characters() {
         return $this->hasMany(Character::class);
     }

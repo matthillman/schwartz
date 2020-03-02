@@ -41,7 +41,7 @@
         background-clip: content-box;
         border-collapse: collapse;
         border-radius: 4px;
-
+        height: 0;
     }
     &:nth-child(even) {
         td {
@@ -63,6 +63,10 @@
 
         td.top {
             vertical-align: top !important;
+        }
+
+        td > * {
+            height: 100%;
         }
 
         .description-wrapper {

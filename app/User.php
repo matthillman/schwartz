@@ -33,6 +33,10 @@ class User extends Authenticatable
         return $this->hasMany(AllyCodeMap::class, 'discord_id', 'discord_id');
     }
 
+    public function discord_roles() {
+        return $this->hasOne(DiscordRole::class, 'discord_id', 'discord_id')->withDefault();
+    }
+
     public function accounts() {
         return $this->hasManyThrough(Member::class, AllyCodeMap::class, 'discord_id', 'ally_code', 'discord_id', 'ally_code');
     }

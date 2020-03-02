@@ -25,7 +25,7 @@
 
                 <div class="card-header row justify-content-between align-items-baseline child-no-margin">
                     <div class="column"><h4>{{ $squad->name }}</h4><div class="small-note"><strong>{{ $squad->guild_id === 0 ? "Global" : "{$squad->guild->name}" }}</strong> Squad Group</div></div>
-                    <auto-checkbox :route="`{{ route('squads.group.publish', ['squad' => $squad->id]) }}`" {{ $squad->publish ? 'checked ' : '' }}:label="`{{ $squad->guild_id !== 0 ? "Publish to guild list" : "Publish globally" }}`"></auto-checkbox>
+                    <auto-checkbox :route="`{{ route('squads.group.publish', ['group' => $squad->id]) }}`" {{ $squad->publish ? 'checked ' : '' }}:label="`{{ $squad->guild_id !== 0 ? "Publish to guild list" : "Publish globally" }}`"></auto-checkbox>
                 </div>
 
                 <collapsable {{ $chars->count() == 0 && $ships->count() == 0 ? 'start-open' : '' }}>
@@ -102,17 +102,17 @@
                                             </td>
                                         @empty
                                             @if (count($squads->max('additional_members')) === 0)
-                                            <td>&nbsp;</td>
+                                            <td><div>&nbsp;</div></td>
                                             @endif
                                         @endforelse
                                         @for ($i = 0; $i < count($squads->max('additional_members')) - count($squad->additional_members); $i++)
-                                            <td>&nbsp;</td>
+                                        <td><div>&nbsp;</div></td>
                                         @endfor
                                         <td class="blank">
                                             <form class="column justify-content-center align-items-center" method="POST" action="{{ route('squad.delete', ['id' => $squad->id ]) }}">
                                                 @method('DELETE')
                                                 @csrf
-                                                <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="trash" size="medium"></ion-icon></button>
+                                                <button type="submit" class="btn btn-danger btn-icon"><ion-icon name="trash" size="medium"></ion-icon></button>
                                             </form>
                                         </td>
                                     </tr>

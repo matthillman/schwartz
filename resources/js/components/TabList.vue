@@ -5,7 +5,7 @@
             class="btn"
             v-for="tab in tabs"
             :key="tab.title"
-            :ref="tab.title"
+            :ref="tab.index"
             :class="{selected: selected == tab.index}"
             @click.prevent="$emit('changed', tab)"
         >
@@ -42,22 +42,20 @@ export default {
     },
     mounted() {
         window.addEventListener('resize', this.makeMoreTabs);
-    },
-    updated() {
-        this.$nextTick(function() {
+        this.$watch('tabs', tabs => {
             this.makeMoreTabs();
-        });
+        }, {immediate: true, deep: true});
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.makeMoreTabs);
     },
     methods: {
-        makeMoreTabs() {
+        makeMoreTabs: _.debounce(function () {
             const hiddenTabs = [];
-            const tabElements = Object.keys(this.$refs).map(label => {
-                const el = this.$refs[label][0];
+            const tabElements = Object.keys(this.$refs).map(index => {
+                const el = this.$refs[index][0];
                 return {
-                    tab: this.tabs.find(t => t.title == label),
+                    tab: this.tabs.find(t => t.index == index),
                     el,
                     visible: this.isInViewPort(el)
                 };
@@ -71,7 +69,7 @@ export default {
                 }
             }
             this.hiddenTabs = hiddenTabs;
-        },
+        }, 200),
 
         isInViewPort(elem) {
             const bounds = elem.getBoundingClientRect();

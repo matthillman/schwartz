@@ -5,9 +5,9 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             {{--
-            <form method="POST" action="{{ route('notify') }}">
+            <form method="POST" action="{{ route('roles.update') }}">
                 @csrf
-                <button type="submit" class="btn btn-primary">{{ __('Test Notifications') }}</button>
+                <button type="submit" class="btn btn-primary">{{ __('Sync Roles') }}</button>
             </form>
             <div class="card">
                 <div class="card-header">Guides</div>

@@ -133,6 +133,8 @@ trait ParsesPlayers {
             'unlocked' => collect($member_data['unlockedPlayerPortraitList'])->pluck('id'),
         ];
 
+        $translated['memberLevel'] = array_get($member_data, 'memberLevel', 2);
+
         $translated['stats'] = $member_data['profileStatList'];
         $translated['arena'] = $member_data['pvpProfileList'];
 
@@ -238,6 +240,8 @@ trait ParsesPlayers {
         if (is_null($member->portrait)) {
             $member->portrait = 'NONE';
         }
+
+        $member->member_level = array_get($member_data, 'memberLevel', 2);
 
         // $stats = collect($member_data['stats']);
         // Fucking game

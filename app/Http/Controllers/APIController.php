@@ -73,4 +73,18 @@ class APIController extends Controller
     public function deleteRegistration(Request $request, $id) {
         // return response()->json(swgoh()->registration([], [], [$id]));
     }
+
+    public function guildQueryResponse(Request $request) {
+        $members = $request->input('response');
+
+        foreach ($members as $member) {
+            $user = User::where('discord_id', $member['id'])->firstOrFail();
+            $currentRoles = $user->discord_roles->roles;
+            $currentRoles[$member['guild']] = $member;
+            $user->discord_roles->roles = $currentRoles;
+            $user->push();
+        }
+
+        broadcast(new \App\Events\PermissionsUpdated($user));
+    }
 }

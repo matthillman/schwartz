@@ -37,7 +37,9 @@ class GuildParser {
 
         if (!is_null($memberCallback)) {
             foreach ($this->rawData['memberList'] as $member) {
-                call_user_func($memberCallback, shitty_bot()->getPlayer($member['playerId']));
+                $player = shitty_bot()->getPlayer($member['playerId']);
+                $player['memberLevel'] = $member['memberLevel'];
+                call_user_func($memberCallback, $player);
             }
         }
 
