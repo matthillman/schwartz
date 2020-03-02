@@ -6,6 +6,7 @@ use App\User;
 use App\Guild;
 use App\Member;
 use App\AllyCodeMap;
+use App\DiscordRole;
 use App\Jobs\ProcessUser;
 use App\Jobs\ProcessGuild;
 use Illuminate\Http\Request;
