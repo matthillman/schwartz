@@ -143,7 +143,7 @@ trait Squads {
                 ->map(function($group) use ($account) {
                     return ['label' => $group->name, 'value' => $group->id, 'guild' => $account->guild->id];
                 });
-            if (!$hideSeparators) {
+            if (!$hideSeparators && $s->count() > 0) {
                 $s->prepend(['label' => $account->guild->name, 'separator' => true, 'guild' => $account->guild->id]);
             }
             $guildSquads = $guildSquads->concat($s);
