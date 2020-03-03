@@ -43,11 +43,15 @@ if (!function_exists('format_stat')) {
 			'UNITSTATABILITYCRITICALNEGATERATING',
 		];
 
+		if (ctype_digit(strval($stat))) {
+			$stat = new \SwgohHelp\Enums\UnitStat($stat);
+		}
+
 		if ($stat instanceof \SwgohHelp\Enums\UnitStat) {
 			$stat = $stat->getKey();
 		}
 
-		return in_array($stat, $percent_stats) ? sprintf("%.1f%%", $value * 100) : number_format($value);
+		return in_array($stat, $percent_stats) ? sprintf("%.1f%%", $value) : number_format($value);
 	}
 }
 

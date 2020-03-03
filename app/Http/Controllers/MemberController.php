@@ -22,7 +22,7 @@ class MemberController extends Controller
     public function compare(Request $request) {
         $members = array_map('trim', explode("\n", $request->members));
 
-        return redirect()->route('member.compare', ['members' => implode(',', $members)]);
+        return redirect()->route('member.compare', ['members' => implode(',', $members), 'units' => $request->get('units', '')]);
     }
 
     public function addMember(Request $request) {
@@ -156,13 +156,15 @@ class MemberController extends Controller
         ]);
     }
 
-    public function compareMembers() {
-        $members = collect(explode(',', request()->get('members')))
+    public function compareMembers(Request $request) {
+        $compareUnits = array_filter(explode(',', $request->get('units', '')));
+
+        $members = collect(explode(',', $request->get('members')))
             ->map(function($ally) {
                 return Member::with(['stats','characters.zetas', 'guild'])->where(['ally_code' => $ally])->firstOrFail();
             })
-            ->map(function($member) {
-                return $member->toCompareData();
+            ->map(function($member) use ($compareUnits) {
+                return $member->toCompareData($compareUnits);
             })
         ;
         $keys = $members->map(function($m) { return $m->keys(); })
@@ -243,9 +245,31 @@ class MemberController extends Controller
         $winners['r_all'] = $totalWinners['r_all']->pluck('id');
         $winners['g_total'] = $totalWinners['g_total']->pluck('id');
 
+        if (empty($compareUnits)) {
+            $charUnits = Member::getCompareCharacters()->merge(Member::getKeyCharacters());
+            $shipUnits = Member::getKeyShips();
+        } else {
+            list($charUnits, $shipUnits) = collect($compareUnits)
+                ->map(function($base) {
+                    $unit = Unit::where('base_id', $base)->firstOrFail();
+                    return [
+                        'base_id' => $unit->base_id,
+                        'name' => $unit->short_name,
+                        'alignment' => $unit->alignment,
+                        'combat_type' => intval($unit->combat_type),
+                    ];
+                })
+                ->partition(function ($unit) {
+                    return $unit['combat_type'] == 1;
+                });
+            ;
+            $charUnits = $charUnits->mapWithKeys(function($u) { return [$u['base_id'] => [ 'name' => $u['name'], 'alignment' => $u['alignment'] ] ];});
+            $shipUnits = $shipUnits->mapWithKeys(function($u) { return [$u['base_id'] => [ 'name' => $u['name'], 'alignment' => $u['alignment'] ] ];});
+        }
+
         return view('member.compare', [
-            'character_list' => Member::getCompareCharacters()->merge(Member::getKeyCharacters()),
-            'ship_list' => Member::getKeyShips(),
+            'character_list' => $charUnits,
+            'ship_list' => $shipUnits,
             'stat_list' => Member::getCompareStats(),
             'data' => $members->keyBy('id'),
             'winner' => $winners,

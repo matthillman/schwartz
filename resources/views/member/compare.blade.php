@@ -247,6 +247,7 @@
                 @endif
                 @endperson
 
+                @if(count($character_list) > 0)
                 <div class="card-body row">
                     <div class="col-md-12 section-header row justify-content-center align-items-center">
                         <div class="image">
@@ -316,7 +317,9 @@
                     @endforeach
                 @endforeach
                 </div>
+                @endif
 
+                @if(count($ship_list) > 0)
                 <div class="card-body row">
                     <div class="col-md-12 section-header row justify-content-center align-items-center">
                         <div class="image">
@@ -386,6 +389,7 @@
                     @endforeach
                 @endforeach
                 </div>
+                @endif
 
                 @bot
                 <div class="row justify-content-end footer-logo">

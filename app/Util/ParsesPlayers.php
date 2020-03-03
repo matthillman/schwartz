@@ -218,12 +218,18 @@ trait ParsesPlayers {
         // $raw_member_data = null;
         // unset($raw_member_data);
 
+        $stats = [];
+        if (config('services.shitty_bot.active')) {
+            $stats = stats()->addStatsTo([$original])->get($original['playerId']);
+        }
         $member_data = $this->translate($original);
 
         $original = null;
         unset($original);
 
-        $member_data = stats()->addStatsTo([$member_data])->first();
+        if (!config('services.shitty_bot.active')) {
+            $member_data = stats()->addStatsTo([$member_data])->first();
+        }
 
         $ally = $member_data['allyCode'];
         $member->url = "/p/{$ally}/characters/";
@@ -262,21 +268,22 @@ trait ParsesPlayers {
         $roster = collect($member_data['roster']);
         $member_data = null;
         unset($member_data);
-        $mappedRoster = $roster->map(function($unit) use ($member, $modUser) {
+        $mappedRoster = $roster->map(function($unit) use ($member, $modUser, $stats) {
             if (is_null($unit['combatType'])) {
                 $unit['combatType'] = 1;
             }
             // $isChar = $unit['combatType'] == 1;
+            $statsEntry = array_get($stats, $unit['defId']);
             $character = [
                 'member_id' => $member->id,
                 'unit_name' => $unit['defId'],
                 'gear_level' => $unit['gear'],
-                'power' => $unit['gp'],
+                'power' => array_get($statsEntry, 'gp', $unit['gp']) ?: 0,
                 'level' => $unit['level'],
                 'combat_type' => $unit['combatType'],
                 'rarity' => $unit['rarity'],
                 'relic' => array_get($unit, 'relic.currentTier', 0),
-                'stats' => $unit['stats'],
+                'stats' => array_get($statsEntry, 'stats', array_get($unit, 'stats', [])),
                 'raw' => collect($unit)->except('stats')->toArray(),
             ];
             // if ($isChar) {

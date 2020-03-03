@@ -62,6 +62,16 @@ class Unit extends Model
     public function getNameAttribute($value) {
         return __('messages.'.$value);
     }
+    public function getShortNameAttribute($value) {
+        $name = $this->name;
+
+        $name = str_replace('General', 'Gen', $name);
+        $name = str_replace('Geonosian', 'Geo', $name);
+        $name = str_replace('Jedi Knight ', '', $name);
+        $name = preg_replace('/\(.+\)/', '', $name);
+
+        return trim($name);
+    }
     public function getDescriptionAttribute($value) {
         return __('messages.'.$value);
     }

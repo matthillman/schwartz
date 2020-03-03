@@ -193,51 +193,34 @@ class Member extends Model
         return $this->characters->pluck('zetas')->flatten();
     }
 
-    public function toCompareData() {
-        return collect($this->compare_data_base)
+    public function toCompareData($unitList = []) {
+        $compareData = collect($this->compare_data_base)
             ->merge($this->stats)
             ->merge([
                 'zetas' => $this->zetas->count(),
-            ])
-            ->merge(
-                $this->characters()->with('zetas')->whereIn('unit_name', static::getCompareCharacters()->keys())->get()
-                    ->mapWithKeys(function($c) {
-                        return collect([strtolower("{$c->unit_name}") => $c,])->merge(
-                            static::getCompareStats()->mapWithKeys(function($stat) use ($c) {
-                                $k = $stat['stat']->getKey();
-                                return [
-                                    strtolower("{$c->unit_name}_{$k}") => $c->$k,
-                                ];
-                            }),
-                        );
-                    })
-            )
-            ->merge(
-                $this->characters()->with('zetas')->whereIn('unit_name', static::getKeyCharacters()->keys())->get()
-                    ->mapWithKeys(function($c) {
-                        return collect([strtolower("{$c->unit_name}") => $c,])->merge(
-                            static::getCompareStats()->mapWithKeys(function($stat) use ($c) {
-                                $k = $stat['stat']->getKey();
-                                return [
-                                    strtolower("{$c->unit_name}_{$k}") => $c->$k,
-                                ];
-                            }),
-                        );
-                    })
-            )
-            ->merge(
-                $this->characters()->with('zetas')->whereIn('unit_name', static::getKeyShips()->keys())->get()
-                    ->mapWithKeys(function($c) {
-                        return collect([strtolower("{$c->unit_name}") => $c,])->merge(
-                            static::getCompareStats()->mapWithKeys(function($stat) use ($c) {
-                                $k = $stat['stat']->getKey();
-                                return [
-                                    strtolower("{$c->unit_name}_{$k}") => $c->$k,
-                                ];
-                            }),
-                        );
-                    })
-            )
-        ;
+            ]);
+        if (empty($unitList)) {
+            $unitList = collect([
+                static::getCompareCharacters()->keys(),
+                static::getKeyCharacters()->keys(),
+                static::getKeyShips()->keys(),
+            ])->flatten();
+        }
+
+        return $compareData->merge(
+            $this->characters()->with('zetas')->whereIn('unit_name', $unitList)->get()
+                ->mapWithKeys([$this, 'extractStats'])
+        );
+    }
+
+    public function extractStats($c) {
+        return collect([strtolower("{$c->unit_name}") => $c])->merge(
+            static::getCompareStats()->mapWithKeys(function($stat) use ($c) {
+                $k = $stat['stat']->getKey();
+                return [
+                    strtolower("{$c->unit_name}_{$k}") => $c->$k,
+                ];
+            }),
+        );
     }
 }

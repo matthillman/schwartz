@@ -25,6 +25,24 @@
                             <textarea placeholder="Enter ally codes to compare" name="members" class="form-control no-resize" :rows="memberCompareArray.length + 1" v-model="memberCompare"></textarea>
                             <button type="submit" class="btn btn-primary">{{ __('Compare') }}</button>
                         </div>
+                        <collapsable>
+                            <template #top-trigger="{ open }">
+                                <div class="row no-margin align-items-center">
+                                    <ion-icon :name="open ? `chevron-down` : `chevron-forward`"></ion-icon> <span>Add Custom Units</span>
+                                </div>
+                            </template>
+
+                            <div class="card-body">
+                                    <div class="row add-row input-group add-squad-row multiple">
+                                        <input type="hidden" name="units" value="" id="units">
+                                        <unit-select multiple
+                                            :placeholder="`Leave blank for default unit list`"
+                                            @@input="val => set('units', val.map(u => u.base_id).reduce((c, u) => [c, u].join(',')))"
+                                        ></unit-select>
+                                    </div>
+                                </form>
+                            </div>
+                        </collapsable>
                     </form>
                 </div>
             </div>
