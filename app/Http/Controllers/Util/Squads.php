@@ -107,6 +107,20 @@ trait Squads {
                 ];
                 $highlight = 'power-stars';
                 break;
+            case 'glkylo':
+                $teams = [
+                    'Challenge 1' => ['KYLORENUNMASKED', 'FIRSTORDERTROOPER', 'FIRSTORDEROFFICERMALE'],
+                    'Challenge 2' => ['KYLOREN', 'PHASMA', 'FIRSTORDEREXECUTIONER'],
+                    'Challenge 3' => ['SMUGGLERHAN', 'FOSITHTROOPER', 'FIRSTORDERSPECIALFORCESPILOT'],
+                ];
+                break;
+            case 'glrey':
+                $teams = [
+                    'Challenge 1' => ['REYJEDITRAINING', 'FINN', 'RESISTANCETROOPER'],
+                    'Challenge 2' => ['REY', 'RESISTANCEPILOT', 'POE'],
+                    'Challenge 3' => ['EPIXFINN', 'AMILYNHOLDO', 'ROSETICO'],
+                ];
+                break;
             default:
                 $teams = [];
                 break;
@@ -127,14 +141,16 @@ trait Squads {
                 return ['label' => $group->name, 'value' => $group->id];
             });
         $defaultSquads = [
-            // ['label' => 'General Skywalker', 'value' => 'gs'],
-            // ['label' => 'Geo TB', 'value' => 'geo'],
-            ['label' => 'LS Geo TB', 'value' => 'lsgeo'],
-            ['label' => 'TW', 'value' => 'tw'],
-            // ['label' => 'Legendaries', 'value' => 'legendary'],
+            ['label' => 'Galactic Legend: Kylo Ren', 'value' => 'glkylo'],
+            ['label' => 'Galactic Legend: Rey', 'value' => 'glrey'],
+            ['label' => 'General Skywalker', 'value' => 'gs'],
+            ['label' => 'Legendaries', 'value' => 'legendary'],
             ['label' => 'Darth Malak', 'value' => 'malak'],
             ['label' => 'Hoth TB', 'value' => 'tb'],
             ['label' => 'STR', 'value' => 'str'],
+            // ['label' => 'Geo TB', 'value' => 'geo'],
+            ['label' => 'LS Geo TB', 'value' => 'lsgeo'],
+            ['label' => 'TW', 'value' => 'tw'],
         ];
 
         $guildSquads = collect([]);
