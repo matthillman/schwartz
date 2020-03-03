@@ -76,6 +76,7 @@ let data = {
 	messageChannel: '678958338225995786',
 	selectedSquadArray: [],
 	modJobStatusByAllyCode: {},
+	guildJobStatusByGuildId: {},
 };
 
 new Vue({
@@ -100,6 +101,7 @@ new Vue({
 	},
 	mounted() {
 		this.loadModJobStatus();
+		this.loadGuildJobStatus();
 	},
 	methods: {
 		go(to) {
@@ -126,7 +128,23 @@ new Vue({
 					setTimeout(() => this.loadModJobStatus(), 3000);
 				}
 			});
-		}
+		},
+		loadGuildJobStatus() {
+			axios.get('/jobs-by-tag?tags=guild').then(result => {
+				this.guildJobStatusByGuildId = {};
+				result.data.forEach(job => {
+					let guildIdTag = job.payload.tags.find(tag => tag.startsWith('guild_id:'));
+					if  (guildIdTag) {
+						let guildId = guildIdTag.split(':')[1];
+						this.guildJobStatusByGuildId[guildId] = job.status;
+					}
+				});
+
+				if (Object.values(this.guildJobStatusByGuildId).find(val => val == 'reserved' || val == 'pending')) {
+					setTimeout(() => this.loadGuildJobStatus(), 3000);
+				}
+			});
+		},
 	},
 });
 
