@@ -10,37 +10,64 @@
                 page: 1,
                 perPage: 50,
                 totalPages: 1,
-                jobs: []
+                jobs: [],
+                tag: null,
             };
         },
-        mounted() {
-            this.loadJobs();
-            this.refreshJobsPeriodically();
+        async mounted() {
+            this.loadTags()
         },
 
         destroyed() {
             clearInterval(this.interval);
         },
 
+        watch: {
+            tag() {
+                console.warn(this.tag.tag);
+                if (this.interval) {
+                    clearInterval(this.interval);
+                }
+                this.loadJobs();
+                this.refreshJobsPeriodically();
+            }
+        },
+
+        computed: {
+            tabs() {
+                return this.tags.map(tag => ({ title: tag.tag, index: tag.tag, tag: tag}))
+            }
+        },
+
         methods: {
-            async loadJobs(starting = -1, refreshing = false) {
+            async loadTags() {
+                this.ready = false;
+
+                const response = await axios.get('/horizon/api/monitoring')
+                this.tags = response.data;
+                if (this.tags.length) {
+                    this.tag = this.tags[0];
+                }
+            },
+
+            async loadJobs(starting = 0, refreshing = false) {
+                if (!this.tag) { return; }
                 if (!refreshing) {
                     this.ready = false;
                 }
 
-                const response = await axios.get('/horizon/api/jobs/recent?starting_at=' + starting + '&limit=' + this.perPage)
+                // const response = await axios.get('/horizon/api/jobs/recent?starting_at=' + starting + '&limit=' + this.perPage)
+                const response = await axios.get(`/horizon/api/monitoring/${encodeURIComponent(this.tag.tag)}?starting_at=${starting}&limit=${this.perPage}`)
+
                 this.jobs = response.data.jobs;
                 this.totalPages = Math.ceil(response.data.total / this.perPage);
 
                 this.ready = true;
             },
 
-
             loadNewEntries() {
                 this.jobs = [];
-
-                this.loadJobs(-1, false);
-
+                this.loadJobs(0, false);
                 this.hasNewEntries = false;
             },
 
@@ -50,7 +77,7 @@
                         return;
                     }
 
-                    this.loadJobs(-1, true);
+                    this.loadJobs(0, true);
                 }, 3000);
             },
 
@@ -72,6 +99,10 @@
                 this.page += 1;
 
                 this.hasNewEntries = false;
+            },
+
+            tabChanged(tab) {
+                this.tag = tab.tag;
             },
 
             jobBaseName(name) {
@@ -105,6 +136,12 @@
             <span>Loading...</span>
         </div>
 
+        <tab-list
+             v-if="ready && tabs.length > 0"
+            :tabs="tabs"
+            :selected="tag.tag"
+            @changed="tabChanged"
+        ></tab-list>
 
         <div v-if="ready && jobs.length == 0"
                 class="d-flex flex-column align-items-center justify-content-center card-bg-secondary p-5 bottom-radius">

@@ -33,7 +33,7 @@ export default {
     props: {
         tabs: Array,
         allRoute: String,
-        selected: Number,
+        selected: [String, Number],
     },
     data() {
         return {
