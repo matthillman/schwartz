@@ -79,11 +79,15 @@ class APIController extends Controller
         $members = $request->input('response');
 
         foreach ($members as $member) {
-            $currentRoles = DiscordRole::firstOrNew(['discord_id' => $member['id']]);
+            $mapping = DiscordRole::firstOrNew(['discord_id' => $member['id']]);
+            $currentRoles = $mapping->roles;
             $currentRoles[$member['guild']] = $member;
-            $currentRoles->save();
+            $mapping->roles = $currentRoles;
+            $mapping->save();
+            if ($mapping->user) {
+                broadcast(new \App\Events\PermissionsUpdated($mapping->user));
+            }
         }
 
-        broadcast(new \App\Events\PermissionsUpdated($user));
     }
 }
