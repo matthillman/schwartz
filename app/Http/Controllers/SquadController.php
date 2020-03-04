@@ -13,17 +13,6 @@ use NotificationChannels\Discord\Discord;
 class SquadController extends Controller
 {
     public function index(Request $request) {
-        $group = SquadGroup::findOrFail($request->get('group', 1));
-
-        Gate::authorize('edit-squad', $group);
-
-        $squads = $group->squads()->orderBy('display')->get();
-        $units = Unit::all()->sortBy('name')->values();
-
-        list($chars, $ships) = $squads->partition(function ($squad) use ($units) {
-            return $units->where('base_id', $squad->leader_id)->first()->combat_type == 1;
-        });
-
         $guildIDs = auth()->user()->accounts->pluck('guild')->pluck('id');
         $guilds = auth()->user()->accounts
             ->filter(function($account) {
@@ -32,15 +21,38 @@ class SquadController extends Controller
                     return preg_match($account->guild->officer_role_regex, $role['name']);
                 });
             })
-            ->map(function ($a) { return ['label' => $a->guild_name, 'value' => $a->guild->id ]; });
+            ->map(function ($a) { return ['label' => $a->guild_name, 'value' => $a->guild->id ]; })
+        ;
 
-
-        if (Gate::authorize('edit-global-squads')) {
+        if (Gate::allows('edit-global-squads')) {
             $guildIDs->prepend(0);
             $guilds->prepend([
                 'label' => 'Global Squad',
                 'value' => 0,
             ]);
+        }
+
+        if ($guildIDs->count() === 0) {
+            http_403("You don't have permission to edit any guild squads.");
+        }
+
+        $group = SquadGroup::findOrFail($request->get('group', 1));
+
+        if (Gate::denies('edit-squad', $group)) {
+            $group = SquadGroup::whereIn('guild_id', $guildIDs)->first();
+        }
+
+        $units = Unit::all()->sortBy('name')->values();
+
+        if (!is_null($group)) {
+            $squads = $group->squads()->orderBy('display')->get();
+
+            list($chars, $ships) = $squads->partition(function ($squad) use ($units) {
+                return $units->where('base_id', $squad->leader_id)->first()->combat_type == 1;
+            });
+        } else {
+            $chars = [];
+            $ships = [];
         }
 
         $tabs = SquadGroup::whereIn('guild_id', $guildIDs)
