@@ -9,46 +9,11 @@
                 @csrf
                 <button type="submit" class="btn btn-primary">{{ __('Sync Roles') }}</button>
             </form>
-            <div class="card">
-                <div class="card-header">Guides</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <div class="guides">
-                        <a href="{{ guide('territory-wars-guide') }}">Territory Wars Guide</a>
-                        <a href="{{ handbook('rots') }}">ROTS Handbook</a>
-                        <a href="{{ route('auth.mods') }}">Mod Set Maker</a>
-                        <a href="{{ route('tw-teams.index') }}">TW Team Counters</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">Guilds</div>
-
-                <div class="card-body">
-                    <div class="guides">
-                        <a href="{{ route('guilds') }}">Guild Teams</a>
-                        <a href="{{ route('schwartz.guilds') }}">Schwartz guilds GP List</a>
-                        <a href="{{ route('schwartz.mods') }}">Schwartz guilds Mod List</a>
-                    </div>
-                </div>
-            </div>
             --}}
 
-            <div class="card">
-                <div class="card-header">Tools</div>
-                @if (session('status'))
-                    <div class="alert alert-success">
-                        {{ session('status') }}
-                    </div>
-                @endif
+            @include('shared.status');
 
+            <div class="card">
                 <div class="card-body">
                     <div class="icon-grid">
 
