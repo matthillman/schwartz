@@ -48,7 +48,7 @@ class User extends Authenticatable
             $server = $this->allyCodes()->whereNull('server_id')->first();
         }
 
-        return $server->ally_code;
+        return is_null($server) ? null : $server->ally_code;
     }
 
     public function accountForGuild($id = null) {
@@ -71,8 +71,10 @@ class User extends Authenticatable
         }
 
         if (!$this->exists) {
-            User::where('discord_id', '297101898375364609')
-                ->notify(new \App\Notifications\DiscordMessage("New user login: $this->name ($this->discord)"));
+            $frax = User::where('discord_id', '297101898375364609')->first();
+            if ($frax) {
+                $frax->notify(new \App\Notifications\DiscordMessage("New user login: $this->name ($this->discord)"));
+            }
         }
 
         $this->save();

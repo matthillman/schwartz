@@ -48,7 +48,7 @@ class HomeController extends Controller
      */
     public function waiting()
     {
-        return view('waiting');
+        return view('waiting', ['updating' => false]);
     }
 
     public function updateRoles() {
