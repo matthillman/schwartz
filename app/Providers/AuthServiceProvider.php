@@ -57,6 +57,7 @@ class AuthServiceProvider extends ServiceProvider
             if (!($squadGroup instanceof SquadGroup)) {
                 $squadGroup = SquadGroup::findOrFail($squadGroup);
             }
+
             if ($squadGroup->id == 1 || $squadGroup->guild_id === 0) { return $user->edit_teams; }
 
             return $user->accounts
@@ -73,6 +74,9 @@ class AuthServiceProvider extends ServiceProvider
             if ($guild === 0) {
                 return $user->admin || $user->edit_teams;
             }
+
+            // if ($user->admin) { return true; }
+
             if (!($guild instanceof Guild)) {
                 $guild = Guild::findOrFail($guild);
             }
@@ -84,6 +88,19 @@ class AuthServiceProvider extends ServiceProvider
                     return collect($user->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) use ($account) {
                         return preg_match($account->guild->officer_role_regex, $role['name']);
                     });
+                });
+        });
+
+        Gate::define('in-guild', function ($user, $guild) {
+            if ($user->admin) { return true; }
+
+            if (!($guild instanceof Guild)) {
+                $guild = Guild::findOrFail($guild);
+            }
+
+            return $user->accounts
+                ->contains(function($account) use ($guild) {
+                    return $account->guild && $account->guild->id == $guild->id;
                 });
         });
 
