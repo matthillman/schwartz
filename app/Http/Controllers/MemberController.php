@@ -161,7 +161,7 @@ class MemberController extends Controller
 
         $members = collect(explode(',', $request->get('members')))
             ->map(function($ally) {
-                return Member::with(['stats','characters.zetas', 'guild'])->where(['ally_code' => $ally])->firstOrFail();
+                return Member::with(['stats','characters.zetas', 'guild'])->where(['ally_code' => str_replace('-', '', $ally)])->firstOrFail();
             })
             ->map(function($member) use ($compareUnits) {
                 return $member->toCompareData($compareUnits);

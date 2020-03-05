@@ -51,6 +51,7 @@ class PullMods extends Command
                 $this->info("Input was not an ally code, trying it as a player ID");
                 $fetchId = $arg;
             } else {
+                $arg = str_replace('-', '', $arg);
                 $user = ModUser::firstOrNew(['name' => "$arg"]);
                 $fetchId = empty($user->member->player_id) ? $user->name : $user->member->player_id;
             }
