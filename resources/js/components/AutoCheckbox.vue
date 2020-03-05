@@ -1,9 +1,19 @@
 <template>
-    <label class="row align-items-baseline">
-        <input type="checkbox" v-model="isChecked">
-        <span>{{ label }}</span>
+    <div class="row align-items-baseline">
+        <button
+            v-if="button"
+            class="btn btn-icon with-text btn-primary"
+            @click="isChecked = !isChecked"
+        >
+            <ion-icon :name="isChecked ? 'checkbox' : 'square'" size="small"></ion-icon>
+            <span>{{ label }}</span>
+        </button>
+        <label v-else>
+            <input type="checkbox" v-model="isChecked">
+            <span>{{ label }}</span>
+        </label>
         <ion-icon :class="{success: this.success}" name="checkmark-circle-outline" size="small"></ion-icon>
-    </label>
+    </div>
 </template>
 
 <script>
@@ -12,6 +22,7 @@ export default {
         route: String,
         label: String,
         checked: Boolean,
+        button: Boolean,
     },
     data() {
         return {
