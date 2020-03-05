@@ -24,7 +24,6 @@
 
         watch: {
             tag() {
-                console.warn(this.tag.tag);
                 if (this.interval) {
                     clearInterval(this.interval);
                 }
