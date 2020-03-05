@@ -55,6 +55,10 @@ class HomeController extends Controller
         return $this->doRoleUpdate(null, true);
     }
 
+    public function waitingOnRoleUpdate() {
+        return view('waiting', ['updating' => true]);
+    }
+
     public function notify(Request $request) {
         Auth::user()->notify(new \App\Notifications\DiscordMessage("This is a test message. 🍺"));
 

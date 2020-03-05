@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::get('guild_mods/{guild}', 'GuildController@listMods')->name('guild.mods');
 
     Route::get('/waiting', 'HomeController@waiting')->name('waiting');
+    Route::get('/waiting-roles', 'HomeController@waitingOnRoleUpdate')->name('waiting.roles');
 
     Route::post('notify', 'HomeController@notify')->name('notify');
     Route::post('update-roles', 'HomeController@updateRoles')->name('roles.update');
