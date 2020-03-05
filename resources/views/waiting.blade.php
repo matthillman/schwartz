@@ -27,4 +27,6 @@
 </div>
 @endsection
 
+@if (auth()->user())
 @include('shared.update_listener')
+@endif

@@ -48,11 +48,15 @@ class HomeController extends Controller
      */
     public function waiting()
     {
-        return view('waiting');
+        return view('waiting', ['updating' => false]);
     }
 
     public function updateRoles() {
         return $this->doRoleUpdate(null, true);
+    }
+
+    public function waitingOnRoleUpdate() {
+        return view('waiting', ['updating' => true]);
     }
 
     public function notify(Request $request) {

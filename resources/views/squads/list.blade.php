@@ -4,15 +4,7 @@
 <div class="container home">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            @if (session('status'))
-            <div class="card">
-                <div class="card-body">
-                    <div class="alert alert-success">
-                        {{ session('status') }}
-                    </div>
-                </div>
-            </div>
-            @endif
+            @include('shared.status');
 
             <div class="card">
                 <div class="card-header"><h2>Squads</h2></div>

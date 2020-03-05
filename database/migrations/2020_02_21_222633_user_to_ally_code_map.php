@@ -27,12 +27,14 @@ class UserToAllyCodeMap extends Migration
             $table->index(['discord_id', 'server_id']);
             $table->index('ally_code');
         });
-        $existingIDs = collect(swgoh()->registration(User::whereNotNull('discord_id')->pluck('discord_id')->toArray())->first());
 
-        $existingIDs->each(function($mapping) {
-            AllyCodeMap::create(['discord_id' => $mapping['discordId'], 'ally_code' => $mapping['allyCode']]);
-        });
+        if (User::whereNotNull('discord_id')->pluck('discord_id')->count() > 0) {
+            $existingIDs = collect(swgoh()->registration(User::whereNotNull('discord_id')->pluck('discord_id')->toArray())->first());
 
+            $existingIDs->each(function($mapping) {
+                AllyCodeMap::create(['discord_id' => $mapping['discordId'], 'ally_code' => $mapping['allyCode']]);
+            });
+        }
     }
 
     /**

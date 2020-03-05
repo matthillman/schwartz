@@ -28,6 +28,7 @@ trait UpdatesRoles {
             'command' => 'guild-query',
             'guilds' => $guilds,
         ]));
-        return view('waiting', ['updating' => true]);
+
+        return redirect()->route('waiting.roles');
     }
 }

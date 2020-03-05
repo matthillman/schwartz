@@ -4,6 +4,7 @@
 <div class="container home">
     <div class="row justify-content-center">
         <div class="col-md-12">
+            @include('shared.status');
             <div class="card">
                 <div class="card-header row justify-content-between align-items-center">
             @if (isset($team->name))
@@ -24,11 +25,6 @@
             @endif
                     @csrf
                     <div class="card-body">
-                        @if (session('twStatus'))
-                            <div class="alert alert-success">
-                                {{ session('twStatus') }}
-                            </div>
-                        @endif
 
                         <div>
                             <div class="form-group row">
