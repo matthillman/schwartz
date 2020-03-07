@@ -76,9 +76,10 @@ class GuildController extends Controller
         $guild = Guild::findOrFail($guild);
 
         if (ctype_digit(strval($team))) {
-            $group = SquadGroup::findOrFail($team);
+            $team = SquadGroup::findOrFail($team);
+            Gate::authorize('view-squad', $team);
             $highlight = 'gear';
-            $teams = $group->squads->mapWithKeys(function($squad) {
+            $teams = $team->squads->mapWithKeys(function($squad) {
                 return [$squad->display => collect([$squad->leader_id])->concat($squad->additional_members)->toArray()];
             });
             $teamKeys = $teams->keys();

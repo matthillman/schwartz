@@ -4,12 +4,21 @@
         :multiple="multiple"
         :placeholder="placeholder"
         :label="'name'"
+        v-model="unit"
         @input="$emit('input', $event)"
         @search="maybeDoSearch"
         @search:focus="maybeDoSearch('', () => {})"
         :filterable="false"
         class="unit-select"
     >
+        <template #search="{attributes, events}">
+            <input
+                class="vs__search"
+                :required="required && needsSelection"
+                v-bind="attributes"
+                v-on="events"
+            />
+        </template>
         <template v-slot:option="unit">
             <unit-preview :unit="unit"></unit-preview>
         </template>
@@ -31,14 +40,25 @@ export default {
     props: {
         placeholder: String,
         multiple: Boolean,
+        required: Boolean
     },
     data() {
         return {
             units: [],
             lastSearchTerm: '',
+            unit: null,
         };
     },
-
+    computed: {
+        needsSelection() {
+            return !this.unit || (Array.isArray(this.unit) && !this.unit.length);
+        }
+    },
+    watch: {
+        unit() {
+            console.warn(this.required && this.needsSelection, this.required, this.needsSelection);
+        }
+    },
     methods: {
         maybeDoSearch: _.debounce(async function(search, loading) {
             loading(true);

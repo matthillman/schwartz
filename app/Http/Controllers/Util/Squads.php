@@ -130,6 +130,9 @@ trait Squads {
     }
 
     public function squadLabelFor($key) {
+        if ($key instanceof SquadGroup) {
+            return $key->name;
+        }
         return collect($this->squadList(true))->first(function($pair) use ($key) {
             return $pair['value'] == $key;
         })['label'];

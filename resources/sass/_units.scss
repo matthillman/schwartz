@@ -185,7 +185,7 @@
     }
 
     [highlight="none"] & [gear] {
-        background: linear-gradient(to top, $light-navy, $dark-navy);
+        @include navy-gradient-background;
     }
     [highlight="stars"] & [stars] {
         background-color: red;
@@ -481,6 +481,7 @@
         width: 100%;
         background-color: black;
         box-shadow: inset 0 0 3px #0071d6;
+        vertical-align: top;
     }
 
     &.dark {

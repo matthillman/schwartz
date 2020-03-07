@@ -20,9 +20,9 @@ class TerritoryWarPlan extends Model
     ];
 
     public function guild() {
-        $this->belongsTo(Guild::class);
+        return $this->belongsTo(Guild::class);
     }
     public function squad_group() {
-        $this->belongsTo(SquadGroup::class);
+        return $this->belongsTo(SquadGroup::class);
     }
 }

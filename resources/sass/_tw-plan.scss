@@ -1,0 +1,72 @@
+.zone-wrapper {
+    $zone-base-width: 1065px;
+    $zone-base-height: 459px + 526px;
+    $zone-target-width: 375px;
+    $zone-target-height: $zone-base-height / $zone-base-width * $zone-target-width;
+    $width-ratio: $zone-target-width / $zone-base-width;
+    $height-ratio: $zone-target-height / $zone-base-height;
+
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+    height: ceil($zone-target-height);
+
+    .zone {
+        position: relative;
+
+        > img {
+            height: 100%;
+            width: 100%;
+        }
+    }
+    .zone-1, .zone-3 {
+        height: #{459px * $height-ratio};
+    }
+    .zone-2, .zone-4 {
+        height: #{526px * $height-ratio};
+    }
+    .zone-5 {
+        height: #{303px * $height-ratio};
+    }
+    .zone-6 {
+        height: #{305px * $height-ratio};
+    }
+    .zone-7, .zone-10 {
+        height: #{377px * $height-ratio};
+    }
+    .zone-8 {
+        height: #{323px * $height-ratio};
+    }
+    .zone-9 {
+        height: #{285px * $height-ratio};
+    }
+
+    .zone-1, .zone-2 {
+        width: #{278px * $width-ratio};
+    }
+    .zone-3, .zone-4 {
+        width: #{255px * $width-ratio};
+    }
+    .zone-5, .zone-6, .zone-7 {
+        width: #{243px * $width-ratio};
+    }
+    .zone-8, .zone-9, .zone-10 {
+        width: #{289px * $width-ratio};
+    }
+
+    .zone-content-wrapper {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        cursor: pointer;
+        border: 3px solid transparent;
+        transition: border-color 300ms ease-out;
+
+        &:hover {
+            border-color: $sw-yellow;
+        }
+    }
+}

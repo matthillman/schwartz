@@ -53,21 +53,28 @@ class AuthServiceProvider extends ServiceProvider
             return $user->edit_teams;
         });
 
+        Gate::define('view-squad', function($user, $squadGroup) {
+            if ($user->admin) { return true; }
+
+            if (!($squadGroup instanceof SquadGroup)) {
+                $squadGroup = SquadGroup::findOrFail($squadGroup);
+            }
+
+            if ($squadGroup->id == 1 || $squadGroup->guild_id === 0) { return $squadGroup->published; }
+            if ($squadGroup->guild_id === -1) { return $user->id === $squadGroup->user_id; }
+
+            return Gate::allows('in-guild', $squadGroup->guild) && $squadGroup->published;
+        });
+
         Gate::define('edit-squad', function ($user, $squadGroup) {
             if (!($squadGroup instanceof SquadGroup)) {
                 $squadGroup = SquadGroup::findOrFail($squadGroup);
             }
 
             if ($squadGroup->id == 1 || $squadGroup->guild_id === 0) { return $user->edit_teams; }
+            if ($squadGroup->guild_id === -1) { return $user->id === $squadGroup->user_id; }
 
-            return $user->accounts
-                ->contains(function($account) use ($squadGroup, $user) {
-                    if (!$account->guild || $account->guild->id != $squadGroup->guild_id) { return false; }
-                    if (is_null($account->guild->server_id)) { return false; }
-                    return collect($user->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) use ($account) {
-                        return preg_match($account->guild->officer_role_regex, $role['name']);
-                    });
-                });
+            return Gate::allows('edit-guild', $squadGroup->guild);
         });
 
         Gate::define('edit-guild', function ($user, $guild) {
