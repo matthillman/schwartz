@@ -66,6 +66,9 @@ Vue.component('squad-tabs', require('./components/SquadTabs.vue').default);
 Vue.component('auto-checkbox', require('./components/AutoCheckbox.vue').default);
 Vue.component('auto-text-field', require('./components/AutoTextField.vue').default);
 Vue.component('collapsable', require('./components/Collapsable.vue').default);
+Vue.component('convert-squad-to-plan', require('./components/ConvertSquadToPlan.vue').default);
+Vue.component('tw-zone', require('./components/TWZone.vue').default);
+Vue.component('mini-squad-table', require('./components/MiniSquadTable.vue').default);
 
 let data = {
 	highlight: null,

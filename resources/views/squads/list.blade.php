@@ -4,15 +4,7 @@
 <div class="container home">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            @if (session('status'))
-            <div class="card">
-                <div class="card-body">
-                    <div class="alert alert-success">
-                        {{ session('status') }}
-                    </div>
-                </div>
-            </div>
-            @endif
+            @include('shared.status');
 
             <div class="card">
                 <div class="card-header"><h2>Squads</h2></div>
@@ -23,12 +15,42 @@
                     :selected="{{ $squad->id }}"
                 ></squad-tabs>
 
-                <div class="card-header row justify-content-between align-items-baseline child-no-margin">
-                    <div class="column"><h4>{{ $squad->name }}</h4><div class="small-note"><strong>{{ $squad->guild_id === 0 ? "Global" : "{$squad->guild->name}" }}</strong> Squad Group</div></div>
-                    <auto-checkbox :route="`{{ route('squads.group.publish', ['group' => $squad->id]) }}`" {{ $squad->publish ? 'checked ' : '' }}:label="`{{ $squad->guild_id !== 0 ? "Publish to guild list" : "Publish globally" }}`"></auto-checkbox>
+                <div class="card-header row justify-content-between align-items-baseline no-margin">
+                    <div class="column grow"><h4>{{ $squad->name }}</h4><div class="small-note"><strong>{{ $squad->guild_id === -1 ? "Personal" : ($squad->guild_id === 0 ? "Global" : "{$squad->guild->name}") }}</strong> Squad Group</div></div>
+
+                    <div class="column">
+                        @if ($squad->guild_id > 0)
+                        @can('edit-guild', $squad->guild_id)
+                        <convert-squad-to-plan :group="{{ $squad->toJson() }}"></convert-squad-to-plan>
+                        @endcan
+                        @endif
+
+                        <popover class="teams" :name="`guild-squads`">
+                            <div slot="face">
+                                <button class="btn btn-primary btn-icon with-text"><ion-icon name="eye" size="small"></ion-icon><span>View For Guild</span></button>
+                            </div>
+                            <div slot="content">
+                                <ul>
+                                @foreach ($guilds->where('value', '>', 0) as $guild)
+                                    <li>
+                                        <a href="{{ route('guild.members', ['guild' => $guild['value'], 'team' => $squad->id, 'mode' => 'guild', 'index' => 0]) }}">{{ $guild['label'] }}</a>
+                                    </li>
+                                @endforeach
+                                </ul>
+                            </div>
+                        </popover>
+                    </div>
+
+                    @if ($squad->guild_id >= 0)
+                    @can('edit-squad', $squad)
+                    <div class="column space-left">
+                        <auto-checkbox button :route="`{{ route('squads.group.publish', ['group' => $squad->id]) }}`" {{ $squad->publish ? 'checked ' : '' }}:label="`{{ $squad->guild_id !== 0 ? "Publish to Guild List" : "Publish Globally" }}`"></auto-checkbox>
+                    </div>
+                    @endcan
+                    @endif
                 </div>
 
-                <collapsable {{ $chars->count() == 0 && $ships->count() == 0 ? 'start-open' : '' }}>
+                <collapsable card-body {{ $chars->count() == 0 && $ships->count() == 0 ? 'start-open' : '' }}>
                     <template #top-trigger="{ open }">
                         <button class="btn btn-primary btn-icon-text">
                             <div class="row no-margin align-items-center">
@@ -43,14 +65,14 @@
                             <div class="row add-row input-group add-squad-row">
                                 <input type="hidden" name="leader_id" value="" id="leader_id">
                                 <input type="hidden" name="group" value="{{ $squad->id }}">
-                                <unit-select :placeholder="`Leader`" @@input="val => set('leader_id', val ? val.base_id : null)"></unit-select>
-                                <input class="form-control" type="text" placeholder="Squad Name" name="name">
-                                <input class="form-control" type="text" placeholder="Squad Description" name="description">
+                                <unit-select :placeholder="`Leader`" @@input="val => set('leader_id', val ? val.base_id : null)" required></unit-select>
+                                <input class="form-control" type="text" placeholder="Squad Name" id="name" name="name" required>
+                                <input class="form-control" type="text" placeholder="Squad Description" id="description" name="description" required>
                                 <button type="submit" class="btn btn-primary">{{ __('Add') }}</button>
                             </div>
                             <div class="row add-row input-group add-squad-row multiple">
                                 <input type="hidden" name="other_members" value="" id="other_members">
-                                <unit-select multiple :placeholder="`Other Members`" @@input="val => set('other_members', val.map(u => u.base_id).reduce((c, u) => [c, u].join(',')))"></unit-select>
+                                <unit-select multiple :placeholder="`Other Members`" @@input="val => set('other_members', val.map(u => u.base_id).reduce((c, u) => [c, u].join(','), '') )"></unit-select>
                             </div>
                         </form>
                     </div>
@@ -58,7 +80,7 @@
 
                 @foreach ([$chars, $ships] as $squads)
                     @if ($squads->count() > 0)
-                    <div class="card-body squad-list-body">
+                    <div class="card-body squad-list-body dark-back">
                         <table class="squad-table">
                             <thead>
                                 <tr>
@@ -129,7 +151,7 @@
                         <h4>No squads configured</h4>
                     </div>
                 @else
-                <collapsable>
+                <collapsable card-body>
                     <form method="POST" :action="`/squads/message/${messageChannel}`">
                         @method('PUT')
                         @csrf

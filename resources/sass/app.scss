@@ -675,11 +675,14 @@ table.sortable {
 }
 
 .dark-back {
-  background-image: radial-gradient(ellipse at 25% center, $light-navy, $dark-navy);
+  background-image: radial-gradient(ellipse at center 40%, $bg-dark-navy, $dark-navy);
 }
 
 .space-right {
   margin-right: 8px;
+}
+.space-left {
+  margin-left: 8px;
 }
 
 @import "grid";
@@ -689,3 +692,4 @@ table.sortable {
 @import "extensions";
 @import "member";
 @import "squads";
+@import "tw-plan";

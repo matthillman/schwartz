@@ -536,11 +536,11 @@ $base: 80px;
             }
 
             &:nth-child(odd) {
-                background: $overlay-navy;
+                background: $light-navy;
             }
 
             &:nth-child(even) {
-                background-color: #213752;
+                background-color: $dark-navy;
             }
         }
 
@@ -550,10 +550,10 @@ $base: 80px;
 
         .stat-header {
             &.row {
-                background: #1e7696;
+                background: $overlay-navy;
 
                 &.with-stat {
-                    background: #274764;
+                    background: $dark-navy;
                 }
             }
 

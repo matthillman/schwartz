@@ -36,17 +36,19 @@
     width: 100%;
 
     td, th {
-        background-color: rgba($color: #000, $alpha: 0.1);
+        color: $white;
+        background: radial-gradient(ellipse at center center, scale-color($color: $light-navy, $lightness: 10%), $light-navy);
         border: 1px solid transparent;
         background-clip: content-box;
         border-collapse: collapse;
         border-radius: 4px;
         height: 0;
     }
-    &:nth-child(even) {
-        td {
-            background-color: rgba($color: #000, $alpha: 0.25);
-        }
+
+    th {
+        background: $overlay-navy;
+        font-weight: 700;
+        border-color: $dark-navy;
     }
 
     th > span {
@@ -57,6 +59,7 @@
 
     th.blank, td.blank {
         background: none;
+        border-color: transparent;
     }
 
     .squad-row {
@@ -92,10 +95,39 @@
             }
         }
     }
+
+    &.micro {
+        .squad-row {
+            .char-image-column {
+                min-width: 38px;
+
+                .char-image-square {
+                    margin: 3px auto;
+                }
+            }
+        }
+    }
 }
 
 .squad-list-body {
     > .row:nth-child(odd) {
         background-color: $gray-300;
+    }
+}
+
+.popover.guild-squads {
+    margin-top: 4px;
+    background: none;
+    .popover__face {
+        > div {
+            > button {
+                width: 100%;
+                border-radius: 8px;
+            }
+        }
+    }
+
+    &.open .popover__container {
+        width: 200px;
     }
 }

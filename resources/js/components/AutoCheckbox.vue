@@ -1,9 +1,19 @@
 <template>
-    <label class="row align-items-baseline">
-        <input type="checkbox" v-model="isChecked">
-        <span>{{ label }}</span>
-        <ion-icon :class="{success: this.success}" name="checkmark-circle-outline" size="small"></ion-icon>
-    </label>
+    <div class="row align-items-center no-margin wrapper">
+        <button
+            v-if="button"
+            class="btn btn-icon with-text btn-primary"
+            @click="isChecked = !isChecked"
+        >
+            <ion-icon :name="iconName" size="small"></ion-icon>
+            <span>{{ label }}</span>
+        </button>
+        <label v-else>
+            <input type="checkbox" v-model="isChecked">
+            <span>{{ label }}</span>
+        </label>
+        <ion-icon class="status" :class="{success: this.success}" name="checkmark-circle-outline" size="small"></ion-icon>
+    </div>
 </template>
 
 <script>
@@ -12,6 +22,7 @@ export default {
         route: String,
         label: String,
         checked: Boolean,
+        button: Boolean,
     },
     data() {
         return {
@@ -24,6 +35,11 @@ export default {
     },
     watch: {
         isChecked: 'saveData'
+    },
+    computed: {
+        iconName() {
+            return this.isChecked ? 'checkbox' : 'square';
+        }
     },
     methods: {
         async saveData(newVal, oldVal) {
@@ -43,13 +59,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../sass/_variables.scss";
-ion-icon {
+.wrapper {
+    position: relative;
+}
+ion-icon.status {
     transition: opacity 300ms ease-in-out;
     opacity: 0;
     color: $green;
-    position: relative;
-    top: 4px;
-    margin-left: 4px;
+    position: absolute;
+    right: -16px;
     visibility: visible;
 
     &.success {

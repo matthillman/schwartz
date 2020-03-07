@@ -1,5 +1,5 @@
 <template>
-    <div class="card-body">
+    <div :class="{'card-body': cardBody}">
         <div v-if="hasSlot('top-trigger')" class="trigger-wrapper" @click="open = !open">
             <slot name="top-trigger" v-bind:open="open"></slot>
         </div>
@@ -20,6 +20,7 @@
 export default {
     props: {
         startOpen: Boolean,
+        cardBody: Boolean,
     },
     mounted() {
         this.open = this.startOpen;

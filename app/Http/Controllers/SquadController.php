@@ -32,14 +32,20 @@ class SquadController extends Controller
             ]);
         }
 
-        if ($guildIDs->count() === 0) {
-            http_403("You don't have permission to edit any guild squads.");
-        }
+        $guildIDs->prepend(-1);
+        $guilds->prepend([
+            'label' => 'Personal Squad',
+            'value' => -1,
+        ]);
 
         $group = SquadGroup::findOrFail($request->get('group', 1));
 
         if (Gate::denies('edit-squad', $group)) {
-            $group = SquadGroup::whereIn('guild_id', $guildIDs)->first();
+            if ($guildIDs->count() > 0) {
+                $group = SquadGroup::whereIn('guild_id', $guildIDs)->first();
+            } else {
+                $group = SquadGroup::where('user_id', auth()->user()->id)->first();
+            }
         }
 
         $units = Unit::all()->sortBy('name')->values();
@@ -117,12 +123,19 @@ class SquadController extends Controller
             'guild' => 'integer',
         ]);
 
-        Gate::authorize('edit-guild', array_get($validated, 'guild', 0));
+        $guildID = array_get($validated, 'guild', 0);
+
+        if ($guildID >= 0) {
+            Gate::authorize('edit-guild', $guildID);
+        }
 
         $group = new SquadGroup;
 
         $group->name = $validated['name'];
-        $group->guild_id = array_get($validated, 'guild', 0);
+        $group->guild_id = $guildID;
+        if ($guildID === -1) {
+            $group->user_id = auth()->user()->id;
+        }
 
         $group->save();
 

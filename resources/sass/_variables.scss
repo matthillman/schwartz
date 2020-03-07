@@ -7,9 +7,12 @@ $sw-yellow: #fce34d;
 $swgoh-orange: #d47c3f;
 $discord-purple: #7289da;
 
-$overlay-navy: #1e4269;
-$light-navy: #17345b;
-$dark-navy: #0d1a28;
+$overlay-navy: #197698;
+$light-navy: #1b426b;
+$dark-navy: #203751;
+
+$bg-light-navy: #2c79c6;
+$bg-dark-navy: #1f2932;
 
 $white:    #fff;
 $gray-100: #f8f9fa;
@@ -22,7 +25,6 @@ $gray-700: #495057;
 $gray-800: #343a40;
 $gray-900: #212529;
 $black:    #000;
-
 
 $blue:    #007bff;
 $indigo:  #6610f2;
@@ -38,7 +40,8 @@ $cyan:    #17a2b8;
 $text: #636b6f;
 $light-text: #e0e9f0;
 
-$primary:       #0483B4;
+// $primary:       #0483B4;
+$primary: $overlay-navy;
 $hover:         #024d69;
 $secondary:     #FFCA47;
 // $success:       $green;
@@ -69,4 +72,9 @@ $rainbow-colors: (
      @each $name, $code in $rainbow-colors {
           --rainbow-#{$name}: #{$code};
      }
+}
+
+@mixin navy-gradient-background {
+     background: linear-gradient(to bottom, $bg-dark-navy 0%, $bg-light-navy 100%);
+     color: $white;
 }
