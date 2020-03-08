@@ -15,6 +15,15 @@
                 </div>
 
                 <div class="card-body">
+                    <div>Found the following ally codes for discord id {{ auth()->user()->discord_id }}:</div>
+                    <ul>
+                        @foreach (auth()->user()->accounts as $account)
+                            <li>{{ $account->ally_code }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div class="card-body">
                 @foreach($guilds as $guild)
                     <auto-text-field :route="`{{ route('guild.profile.update', ['guild' => $guild->id]) }}`" :label="`{{ $guild->name }}`" :value="`{{ $guild->server_id }}`"></auto-text-field>
                 @endforeach
