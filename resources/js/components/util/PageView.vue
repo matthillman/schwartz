@@ -53,6 +53,7 @@ export default {
 .page-container {
     display: flex;
     justify-content: flex-start;
+    align-items: flex-start;
 
     margin-top: 8px;
     padding-bottom: 8px;

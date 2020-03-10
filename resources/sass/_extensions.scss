@@ -1,4 +1,4 @@
- /*prevent bootstrap-vue css conflict*/
+/*prevent bootstrap-vue css conflict*/
  .v-select.dropdown .dropdown-toggle::after {
     content: inherit;
     display: none;
@@ -7,8 +7,36 @@
     height: inherit;
 }
 
-.form-group.row > .v-select .vs__dropdown-toggle {
-    padding: 2px 0 6px;
+.form-group.row, .input-group {
+    > .v-select {
+        .vs__dropdown-toggle {
+            padding: 2px 0 6px;
+            min-width: 250px;
+        }
+
+        .vs__selected, input {
+            min-height: 23px;
+        }
+    }
+}
+
+.v-select input::placeholder {
+    color: $gray-600;
+}
+
+.input-group .v-select {
+    .vs__dropdown-toggle {
+        border-radius: 0;
+
+    }
+    &:first-child .vs__dropdown-toggle {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+    &:last-child .vs__dropdown-toggle {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
 }
 
 popover {

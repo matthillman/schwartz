@@ -686,6 +686,16 @@ table.sortable {
   margin-left: 8px;
 }
 
+.input-group + .input-group {
+  margin-top: 4px;
+}
+
+.discord-select {
+  .input-group-text {
+    width: 260px;
+  }
+}
+
 @import "grid";
 @import "mods";
 @import "units";
