@@ -512,61 +512,62 @@ $base: 80px;
         }
     }
 
-    .stat-list {
-        background: #1e2941;
-        padding: 0;
-        border: 1px solid $gray-800;
-        border-radius: 4px;
-        overflow: hidden;
-        margin: 0 auto;
-        flex-basis: 50%;
+}
 
-        font-weight: 400;
-        color: $white;
-        text-shadow: 1px 1px 0 $gray-900;
+.stat-list {
+    background: #1e2941;
+    padding: 0;
+    border: 1px solid $gray-800;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0 auto;
+    flex-basis: 50%;
 
-        .row {
-            margin: 0;
-            &:not(:last-child) {
-                margin-bottom: 4px;
-            }
+    font-weight: 400;
+    color: $white;
+    text-shadow: 1px 1px 0 $gray-900;
 
-            > * {
-                padding: 6px 8px;
-            }
+    .row {
+        margin: 0;
+        &:not(:last-child) {
+            margin-bottom: 4px;
+        }
 
-            &:nth-child(odd) {
-                background: $light-navy;
-            }
+        > * {
+            padding: 6px 8px;
+        }
 
-            &:nth-child(even) {
-                background-color: $dark-navy;
+        &:nth-child(odd) {
+            background: $light-navy;
+        }
+
+        &:nth-child(even) {
+            background-color: $dark-navy;
+        }
+    }
+
+    > :not(.row) + * > .stat-header {
+        margin-top: 4px;
+    }
+
+    .stat-header {
+        &.row {
+            background: $overlay-navy;
+
+            &.with-stat {
+                background: $dark-navy;
             }
         }
 
-        > :not(.row) + * > .stat-header {
-            margin-top: 4px;
+        > :first-child {
+            font-size: 16px;
+            font-weight: 700;
         }
+    }
 
-        .stat-header {
-            &.row {
-                background: $overlay-navy;
-
-                &.with-stat {
-                    background: $dark-navy;
-                }
-            }
-
-            > :first-child {
-                font-size: 16px;
-                font-weight: 700;
-            }
-        }
-
-        .bonus {
-            font-weight: 500;
-            margin-left: 2px;
-            color: #5bb9ab;
-        }
+    .bonus {
+        font-weight: 500;
+        margin-left: 2px;
+        color: #5bb9ab;
     }
 }

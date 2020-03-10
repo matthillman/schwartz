@@ -29,7 +29,7 @@ class TerritoryWarPlanController extends Controller
     }
 
     public function show(Request $request, $id) {
-        $plan = TerritoryWarPlan::findOrFail($id);
+        $plan = TerritoryWarPlan::with('guild.members')->findOrFail($id);
 
         Gate::authorize('in-guild', $plan->guild->id);
 
@@ -39,5 +39,18 @@ class TerritoryWarPlanController extends Controller
             'units' => Unit::all()->sortBy('name')->values(),
         ]);
 
+    }
+
+    function saveZone(Request $request, $plan, $zone) {
+        $plan = TerritoryWarPlan::findOrFail($plan);
+
+        Gate::authorize('edit-guild', $plan->guild->id);
+
+        $plan->{"zone_{$zone}"} = json_decode($request->get('assignments', '{}'));
+        $plan->{"zone_{$zone}_notes"} = $request->get('notes') ?: '';
+
+        $plan->save();
+
+        return response()->json(['success' => true]);
     }
 }

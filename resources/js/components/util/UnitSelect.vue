@@ -75,10 +75,10 @@ export default {
 
 <style lang="scss">
 .unit-select {
-    &.dropdown.v-select {
+    &.v-select {
         min-width: 200px;
 
-        .dropdown-toggle {
+        .vs__dropdown-toggle {
             height: 36px;
             padding: 0;
         }
@@ -92,23 +92,23 @@ export default {
             }
         }
 
-        &.single .selected-tag {
+        &.vs--single .vs__selected {
             margin: 0;
             padding: 0;
             border: none;
         }
     }
-    .multiple &.dropdown.v-select {
+    .multiple &.v-select {
         --select-width: calc(100% - 71px);
         width: var(--select-width);
 
-        .dropdown-toggle {
+        .vs__dropdown-toggle {
             min-height: 42px;
             height: auto;
             padding: 0;
         }
 
-        .selected-tag {
+        .vs__selected {
             margin: 2px 4px;
             padding-left: 0;
         }

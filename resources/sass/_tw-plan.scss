@@ -1,7 +1,7 @@
 .zone-wrapper {
     $zone-base-width: 1065px;
     $zone-base-height: 459px + 526px;
-    $zone-target-width: 375px;
+    $zone-target-width: 450px;
     $zone-target-height: $zone-base-height / $zone-base-width * $zone-target-width;
     $width-ratio: $zone-target-width / $zone-base-width;
     $height-ratio: $zone-target-height / $zone-base-height;
@@ -11,6 +11,17 @@
     align-content: center;
     flex-wrap: wrap;
     height: ceil($zone-target-height);
+
+    &:first-child {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        overflow: hidden;
+    }
+    &:last-child {
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        overflow: hidden;
+    }
 
     .zone {
         position: relative;
@@ -64,8 +75,14 @@
         cursor: pointer;
         border: 3px solid transparent;
         transition: border-color 300ms ease-out;
+        color: $white;
 
-        &:hover {
+        > div {
+            height: 100%;
+            text-shadow: 1px 1px 0 black;
+        }
+
+        &:hover, &.active {
             border-color: $sw-yellow;
         }
     }

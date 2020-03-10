@@ -42,33 +42,42 @@ Vue.directive('highlight', function(el, binding) {
 	}
 });
 
-Vue.component('modal', require('./components/Modal.vue').default);
+Vue.component('welcome-parallax', require('./components/Parallax.vue').default);
+Vue.component('discord-widget', require('./components/DiscordWidget.vue').default);
+Vue.component('horizon-jobs', require('./components/Horizon.vue').default);
+
+Vue.component('member-mods', require('./components/MemberMods.vue').default);
 Vue.component('mods', require('./components/Mods.vue').default);
 Vue.component('mod', require('./components/Mod.vue').default);
-Vue.component('character', require('./components/Character.vue').default);
-Vue.component('guild', require('./components/Guild.vue').default);
-Vue.component('list', require('./components/List.vue').default);
-Vue.component('members', require('./components/Members.vue').default);
-Vue.component('member-mods', require('./components/MemberMods.vue').default);
-Vue.component('welcome-parallax', require('./components/Parallax.vue').default);
-Vue.component('tw-form', require('./components/TWForm.vue').default);
-Vue.component('guild-teams', require('./components/GuildTeams.vue').default);
 Vue.component('mod-preference', require('./components/Preference.vue').default);
-Vue.component('team-sort', require('./components/TeamSort.vue').default);
-Vue.component('discord-widget', require('./components/DiscordWidget.vue').default);
-Vue.component('highlight-widget', require('./components/HighlightWidget.vue').default);
-Vue.component('loading-indicator', require('./components/LoadingIndicator.vue').default);
-Vue.component('horizon-jobs', require('./components/Horizon.vue').default);
-Vue.component('search', require('./components/Search.vue').default);
-Vue.component('unit-select', require('./components/UnitSelect.vue').default);
-Vue.component('tab-list', require('./components/TabList.vue').default);
-Vue.component('squad-tabs', require('./components/SquadTabs.vue').default);
-Vue.component('auto-checkbox', require('./components/AutoCheckbox.vue').default);
-Vue.component('auto-text-field', require('./components/AutoTextField.vue').default);
-Vue.component('collapsable', require('./components/Collapsable.vue').default);
-Vue.component('convert-squad-to-plan', require('./components/ConvertSquadToPlan.vue').default);
-Vue.component('tw-zone', require('./components/TWZone.vue').default);
+
+Vue.component('modal', require('./components/util/Modal.vue').default);
+Vue.component('list', require('./components/util/List.vue').default);
+Vue.component('collapsable', require('./components/util/Collapsable.vue').default);
+Vue.component('page-view', require('./components/util/PageView.vue').default);
+Vue.component('search', require('./components/util/Search.vue').default);
+Vue.component('loading-indicator', require('./components/util/LoadingIndicator.vue').default);
+Vue.component('unit-select', require('./components/util/UnitSelect.vue').default);
+Vue.component('tab-list', require('./components/util/TabList.vue').default);
+Vue.component('auto-checkbox', require('./components/util/AutoCheckbox.vue').default);
+Vue.component('auto-text-field', require('./components/util/AutoTextField.vue').default);
+Vue.component('tooltip', require('./components/util/Tooltip.vue').default);
+
 Vue.component('mini-squad-table', require('./components/MiniSquadTable.vue').default);
+Vue.component('highlight-widget', require('./components/HighlightWidget.vue').default);
+Vue.component('character', require('./components/Character.vue').default);
+
+Vue.component('members', require('./components/Members.vue').default);
+Vue.component('guild', require('./components/Guild.vue').default);
+Vue.component('guild-teams', require('./components/GuildTeams.vue').default);
+Vue.component('team-sort', require('./components/TeamSort.vue').default);
+Vue.component('tw-form', require('./components/TWForm.vue').default);
+
+Vue.component('squad-tabs', require('./components/SquadTabs.vue').default);
+Vue.component('convert-squad-to-plan', require('./components/ConvertSquadToPlan.vue').default);
+
+Vue.component('tw-plan', require('./components/tw/TWPlan.vue').default);
+Vue.component('tw-zone', require('./components/tw/TWZone.vue').default);
 
 let data = {
 	highlight: null,

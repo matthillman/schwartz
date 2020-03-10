@@ -82,7 +82,7 @@ class Member extends Model
             'url' => $this->url,
             'ally_code' => $this->ally_code,
             'player' => $this->player,
-            'characters' => $this->characters->whereIn('unit_name', $characters)->values()
+            'characters' => $this->characters()->with('zetas')->whereIn('unit_name', $characters)->get()->values()
         ]);
     }
 

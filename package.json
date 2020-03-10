@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "@popperjs/core": "^2.1.0",
         "ionicons": "^5.0.0",
         "laravel-echo": "^1.5.4",
         "moment": "^2.10.6",
@@ -33,7 +34,7 @@
         "v-show-slide": "^1.8.3",
         "vue-cool-select": "^3.5.1",
         "vue-popover": "^1.6.2",
-        "vue-select": "^2.6.4",
+        "vue-select": "^3.7.1",
         "vue-slider-component": "^2.8.16",
         "vue-toasted": "^1.1.27"
     }

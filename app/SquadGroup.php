@@ -14,6 +14,10 @@ class SquadGroup extends Model
         return $this->belongsTo(Guild::class);
     }
 
+    public function plans() {
+        return $this->hasMany(TerritoryWarPlan::class);
+    }
+
     public function scopeGlobal($query) {
         return $query->where('guild_id', 0)->where('publish', true);
     }

@@ -9,15 +9,7 @@
         </thead>
         <tbody>
             <tr class="squad-row">
-                <td class="top">
-                    <div class="column char-image-column">
-                        <div class="char-image-square small" :class="[units[squad.leader_id].alignment]">
-                            <img :src="`/images/units/${squad.leader_id}.png`">
-                        </div>
-                    </div>
-                </td>
-
-                <td class="top" v-for="char_id in squad.additional_members" :key="char_id">
+                <td class="top" v-for="char_id in [squad.leader_id, ...squad.additional_members]" :key="char_id">
                     <div class="column char-image-column">
                         <div class="char-image-square small" :class="[units[char_id].alignment]">
                             <img :src="`/images/units/${char_id}.png`">

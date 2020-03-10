@@ -1,9 +1,23 @@
 <template>
     <div>
-        <button class="btn btn-icon with-text btn-primary trigger" @click="showCreate = true">
-            <ion-icon name="skull" size="small"></ion-icon>
-            <span>Create TW Plan</span>
-        </button>
+        <popover class="teams" :name="`guild-plans`">
+            <template #face>
+                <button class="btn btn-icon with-text btn-primary trigger">
+                    <ion-icon name="skull" size="small"></ion-icon>
+                    <span>Create TW Plan</span>
+                </button>
+            </template>
+            <template #content>
+                <ul>
+                    <li><a href="#" @click="showCreate = true">
+                        <ion-icon name="create" size="small"></ion-icon>
+                        <span>New Plan…</span>
+                    </a></li>
+
+                    <li v-for="plan in plans" :key="plan.id"><a :href="`/twp/${plan.id}`">{{ plan.name }}</a></li>
+                </ul>
+            </template>
+        </popover>
 
         <modal v-if="showCreate" @close="showCreate = false">
             <h3 slot="header">Create TW Plan from this Squad Group</h3>
@@ -26,6 +40,7 @@
 export default {
     props: {
         group: Object,
+        plans: Array,
     },
     data() {
         return {

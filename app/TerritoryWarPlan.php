@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class TerritoryWarPlan extends Model
 {
     protected $casts = [
-        'zone_1' => 'array',
-        'zone_2' => 'array',
-        'zone_3' => 'array',
-        'zone_4' => 'array',
-        'zone_5' => 'array',
-        'zone_6' => 'array',
-        'zone_7' => 'array',
-        'zone_8' => 'array',
-        'zone_9' => 'array',
-        'zone_10' => 'array',
+        'zone_1' => 'collection',
+        'zone_2' => 'collection',
+        'zone_3' => 'collection',
+        'zone_4' => 'collection',
+        'zone_5' => 'collection',
+        'zone_6' => 'collection',
+        'zone_7' => 'collection',
+        'zone_8' => 'collection',
+        'zone_9' => 'collection',
+        'zone_10' => 'collection',
     ];
 
     public function guild() {
@@ -24,5 +24,15 @@ class TerritoryWarPlan extends Model
     }
     public function squad_group() {
         return $this->belongsTo(SquadGroup::class);
+    }
+
+    public function jsonSerialize() {
+        $data = $this->toArray();
+
+        foreach ($this->casts as $attribute => $type) {
+            $data[$attribute] = (object) $data[$attribute];
+        }
+
+        return $data;
     }
 }

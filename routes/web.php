@@ -95,8 +95,9 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::delete('/squad/{id}', 'SquadController@delete')->name('squad.delete');
     Route::put('/squads/message/{channel}', 'SquadController@sendDiscordMessages')->name('squads.message');
 
-    // Route::post('/twp/squad/{squadID}', 'TerritoryWarPlanController@createFrom')->name('tw-plan.create.from-group');
-    // Route::get('/twp/{plan}', 'TerritoryWarPlanController@show')->name('tw-plan.edit');
+    Route::post('/twp/squad/{squadID}', 'TerritoryWarPlanController@createFrom')->name('tw-plan.create.from-group');
+    Route::get('/twp/{plan}', 'TerritoryWarPlanController@show')->name('tw-plan.edit');
+    Route::put('/twp/{plan}/{zone}', 'TerritoryWarPlanController@saveZone')->name('tw-plan.zone.save');
 });
 
 Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {

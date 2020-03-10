@@ -57,7 +57,7 @@
           <span class="value">{{ character.level }}</span>
         </div>
       </div>
-      <span class="zeta-list">
+      <span class="zeta-list" v-if="showZetas">
         <span v-for="zeta in character.zetas" :key="zeta.id" class="zeta">{{ zeta.class[0] }}</span>
       </span>
       <div class="stat-container" v-if="showStats">
@@ -162,6 +162,10 @@ export default {
       type: Boolean,
       default: false
     },
+    noZetas: {
+      type: Boolean,
+      default: false
+    },
     showName: {
       type: Boolean,
       default: false
@@ -190,7 +194,10 @@ export default {
     },
     showMods: function() {
       return !this.noMods;
-    }
+    },
+    showZetas: function() {
+      return !this.noZetas;
+    },
   },
   methods: {
     range,

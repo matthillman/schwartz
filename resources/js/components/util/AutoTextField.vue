@@ -46,7 +46,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../sass/_variables.scss";
+@import "../../../sass/_variables.scss";
 ion-icon {
     transition: opacity 300ms ease-in-out;
     opacity: 0;

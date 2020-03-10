@@ -106,7 +106,7 @@ export default {
 }
 </style>
 <style lang="scss">
-@import "../../sass/_variables.scss";
+@import "../../../sass/_variables.scss";
 .popover.teams.right {
     .popover__container {
         right: 0;

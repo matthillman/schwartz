@@ -21,7 +21,10 @@
                     <div class="column">
                         @if ($squad->guild_id > 0)
                         @can('edit-guild', $squad->guild_id)
-                        <convert-squad-to-plan :group="{{ $squad->toJson() }}"></convert-squad-to-plan>
+                        <convert-squad-to-plan
+                            :group="{{ $squad->toJson() }}"
+                            :plans="{{ $squad->plans->sortBy('name')->toJson() }}"
+                        ></convert-squad-to-plan>
                         @endcan
                         @endif
 
