@@ -41,6 +41,7 @@
                             <h3 v-else>Overview</h3>
                         </div>
                         <tw-zone
+                            :ref="`zone_${page}`"
                             v-if="page > 0"
                             :zone="page"
                             :zone-data="getPlanForZone(page)"
@@ -50,10 +51,11 @@
                             :members="ourMembers"
                             :drag-mode="!!draggingMember"
                             @add-squad="addSquad"
-                            @remove-squad="deleteSquad"
+                            @remove-squad="(z, s) => confirmDeleteSquad = {z, s}"
                             @add-member="addMember"
                             @remove-member="deleteMember"
                             @update-notes="updateNotes"
+                            @add-multiple="addMultipleForZone"
                         ></tw-zone>
                         <div class="card-body" v-else>
                         </div>
@@ -69,47 +71,12 @@
                             <h4>Squads</h4>
                         </div>
                     </template>
-                    <table class="squad-table micro">
-                        <tbody>
-                            <tr v-for="squad in squads" :key="squad.id" class="squad-row">
-                                <td class="top" v-for="char_id in [squad.leader_id, ...squad.additional_members.slice(0, 3)]" :key="char_id">
-                                    <div class="column char-image-column">
-                                        <div class="char-image-square small" :class="[alignment(char_id)]">
-                                            <img :src="`/images/units/${char_id}.png`">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                     <div v-if="squad.additional_members.length == 4" class="column char-image-column">
-                                        <div class="char-image-square small" :class="[alignment(squad.additional_members[3])]">
-                                            <img :src="`/images/units/${squad.additional_members[3]}.png`">
-                                        </div>
-                                    </div>
-                                    <div v-else-if="squad.additional_members.length > 4" class="column justify-content-center align-items-center extra-units">
-                                        <tooltip>
-                                            +{{ squad.additional_members.length - 3 }}
-                                            <template #tooltip>
-                                                <table class="squad-table micro">
-                                                    <tbody>
-                                                        <tr class="squad-row tooltip-row">
-                                                            <td v-for="char_id in squad.additional_members.slice(3)" :key="char_id">
-                                                                <div class="column char-image-column">
-                                                                    <div class="char-image-square small" :class="[alignment(char_id)]">
-                                                                        <img :src="`/images/units/${char_id}.png`">
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </template>
-                                        </tooltip>
-                                    </div>
-                                </td>
-                                <td v-for="i in memberDifference(squad)" :key="i"><div>&nbsp;</div></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <mini-squad-table v-for="squad in squads" :key="squad.id"
+                        :squad="squad"
+                        :units="units"
+                        no-header
+                        :max-units="5"
+                    ></mini-squad-table>
                 </collapsable>
 
                 <div class="defense-list">
@@ -135,11 +102,42 @@
 
             </div>
         </div>
+
+        <modal v-if="addMultiple" @close="addMultiple = null; potentialAddMembers = []" wider>
+            <template #header><h3>Multiple Assignment</h3></template>
+            <template #body>
+                <member-filter
+                    :squad="squads[addMultiple]"
+                    :members="availableMembersFor(addMultipleZone, addMultiple)"
+                    :units="units"
+                    :max="25 - getTeamsInZone(addMultipleZone)"
+                    @changed="potentialAddMembers = $event"></member-filter>
+            </template>
+            <template #footer>
+                <button class="btn btn-primary" :disabled="!potentialAddMembers.length" @click="addMember(addMultipleZone, addMultiple, potentialAddMembers)">Assign Members</button>
+            </template>
+        </modal>
+
+
+        <modal v-if="confirmDeleteSquad" @close="confirmDeleteSquad = null">
+            <template #header><h3>Are you sure you want to delete this squad?</h3></template>
+            <template #body>
+                <div>
+                    This will remove this squad and all its assigned teams from this zone. <strong>This cannot be undone</strong>. Continue?
+                </div>
+            </template>
+            <template #footer>
+                <button class="btn btn-danger" @click="deleteSquad(confirmDeleteSquad.z, confirmDeleteSquad.s)">Delete it</button>
+            </template>
+        </modal>
     </div>
 </template>
 
 <script>
 export default {
+    components: {
+        'member-filter': require('./MemberFilter.vue').default,
+    },
     props: {
         plan: Object,
         squads: Object,
@@ -156,6 +154,10 @@ export default {
             ourPlan: this.plan,
             ourMembers: this.members,
             draggingMember: null,
+            addMultiple: null,
+            addMultipleZone: null,
+            potentialAddMembers: [],
+            confirmDeleteSquad: null,
         };
     },
     methods: {
@@ -228,13 +230,31 @@ export default {
         deleteSquad(zone, squadID) {
             delete this.getPlanForZone(zone)[squadID];
             this.saveData(zone);
+            this.$refs[`zone_${zone}`].$forceUpdate();
+            this.confirmDeleteSquad = null;
         },
 
-        addMember(zone, squadID, member) {
-            if (!this.getPlanForZone(zone)[squadID].includes(member.ally_code)) {
-                this.getPlanForZone(zone)[squadID].push(member.ally_code);
-                this.getPlanForZone(zone)[squadID].sort((a, b) => this.nameForMember(a).localeCompare(this.nameForMember(b)));
+        addMember(zone, squadID, members) {
+            let dirty = false;
+            if (!Array.isArray(members)) {
+                members = [members.ally_code];
+            }
+            for (const ally_code of members) {
+                if (!this.getPlanForZone(zone)[squadID].includes(ally_code)) {
+                    this.getPlanForZone(zone)[squadID].push(ally_code);
+                    this.getPlanForZone(zone)[squadID].sort((a, b) => this.nameForMember(a).localeCompare(this.nameForMember(b)));
+                    dirty = true;
+                }
+            }
+
+            if (dirty) {
                 this.saveData(zone);
+            }
+
+            if (this.addMultiple) {
+                this.addMultiple = null;
+                this.addMultipleZone = null;
+                this.potentialAddMembers = [];
             }
         },
         deleteMember(zone, squadID, member) {
@@ -246,6 +266,18 @@ export default {
         updateNotes(zone, notes) {
             this.ourPlan[`zone_${zone}_notes`] = notes;
             this.saveData(zone);
+        },
+
+        addMultipleForZone(zone, squadID) {
+            this.addMultipleZone = zone;
+            this.addMultiple = squadID;
+        },
+        memberAvailable(member, zone, squadID) {
+            return !this.getPlanForZone(zone)[squadID].includes(member.ally_code)
+            && (!member.usedSquads || !member.usedSquads.has(this.squads[squadID].leader_id));
+        },
+        availableMembersFor(zone, squadID) {
+            return this.members.filter(m => this.memberAvailable(m, zone, squadID));
         },
 
         onDragStart(member, evt) {

@@ -23,7 +23,7 @@
             <button class="btn btn-primary" @click="addSquad">Add to Zone</button>
         </div>
 
-        <div v-for="(zoneMembers, squadID) in zoneData" :key="squadID"
+        <div v-for="(zoneMembers, squadID) in zoneData" :key="`${squadID}-${zoneMembers.length}`"
             class="drop-target"
             :class="{ over: dragTarget == squadID, targetable: dragMode, 'not-dropable': !dropOK }"
             @dragover.prevent="onDragOver(squadID, $event)"
@@ -33,8 +33,8 @@
             @dragend="onDragLeave"
         >
             <div class="squad-wrapper">
-                <mini-squad-table :squad="squads[squadID]" :units="units"></mini-squad-table>
-                <button class="btn btn-danger btn-icon inverted" @click="confirmDeleteSquad = squadID"><ion-icon name="remove-circle" size="small"></ion-icon></button>
+                <mini-squad-table :squad="squads[squadID]" :units="units" flex-width></mini-squad-table>
+                <button class="btn btn-danger btn-icon inverted" @click="deleteSquad(squads[squadID])"><ion-icon name="remove-circle" size="small"></ion-icon></button>
             </div>
 
             <div v-show-slide="!dragMode" class="zone-member-wrapper">
@@ -102,7 +102,7 @@
                 >
                 </v-select>
                 <button class="btn btn-primary" @click="addMember(squadID)">Add</button>
-                <button class="btn btn-secondary btn-icon" @click="addMultiple = squadID">
+                <button class="btn btn-secondary btn-icon" @click="$emit('add-multiple', zone, squadID)">
                     <tooltip>
                         <ion-icon name="duplicate" size="small"></ion-icon>
                         <template #tooltip>
@@ -112,18 +112,6 @@
                 </button>
             </div>
         </div>
-
-        <modal v-if="confirmDeleteSquad" @close="confirmDeleteSquad = null" narrower>
-            <template #header><h3>Are you sure you want to delete this squad?</h3></template>
-            <template #body>
-                <div>
-                    This will remove this squad and all its assigned teams from this zone. <strong>This cannot be undone</strong>. Continue?
-                </div>
-            </template>
-            <template #footer>
-                <button class="btn btn-danger" @click="deleteSquad(squads[confirmDeleteSquad])">Delete it</button>
-            </template>
-        </modal>
     </div>
 </template>
 
@@ -146,8 +134,6 @@ export default {
             selectedMember: {},
             dragTarget: null,
             dropOK: false,
-            addMultiple: null,
-            confirmDeleteSquad: null,
         };
     },
     methods: {
@@ -161,7 +147,6 @@ export default {
         },
         deleteSquad(squad) {
             this.$emit('remove-squad', this.zone, squad.id);
-            this.confirmDeleteSquad = null;
         },
         deleteMember(squad, member) {
             this.$emit('remove-member', this.zone, squad.id, member);
@@ -197,7 +182,7 @@ export default {
             return this.memberFor(ally_code).player;
         },
 
-        withPopper (dropdownList, component, {width},) {
+        withPopper(dropdownList, component, {width},) {
             dropdownList.style.width = width;
             createPopper(component.$refs.toggle, dropdownList, {
                 placement: 'top',
@@ -217,7 +202,6 @@ export default {
                 }]
             });
         },
-
 
         onDragOver(squadID, evt) {
             this.dragTarget = squadID;
@@ -273,8 +257,11 @@ export default {
     }
 }
 
-.zone-member-wrapper table:first-of-type, .add-member {
-    margin-top: 4px;
+.zone-member-wrapper {
+    overflow-x: visible !important;
+    table:first-of-type, .add-member {
+        margin-top: 4px;
+    }
 }
 
 .targetable {
@@ -293,20 +280,20 @@ export default {
 .name-wrapper, .squad-wrapper {
     position: relative;
 
-    > button {
+    > button.btn-danger {
         position: absolute;
-        right: 0;
-        top: calc(50% - (26px / 2));
+        left: -2px;
+        top: -2px;
         opacity: 0;
         transition: opacity 300ms ease-out;
-    }
-
-    &.squad-wrapper > button {
-        top: 0;
+        background: white;
+        border-radius: 50%;
+        padding: 0px;
+        box-shadow: 0px 0px 2px black;
     }
 
     &:hover {
-        > button {
+        > button.btn-danger {
             opacity: 1;
         }
     }
