@@ -18,6 +18,10 @@
             min-height: 23px;
         }
     }
+
+    > .btn-icon {
+        padding: 9px;
+    }
 }
 
 .v-select input::placeholder {
@@ -122,15 +126,24 @@ popover {
     }
 }
 
-.btn.btn-primary.inverted {
+.btn.inverted {
     outline: none;
     box-shadow: none;
-    color: $primary;
     background: none;
     border: 0;
 
-    &:hover {
-        color: #03688f;
+    &.btn-primary {
+        color: $primary;
+        &:hover {
+            color: #03688f;
+        }
+    }
+
+    &.btn-danger {
+        color: #dc3545;
+        &:hover {
+            color: #c82333;
+        }
     }
 }
 

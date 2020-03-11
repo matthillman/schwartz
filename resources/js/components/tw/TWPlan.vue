@@ -31,7 +31,7 @@
                     <!-- <button class="btn btn-primary overview-button" @click="currentZone = 0">Overview</button> -->
                 </div>
 
-                <page-view :first-page="1" :last-page="10" :current-page="currentZone">
+                <page-view :first-page="1" :last-page="10" :current-page="currentZone" ref="pageContainer">
                     <template #page="{ page }">
                         <div class="card-header">
                             <div v-if="page > 0" class="row no-margin justify-content-between align-items-baseline">
@@ -48,6 +48,7 @@
                             :squads="squads"
                             :units="units"
                             :members="ourMembers"
+                            :drag-mode="!!draggingMember"
                             @add-squad="addSquad"
                             @remove-squad="deleteSquad"
                             @add-member="addMember"
@@ -117,10 +118,18 @@
                             <div>Member</div>
                             <div>Banners</div>
                         </div>
-                        <div class="row justify-content-between" v-for="member in ourMembers" :key="member.bannerKey">
+                        <a :href="`/twp/${plan.id}/${member.ally_code}`"
+                            class="row justify-content-between"
+                            :class="{ dragging: draggingMember == member.ally_code }"
+                            v-for="member in ourMembers"
+                            :key="member.bannerKey"
+                            draggable="true"
+                            @dragstart.self="onDragStart(member, $event)"
+                            @dragend.self="onDragEnd"
+                        >
                             <div>{{ member.player }}</div>
                             <div>{{ member.bannerCount }}</div>
-                        </div>
+                        </a>
                     </div>
                 </div>
 
@@ -139,12 +148,14 @@ export default {
     },
     mounted() {
         this.updateBannerCount();
+        this.updateMemberSquadCount();
     },
     data() {
         return {
             currentZone: 0,
             ourPlan: this.plan,
             ourMembers: this.members,
+            draggingMember: null,
         };
     },
     methods: {
@@ -156,6 +167,21 @@ export default {
             return (this.units[char] || { alignment: 'neutral' }).alignment;
         },
 
+        updateMemberSquadCount() {
+            for (const index of [...Array(10).keys()]) {
+                const zone = index + 1;
+                const p = this.getPlanForZone(zone);
+                for (const squadID in p) {
+                    const members = p[squadID];
+                    for (const ally_code of members) {
+                        const member = this.ourMembers.find(m => m.ally_code == ally_code);
+                        const memberSquads = member.usedSquads || new Set;
+                        memberSquads.add(this.squads[squadID].leader_id);
+                        member.usedSquads = memberSquads;
+                    }
+                }
+            }
+        },
         updateBannerCount() {
             for (const member of this.ourMembers) {
                 member.bannerCount = this.getBannerCount(member);
@@ -222,6 +248,17 @@ export default {
             this.saveData(zone);
         },
 
+        onDragStart(member, evt) {
+            evt.dataTransfer.effectAllowed = 'move';
+            evt.dataTransfer.setData('text/plain', member.ally_code);
+            evt.dataTransfer.setData(`ally:${member.ally_code}`, '');
+            this.draggingMember = member.ally_code;
+            setTimeout(() => this.$refs.pageContainer.$el.scrollIntoView(true), 100);
+        },
+        onDragEnd() {
+            this.draggingMember = null;
+        },
+
         async saveData(zone) {
             try {
                 await axios.put(`/twp/${this.ourPlan.id}/${zone}`, {
@@ -230,6 +267,7 @@ export default {
                 });
 
                 this.updateBannerCount();
+                this.updateMemberSquadCount();
             } catch (error) {
                 console.error(error);
             }
@@ -246,10 +284,19 @@ export default {
 .overview-button {
     margin: 8px 0;
 }
+.dragging {
+    transform: scale(0.9);
+    opacity: 0.6;
+}
 </style>
 
 <style lang="scss">
 .extra-units {
     padding: 2px;
+}
+
+.dragging .page-wrapper {
+    position: sticky;
+    top: 8px;
 }
 </style>

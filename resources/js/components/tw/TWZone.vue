@@ -1,10 +1,10 @@
 <template>
     <div class="card-body">
-        <div>
+        <div v-show-slide="!dragMode">
             <div class="small-note">Notes:</div>
             <div class="notes-field" contenteditable @blur="updateNotes">{{ notes }}</div>
         </div>
-        <div class="form-group row no-margin align-items-start">
+        <div v-show-slide="!dragMode" class="form-group row no-margin align-items-start">
             <v-select
                 class="grow"
                 :options="availableSquads()"
@@ -23,17 +23,32 @@
             <button class="btn btn-primary" @click="addSquad">Add to Zone</button>
         </div>
 
-        <div v-for="(zoneMembers, squadID) in zoneData" :key="squadID">
-            <mini-squad-table :squad="squads[squadID]" :units="units"></mini-squad-table>
+        <div v-for="(zoneMembers, squadID) in zoneData" :key="squadID"
+            class="drop-target"
+            :class="{ over: dragTarget == squadID, targetable: dragMode, 'not-dropable': !dropOK }"
+            @dragover.prevent="onDragOver(squadID, $event)"
+            @dragenter="onDragEnter(squadID, $event)"
+            @dragleave.self="onDragLeave"
+            @drop.prevent.stop="onDrop(squadID, $event)"
+            @dragend="onDragLeave"
+        >
+            <div class="squad-wrapper">
+                <mini-squad-table :squad="squads[squadID]" :units="units"></mini-squad-table>
+                <button class="btn btn-danger btn-icon inverted" @click="confirmDeleteSquad = squadID"><ion-icon name="remove-circle" size="small"></ion-icon></button>
+            </div>
 
-            <div class="zone-member-wrapper" v-for="ally_code of zoneMembers" :key="ally_code">
-                <table class="squad-table micro">
+            <div v-show-slide="!dragMode" class="zone-member-wrapper">
+                <table v-for="ally_code of zoneMembers" :key="ally_code" class="squad-table micro">
                     <tbody>
                         <tr class="squad-row player-info">
                             <td>
-                                <div class="column">
-                                    <div>{{ nameForMember(ally_code) }}</div>
-                                    <div class="small-note">Power: {{ [squads[squadID].leader_id, ...squads[squadID].additional_members].map(c => charForMember(ally_code, c)).reduce((p, c) => p + c.power, 0).toLocaleString() }}</div>
+                                <div class="name-wrapper">
+                                    <div class="column">
+                                        <div>{{ nameForMember(ally_code) }}</div>
+                                        <div class="small-note">Power: {{ [squads[squadID].leader_id, ...squads[squadID].additional_members].map(c => charForMember(ally_code, c)).reduce((p, c) => p + c.power, 0).toLocaleString() }}</div>
+                                    </div>
+
+                                    <button class="btn btn-danger btn-icon inverted" @click="deleteMember(squads[squadID], memberFor(ally_code))"><ion-icon name="remove-circle" size="small"></ion-icon></button>
                                 </div>
                             </td>
                             <td v-for="base_id in [squads[squadID].leader_id, ...squads[squadID].additional_members.slice(0, 4)]" :key="base_id">
@@ -74,7 +89,7 @@
                 </table>
             </div>
 
-            <div class="form-group row no-margin align-items-start add-member">
+            <div v-show-slide="!dragMode" class="form-group row no-margin align-items-start add-member">
                 <v-select
                     class="grow"
                     :options="availableMembers(squadID)"
@@ -83,11 +98,32 @@
                     :label="'player'"
                     append-to-body
                     :calculate-position="withPopper"
+                    :selectable="member => memberAvailable(member, squadID)"
                 >
                 </v-select>
                 <button class="btn btn-primary" @click="addMember(squadID)">Add</button>
+                <button class="btn btn-secondary btn-icon" @click="addMultiple = squadID">
+                    <tooltip>
+                        <ion-icon name="duplicate" size="small"></ion-icon>
+                        <template #tooltip>
+                            Add multiple members
+                        </template>
+                    </tooltip>
+                </button>
             </div>
         </div>
+
+        <modal v-if="confirmDeleteSquad" @close="confirmDeleteSquad = null" narrower>
+            <template #header><h3>Are you sure you want to delete this squad?</h3></template>
+            <template #body>
+                <div>
+                    This will remove this squad and all its assigned teams from this zone. <strong>This cannot be undone</strong>. Continue?
+                </div>
+            </template>
+            <template #footer>
+                <button class="btn btn-danger" @click="deleteSquad(squads[confirmDeleteSquad])">Delete it</button>
+            </template>
+        </modal>
     </div>
 </template>
 
@@ -102,11 +138,16 @@ export default {
         squads: Object,
         units: Object,
         members: Array,
+        dragMode: Boolean,
     },
     data() {
         return {
             selectedSquad: null,
             selectedMember: {},
+            dragTarget: null,
+            dropOK: false,
+            addMultiple: null,
+            confirmDeleteSquad: null,
         };
     },
     methods: {
@@ -120,6 +161,7 @@ export default {
         },
         deleteSquad(squad) {
             this.$emit('remove-squad', this.zone, squad.id);
+            this.confirmDeleteSquad = null;
         },
         deleteMember(squad, member) {
             this.$emit('remove-member', this.zone, squad.id, member);
@@ -136,7 +178,12 @@ export default {
             ;
         },
         availableMembers(squadID) {
-            return this.members.filter(m => !this.zoneData[squadID].includes(m.ally_code));
+            return this.members
+                .filter(m => !this.zoneData[squadID].includes(m.ally_code));
+        },
+        memberAvailable(member, squadID) {
+            return !this.zoneData[squadID].includes(member.ally_code)
+            && (!member.usedSquads || !member.usedSquads.has(this.squads[squadID].leader_id));
         },
         memberFor(ally_code) {
             return this.members.find(m => m.ally_code == ally_code) || { player: "BOB" };
@@ -169,7 +216,40 @@ export default {
                     },
                 }]
             });
-        }
+        },
+
+
+        onDragOver(squadID, evt) {
+            this.dragTarget = squadID;
+        },
+        onDragEnter(squadID, evt) {
+            this.dragTarget = squadID;
+
+            const packedCode = evt.dataTransfer.types.find(t => t.startsWith('ally:'));
+
+            if (packedCode) {
+                const ally_code = packedCode.split(':')[1];
+                const member = this.memberFor(ally_code);
+                this.dropOK = this.memberAvailable(member, squadID);
+            }
+
+        },
+        onDragLeave() {
+            this.dragTarget = null;
+            this.dropOK = false;
+        },
+        onDrop(squadID, evt) {
+            const ally_code = evt.dataTransfer.getData('text/plain');
+            const member = this.memberFor(ally_code);
+
+            if (this.memberAvailable(member, squadID)) {
+                this.selectedMember[squadID] = member;
+                this.addMember(squadID);
+            }
+
+            this.dragTarget = null;
+            this.dropOK = false;
+        },
     },
 }
 </script>
@@ -184,8 +264,60 @@ export default {
     }
 }
 
-.zone-member-wrapper:first-of-type, .add-member {
+.card-body {
+    padding: 15px 0;
+
+    > * {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+.zone-member-wrapper table:first-of-type, .add-member {
     margin-top: 4px;
+}
+
+.targetable {
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.over.targetable {
+    background: $sw-yellow;
+    &.not-dropable {
+        background: $red;
+        cursor: not-allowed;
+    }
+}
+
+.name-wrapper, .squad-wrapper {
+    position: relative;
+
+    > button {
+        position: absolute;
+        right: 0;
+        top: calc(50% - (26px / 2));
+        opacity: 0;
+        transition: opacity 300ms ease-out;
+    }
+
+    &.squad-wrapper > button {
+        top: 0;
+    }
+
+    &:hover {
+        > button {
+            opacity: 1;
+        }
+    }
+}
+
+.card-body {
+    position: relative;
+}
+
+.modal-mask {
+    position: absolute;
 }
 </style>
 

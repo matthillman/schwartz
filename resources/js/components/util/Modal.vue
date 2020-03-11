@@ -2,7 +2,7 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container" :class="{wider: this.wider}">
+        <div class="modal-container" :class="{wider, narrower}">
 
           <div class="modal-header">
             <slot name="header">
@@ -35,6 +35,7 @@ export default {
       default: false
     },
     wider: Boolean,
+    narrower: Boolean,
   },
 }
 </script>
@@ -68,6 +69,9 @@ export default {
 
   &.wider {
     width: 750px;
+  }
+  &.narrower {
+    width: 410px;
   }
 }
 

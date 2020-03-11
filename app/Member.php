@@ -69,6 +69,10 @@ class Member extends Model
         return $this->hasOne(AllyCodeMap::class, 'ally_code', 'ally_code');
     }
 
+    public function user() {
+        return $this->hasOneThrough(User::class, AllyCodeMap::class, 'ally_code', 'discord_id', 'ally_code', 'discord_id');
+    }
+
     public function characters() {
         return $this->hasMany(Character::class);
     }

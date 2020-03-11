@@ -546,6 +546,22 @@ $base: 80px;
         }
     }
 
+    a.row {
+        color: $white;
+
+        &:hover {
+            text-decoration: none;
+
+            &:nth-child(odd) {
+                background: scale-color($color: $light-navy, $lightness: 15%);
+            }
+
+            &:nth-child(even) {
+                background-color: scale-color($color: $dark-navy, $lightness: 15%);;
+            }
+        }
+    }
+
     > :not(.row) + * > .stat-header {
         margin-top: 4px;
     }
