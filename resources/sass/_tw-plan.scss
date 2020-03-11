@@ -82,7 +82,7 @@
             text-shadow: 1px 1px 0 black;
         }
 
-        &:hover, &.active {
+        &:hover, &.active, &.member-highlight {
             border-color: $sw-yellow;
         }
     }

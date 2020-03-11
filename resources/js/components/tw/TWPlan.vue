@@ -18,10 +18,17 @@
                                 @click="currentZone = zone"
                             >
                                 <img :src="`/images/tw/defense-zone-${zone}.png`">
-                                <div class="zone-content-wrapper" :class="{active: currentZone == zone}">
+                                <div class="zone-content-wrapper" :class="{active: currentZone == zone, 'member-highlight': hasTeaminZone(zone, highlightMember) }">
                                     <div class="column justify-content-center align-items-center">
                                         <h1>{{ zone }}</h1>
                                         <div>{{ getTeamsInZone(zone) }} {{ getTeamsInZone(zone) == 1 ? 'team' : 'teams' }}</div>
+                                        <div class="row no-margin justify-content-center align-items-start">
+                                            <div class="column char-image-column" v-for="(members, squadID) in getPlanForZone(zone)" :key="squadID">
+                                                <div class="char-image-square small" :class="[units[squads[squadID].leader_id].alignment]">
+                                                    <img :src="`/images/units/${squads[squadID].leader_id}.png`">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +92,7 @@
                             <div>Member</div>
                             <div>Banners</div>
                         </div>
-                        <a :href="`/twp/${plan.id}/${member.ally_code}`"
+                        <a :href="`/twp/${plan.id}/member/${member.ally_code}`"
                             class="row justify-content-between"
                             :class="{ dragging: draggingMember == member.ally_code }"
                             v-for="member in ourMembers"
@@ -93,6 +100,8 @@
                             draggable="true"
                             @dragstart.self="onDragStart(member, $event)"
                             @dragend.self="onDragEnd"
+                            @mouseenter="overMember(member)"
+                            @mouseleave="leaveMember(member)"
                         >
                             <div>{{ member.player }}</div>
                             <div>{{ member.bannerCount }}</div>
@@ -158,6 +167,7 @@ export default {
             addMultipleZone: null,
             potentialAddMembers: [],
             confirmDeleteSquad: null,
+            highlightMember: null,
         };
     },
     methods: {
@@ -219,6 +229,9 @@ export default {
         },
         getTeamsInZone(zone) {
             return Object.values(this.getPlanForZone(zone)).flat().length;
+        },
+        hasTeaminZone(zone, ally_code) {
+            return ally_code !== null && Object.values(this.getPlanForZone(zone)).flat().includes(ally_code);
         },
 
         addSquad(zone, squadID) {
@@ -289,6 +302,15 @@ export default {
         },
         onDragEnd() {
             this.draggingMember = null;
+        },
+
+        overMember(member) {
+            this.highlightMember = member.ally_code;
+        },
+        leaveMember(member) {
+            if (this.highlightMember == member.ally_code) {
+                this.highlightMember = null;
+            }
         },
 
         async saveData(zone) {
