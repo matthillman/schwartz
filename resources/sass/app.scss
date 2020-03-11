@@ -690,6 +690,12 @@ table.sortable {
   margin-top: 4px;
 }
 
+.column {
+  button + button {
+    margin-top: 4px;
+  }
+}
+
 .discord-select {
   .input-group-text {
     width: 260px;

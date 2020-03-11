@@ -33,10 +33,13 @@ class TerritoryWarPlanController extends Controller
 
         Gate::authorize('in-guild', $plan->guild->id);
 
+        $units = Unit::all()->sortBy('name')->values();
+
         return view('tw.plan', [
             'plan' => $plan,
+            'squads' => $plan->squad_group->squads->keyBy('id'),
             'unitIDs' => $plan->squad_group->squads->pluck('additional_members')->flatten()->merge($plan->squad_group->squads->pluck('leader_id'))->unique()->toArray(),
-            'units' => Unit::all()->sortBy('name')->values(),
+            'units' => $units,
         ]);
 
     }

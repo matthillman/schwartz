@@ -107,7 +107,8 @@ class SquadController extends Controller
 
         $squad->save();
 
-        return redirect()->route('squads', ['group' => $request->group])->with('status', "Squad added");
+
+        return back()->with('status', "Squad added");
     }
 
     public function delete($id) {
