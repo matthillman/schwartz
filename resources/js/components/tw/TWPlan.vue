@@ -4,7 +4,7 @@
             <div class="col-8">
                 <div class="row no-margin justify-content-between align-items-baseline">
                     <h2>Zone Config</h2>
-                    <button class="btn btn-secondary btn-image with-text">
+                    <button class="btn btn-secondary btn-image with-text" @click="showSendDialog">
                         <ion-icon name="send" size="small"></ion-icon>
                         <span>Send Messages</span>
                     </button>
@@ -139,6 +139,39 @@
                 <button class="btn btn-danger" @click="deleteSquad(confirmDeleteSquad.z, confirmDeleteSquad.s)">Delete it</button>
             </template>
         </modal>
+
+        <modal v-if="sendMessages" @close="sendMessages = null">
+            <template #header><h3>Send Assignment Messages</h3></template>
+            <template #body>
+                <div>
+                    Send DMs to the following:
+                </div>
+                <div class="small-note">(Only showing members with assignments)</div>
+                <div class="small-note">(Will only acutally send DMs to accounts with mapped Discord Users)</div>
+                <div class="row no-margin justify-content-end">
+
+                    <button class="btn btn-primary btn-icon with-text inverted" @click="membersToMessage = members.filter(m => m.bannerCount).map(m => m.ally_code)">
+                        <ion-icon name="checkbox" size="small"></ion-icon>
+                        <span>Select All</span>
+                    </button>
+                    <button class="btn btn-primary btn-icon with-text inverted" @click="membersToMessage = []">
+                        <ion-icon name="square" size="small"></ion-icon>
+                        <span>Select None</span>
+                    </button>
+                </div>
+                <div class="checkbox-list-wrapper">
+                    <div v-for="member in members.filter(m => m.bannerCount)" :key="member.ally_code">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" v-model="membersToMessage" :value="member.ally_code" :id="`message-${member.ally_code}`">
+                            <label class="form-check-label" :for="`message-${member.ally_code}`">{{ member.player }}</label>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template #footer>
+                <button class="btn btn-primary" @click="sendDMs">Send DMs</button>
+            </template>
+        </modal>
     </div>
 </template>
 
@@ -168,6 +201,8 @@ export default {
             potentialAddMembers: [],
             confirmDeleteSquad: null,
             highlightMember: null,
+            sendMessages: null,
+            membersToMessage: [],
         };
     },
     methods: {
@@ -313,6 +348,24 @@ export default {
             }
         },
 
+        showSendDialog() {
+            this.membersToMessage = this.members.filter(m => m.bannerCount).map(m => m.ally_code);
+            this.sendMessages = true;
+        },
+        async sendDMs() {
+            console.warn(this.membersToMessage);
+            try {
+                await axios.post(`/twp/${this.ourPlan.id}/dm`, {
+                    members: this.membersToMessage.join(','),
+                });
+                alert("DMs queued to be sent");
+                this.sendMessages = null;
+                this.membersToMessage = [];
+            } catch (error) {
+                console.error(error);
+            }
+        },
+
         async saveData(zone) {
             try {
                 await axios.put(`/twp/${this.ourPlan.id}/${zone}`, {
@@ -352,5 +405,27 @@ export default {
 .dragging .page-wrapper {
     position: sticky;
     top: 8px;
+}
+
+.checkbox-list-wrapper {
+    height: calc(100% - 20px);
+    max-height: 280px;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+
+    > div {
+        scroll-snap-align: start;
+        position: relative;
+        background: #f8f9fa;
+        padding: 4px;
+        border-radius: 8px;
+        margin-bottom: 4px;
+        cursor: pointer;
+
+        label {
+            cursor: pointer;
+            width: 100%;
+        }
+    }
 }
 </style>

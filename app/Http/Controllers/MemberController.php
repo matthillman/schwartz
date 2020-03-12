@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Gate;
 use App\Unit;
 use App\Member;
 use App\Category;
@@ -45,6 +46,21 @@ class MemberController extends Controller
             'member' => $member,
             'units' => Unit::all(),
         ]);
+    }
+
+    public function updateDiscordMapping(Request $request, $allyCode) {
+        $validated = $request->validate([
+            'value' => 'required',
+        ]);
+
+        $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
+
+        Gate::authorize('edit-guild-profile', $member->guild);
+
+        $member->discord->discord_id = $validated['value'];
+        $member->push();
+
+        return response()->json(['success' => true]);
     }
 
     public function characters(Request $request, $allyCode) {

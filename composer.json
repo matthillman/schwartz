@@ -26,6 +26,7 @@
         "laravel/tinker": "^2.1",
         "matthillman/swgoh-help": "dev-master",
         "myclabs/php-enum": "^1.6",
+        "nesk/puphpeteer": "^1.6",
         "predis/predis": "^1.1",
         "salsify/json-streaming-parser": "^7.0",
         "spatie/flysystem-dropbox": "^1.0"

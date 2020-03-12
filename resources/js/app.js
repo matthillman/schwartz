@@ -61,6 +61,7 @@ Vue.component('unit-select', require('./components/util/UnitSelect.vue').default
 Vue.component('tab-list', require('./components/util/TabList.vue').default);
 Vue.component('auto-checkbox', require('./components/util/AutoCheckbox.vue').default);
 Vue.component('auto-text-field', require('./components/util/AutoTextField.vue').default);
+Vue.component('auto-select', require('./components/util/AutoSelect.vue').default);
 Vue.component('tooltip', require('./components/util/Tooltip.vue').default);
 
 Vue.component('mini-squad-table', require('./components/MiniSquadTable.vue').default);

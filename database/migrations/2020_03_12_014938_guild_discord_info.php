@@ -21,6 +21,7 @@ class GuildDiscordInfo extends Migration
         Schema::table('discord_roles', function (Blueprint $table) {
             $table->string('username')->nullable();
             $table->string('discriminator')->nullable();
+            $table->string('discord_private_channel_id')->nullable();
         });
     }
 

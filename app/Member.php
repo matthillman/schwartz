@@ -66,7 +66,11 @@ class Member extends Model
     ];
 
     public function discord() {
-        return $this->hasOne(AllyCodeMap::class, 'ally_code', 'ally_code');
+        return $this->hasOne(AllyCodeMap::class, 'ally_code', 'ally_code')->withDefault();
+    }
+
+    public function roles() {
+        return $this->hasOneThrough(DiscordRole::class, AllyCodeMap::class, 'ally_code', 'discord_id', 'ally_code', 'discord_id')->withDefault();
     }
 
     public function user() {

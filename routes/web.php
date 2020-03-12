@@ -66,6 +66,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::post('/members/compare', 'MemberController@compare')->name('members.post.compare');
     Route::put('/member/{id}/refresh', 'MemberController@scrapeMember')->name('member.scrape');
     Route::post('/member/add', 'MemberController@addMember')->name('member.add');
+    Route::put('/member/{ally}', 'MemberController@updateDiscordMapping')->name('member.update.discord');
 
     Route::post('/guilds', 'GuildController@addGuild')->name('guild.add');
     Route::post('/guild/compare', 'GuildController@postGuildCompare')->name('guild.post.compare');
@@ -99,7 +100,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::post('/twp/squad/{squadID}', 'TerritoryWarPlanController@createFrom')->name('tw-plan.create.from-group');
     Route::get('/twp/{plan}', 'TerritoryWarPlanController@show')->name('tw-plan.edit');
     Route::put('/twp/{plan}/{zone}', 'TerritoryWarPlanController@saveZone')->name('tw-plan.zone.save');
-    Route::get('/twp/{plan}/member/{ally_code}', 'TerritoryWarPlanController@showAssignment')->name('tw-plan.member.assignment');
+    Route::post('/twp/{plan}/dm', 'TerritoryWarPlanController@sendDMs')->name('tw-plan.send-dms');
 });
 
 Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
@@ -117,6 +118,7 @@ Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
     Route::get('/unit-search', 'SearchController@searchUnits')->name('search.units');
     Route::get('/category-search', 'SearchController@searchCategories')->name('search.categories');
     Route::get('/member-unit-search/{ally}', 'SearchController@searchMemberUnits')->name('search.member.units');
+    Route::get('/twp/{plan}/member/{ally_code}', 'TerritoryWarPlanController@showAssignment')->name('tw-plan.member.assignment');
 });
 
 Route::get('/schwartz_list', 'GuildController@schwartzGuildsImportList')->name('schwartz.import');

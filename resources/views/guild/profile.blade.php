@@ -39,10 +39,9 @@
                     <div class="small-note">Defeine the ID of the discord server where your guild roles are defined. These roles are used to authorize other guild-related actions.</div>
 
                     <auto-text-field :route="`{{ route('guild.profile.update', ['guild' => $guild->id, 'prop' => 'server_id']) }}`" :label="`Server ID`" :value="`{{ $guild->server_id }}`"></auto-text-field>
-
                     <auto-text-field :route="`{{ route('guild.profile.update', ['guild' => $guild->id, 'prop' => 'admin_channel']) }}`" :label="`Admin Channel ID`" :value="`{{ $guild->admin_channel }}`"></auto-text-field>
-                    <auto-text-field :route="`{{ route('guild.profile.update', ['guild' => $guild->id, 'prop' => 'officer_role_regex']) }}`" :label="`Officer Role Query`" :value="`{{ $guild->officer_role_regex }}`"></auto-text-field>
-                    <auto-text-field :route="`{{ route('guild.profile.update', ['guild' => $guild->id, 'prop' => 'member_role_regex']) }}`" :label="`Member Role Query`" :value="`{{ $guild->member_role_regex }}`"></auto-text-field>
+                    <auto-text-field :route="`{{ route('guild.profile.update', ['guild' => $guild->id, 'prop' => 'officer_role_regex']) }}`" :label="`Officer Role Query (case insensitive)`" :value="`{{ $guild->officer_role_regex }}`"></auto-text-field>
+                    <auto-text-field :route="`{{ route('guild.profile.update', ['guild' => $guild->id, 'prop' => 'member_role_regex']) }}`" :label="`Member Role Query (case insensitive)`" :value="`{{ $guild->member_role_regex }}`"></auto-text-field>
 
                     <collapsable start-open>
                         <template #top-trigger="{ open }">
@@ -54,10 +53,19 @@
                         </template>
                         @foreach ($guild->members->sortBy('player') as $member)
                         <div class="input-group discord-select row no-margin">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">{{ $member->player }} ({{ $member->ally_code }})</span>
-                            </div>
-                            <v-select :options="{{ $guild->discordMemberOptions()->sortBy('label')->values()->toJson() }}" :placeholder="`Pick Discord User`"></v-select>
+                            <auto-select
+                                :route="`{{ route('member.update.discord', ['ally' => $member->ally_code]) }}`"
+                                :options="{{ $guild->discordMemberOptions()->sortBy('label')->values()->toJson() }}"
+                                @if ($member->discord->discord_id)
+                                :value="`{{ $member->discord->discord_id }}`"
+                                @endif
+                                :clearable="false"
+                                placeholder="Select Discord ID"
+                            >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">{{ $member->player }} ({{ $member->ally_code }})</span>
+                                </div>
+                            </auto-select>
                         </div>
                         @endforeach
                     </collapsable>

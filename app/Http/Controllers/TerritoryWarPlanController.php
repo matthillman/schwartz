@@ -47,7 +47,9 @@ class TerritoryWarPlanController extends Controller
     public function showAssignment(Request $request, $id, $allyCode) {
         $plan = TerritoryWarPlan::with('guild.members')->findOrFail($id);
 
-        Gate::authorize('in-guild', $plan->guild->id);
+        if (auth()->user()) {
+            Gate::authorize('in-guild', $plan->guild->id);
+        }
 
         $unitIDs = $plan->squad_group->squads->pluck('additional_members')->flatten()->merge($plan->squad_group->squads->pluck('leader_id'))->unique();
 
@@ -68,6 +70,39 @@ class TerritoryWarPlanController extends Controller
         $plan->{"zone_{$zone}_notes"} = $request->get('notes') ?: '';
 
         $plan->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function sendDMs(Request $request, $plan) {
+        $plan = TerritoryWarPlan::findOrFail($plan);
+        Gate::authorize('edit-guild', $plan->guild->id);
+
+        $members = collect(explode(',', $request->get('members')))
+            ->map(function($ally) {
+                return Member::with('roles')->where(['ally_code' => str_replace('-', '', $ally)])->firstOrFail();
+            })
+            ->map(function($member) {
+                return [
+                    'ally_code' => $member->ally_code,
+                    'id' => $member->roles->discord_id,
+                ];
+            })
+            ->filter(function($data) {
+                return !is_null($data['id']);
+            })
+        ;
+
+        if ($members->count() == 0) {
+            return http_500("No members to DM");
+        }
+
+        broadcast(new \App\Events\BotCommand([
+            'command' => 'send-dms',
+            'members' => $members->all(),
+            'url' => "twp/{$plan->id}/member",
+            'message' => 'Here are your defensive assignments for this TW! Please ask if you have any questions!'
+        ]));
 
         return response()->json(['success' => true]);
     }

@@ -156,6 +156,15 @@ popover {
   }
 }
 
+.btn-image.with-text {
+    display: flex;
+    align-items: center;
+
+    > :first-child {
+        margin-right: 4px;
+    }
+}
+
 ion-icon {
     &[size="micro"] {
         font-size: 15px;
