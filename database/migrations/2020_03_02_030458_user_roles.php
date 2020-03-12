@@ -17,7 +17,7 @@ class UserRoles extends Migration
             $table->bigIncrements('id');
             $table->string('discord_id');
             $table->unique('discord_id');
-            $table->json('roles')->default('[]');
+            $table->jsonb('roles')->default('[]');
             $table->timestamps();
         });
         Schema::table('guilds', function (Blueprint $table) {

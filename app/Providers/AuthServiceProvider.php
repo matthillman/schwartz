@@ -93,7 +93,7 @@ class AuthServiceProvider extends ServiceProvider
                     if (!$account->guild || $account->guild->id != $guild->id) { return false; }
                     if (is_null($account->guild->server_id)) { return false; }
                     return collect($user->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) use ($account) {
-                        return preg_match($account->guild->officer_role_regex, $role['name']);
+                        return preg_match("/{$account->guild->officer_role_regex}/i", $role['name']);
                     });
                 });
         });

@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class GuildController extends Controller
 {
     use Util\Squads;
+    use Util\UpdatesRoles;
 
     public function listGuilds() {
         return view('guilds', [
@@ -49,10 +50,20 @@ class GuildController extends Controller
         $guild = Guild::findOrFail($guildID);
         Gate::authorize('edit-guild-profile', $guild);
 
-        $guild->server_id = $validated['value'];
+        $prop = $request->get('prop');
+
+        if (!in_array($prop, ['server_id', 'admin_channel', 'officer_role_regex', 'member_role_regex'])) {
+            http_403("Bad prop");
+        }
+
+        $guild->$prop = $validated['value'];
         $guild->save();
 
         return response()->json(['success' => true]);
+    }
+
+    public function updateMembersFromRoles() {
+        return $this->updateMemberList();
     }
 
     public function postGuildCompare(Request $request) {

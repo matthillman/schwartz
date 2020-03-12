@@ -50,8 +50,30 @@ class Guild extends Model
         return $this->hasMany(Member::class);
     }
 
-    public function getOfficerRoleRegexAttribute() {
-        return '/^officer/i';
+    public function getOfficerRoleRegexAttribute($value) {
+        if (testRegex($value)) {
+            return $value;
+        }
+        return '^officer';
+    }
+
+    public function getMemberRoleRegexAttribute($value) {
+        if (testRegex($value)) {
+            return $value;
+        }
+        return '^member';
+    }
+
+    public function getDiscordMembersAttribute() {
+        return collect(DB::select("select discord_id, username, discriminator, d_roles.name as role_name
+            from discord_roles, jsonb_to_recordset(discord_roles.roles->?->'roles') as d_roles(name text)
+            where d_roles.name ~* ?", [$this->server_id, $this->member_role_regex]));
+    }
+
+    public function discordMemberOptions() {
+        return $this->discord_members->map(function ($m) {
+            return ['value' => $m->discord_id, 'label' => "{$m->username}#{$m->discriminator}"];
+        });
     }
 
     public static function getCompareData($guild1, $guild2) {
@@ -119,4 +141,20 @@ class Guild extends Model
             ->whereIn('guilds.guild_id', [$this->guild_id])
             ->get();
     }
+}
+
+function testRegex($regex) {
+    if (is_null($regex) || strpos($regex, chr(0x00)) !== false || ! trim($regex)) {
+        return false;
+    }
+
+    $backtrack_limit = ini_set('pcre.backtrack_limit', 200);
+    $recursion_limit = ini_set('pcre.recursion_limit', 20);
+
+    $valid = @preg_match("~$regex~u", null) !== false;
+
+    ini_set('pcre.backtrack_limit', $backtrack_limit);
+    ini_set('pcre.recursion_limit', $recursion_limit);
+
+    return $valid;
 }

@@ -1,5 +1,5 @@
 <template>
-    <label class="row no-margin align-items-end input-gropu form-group">
+    <label class="row no-margin align-items-end input-group form-group">
         <div class="column">
             <span class="small-note">{{ label }}</span>
             <input type="text" class="form-control" size="30" v-model="textValue">

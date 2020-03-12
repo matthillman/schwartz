@@ -80,6 +80,8 @@ class APIController extends Controller
 
         foreach ($members as $member) {
             $mapping = DiscordRole::firstOrNew(['discord_id' => $member['id']]);
+            $mapping->username = $member['username'];
+            $mapping->discriminator = $member['discriminator'];
             $currentRoles = $mapping->roles;
             $currentRoles[$member['guild']] = $member;
             $mapping->roles = $currentRoles;

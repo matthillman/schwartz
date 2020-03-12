@@ -18,7 +18,7 @@ class SquadController extends Controller
             ->filter(function($account) {
                 if (!$account->guild  || is_null($account->guild->server_id)) { return false; }
                 return collect(auth()->user()->discord_roles->roles[$account->guild->server_id]['roles'])->first(function($role) use ($account) {
-                    return preg_match($account->guild->officer_role_regex, $role['name']);
+                    return preg_match("/{$account->guild->officer_role_regex}/i", $role['name']);
                 });
             })
             ->map(function ($a) { return ['label' => $a->guild_name, 'value' => $a->guild->id ]; })
@@ -86,7 +86,7 @@ class SquadController extends Controller
 
         return view('squads.list', [
             'groups' => $tabs,
-            'squad' => $group,
+            'group' => $group,
             'ships' => $ships,
             'chars' => $chars,
             'units' => $units,

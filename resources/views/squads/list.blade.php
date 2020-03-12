@@ -12,18 +12,18 @@
                 <squad-tabs
                     :groups="{{ $groups->toJson() }}"
                     :guilds="{{ $guilds->toJson() }}"
-                    :selected="{{ $squad->id }}"
+                    :selected="{{ $group->id }}"
                 ></squad-tabs>
 
                 <div class="card-header row justify-content-between align-items-baseline no-margin">
-                    <div class="column grow"><h4>{{ $squad->name }}</h4><div class="small-note"><strong>{{ $squad->guild_id === -1 ? "Personal" : ($squad->guild_id === 0 ? "Global" : "{$squad->guild->name}") }}</strong> Squad Group</div></div>
+                    <div class="column grow"><h4>{{ $group->name }}</h4><div class="small-note"><strong>{{ $group->guild_id === -1 ? "Personal" : ($group->guild_id === 0 ? "Global" : "{$group->guild->name}") }}</strong> Squad Group</div></div>
 
                     <div class="column">
-                        @if ($squad->guild_id > 0)
-                        @can('edit-guild', $squad->guild_id)
+                        @if ($group->guild_id > 0)
+                        @can('edit-guild', $group->guild_id)
                         <convert-squad-to-plan
-                            :group="{{ $squad->toJson() }}"
-                            :plans="{{ $squad->plans->sortBy('name')->toJson() }}"
+                            :group="{{ $group->toJson() }}"
+                            :plans="{{ $group->plans->sortBy('name')->toJson() }}"
                         ></convert-squad-to-plan>
                         @endcan
                         @endif
@@ -36,7 +36,7 @@
                                 <ul>
                                 @foreach ($guilds->where('value', '>', 0) as $guild)
                                     <li>
-                                        <a href="{{ route('guild.members', ['guild' => $guild['value'], 'team' => $squad->id, 'mode' => 'guild', 'index' => 0]) }}">{{ $guild['label'] }}</a>
+                                        <a href="{{ route('guild.members', ['guild' => $guild['value'], 'team' => $group->id, 'mode' => 'guild', 'index' => 0]) }}">{{ $guild['label'] }}</a>
                                     </li>
                                 @endforeach
                                 </ul>
@@ -44,10 +44,10 @@
                         </popover>
                     </div>
 
-                    @if ($squad->guild_id >= 0)
-                    @can('edit-squad', $squad)
+                    @if ($group->guild_id >= 0)
+                    @can('edit-squad', $group)
                     <div class="column space-left">
-                        <auto-checkbox button :route="`{{ route('squads.group.publish', ['group' => $squad->id]) }}`" {{ $squad->publish ? 'checked ' : '' }}:label="`{{ $squad->guild_id !== 0 ? "Publish to Guild List" : "Publish Globally" }}`"></auto-checkbox>
+                        <auto-checkbox button :route="`{{ route('squads.group.publish', ['group' => $group->id]) }}`" {{ $group->publish ? 'checked ' : '' }}:label="`{{ $group->guild_id !== 0 ? "Publish to Guild List" : "Publish Globally" }}`"></auto-checkbox>
                     </div>
                     @endcan
                     @endif
@@ -66,7 +66,7 @@
                         <form method="POST" action="{{ route('squads.add') }}" >
                             @csrf
                             <input type="hidden" name="leader_id" value="" id="leader_id">
-                            <input type="hidden" name="group" value="{{ $squad->id }}">
+                            <input type="hidden" name="group" value="{{ $group->id }}">
                             <input type="hidden" name="other_members" value="" id="other_members">
 
                             <div class="row add-row input-group add-squad-row">
@@ -155,26 +155,33 @@
                         <h4>No squads configured</h4>
                     </div>
                 @else
-                <collapsable card-body>
-                    <form method="POST" :action="`/squads/message/${messageChannel}`">
-                        @method('PUT')
-                        @csrf
-                        <div class="row no-margin add-row input-group align-items-baseline">
-                            <input type="hidden" name="squads" :value="selectedSquadArray.join(',')">
-                            <label for="discord-channel">Discord Channel ID:</label>
-                            <input class="form-control" id="discord-channel" type="text" placeholder="Channel ID" v-model="messageChannel">
-                            <button type="submit" class="btn btn-primary">{{ __('Send Messages') }}</button>
-                        </div>
-                    </form>
 
-                    <template #top-trigger="{ open }">
-                        <button class="btn btn-primary btn-icon-text">
-                            <div class="row no-margin align-items-center">
-                                <ion-icon :name="open ? `chevron-down` : `chevron-forward`"></ion-icon> <span>Send add messages for checked squads</span>
+                 @if($group->guild_id == 0)
+                    <collapsable card-body>
+                    @endif
+                        <form method="POST" :action="`/squads/message/{{ $group->guild_id > 0 ? $group->guild->admin_channel : '${messageChannel}' }}`">
+                            @method('PUT')
+                            @csrf
+                            <div class="row no-margin add-row input-group align-items-baseline">
+                                <input type="hidden" name="squads" :value="selectedSquadArray.join(',')">
+                                @if($group->guild_id == 0)
+                                <label for="discord-channel">Discord Channel ID:</label>
+                                <input class="form-control" id="discord-channel" type="text" placeholder="Channel ID" v-model="messageChannel">
+                                @endif
+                                <button type="submit" :disabled="!selectedSquadArray.length" class="btn btn-primary">{{ $group->guild_id > 0 ? __('Send add messages for checked squads') : __('Send Messages') }}</button>
                             </div>
-                        </button>
-                    </template>
-                </collapsable>
+                        </form>
+
+                    @if($group->guild_id == 0)
+                        <template #top-trigger="{ open }">
+                            <button class="btn btn-primary btn-icon-text">
+                                <div class="row no-margin align-items-center">
+                                    <ion-icon :name="open ? `chevron-down` : `chevron-forward`"></ion-icon> <span>Send add messages for checked squads</span>
+                                </div>
+                            </button>
+                        </template>
+                    </collapsable>
+                    @endif
                 @endif
             </div>
         </div>

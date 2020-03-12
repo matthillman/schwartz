@@ -7,7 +7,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         Echo.private('permissions.{{ auth()->user()->id }}')
             .listen('.permissions.updated', data => {
-                window.location = '/home';
+                window.location = document.referrer || '/home';
             });
     })(window.Echo, window.Vue);
 });
