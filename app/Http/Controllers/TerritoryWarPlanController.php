@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Gate;
 use App\Unit;
 use App\Guild;
+use App\Member;
 use App\SquadGroup;
 use App\TerritoryWarPlan;
 
@@ -41,7 +42,21 @@ class TerritoryWarPlanController extends Controller
             'unitIDs' => $plan->squad_group->squads->pluck('additional_members')->flatten()->merge($plan->squad_group->squads->pluck('leader_id'))->unique()->toArray(),
             'units' => $units,
         ]);
+    }
 
+    public function showAssignment(Request $request, $id, $allyCode) {
+        $plan = TerritoryWarPlan::with('guild.members')->findOrFail($id);
+
+        Gate::authorize('in-guild', $plan->guild->id);
+
+        $unitIDs = $plan->squad_group->squads->pluck('additional_members')->flatten()->merge($plan->squad_group->squads->pluck('leader_id'))->unique();
+
+        return view('tw.assignments',[
+            'plan' => $plan,
+            'squads' => $plan->squad_group->squads->keyBy('id'),
+            'member' => Member::where('ally_code', $allyCode)->firstOrFail()->characterSet($unitIDs->all()),
+            'units' => Unit::whereIn('base_id', $unitIDs)->get()->keyBy('base_id'),
+        ]);
     }
 
     function saveZone(Request $request, $plan, $zone) {

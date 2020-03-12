@@ -1,6 +1,7 @@
+$zone-base-width: 1065px;
+$zone-base-height: 459px + 526px;
+
 .zone-wrapper {
-    $zone-base-width: 1065px;
-    $zone-base-height: 459px + 526px;
     $zone-target-width: 450px;
     $zone-target-height: $zone-base-height / $zone-base-width * $zone-target-width;
     $width-ratio: $zone-target-width / $zone-base-width;
@@ -84,6 +85,103 @@
 
         &:hover, &.active, &.member-highlight {
             border-color: $sw-yellow;
+        }
+    }
+}
+
+.content .container.tw-assignments {
+    width: 509px;
+
+    > .row + .row {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 3px solid $gray-400;
+    }
+
+    .zone-assignments {
+        padding-top: 0;
+        padding-bottom: 30px;
+
+        .row.header {
+            padding: 8px 0;
+            margin-bottom: 15px;
+            color: $white;
+            text-shadow: 0 1px 0 $black;
+
+            h1 {
+                margin: 0;
+            }
+        }
+    }
+
+    .squad-name {
+        color: $white;
+        text-shadow: 0 1px 0 $black;
+    }
+
+    .assignment-zone {
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+
+        > img {
+            width: 100%;
+        }
+    }
+
+    .zone-content-wrapper {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        color: $white;
+
+        > div {
+            height: 100%;
+            text-shadow: 1px 1px 0 black;
+        }
+    }
+
+    .notes-row {
+        .small-note {
+            background-color: $gray-300;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            padding: 4px;
+        }
+        .notes {
+            padding: 0 4px;
+            border: 1px solid $gray-300;
+            flex-grow: 1;
+        }
+    }
+
+    .col-md-8 {
+        padding-left: 0;
+    }
+
+    .team-wrapper {
+        border-radius: 8px;
+        padding: 8px 8px 4px;
+
+        .small-note {
+            color: $white;
+            text-shadow: 0 1px 0 $black;
+        }
+    }
+
+    .character-bg-wrapper {
+        padding: 2px;
+        margin: 0 4px 4px 0;
+        border-radius: 8px;
+
+        &.ship {
+            padding: 6px;
+        }
+
+        &:last-child {
+            margin-right: 0;
         }
     }
 }
