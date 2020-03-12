@@ -3,7 +3,7 @@
 @section('content')
 <div class="container home">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
 
             <div class="card">
                 <div class="card-header row justify-content-between align-items-center">
@@ -29,7 +29,7 @@
 
                     <div class="guild-list">
                         <div class="row top border-bottom">
-                            <div class="col-md-3">
+                            <div class="col-3">
                                 <div>Team</div>
                                 <div class="small-note">Aliases</div>
                             </div>
@@ -44,7 +44,7 @@
                         </div>
                     @foreach($teams as $team)
                         <div class="row top nowrap">
-                            <div class="col-md-3">
+                            <div class="col-3">
                                 <h4>{{ $team->name }}</h4>
                                 <div class="small-note">{{ $team->aliases }}</div>
                             </div>
@@ -59,7 +59,7 @@
                                 </ul>
                             </div>
                         @user('edit_tw')
-                            <div class="col-md-1">
+                            <div class="col-1">
                                 <form method="GET" action="{{ route('tw-teams.edit', ['team' => $team->id]) }}" >
                                     @csrf
                                     <button type="submit" class="btn btn-primary">{{ __('Edit') }}</button>

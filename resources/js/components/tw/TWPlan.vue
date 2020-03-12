@@ -1,7 +1,7 @@
 <template>
     <div class="card-body">
         <div class="row no-margin">
-            <div class="col-md-8">
+            <div class="col-8">
                 <div class="row no-margin justify-content-between align-items-baseline">
                     <h2>Zone Config</h2>
                     <button class="btn btn-secondary btn-image with-text">
@@ -70,7 +70,7 @@
                 </page-view>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-4">
                 <collapsable start-open>
                     <template #top-trigger="{ open }">
                         <div class="row no-margin align-items-start">

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container member-profile member-character">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card dark-back">
                 <div class="card-header glass-back row justify-content-start align-items-baseline">
                     <button type="button" @@click="back" class="btn btn-dark btn-icon back-button">
@@ -12,7 +12,7 @@
                     <h2>{{ $member->player }}'s {{ $character->display_name }}</h2>
                 </div>
                 <div class="card-body character-profile row">
-                    <div class="col-md-6">
+                    <div class="col-6">
                         <div class="column justify-content-center character-info-wrapper">
                             <div class="row justify-content-between align-items-center portrait-wrapper {{ $character->alignment }}">
                                 @include('shared.char', [
@@ -45,7 +45,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-6">
 
                         <div class="stat-list column">
                         <div class="row justify-content-between align-items-baseline stat-header with-stat">

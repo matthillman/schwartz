@@ -4,7 +4,7 @@
             <input class="form-control" type="text" value="" placeholder="Search" name="query" v-model="search">
             <div v-if="helpNote.length" class="small-note">{{ helpNote }}</div>
         </div>
-        <div class="results-wrapper" v-if="results || searching">
+        <div class="search-results-wrapper" v-if="results || searching">
             <div class="column" v-for="item in results.data" :key="item.id">
                 <slot v-bind:item="item">
                     {{item.name}}
@@ -149,7 +149,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.results-wrapper {
+.search-results-wrapper {
     position: relative;
 }
 .pagination-wrapper {

@@ -513,11 +513,11 @@ table.sortable {
         }
       }
 
-      .col-md-5, .col-md-2, .col-md-4, .col-md-1 {
+      .col-5, .col-2, .col-4, .col-1 {
         padding: 0 4px;
       }
 
-      .col-md-2 {
+      .col-2 {
         flex: 0 0 var(--header-column, 98px);
         max-width: var(--header-column, 98px);
 
@@ -529,20 +529,20 @@ table.sortable {
 
       --single-col-width: calc((100% - var(--header-column, 98px)) / var(--compare-count, 2));
 
-      .col-md-5 {
+      .col-5 {
         flex: 0 0 var(--single-col-width);
         max-width: var(--single-col-width);
       }
-      .col-md-1 {
+      .col-1 {
         flex: 0 0 88px;
         max-width: 88px;
       }
-      .col-md-4 {
+      .col-4 {
         flex: 0 0 calc(var(--single-col-width) - 88px);
         max-width: calc(var(--single-col-width) - 88px);
       }
 
-      .col-md-5 + .col-md-2, .col-md-12:not(.section-header) + .col-md-5 {
+      .col-5 + .col-2, .col-12:not(.section-header) + .col-5 {
         margin-top: 8px;
       }
 

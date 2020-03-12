@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mod-container">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header"><h2>{{ $character->member->player }}: {{ $character->unit->name }}</h2></div>
                 <div class="card-body mod-details">

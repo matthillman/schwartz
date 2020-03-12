@@ -13,11 +13,11 @@
 @section('content')
 <div class="container comparison-container">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card">
                 <div class="card-body row">
                 @foreach ($data as $id => $member)
-                    <div class="col-md-5">
+                    <div class="col-5">
                         <h4>{{ $member['player'] }}</h4>
                     </div>
                 @endforeach
@@ -25,7 +25,7 @@
 
                 <div class="card-body row">
                 @foreach ($data as $id => $member)
-                    <div class="col-md-5 column justify-content-center align-items-center">
+                    <div class="col-5 column justify-content-center align-items-center">
                         <table class="gear-table">
                             <tbody>
                                 <tr>
@@ -93,7 +93,7 @@
                 </div>
 
                 <div class="card-body row">
-                    <div class="col-md-12 section-header row justify-content-center align-items-center">
+                    <div class="col-12 section-header row justify-content-center align-items-center">
                         <span class="gear-icon tier12 micro">
                             <span class="gear-icon-inner">
                                 <img class="gear-icon-img" src="/images/gear/tex.equip_powercellinjector.png" alt="Power Cell Injector (Plasma)">
@@ -102,7 +102,7 @@
                         <h2 class="section-head">Gear</h2>
                     </div>
                 @foreach ($data as $id => $member)
-                    <div class="col-md-5 column justify-content-center align-items-center">
+                    <div class="col-5 column justify-content-center align-items-center">
                         <table class="gear-table">
                             <thead>
                                 <tr>
@@ -190,12 +190,12 @@
                 </div>
 
                 <div class="card-body row">
-                    <div class="col-md-12 section-header row justify-content-center align-items-center">
+                    <div class="col-12 section-header row justify-content-center align-items-center">
                         <div class="image"><div class="icon mod-image diamond speed tier-6 gold micro"></div></div>
                         <h2 class="section-head">Mods</h2>
                     </div>
                 @foreach ($data as $id => $member)
-                    <div class="col-md-5 column justify-content-center align-items-center">
+                    <div class="col-5 column justify-content-center align-items-center">
                         <table class="gear-table">
                             <thead>
                                 <tr>
@@ -239,7 +239,7 @@
                 @if (count($data) > 2)
                 <div class="card-body row">
                 @foreach ($data as $id => $member)
-                    <div class="col-md-5">
+                    <div class="col-5">
                         <h4>{{ $member['player'] }}</h4>
                     </div>
                 @endforeach
@@ -249,7 +249,7 @@
 
                 @if(count($character_list) > 0)
                 <div class="card-body row">
-                    <div class="col-md-12 section-header row justify-content-center align-items-center">
+                    <div class="col-12 section-header row justify-content-center align-items-center">
                         <div class="image">
                             <div class="char-image-square small light">
                                 <img src="/images/units/GENERALKENOBI.png">
@@ -260,13 +260,13 @@
                 @foreach ($character_list as $id => $character)
                     @foreach ($data as $member_id => $member)
                         @empty($member->get(strtolower($id)))
-                        <div class="col-md-5">
+                        <div class="col-5">
                             <div class="row justify-content-center align-items-center locked-message">
                                 <strong>{{ $character['name'] }} Not Unlocked</strong>
                             </div>
                         </div>
                         @else
-                        <div class="col-md-1">
+                        <div class="col-1">
                             <div class="char-image-wrapper">
                             @include('shared.char', [
                                 'character' => $member->get(strtolower($id)),
@@ -276,7 +276,7 @@
                             </div>
                             <div class="char-name">{{ $character['name'] }}</div>
                         </div>
-                        <div class="col-md-4 {{ $character['alignment'] }} column justify-content-center align-items-center">
+                        <div class="col-4 {{ $character['alignment'] }} column justify-content-center align-items-center">
                             <table class="gear-table">
                                 <thead>
                                     <th colspan="3" {{ $winner[strtolower($id.'_'.$stat_list->first()['stat']->getKey())]->contains($member_id) ? 'winner' : '' }}>
@@ -321,7 +321,7 @@
 
                 @if(count($ship_list) > 0)
                 <div class="card-body row">
-                    <div class="col-md-12 section-header row justify-content-center align-items-center">
+                    <div class="col-12 section-header row justify-content-center align-items-center">
                         <div class="image">
                             <div class="char-image-square ship small light">
                                 <img src="/images/units/CAPITALNEGOTIATOR.png">
@@ -332,13 +332,13 @@
                 @foreach ($ship_list as $id => $character)
                     @foreach ($data as $member_id => $member)
                         @empty($member->get(strtolower($id)))
-                        <div class="col-md-5">
+                        <div class="col-5">
                             <div class="row justify-content-center align-items-center locked-message">
                                 <strong>{{ $character['name'] }} Not Unlocked</strong>
                             </div>
                         </div>
                         @else
-                        <div class="col-md-1">
+                        <div class="col-1">
                             <div class="char-image-wrapper">
                             @include('shared.char', [
                                 'character' => $member->get(strtolower($id)),
@@ -349,7 +349,7 @@
                             </div>
                             <div class="char-name">{{ $character['name'] }}</div>
                         </div>
-                        <div class="col-md-4 {{ $character['alignment'] }} column justify-content-center align-items-center">
+                        <div class="col-4 {{ $character['alignment'] }} column justify-content-center align-items-center">
                             <table class="gear-table">
                                 <thead>
                                     <th colspan="3" {{ $winner[strtolower($id.'_'.$stat_list->first()['stat']->getKey())]->contains($member_id) ? 'winner' : '' }}>

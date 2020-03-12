@@ -3,7 +3,7 @@
 @section('content')
 <div class="container member-profile">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card profile-card dark-back">
                     <div class="card-body" highlight="none">
                         <div class="row justify-content-between align-items-start">

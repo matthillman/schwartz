@@ -17,17 +17,17 @@
 const counterTemplate = `
 <div class="counter">
     <div class="form-group row">
-        <label for="counters" class="col-md-4 col-form-label text-md-right">Team</label>
-        <div class="col-md-6">
+        <label for="counters" class="col-4 col-form-label text-md-right">Team</label>
+        <div class="col-6">
             <input type="text" class="form-control" name="counter[]" placeholder="Name" required>
         </div>
-        <div class="col-md-1">
+        <div class="col-1">
             <button class="btn btn-danger" @click="deleteCounter()">Delete</button>
         </div>
     </div>
     <div class="form-group row border-bottom">
-        <label for="counters" class="col-md-4 col-form-label text-md-right">Notes</label>
-        <div class="col-md-6">
+        <label for="counters" class="col-4 col-form-label text-md-right">Notes</label>
+        <div class="col-6">
             <input type="text" class="form-control" name="notes[]">
         </div>
     </div>

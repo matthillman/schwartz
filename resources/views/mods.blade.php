@@ -5,7 +5,7 @@
 @section('content')
 <div class="container mods">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header">Mods: Set Maker</div>
 

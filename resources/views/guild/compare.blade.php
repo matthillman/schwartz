@@ -11,21 +11,21 @@
 @section('content')
 <div class="container comparison-container">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card">
                 <div class="card-body row">
-                    <div class="col-md-2">&nbsp;</div>
+                    <div class="col-2">&nbsp;</div>
                 @foreach ($data as $id => $guild)
-                    <div class="col-md-5">
+                    <div class="col-5">
                         <h4>{{ $guild['name'] }}</h4>
                     </div>
                 @endforeach
                 </div>
 
                 <div class="card-body row">
-                    <div class="col-md-2">&nbsp;</div>
+                    <div class="col-2">&nbsp;</div>
                 @foreach ($data as $id => $guild)
-                    <div class="col-md-5 column justify-content-center align-items-center">
+                    <div class="col-5 column justify-content-center align-items-center">
                         <table class="gear-table">
                             <thead>
                                 <tr>
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="card-body row">
-                    <div class="col-md-2 column justify-content-center align-items-center">
+                    <div class="col-2 column justify-content-center align-items-center">
                         <span class="gear-icon tier12 giant">
                             <span class="gear-icon-inner">
                                 <img class="gear-icon-img" src="/images/gear/tex.equip_powercellinjector.png" alt="Power Cell Injector (Plasma)">
@@ -57,7 +57,7 @@
                         </span>
                     </div>
                 @foreach ($data as $id => $guild)
-                    <div class="col-md-5 column justify-content-center align-items-center">
+                    <div class="col-5 column justify-content-center align-items-center">
                         <table class="gear-table">
                             <thead>
                                 <tr>
@@ -133,9 +133,9 @@
                 </div>
 
                 <div class="card-body row">
-                    <div class="col-md-2 column justify-content-center align-items-center"><div class="image"><div class="icon mod-image diamond speed tier-6 gold large"></div></div></div>
+                    <div class="col-2 column justify-content-center align-items-center"><div class="image"><div class="icon mod-image diamond speed tier-6 gold large"></div></div></div>
                 @foreach ($data as $id => $guild)
-                    <div class="col-md-5 column justify-content-center align-items-center">
+                    <div class="col-5 column justify-content-center align-items-center">
                         <table class="gear-table">
                             <thead>
                                 <tr>
@@ -177,14 +177,14 @@
 
                 <div class="card-body row">
                 @foreach ($character_list as $id => $character)
-                    <div class="col-md-2">
+                    <div class="col-2">
                         <div class="char-image-square {{ $character['alignment'] }}">
                             <img src="/images/units/{{$id}}.png">
                         </div>
                         <div class="char-name">{{ $character['name'] }}</div>
                     </div>
                     @foreach ($data as $guild_id => $guild)
-                        <div class="col-md-5 {{ $character['alignment'] }} column justify-content-center align-items-center">
+                        <div class="col-5 {{ $character['alignment'] }} column justify-content-center align-items-center">
                             <table class="gear-table">
                                 <thead>
                                     <tr>

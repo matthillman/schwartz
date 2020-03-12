@@ -3,7 +3,7 @@
 @section('content')
 <div class="container login">
     <div class="column full-height justify-content-center">
-        <div class="col-md-6">
+        <div class="col-6">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
                 <div class="card-body">
@@ -26,7 +26,7 @@
                         <div class="form-group row">
                             <label for="discord" class="col-sm-4 col-form-label text-md-right">{{ __('Discord ID') }}</label>
 
-                            <div class="col-md-6">
+                            <div class="col-6">
                                 <input id="discord" type="discord" class="form-control{{ $errors->has('discord') ? ' is-invalid' : '' }}" name="discord" value="{{ old('discord') }}" required autofocus>
 
                                 @if ($errors->has('discord'))
@@ -38,9 +38,9 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+                            <label for="password" class="col-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
-                            <div class="col-md-6">
+                            <div class="col-6">
                                 <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
                                 @if ($errors->has('password'))
@@ -52,7 +52,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
+                            <div class="col-6 offset-md-4">
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember Me') }}
@@ -62,7 +62,7 @@
                         </div>
 
                         <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
+                            <div class="col-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>

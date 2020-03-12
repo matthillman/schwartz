@@ -4,7 +4,7 @@
 @section('content')
 <div class="container guild-members">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card">
 
                     <div class="card-body" highlight="{{$highlight}}" v-highlight:[highlight]>

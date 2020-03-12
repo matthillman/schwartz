@@ -3,7 +3,7 @@
 @section('content')
 <div class="container member-profile">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header row justify-content-between align-items-baseline">
                     @person
@@ -15,7 +15,7 @@
                 </div>
                 @person
                 <div class="card-body">
-                    <div class="col-md-12 character-filter-wrapper">
+                    <div class="col-12 character-filter-wrapper">
                         <v-select
                             multiple
                             :options="{{ $categories->flatten()->toJson() }}"
@@ -30,9 +30,9 @@
                     @foreach ($member->characters()->with('zetas')->where('combat_type', 1)->get()->sortByDesc('power')->filter(function($char) use ($selected_category) {
                         return is_null($selected_category) || in_array($selected_category->category_id, $char->category_list);
                     })->chunk(6) as $chunk)
-                    <div class="col-md-12 row">
+                    <div class="col-12 row">
                         @foreach ($chunk as $character)
-                        <a class="col-md-2 character-wrapper" href="{{ route('member.character', ['ally' => $member->ally_code, 'id' => $character->unit_name ]) }}">
+                        <a class="col-2 character-wrapper" href="{{ route('member.character', ['ally' => $member->ally_code, 'id' => $character->unit_name ]) }}">
                             @include('shared.char', [
                                 'character' => $character,
                                 'noMods' => true,

@@ -4,7 +4,7 @@
 @section('content')
 <div class="container tw-assignments">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header row no-margin justify-content-between align-items-end">
                     <div class="column">
@@ -31,10 +31,10 @@
                     @if ($plan->{"zone_$zone"}->flatten()->contains($member['ally_code']))
                     <div class="card-body zone-assignments">
                         <div class="row">
-                            <div class="col-md-12 row no-margin justify-content-center dark-back header">
+                            <div class="col-12 row no-margin justify-content-center dark-back header">
                                 <h1>Zone {{ $zone }}</h1>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-4">
                                 <div class="assignment-zone">
                                     <img class="zone-{{ $zone }}" src="/images/tw/defense-zone-{{ $zone }}.png">
                                     <div class="zone-content-wrapper">
@@ -44,7 +44,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-8">
                                 @if(!empty($plan->{"zone_{$zone}_notes"}))
                                 <div class="row no-margin notes-row align-content-stretch">
                                     <div class="small-note">Notes:</div>

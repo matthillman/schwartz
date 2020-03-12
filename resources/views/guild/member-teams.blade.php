@@ -4,7 +4,7 @@
 @section('content')
 <div class="container guild-members">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card stripes">
                 <div class="card-header row justify-content-between align-items-center">
                     <h2>Guild Teams by Member</h2>

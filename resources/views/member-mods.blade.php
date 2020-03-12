@@ -6,7 +6,7 @@
 @section('content')
 <div class="container guild-stats">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header"><h2>Guilds</h2></div>
 

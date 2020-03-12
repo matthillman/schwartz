@@ -3,7 +3,7 @@
 @section('content')
 <div class="container home">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-8">
             <div class="card">
                 @if ($updating)
                 <div class="card-body">
