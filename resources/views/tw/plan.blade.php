@@ -24,20 +24,20 @@
                     </div>
                 </div>
 
-                <div class="card-body" v-show-slide="showGlobalModal">
+                <div v-show-slide="showGlobalModal">
                     <form method="POST" action="{{ route('squads.add') }}" >
                         @csrf
                         <input type="hidden" name="leader_id" value="" id="leader_id">
                         <input type="hidden" name="group" value="{{ $plan->squad_group->id }}">
                         <input type="hidden" name="other_members" value="" id="other_members">
 
-                        <div class="row add-row input-group add-squad-row">
+                        <div class="row no-margin add-row input-group add-squad-row">
                             <unit-select :placeholder="`Leader`" @@input="val => set('leader_id', val ? val.base_id : null)" required></unit-select>
                             <input class="form-control" type="text" placeholder="Squad Name" id="name" name="name" required>
                             <input class="form-control" type="text" placeholder="Squad Description" id="description" name="description" required>
                             <button type="submit" class="btn btn-primary">{{ __('Add') }}</button>
                         </div>
-                        <div class="row add-row input-group add-squad-row multiple">
+                        <div class="row no-margin add-row input-group add-squad-row multiple">
                             <unit-select multiple :placeholder="`Other Members`" @@input="val => set('other_members', val.map(u => u.base_id).reduce((c, u) => [c, u].join(','), '') )"></unit-select>
                         </div>
                     </form>

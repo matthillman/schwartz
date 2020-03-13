@@ -1,5 +1,20 @@
 <template>
     <div class="card-body">
+        <div class="column justify-content-start align-items-stretch portrait-row" :class="{open: userList.length > 1}" v-show-slide="userList.length > 1">
+            <div class="row no-margin justify-content-end align-items-start"><div class="small-note">Also Editing this Plan</div></div>
+            <div class="row no-margin justify-content-end align-items-start">
+                <div class="user-portrait-wrapper" v-for="user in userList" :key="user.id">
+                    <tooltip>
+                        <div class="user-portrait">
+                            <img :src="user.avatar">
+                        </div>
+                        <template #tooltip>
+                            <div class="user-name">{{ user.name }}</div>
+                        </template>
+                    </tooltip>
+                </div>
+            </div>
+        </div>
         <div class="row no-margin">
             <div class="col-8">
                 <div class="row no-margin justify-content-between align-items-baseline">
@@ -187,6 +202,24 @@ export default {
         members: Array,
     },
     mounted() {
+        Echo.join(`plan.${this.plan.id}`)
+            .here(users => {
+                this.userList = users;
+                this.userList.sort((a, b) => a.name.localeCompare(b.name))
+            })
+            .joining(user => {
+                this.userList.push(user);
+                this.userList.sort((a, b) => a.name.localeCompare(b.name))
+            })
+            .leaving(user => {
+                const index = this.userList.indexOf(user);
+                this.userList.slice(index, 1);
+                this.userList.sort((a, b) => a.name.localeCompare(b.name))
+            })
+            .listen('.plan.changed', event => {
+                this.updateData(event.zone, event.change);
+            })
+        ;
         this.updateBannerCount();
         this.updateMemberSquadCount();
     },
@@ -203,6 +236,7 @@ export default {
             highlightMember: null,
             sendMessages: null,
             membersToMessage: [],
+            userList: [],
         };
     },
     methods: {
@@ -369,6 +403,14 @@ export default {
             }
         },
 
+        updateData(zone, change) {
+            this.ourPlan[`zone_${zone}`] = JSON.parse(change.assignments);
+            this.ourPlan[`zone_${zone}_notes`] = change.notes;
+
+            this.$refs[`zone_${zone}`].$forceUpdate();
+            this.updateBannerCount();
+            this.updateMemberSquadCount();
+        },
         async saveData(zone) {
             try {
                 await axios.put(`/twp/${this.ourPlan.id}/${zone}`, {
@@ -429,6 +471,42 @@ export default {
             cursor: pointer;
             width: 100%;
         }
+    }
+}
+
+.portrait-row {
+    background: #e9ecef;
+    box-shadow: inset 0px 0px 1px #495057;
+    margin: -15px -15px 0;
+    padding: 0 15px;
+
+    &.open {
+        margin-bottom: 15px;
+    }
+}
+
+.user-portrait-wrapper {
+    display: inline-block;
+    margin: 0 4px;
+    width: 40px;
+
+    .user-portrait {
+        display: inline-block;
+        background-color: white;
+        border-radius: 50%;
+        border: 3px double #bfd5ff;
+        box-shadow: 0 0 3px #0071d6;
+        margin: 4px auto 0;
+        overflow: hidden;
+        box-sizing: border-box;
+
+        &, & img {
+            width: 100%;
+        }
+    }
+
+    .user-name {
+        text-align: center;
     }
 }
 </style>

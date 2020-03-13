@@ -30,3 +30,18 @@ Broadcast::channel('guilds', function ($user) {
 Broadcast::channel('bot', function ($user) {
 
 });
+
+Broadcast::channel('plan.{id}', function ($user, $id) {
+    $plan = \App\TerritoryWarPlan::find($id);
+
+    if (is_null($plan) || Gate::denies('edit-guild', $plan->guild->id)) {
+        return null;
+    }
+
+    return [
+        'id' => $user->id,
+        'name' => $user->name,
+        'avatar' => $user->avatar,
+    ];
+
+});

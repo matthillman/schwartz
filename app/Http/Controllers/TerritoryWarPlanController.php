@@ -8,6 +8,7 @@ use App\Guild;
 use App\Member;
 use App\SquadGroup;
 use App\TerritoryWarPlan;
+use App\Events\TWPlanChanged;
 
 use Illuminate\Http\Request;
 
@@ -61,8 +62,8 @@ class TerritoryWarPlanController extends Controller
         ]);
     }
 
-    function saveZone(Request $request, $plan, $zone) {
-        $plan = TerritoryWarPlan::findOrFail($plan);
+    function saveZone(Request $request, $id, $zone) {
+        $plan = TerritoryWarPlan::findOrFail($id);
 
         Gate::authorize('edit-guild', $plan->guild->id);
 
@@ -70,6 +71,8 @@ class TerritoryWarPlanController extends Controller
         $plan->{"zone_{$zone}_notes"} = $request->get('notes') ?: '';
 
         $plan->save();
+
+        broadcast(new TWPlanChanged($plan, $zone, $request->input()))->toOthers();
 
         return response()->json(['success' => true]);
     }
