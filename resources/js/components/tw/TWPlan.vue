@@ -228,7 +228,7 @@ export default {
             .here(users => {
                 this.userList = users;
                 this.userList.sort((a, b) => a.name.localeCompare(b.name))
-                this.user = this.userList.find(u => u.id = this.userId);
+                this.user = this.userList.find(u => u.id == this.userId);
                 this.user.zone = this.currentZone;
             })
             .joining(user => {
