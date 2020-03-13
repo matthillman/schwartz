@@ -477,10 +477,11 @@ export default {
 .portrait-row {
     background: #e9ecef;
     box-shadow: inset 0px 0px 1px #495057;
-    margin: -15px -15px 0;
+    margin: 0 -15px;
     padding: 0 15px;
 
     &.open {
+        margin-top: -15px;
         margin-bottom: 15px;
     }
 }
