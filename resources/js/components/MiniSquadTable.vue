@@ -12,7 +12,7 @@
                 <td class="top" v-for="char_id in [squad.leader_id, ...squad.additional_members.slice(0, Math.max(0, maxUnits - 2))]" :key="char_id">
                     <div class="column char-image-column">
                         <div class="char-image-square small" :class="[units[char_id].alignment]">
-                            <img :src="`/images/units/${char_id}.png`">
+                            <img draggable="false" :src="`/images/units/${char_id}.png`">
                         </div>
                     </div>
                 </td>

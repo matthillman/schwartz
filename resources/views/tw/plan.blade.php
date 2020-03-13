@@ -44,6 +44,7 @@
                 </div>
 
                 <tw-plan
+                    :user-id="{{ auth()->user()->id }}"
                     :plan="{{ $plan->toJson() }}"
                     :squads="{{ $squads->toJson() }}"
                     :units="{{ $units->whereIn('base_id', $unitIDs)->keyBy('base_id')->toJson() }}"

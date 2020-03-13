@@ -9,6 +9,7 @@ use App\Member;
 use App\SquadGroup;
 use App\TerritoryWarPlan;
 use App\Events\TWPlanChanged;
+use App\Events\TWPlanUserState;
 
 use Illuminate\Http\Request;
 
@@ -73,6 +74,17 @@ class TerritoryWarPlanController extends Controller
         $plan->save();
 
         broadcast(new TWPlanChanged($plan, $zone, $request->input()))->toOthers();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function publishUserState(Request $request, $id) {
+
+        $plan = TerritoryWarPlan::findOrFail($id);
+
+        Gate::authorize('edit-guild', $plan->guild->id);
+
+        broadcast(new TWPlanUserState($plan, $request->input()))->toOthers();
 
         return response()->json(['success' => true]);
     }

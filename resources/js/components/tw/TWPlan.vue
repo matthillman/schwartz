@@ -26,15 +26,33 @@
                 </div>
 
                 <div class="column">
-                    <div class="row justify-content-center no-margin">
+                    <div class="row justify-content-center no-margin" ref="zoneContainer">
                         <div v-for="(slice, index) in [[8, 9, 10], [5, 6, 7], [3, 4], [1, 2]]" :key="index" class="column no-margin zone-wrapper">
                             <div v-for="zone in slice" :key="zone"
-                                class="zone" :class="[`zone-${zone}`]"
+                                class="zone drop-target"
+                                :class="[`zone-${zone}`, { over: dragTarget == zone, 'not-dropable': !dropOK }]"
                                 @click="currentZone = zone"
+                                @dragover.prevent="onDragOver(zone, $event)"
+                                @dragenter="onDragEnter(zone, $event)"
+                                @dragleave.self="onDragLeave(zone)"
+                                @drop.prevent.stop="onDrop(zone, $event)"
+                                @dragend="onDragLeave(zone)"
                             >
                                 <img :src="`/images/tw/defense-zone-${zone}.png`">
                                 <div class="zone-content-wrapper" :class="{active: currentZone == zone, 'member-highlight': hasTeaminZone(zone, highlightMember) }">
                                     <div class="column justify-content-center align-items-center">
+                                        <div class="row no-margin justify-content-end align-items-start zone-portraits" v-show-slide="userList.length > 1">
+                                            <div class="user-portrait-wrapper mini" v-for="user in userList.filter(u => u.zone == zone)" :key="user.id">
+                                                <tooltip>
+                                                    <div class="user-portrait">
+                                                        <img :src="user.avatar">
+                                                    </div>
+                                                    <template #tooltip>
+                                                        <div class="user-name">{{ user.name }} ({{ user.zone }})</div>
+                                                    </template>
+                                                </tooltip>
+                                            </div>
+                                        </div>
                                         <h1>{{ zone }}</h1>
                                         <div>{{ getTeamsInZone(zone) }} {{ getTeamsInZone(zone) == 1 ? 'team' : 'teams' }}</div>
                                         <div class="row no-margin justify-content-center align-items-start">
@@ -98,6 +116,9 @@
                         :units="units"
                         no-header
                         :max-units="5"
+                        draggable="true"
+                        @dragstart="onDragStartSquad(squad, $event)"
+                        @dragend.self="onDragEndSquad"
                     ></mini-squad-table>
                 </collapsable>
 
@@ -196,6 +217,7 @@ export default {
         'member-filter': require('./MemberFilter.vue').default,
     },
     props: {
+        userId: Number,
         plan: Object,
         squads: Object,
         units: Object,
@@ -206,18 +228,31 @@ export default {
             .here(users => {
                 this.userList = users;
                 this.userList.sort((a, b) => a.name.localeCompare(b.name))
+                this.user = this.userList.find(u => u.id = this.userId);
+                this.user.zone = this.currentZone;
             })
             .joining(user => {
-                this.userList.push(user);
-                this.userList.sort((a, b) => a.name.localeCompare(b.name))
+                const index = this.userList.findIndex(u => u.id == user.id);
+                if (index === -1) {
+                    this.userList.push(user);
+                } else {
+                    this.userList[index] = user;
+                }
+                this.userList.sort((a, b) => a.name.localeCompare(b.name));
+
+                this.pushUserState();
             })
             .leaving(user => {
-                const index = this.userList.indexOf(user);
+                const index = this.userList.findIndex(u => u.id == user.id);
                 this.userList.slice(index, 1);
                 this.userList.sort((a, b) => a.name.localeCompare(b.name))
             })
             .listen('.plan.changed', event => {
                 this.updateData(event.zone, event.change);
+            })
+            .listen('.user.changed', e => {
+                this.userList.find(u => u.id == e.user.id).zone = e.user.zone;
+                this.$forceUpdate();
             })
         ;
         this.updateBannerCount();
@@ -225,10 +260,11 @@ export default {
     },
     data() {
         return {
-            currentZone: 0,
+            currentZone: 1,
             ourPlan: this.plan,
             ourMembers: this.members,
             draggingMember: null,
+            draggingSquad: null,
             addMultiple: null,
             addMultipleZone: null,
             potentialAddMembers: [],
@@ -236,8 +272,17 @@ export default {
             highlightMember: null,
             sendMessages: null,
             membersToMessage: [],
+            user: {},
             userList: [],
+            dragTarget: null,
+            dropOK: false,
         };
+    },
+    watch: {
+        currentZone() {
+            this.user.zone = this.currentZone;
+            this.pushUserState();
+        }
     },
     methods: {
         memberDifference(squad) {
@@ -376,6 +421,49 @@ export default {
             this.draggingMember = null;
         },
 
+        onDragStartSquad(member, evt) {
+            evt.dataTransfer.effectAllowed = 'move';
+            evt.dataTransfer.setData('text/plain', squad.id);
+            evt.dataTransfer.setData(`squad:${squad.id}`, '');
+            this.draggingSquad = squad.id;
+            setTimeout(() => this.$refs.zoneContainer.$el.scrollIntoView(true), 100);
+        },
+        onDragEndSquad() {
+            this.draggingSquad = null;
+        },
+
+        onDragOver(zone, evt) {
+            this.dragTarget = zone;
+        },
+        onDragEnter(zone, evt) {
+            this.dragTarget = zone;
+
+            const packedCode = evt.dataTransfer.types.find(t => t.startsWith('squad:'));
+
+            if (packedCode) {
+                const squadID = packedCode.split(':')[1];
+                this.dropOK = !Object.keys(this.getPlanForZone(zone)).includes(squadID) && this.squads[squadID];
+                console.log(squadID, this.dropOK);
+            }
+
+        },
+        onDragLeave() {
+            if (this.dragTarget == zone) {
+                this.dragTarget = null;
+                this.dropOK = false;
+            }
+        },
+        onDrop(zone, evt) {
+            const squadID = evt.dataTransfer.getData('text/plain');
+
+            if (!Object.keys(this.getPlanForZone(zone)).includes(squadID) && this.squads[squadID]) {
+                this.addSquad(zone, squadID);
+            }
+
+            this.dragTarget = null;
+            this.dropOK = false;
+        },
+
         overMember(member) {
             this.highlightMember = member.ally_code;
         },
@@ -425,11 +513,25 @@ export default {
             }
 
         },
+        async pushUserState() {
+            try {
+                await axios.put(`/twp/${this.ourPlan.id}/user`, {
+                    id: this.user.id,
+                    zone: this.currentZone,
+                });
+
+                this.updateBannerCount();
+                this.updateMemberSquadCount();
+            } catch (error) {
+                console.error(error);
+            }
+        },
     }
 }
 </script>
 
 <style lang="scss" scoped>
+@import "../../../sass/_variables.scss";
 .defense-list {
     margin-top: 16px;
 }
@@ -439,6 +541,13 @@ export default {
 .dragging {
     transform: scale(0.9);
     opacity: 0.6;
+}
+.zone.over {
+    background: rgba($color: $sw-yellow, $alpha: 0.4);
+    &.not-dropable {
+        background: rgba($color: $red, $alpha: 0.4);;
+        cursor: not-allowed;
+    }
 }
 </style>
 
@@ -478,7 +587,7 @@ export default {
     background: #e9ecef;
     box-shadow: inset 0px 0px 1px #495057;
     margin: 0 -15px;
-    padding: 0 15px;
+    padding: 0 15px 4px;
 
     &.open {
         margin-top: -15px;
@@ -492,12 +601,13 @@ export default {
     width: 40px;
 
     .user-portrait {
-        display: inline-block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background-color: white;
         border-radius: 50%;
         border: 3px double #bfd5ff;
         box-shadow: 0 0 3px #0071d6;
-        margin: 4px auto 0;
         overflow: hidden;
         box-sizing: border-box;
 
@@ -509,5 +619,21 @@ export default {
     .user-name {
         text-align: center;
     }
+
+    &.mini {
+        &, .user-portrait {
+            width: 25px;
+            height: 25px;
+
+            &.user-portrait {
+                border-width: 1px;
+            }
+        }
+    }
+}
+.zone-portraits {
+    position: absolute;
+    top: 3px;
+    right: 0;
 }
 </style>

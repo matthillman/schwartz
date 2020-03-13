@@ -138,10 +138,12 @@ export default {
     },
     methods: {
         addSquad() {
+            if (this.selectedSquad == null) { return; }
             this.$emit('add-squad', this.zone, this.selectedSquad.id);
             this.selectedSquad = null;
         },
         addMember(squadID) {
+            if (this.selectedMember[squadID] == null) { return; }
             this.$emit('add-member', this.zone, squadID, this.selectedMember[squadID]);
             this.selectedMember[squadID] = null;
         },
@@ -167,6 +169,7 @@ export default {
                 .filter(m => !this.zoneData[squadID].includes(m.ally_code));
         },
         memberAvailable(member, squadID) {
+            if (!member.ally_code) { return false; }
             return !this.zoneData[squadID].includes(member.ally_code)
             && (!member.usedSquads || !member.usedSquads.has(this.squads[squadID].leader_id));
         },
