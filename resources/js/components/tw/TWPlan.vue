@@ -373,6 +373,7 @@ export default {
                 if (!this.getPlanForZone(zone)[squadID].includes(ally_code)) {
                     this.getPlanForZone(zone)[squadID].push(ally_code);
                     this.getPlanForZone(zone)[squadID].sort((a, b) => this.nameForMember(a).localeCompare(this.nameForMember(b)));
+                    this.$refs[`zone_${zone}`].$forceUpdate();
                     dirty = true;
                 }
             }

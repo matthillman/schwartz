@@ -100,7 +100,7 @@ class SquadController extends Controller
     public function add(Request $request) {
         Gate::authorize('edit-squad', $request->group);
 
-        $squad = $request->has('id') ? Squad::findOrFail($request->get('id')) : new Squad;
+        $squad = !empty($request->get('id')) ? Squad::findOrFail($request->get('id')) : new Squad;
 
         $squad->leader_id = $request->leader_id;
         $squad->display = $request->name;
