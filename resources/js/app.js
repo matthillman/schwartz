@@ -84,7 +84,7 @@ let data = {
 	highlight: null,
 	showGlobalModal: null,
 	guildCompare: [],
-	memberCompare: [],
+	memberCompare: null,
 	memberCompareArray: [],
 	messageChannel: '678958338225995786',
 	selectedSquadArray: [],
@@ -115,7 +115,7 @@ new Vue({
 	mounted() {
 		this.loadModJobStatus();
 		this.loadGuildJobStatus();
-		this.memberCompareArray = this.memberCompare.split('\n');
+		this.memberCompareArray = (this.memberCompare || '').split('\n');
 	},
 	methods: {
 		go(to) {
