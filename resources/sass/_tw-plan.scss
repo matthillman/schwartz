@@ -83,8 +83,12 @@ $zone-base-height: 459px + 526px;
             text-shadow: 1px 1px 0 black;
         }
 
-        &:hover, &.active, &.member-highlight {
+        &:hover, &.active {
             border-color: $sw-yellow;
+        }
+
+        &.member-highlight {
+            background-color: rgba($color: $sw-yellow, $alpha: 0.4);
         }
     }
 }

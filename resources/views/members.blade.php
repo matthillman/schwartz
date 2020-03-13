@@ -18,11 +18,24 @@
                 <div class="card-header"><h2>Compare Players</h2></div>
 
                 <div class="card-body">
+                    <form method="POST" action="{{ route('members.refresh') }}" >
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="members" id="scrape-members" v-model="memberCompare">
+                        <div class="row no-margin justify-content-between align-items-start">
+                            <div>Enter ally codes one per line (or check boxes below)</div>
+                            <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="refresh" size="small"></ion-icon></button>
+                        </div>
+                    </form>
                     <form method="POST" action="{{ route('members.post.compare') }}" >
                         @csrf
-                        <div>Enter ally codes one per line (or check boxes below)</div>
-                        <div class="row add-row input-group">
-                            <textarea placeholder="Enter ally codes to compare" name="members" class="form-control no-resize" :rows="memberCompareArray.length + 1" v-model="memberCompare"></textarea>
+                        <div class="row add-row align-items-start input-group">
+                            <textarea placeholder="Enter ally codes to compare"
+                                name="members"
+                                class="form-control no-resize"
+                                :rows="memberCompareArray.length + 1"
+                                v-model="memberCompare"
+                            ></textarea>
                             <button type="submit" class="btn btn-primary">{{ __('Compare') }}</button>
                         </div>
                         <collapsable>

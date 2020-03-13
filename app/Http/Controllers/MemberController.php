@@ -39,6 +39,18 @@ class MemberController extends Controller
         return redirect()->route('members')->with('memberStatus', "Member scrape queued");
     }
 
+    public function scrapeAllyCodes(Request $request) {
+        $members = collect(preg_split('/\r\n|\r|\n/', $request->get('members')))
+            ->map(function($ally) {
+                return Member::where(['ally_code' => str_replace('-', '', $ally)])->firstOrFail();
+            })
+            ->each(function($member) {
+                ProcessUser::dispatch($member->ally_code);
+            });
+
+        return back()->withInput()->with('memberStatus', "Member scrapes queued for " . $members->count() . " ally codes");
+    }
+
     public function show($allyCode) {
         $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
 

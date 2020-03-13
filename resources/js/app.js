@@ -115,6 +115,7 @@ new Vue({
 	mounted() {
 		this.loadModJobStatus();
 		this.loadGuildJobStatus();
+		this.memberCompareArray = this.memberCompare.split('\n');
 	},
 	methods: {
 		go(to) {
