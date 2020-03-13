@@ -269,7 +269,7 @@ export default {
             return ally_code !== null && Object.values(this.getPlanForZone(zone)).flat().includes(ally_code);
         },
         getLeadersForZone(zone) {
-            return Array.from(new Set(getPlanForZone(zone).map(s => s.leader_id)));
+            return Array.from(new Set(this.getPlanForZone(zone).map(s => s.leader_id)));
         },
 
         addSquad(zone, squadID) {
