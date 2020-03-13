@@ -84,7 +84,7 @@
                                 <input class="form-control" type="text" placeholder="Squad Description" id="description" name="description" value="{{$edit_squad->description}}" required>
                                 <button type="submit" class="btn btn-primary">{{ !is_null($edit_squad->id) ? __('Save') : __('Add') }}</button>
                             </div>
-                            <div class="row no-margin input-group add-squad-row multiple">
+                            <div class="row no-margin align-items-start input-group add-squad-row multiple">
                                 <unit-select multiple
                                     :placeholder="`Other Members`"
                                     @if(!is_null($edit_squad->id))
@@ -92,6 +92,10 @@
                                     @endif
                                     @@input="val => set('other_members', val.map(u => u.base_id).reduce((c, u) => [c, u].join(','), '') )"
                                 ></unit-select>
+
+                                @if(!is_null($edit_squad->id))
+                                <button class="btn btn-danger" @@click.prevent="go(`{{ route('squads', ['group' => $group->id]) }}`)">{{ __('Cancel') }}</button>
+                                @endif
                             </div>
                         </form>
                     </div>
