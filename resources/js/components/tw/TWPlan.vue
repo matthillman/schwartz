@@ -23,7 +23,7 @@
                                         <h1>{{ zone }}</h1>
                                         <div>{{ getTeamsInZone(zone) }} {{ getTeamsInZone(zone) == 1 ? 'team' : 'teams' }}</div>
                                         <div class="row no-margin justify-content-center align-items-start">
-                                            <div class="column char-image-column" v-for="(members, squadID) in getPlanForZone(zone)" :key="squadID">
+                                            <div class="column char-image-column" v-for="(members, squadID) in getLeadersForZone(zone)" :key="squadID">
                                                 <div class="char-image-square small" :class="[units[squads[squadID].leader_id].alignment]">
                                                     <img :src="`/images/units/${squads[squadID].leader_id}.png`">
                                                 </div>
@@ -267,6 +267,9 @@ export default {
         },
         hasTeaminZone(zone, ally_code) {
             return ally_code !== null && Object.values(this.getPlanForZone(zone)).flat().includes(ally_code);
+        },
+        getLeadersForZone(zone) {
+            return Array.from(new Set(getPlanForZone(zone).map(s => s.leader_id)));
         },
 
         addSquad(zone, squadID) {
