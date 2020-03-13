@@ -24,10 +24,16 @@
     }
 }
 
+.squad-row-toggle {
+    background-color: $gray-300;
+    border-radius: 8px;
+    box-shadow: inset 0 0 1px $gray-700;
+}
+
 .add-squad-row {
 
     .btn.btn-primary {
-        width: 55px;
+        width: 70px;
     }
 }
 

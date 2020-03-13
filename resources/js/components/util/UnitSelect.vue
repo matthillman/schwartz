@@ -40,23 +40,19 @@ export default {
     props: {
         placeholder: String,
         multiple: Boolean,
-        required: Boolean
+        required: Boolean,
+        value: Object|Array,
     },
     data() {
         return {
             units: [],
             lastSearchTerm: '',
-            unit: null,
+            unit: this.value,
         };
     },
     computed: {
         needsSelection() {
             return !this.unit || (Array.isArray(this.unit) && !this.unit.length);
-        }
-    },
-    watch: {
-        unit() {
-            console.warn(this.required && this.needsSelection, this.required, this.needsSelection);
         }
     },
     methods: {
@@ -81,6 +77,7 @@ export default {
         .vs__dropdown-toggle {
             height: 36px;
             padding: 0;
+            background: #fff;
         }
 
         .vs__selected-options {
@@ -99,7 +96,7 @@ export default {
         }
     }
     .multiple &.v-select {
-        --select-width: calc(100% - 71px);
+        --select-width: calc(100% - 70px);
         width: var(--select-width);
 
         .vs__dropdown-toggle {

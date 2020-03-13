@@ -53,7 +53,8 @@
                     @endif
                 </div>
 
-                <collapsable card-body {{ $chars->count() == 0 && $ships->count() == 0 ? 'start-open' : '' }}>
+                <collapsable card-body {{ !is_null($edit_squad->id)|| $chars->count() == 0 && $ships->count() == 0 ? 'start-open' : '' }}>
+                    @if(is_null($edit_squad->id))
                     <template #top-trigger="{ open }">
                         <button class="btn btn-primary btn-icon-text">
                             <div class="row no-margin align-items-center">
@@ -61,22 +62,36 @@
                             </div>
                         </button>
                     </template>
+                    @endif
 
-                    <div class="card-body">
+                    <div class="card-body squad-row-toggle">
                         <form method="POST" action="{{ route('squads.add') }}" >
                             @csrf
-                            <input type="hidden" name="leader_id" value="" id="leader_id">
+                            <input type="hidden" name="id" value="{{$edit_squad->id}}" id="id">
+                            <input type="hidden" name="leader_id" value="{{$edit_squad->leader_id}}" id="leader_id">
                             <input type="hidden" name="group" value="{{ $group->id }}">
-                            <input type="hidden" name="other_members" value="" id="other_members">
+                            <input type="hidden" name="other_members" value="{{implode(',', $edit_squad->additional_members ?: [])}}" id="other_members">
 
-                            <div class="row add-row input-group add-squad-row">
-                                <unit-select :placeholder="`Leader`" @@input="val => set('leader_id', val ? val.base_id : null)" required></unit-select>
-                                <input class="form-control" type="text" placeholder="Squad Name" id="name" name="name" required>
-                                <input class="form-control" type="text" placeholder="Squad Description" id="description" name="description" required>
-                                <button type="submit" class="btn btn-primary">{{ __('Add') }}</button>
+                            <div class="row no-margin input-group add-squad-row">
+                                <unit-select
+                                    :placeholder="`Leader`"
+                                    @if(!is_null($edit_squad->id))
+                                    :value="{{ $units->where('base_id', $edit_squad->leader_id)->first()->toJson() }}"
+                                    @endif
+                                    @@input="val => set('leader_id', val ? val.base_id : null)" required
+                                ></unit-select>
+                                <input class="form-control" type="text" placeholder="Squad Name" id="name" name="name" value="{{$edit_squad->display}}" required>
+                                <input class="form-control" type="text" placeholder="Squad Description" id="description" name="description" value="{{$edit_squad->description}}" required>
+                                <button type="submit" class="btn btn-primary">{{ !is_null($edit_squad->id) ? __('Save') : __('Add') }}</button>
                             </div>
-                            <div class="row add-row input-group add-squad-row multiple">
-                                <unit-select multiple :placeholder="`Other Members`" @@input="val => set('other_members', val.map(u => u.base_id).reduce((c, u) => [c, u].join(','), '') )"></unit-select>
+                            <div class="row no-margin input-group add-squad-row multiple">
+                                <unit-select multiple
+                                    :placeholder="`Other Members`"
+                                    @if(!is_null($edit_squad->id))
+                                    :value="{{ $units->whereIn('base_id', $edit_squad->additional_members)->values()->toJson() }}"
+                                    @endif
+                                    @@input="val => set('other_members', val.map(u => u.base_id).reduce((c, u) => [c, u].join(','), '') )"
+                                ></unit-select>
                             </div>
                         </form>
                     </div>
@@ -135,11 +150,14 @@
                                         <td><div>&nbsp;</div></td>
                                         @endfor
                                         <td class="blank">
-                                            <form class="column justify-content-center align-items-center" method="POST" action="{{ route('squad.delete', ['id' => $squad->id ]) }}">
-                                                @method('DELETE')
-                                                @csrf
-                                                <button type="submit" class="btn btn-danger btn-icon"><ion-icon name="trash" size="medium"></ion-icon></button>
-                                            </form>
+                                            <div class="column justify-content-around align-items-center">
+                                                <button @@click="go(`{{ route('squads', ['group' => $group->id, 'squad' => $squad->id ]) }}`)" class="btn btn-primary btn-icon"><ion-icon name="pencil" size="small"></ion-icon></button>
+                                                <form class="column justify-content-center align-items-center" method="POST" action="{{ route('squad.delete', ['id' => $squad->id ]) }}">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger btn-icon"><ion-icon name="trash" size="small"></ion-icon></button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

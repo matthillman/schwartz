@@ -55,6 +55,17 @@ if (!function_exists('format_stat')) {
 	}
 }
 
+if (!function_exists('previous_route_name')) {
+    /**
+     * The route name of the previous url
+	 *
+     * @return String
+     */
+    function previous_route_name() {
+        return app('router')->getRoutes()->match(app('request')->create(url()->previous()))->getName();
+    }
+}
+
 // if (!function_exists('guzzle')) {
 //     /**
 //      * Return a guzzle client

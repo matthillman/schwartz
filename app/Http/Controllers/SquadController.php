@@ -84,6 +84,8 @@ class SquadController extends Controller
             'index' => -1,
         ]);
 
+        $editSquad = Squad::findOrNew($request->get('squad'));
+
         return view('squads.list', [
             'groups' => $tabs,
             'group' => $group,
@@ -91,13 +93,14 @@ class SquadController extends Controller
             'chars' => $chars,
             'units' => $units,
             'guilds' => $guilds,
+            'edit_squad' => $editSquad,
         ]);
     }
 
     public function add(Request $request) {
         Gate::authorize('edit-squad', $request->group);
 
-        $squad = new Squad;
+        $squad = $request->has('id') ? Squad::findOrFail($request->get('id')) : new Squad;
 
         $squad->leader_id = $request->leader_id;
         $squad->display = $request->name;
@@ -107,15 +110,15 @@ class SquadController extends Controller
 
         $squad->save();
 
-
-        return back()->with('status', "Squad added");
+        return redirect()->route(previous_route_name(), ['group' => $request->group])->with('status', $request->has('id') ? "Squad saved" : "Squad added");
     }
 
     public function delete($id) {
         $squad = Squad::findOrFail($id);
+        $group = $squad->squad_group_id;
         $squad->delete();
 
-        return redirect()->route('squads')->with('status', "Squad deleted");
+        return redirect()->route(previous_route_name(), ['group' => $group])->with('status', "Squad deleted");
     }
 
     public function addGroup(Request $request) {

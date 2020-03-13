@@ -10,8 +10,8 @@
         >
             <slot>Body</slot>
         </div>
-        <div v-if="hasSlot('trigger') || !hasSlot('top-trigger')" class="trigger-wrapper" @click="open = !open">
-            <slot name="trigger" v-bind:open="open">Trigger</slot>
+        <div v-if="hasSlot('trigger')" class="trigger-wrapper" @click="open = !open">
+            <slot name="trigger" v-bind:open="open"></slot>
         </div>
     </div>
 </template>
