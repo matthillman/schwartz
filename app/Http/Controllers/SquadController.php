@@ -189,7 +189,7 @@ class SquadController extends Controller
 
         $squadIds = explode(',', $request->squads);
         foreach (Squad::whereIn('id', $squadIds)->get() as $squad) {
-            $others = implode(' ', explode(',', $squad->additional_members));
+            $others = implode(' ', $squad->additional_members);
             $message = "!addteam {$squad->leader_id} {$squad->display} 50 [{$squad->description}] {$others}";
 
             $discord->send($channel, ['content' => $message]);
