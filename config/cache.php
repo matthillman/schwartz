@@ -73,6 +73,11 @@ return [
             'connection' => 'default',
         ],
 
+
+        'request' => [
+            'driver' => 'array'
+        ],
+
     ],
 
     /*

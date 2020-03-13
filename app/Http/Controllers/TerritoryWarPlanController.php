@@ -32,7 +32,7 @@ class TerritoryWarPlanController extends Controller
     }
 
     public function show(Request $request, $id) {
-        $plan = TerritoryWarPlan::with('guild.members')->findOrFail($id);
+        $plan = TerritoryWarPlan::with('guild.members.stats')->findOrFail($id);
 
         Gate::authorize('in-guild', $plan->guild->id);
 
@@ -47,7 +47,7 @@ class TerritoryWarPlanController extends Controller
     }
 
     public function showAssignment(Request $request, $id, $allyCode) {
-        $plan = TerritoryWarPlan::with('guild.members')->findOrFail($id);
+        $plan = TerritoryWarPlan::with('guild.members.stats')->findOrFail($id);
 
         if (auth()->user()) {
             Gate::authorize('in-guild', $plan->guild->id);
