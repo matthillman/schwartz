@@ -117,8 +117,9 @@
                         no-header
                         :max-units="5"
                         draggable="true"
+                        :style-class="{dragging: draggingSquad == squad.id}"
                         @dragstart="onDragStartSquad(squad, $event)"
-                        @dragend.self="onDragEndSquad"
+                        @dragend="onDragEndSquad"
                     ></mini-squad-table>
                 </collapsable>
 
@@ -416,18 +417,22 @@ export default {
             evt.dataTransfer.setData('text/plain', member.ally_code);
             evt.dataTransfer.setData(`ally:${member.ally_code}`, '');
             this.draggingMember = member.ally_code;
-            setTimeout(() => this.$refs.pageContainer.$el.scrollIntoView(true), 100);
+            if (!this.isInViewport(this.$refs.pageContainer.$el)) {
+                setTimeout(() => this.$refs.pageContainer.$el.scrollIntoView(true), 100);
+            }
         },
         onDragEnd() {
             this.draggingMember = null;
         },
 
-        onDragStartSquad(member, evt) {
+        onDragStartSquad(squad, evt) {
             evt.dataTransfer.effectAllowed = 'move';
             evt.dataTransfer.setData('text/plain', squad.id);
             evt.dataTransfer.setData(`squad:${squad.id}`, '');
             this.draggingSquad = squad.id;
-            setTimeout(() => this.$refs.zoneContainer.$el.scrollIntoView(true), 100);
+            if (!this.isInViewport(this.$refs.zoneContainer)) {
+                setTimeout(() => this.$refs.zoneContainer.scrollIntoView(true), 100);
+            }
         },
         onDragEndSquad() {
             this.draggingSquad = null;
@@ -443,12 +448,11 @@ export default {
 
             if (packedCode) {
                 const squadID = packedCode.split(':')[1];
-                this.dropOK = !Object.keys(this.getPlanForZone(zone)).includes(squadID) && this.squads[squadID];
-                console.log(squadID, this.dropOK);
+                this.dropOK = !Object.keys(this.getPlanForZone(zone)).includes(squadID) && !!this.squads[squadID];
             }
 
         },
-        onDragLeave() {
+        onDragLeave(zone) {
             if (this.dragTarget == zone) {
                 this.dragTarget = null;
                 this.dropOK = false;
@@ -457,8 +461,9 @@ export default {
         onDrop(zone, evt) {
             const squadID = evt.dataTransfer.getData('text/plain');
 
-            if (!Object.keys(this.getPlanForZone(zone)).includes(squadID) && this.squads[squadID]) {
+            if (!Object.keys(this.getPlanForZone(zone)).includes(squadID) && !!this.squads[squadID]) {
                 this.addSquad(zone, squadID);
+                this.$refs[`zone_${zone}`].$forceUpdate();
             }
 
             this.dragTarget = null;
@@ -474,12 +479,21 @@ export default {
             }
         },
 
+        isInViewport(elem) {
+            const bounding = elem.getBoundingClientRect();
+            return (
+                bounding.top >= 0 &&
+                bounding.left >= 0 &&
+                bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        },
+
         showSendDialog() {
             this.membersToMessage = this.members.filter(m => m.bannerCount).map(m => m.ally_code);
             this.sendMessages = true;
         },
         async sendDMs() {
-            console.warn(this.membersToMessage);
             try {
                 await axios.post(`/twp/${this.ourPlan.id}/dm`, {
                     members: this.membersToMessage.join(','),
@@ -539,22 +553,16 @@ export default {
 .overview-button {
     margin: 8px 0;
 }
-.dragging {
-    transform: scale(0.9);
-    opacity: 0.6;
-}
-.zone.over {
-    background: rgba($color: $sw-yellow, $alpha: 0.4);
-    &.not-dropable {
-        background: rgba($color: $red, $alpha: 0.4);;
-        cursor: not-allowed;
-    }
-}
 </style>
 
 <style lang="scss">
 .extra-units {
     padding: 2px;
+}
+
+.dragging {
+    transform: scale(0.9);
+    opacity: 0.6;
 }
 
 .dragging .page-wrapper {

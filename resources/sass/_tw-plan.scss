@@ -93,6 +93,21 @@ $zone-base-height: 459px + 526px;
     }
 }
 
+
+.zone.over {
+    .zone-content-wrapper {
+        background: rgba($color: $sw-yellow, $alpha: 0.4);
+    }
+
+    &.not-dropable {
+        cursor: not-allowed;
+
+        .zone-content-wrapper {
+            background: rgba($color: $red, $alpha: 0.4);;
+        }
+    }
+}
+
 .content .container.tw-assignments {
     width: 509px;
 

@@ -1,5 +1,5 @@
 <template>
-    <table class="squad-table micro" :class="{ fixed: !flexWidth }">
+    <table class="squad-table micro" :class="[styleClass, { fixed: !flexWidth }]" @dragstart.self="$emit('dragstart', $event)" @dragend="$emit('dragend', $event)">
         <thead v-if="!noHeader">
             <tr>
                 <th :colspan="Math.min(squad.additional_members.length + 1, maxUnits)">
@@ -59,6 +59,7 @@ export default {
             default: 10,
         },
         flexWidth: Boolean,
+        styleClass: String|Object,
     }
 }
 </script>
