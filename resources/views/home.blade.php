@@ -32,10 +32,10 @@
                             <div class="label"><a href="{{ route('auth.mods') }}">Mod Set Maker</a></div>
                         </div>
 
-                        <div class="item">
+                        {{-- <div class="item">
                             <div class="icon-wrapper"><a href="{{ route('tw-teams.index') }}"><div class="image"><ion-icon name="help-buoy" size="huge"></ion-icon></div></a></div>
                             <div class="label"><a href="{{ route('tw-teams.index') }}">TW Team Counters</a></div>
-                        </div>
+                        </div> --}}
 
                         <div class="item">
                             <div class="icon-wrapper"><a href="{{ route('squads') }}"><div class="image"><ion-icon name="save" size="huge"></ion-icon></div></a></div>

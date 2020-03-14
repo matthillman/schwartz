@@ -436,6 +436,8 @@ export default {
         },
         onDragEndSquad() {
             this.draggingSquad = null;
+            this.dragTarget = null;
+            this.dropOK = false;
         },
 
         onDragOver(zone, evt) {
