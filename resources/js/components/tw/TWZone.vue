@@ -45,7 +45,7 @@
                                 <div class="name-wrapper">
                                     <div class="column">
                                         <div>{{ nameForMember(ally_code) }}</div>
-                                        <div class="small-note">Power: {{ [squads[squadID].leader_id, ...squads[squadID].additional_members].map(c => charForMember(ally_code, c)).reduce((p, c) => p + c.power, 0).toLocaleString() }}</div>
+                                        <div class="small-note">Power: {{ [squads[squadID].leader_id, ...squads[squadID].additional_members].map(c => charForMember(ally_code, c)).reduce((p, c) => p + (c ? c.power : 0), 0).toLocaleString() }}</div>
                                     </div>
 
                                     <button class="btn btn-danger btn-icon inverted" @click="deleteMember(squads[squadID], memberFor(ally_code))"><ion-icon name="remove-circle" size="small"></ion-icon></button>
