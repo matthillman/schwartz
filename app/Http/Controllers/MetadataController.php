@@ -36,7 +36,7 @@ class MetadataController extends Controller
         return redirect()->away("http://feeds.soundcloud.com/users/soundcloud:users:536817606/sounds.rss");
     }
 
-    public function discordWidget() {
+    public function discordWidget($id) {
         $response = guzzle()->get("https://discordapp.com/api/guilds/${id}/widget.json");
         return $response->getBody();
     }
