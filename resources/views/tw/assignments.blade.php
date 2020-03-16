@@ -55,36 +55,48 @@
                                 <div class="team-wrapper dark-back">
                                 @foreach ($plan->{"zone_$zone"} as $squadID => $members)
                                     @if (in_array($member['ally_code'], $members))
-                                        <div class="row no-margin">
-                                            <div class="character-bg-wrapper glass-back {{ $units[$squads->get($squadID)->leader_id]->combat_type == 1 ? '' : 'ship' }}">
-                                                <character
-                                                    :character="{{ $member->get('characters')->where('unit_name', $squads->get($squadID)->leader_id)->first()->toJson() }}"
-                                                    no-stats no-mods no-zetas
-                                                    :classes="'large'"
-                                                ></character>
-                                            </div>
-                                            <div class="column justify-content-center align-items-center grow"><h3 class="squad-name">{{ $squads[$squadID]->display }}</h3></div>
+                                    <div class="row no-margin">
+                                        @if (!$member->get('characters')->where('unit_name', $squads->get($squadID)->leader_id)->isEmpty())
+                                        <div class="character-bg-wrapper glass-back {{ $units[$squads->get($squadID)->leader_id]->combat_type == 1 ? '' : 'ship' }}">
+                                            <character
+                                                :character="{{ $member->get('characters')->where('unit_name', $squads->get($squadID)->leader_id)->first()->toJson() }}"
+                                                no-stats no-mods no-zetas
+                                                :classes="'large'"
+                                            ></character>
+                                        </div>
+                                        @else
+                                        <div>LEADER NOT UNLOCKED</div>
+                                        @endif
+                                        <div class="column justify-content-center align-items-center grow"><h3 class="squad-name">{{ $squads[$squadID]->display }}</h3></div>
                                         </div>
 
                                         <div class="row no-margin">
                                             @if($units[$squads->get($squadID)->leader_id]->combat_type == 1)
                                             @foreach ($squads->get($squadID)->additional_members as $base_id)
                                             <div class="character-bg-wrapper glass-back">
+                                                @if (!$member->get('characters')->where('unit_name', $base_id)->isEmpty())
                                                 <character
                                                     :character="{{ $member->get('characters')->where('unit_name', $base_id)->first()->toJson() }}"
                                                     no-stats no-mods no-zetas
                                                     :classes="'medium'"
                                                 ></character>
+                                                @else
+                                                <div>{{$base_id}} not ulocked!!</div>
+                                                @endif
                                             </div>
                                             @endforeach
                                             @else
                                             @foreach (collect($squads->get($squadID)->additional_members)->slice(0, 3) as $base_id)
                                             <div class="character-bg-wrapper glass-back ship">
+                                                @if (!$member->get('characters')->where('unit_name', $base_id)->isEmpty())
                                                 <character
                                                     :character="{{ $member->get('characters')->where('unit_name', $base_id)->first()->toJson() }}"
                                                     no-stats no-mods no-zetas
                                                     :classes="'medium'"
                                                 ></character>
+                                                @else
+                                                <div>{{$base_id}} not ulocked!!</div>
+                                                @endif
                                             </div>
                                             @endforeach
                                             @endif
@@ -95,11 +107,15 @@
                                         <div class="row no-margin">
                                             @foreach (collect($squads->get($squadID)->additional_members)->slice(3) as $base_id)
                                             <div class="character-bg-wrapper glass-back ship">
+                                                @if (!$member->get('characters')->where('unit_name', $base_id)->isEmpty())
                                                 <character
                                                     :character="{{ $member->get('characters')->where('unit_name', $base_id)->first()->toJson() }}"
                                                     no-stats no-mods no-zetas
                                                     :classes="'medium'"
                                                 ></character>
+                                                @else
+                                                <div>{{$base_id}} not ulocked!!</div>
+                                                @endif
                                             </div>
                                             @endforeach
                                         </div>
