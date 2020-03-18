@@ -61,7 +61,8 @@ class SquadController extends Controller
             $ships = [];
         }
 
-        $tabs = SquadGroup::whereIn('guild_id', $guildIDs)
+        $tabs = SquadGroup::whereIn('guild_id', $guildIDs->filter(function ($v) { return $v > -1; }))
+            ->orWhere('user_id', auth()->user()->id)
             ->orderBy('guild_id')
             ->orderByDesc('publish')
             ->orderBy('name')->get()

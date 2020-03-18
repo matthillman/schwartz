@@ -85,15 +85,16 @@ class GuildController extends Controller
 
     public function listMembers($guild, $team, $mode = 'guild', int $index = PHP_INT_MAX) {
         $guild = Guild::findOrFail($guild);
-
+        $group = null;
         if (ctype_digit(strval($team))) {
-            $team = SquadGroup::findOrFail($team);
-            Gate::authorize('view-squad', $team);
+            $group = SquadGroup::findOrFail($team);
+            Gate::authorize('view-squad', $group);
             $highlight = 'gear';
-            $teams = $team->squads->mapWithKeys(function($squad) {
+            $teams = $group->squads->mapWithKeys(function($squad) {
                 return [$squad->display => collect([$squad->leader_id])->concat($squad->additional_members)->toArray()];
             });
             $teamKeys = $teams->keys();
+            $team = $group->id;
         } else {
             list($highlight, $teams) = $this->getSquadsFor($team);
             $teamKeys = array_keys($teams);
@@ -124,7 +125,7 @@ class GuildController extends Controller
             'team' => $team,
             'guild' => $guild,
             'teamKeys' => collect($teamKeys)->map(function($k, $i) { return ['title' => $k, 'index' => $i]; }),
-            'title' => $this->squadLabelFor($team),
+            'title' => $this->squadLabelFor($group ?? $team),
             'selected' => $index,
         ]);
     }

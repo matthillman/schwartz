@@ -54,16 +54,18 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('view-squad', function($user, $squadGroup) {
+            if (Gate::allows('edit-squad', $squadGroup)) { return true; }
             if ($user->admin) { return true; }
 
             if (!($squadGroup instanceof SquadGroup)) {
                 $squadGroup = SquadGroup::findOrFail($squadGroup);
             }
 
-            if ($squadGroup->id == 1 || $squadGroup->guild_id === 0) { return $squadGroup->published; }
             if ($squadGroup->guild_id === -1) { return $user->id === $squadGroup->user_id; }
 
-            return Gate::allows('in-guild', $squadGroup->guild) && $squadGroup->published;
+            if (!$squadGroup->published) { return false; }
+
+            return $squadGroup->id == 1 || $squadGroup->guild_id === 0 || Gate::allows('in-guild', $squadGroup->guild);
         });
 
         Gate::define('edit-squad', function ($user, $squadGroup) {
