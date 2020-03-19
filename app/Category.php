@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use Searchable;
+    use \App\Database\CachesQueries;
 
     protected $fillable = [ 'category_id', 'description', 'visible' ];
     protected $appends = [ 'partition' ];

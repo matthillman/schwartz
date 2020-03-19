@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use DB;
+use Cache;
 use Storage;
 use App\Unit;
 use App\Zeta;
@@ -228,6 +229,8 @@ class PullGameData extends Command
 
             $this->info("Done.");
         }
+
+        Cache::store('game-data')->flush();
 
         $time = Carbon::now()->diffInSeconds($start);
         $this->comment("Returning. Fetching took {$time} seconds.");

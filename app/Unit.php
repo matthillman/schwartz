@@ -4,13 +4,12 @@ namespace App;
 
 use ScoutElastic\Searchable;
 use SwgohHelp\Enums\Alignment;
-use App\Database\CachesQueries;
 use Illuminate\Database\Eloquent\Model;
 
 class Unit extends Model
 {
     use Searchable;
-    use CachesQueries;
+    use \App\Database\CachesQueries;
 
     protected $fillable = ['base_id'];
 

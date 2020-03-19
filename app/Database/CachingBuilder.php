@@ -14,7 +14,7 @@ class CachingBuilder extends QueryBuilder
      */
     protected function runSelect()
     {
-        return Cache::store('request')->remember($this->getCacheKey(), 1, function() {
+        return Cache::store('game-data')->remember($this->getCacheKey(), null, function() {
             return parent::runSelect();
         });
     }

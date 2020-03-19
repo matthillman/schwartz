@@ -21,7 +21,7 @@ class BotCommand implements ShouldBroadcast
     *
     * @var string
     */
-    public $broadcastQueue = 'notifications';
+    public $broadcastQueue = 'bot';
 
     protected $payload;
     /**

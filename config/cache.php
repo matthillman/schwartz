@@ -73,10 +73,13 @@ return [
             'connection' => 'default',
         ],
 
-
         'request' => [
-            'driver' => 'array'
+            'driver' => 'array',
         ],
+
+        'game-data' => [
+            'driver' => 'redis',
+        ]
 
     ],
 
