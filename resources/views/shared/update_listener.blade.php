@@ -1,3 +1,4 @@
+@person
 @push('scripts')
 <script type="text/javascript" defer>
 
@@ -13,3 +14,4 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 @endpush
+@endperson
