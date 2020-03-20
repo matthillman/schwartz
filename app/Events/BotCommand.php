@@ -53,6 +53,6 @@ class BotCommand implements ShouldBroadcast
     }
 
     public function tags() {
-        return ['bot'];
+        return collect(['bot'])->concat($this->payload['tag'] ?? [])->all();
     }
 }

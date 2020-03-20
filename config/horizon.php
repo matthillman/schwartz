@@ -76,7 +76,7 @@ return [
         'production' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue' => ['notifications', 'default', 'scout'],
+                'queue' => explode(',', env('HORIZON_QUEUES', 'default')),
                 'balance' => 'simple',
                 'processes' => 3,
                 'tries' => 3,
@@ -86,7 +86,7 @@ return [
         'local' => [
             'supervisor-1' => [
                 'connection' => 'redis',
-                'queue' => ['notifications', 'default', 'scout'],
+                'queue' => ['bot', 'notifications', 'default', 'scout'],
                 'balance' => 'simple',
                 'processes' => 3,
                 'tries' => 3,

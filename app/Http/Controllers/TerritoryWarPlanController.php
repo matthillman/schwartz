@@ -112,12 +112,15 @@ class TerritoryWarPlanController extends Controller
             return http_500("No members to DM");
         }
 
-        broadcast(new \App\Events\BotCommand([
-            'command' => 'send-dms',
-            'members' => $members->all(),
-            'url' => "twp/{$plan->id}/member",
-            'message' => 'Here are your defensive assignments for this TW! Please ask if you have any questions!'
-        ]));
+        $members->each(function($member) use ($plan) {
+            broadcast(new \App\Events\BotCommand([
+                'command' => 'send-dms',
+                'members' => [$member],
+                'url' => "twp/{$plan->id}/member",
+                'message' => 'Here are your defensive assignments for this TW! Please ask if you have any questions!',
+                'tag' => ['dm', "plan:{$plan->id}", "member:".$member['ally_code']],
+            ]));
+        });
 
         return response()->json(['success' => true]);
     }
