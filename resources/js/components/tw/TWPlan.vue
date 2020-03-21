@@ -201,6 +201,7 @@
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" v-model="membersToMessage" :value="member.ally_code" :id="`message-${member.ally_code}`">
                             <label class="form-check-label" :for="`message-${member.ally_code}`">{{ member.player }}</label>
+                            <status :status="getStatusFor(member.dm_status)"></status>
                         </div>
                     </div>
                 </div>
@@ -253,6 +254,11 @@ export default {
             })
             .listen('.user.changed', e => {
                 this.userList.find(u => u.id == e.user.id).zone = e.user.zone;
+                this.$forceUpdate();
+            })
+            .listen('.member.dm.status', e => {
+                console.warn('dm update', e);
+                this.ourMembers.find(m => m.ally_code == e.member.ally_code).dm_status = e.member.dm_status;
                 this.$forceUpdate();
             })
         ;
@@ -495,13 +501,20 @@ export default {
             this.membersToMessage = this.members.filter(m => m.bannerCount).map(m => m.ally_code);
             this.sendMessages = true;
         },
+        getStatusFor(dmStatus) {
+            switch(dmStatus) {
+                case -1: return 'failed';
+                case 1: return 'pending';
+                case 2: return 'completed';
+                default: return '';
+            }
+        },
         async sendDMs() {
             try {
                 await axios.post(`/twp/${this.ourPlan.id}/dm`, {
                     members: this.membersToMessage.join(','),
                 });
                 alert("DMs queued to be sent");
-                this.sendMessages = null;
                 this.membersToMessage = [];
             } catch (error) {
                 console.error(error);
@@ -587,9 +600,17 @@ export default {
         margin-bottom: 4px;
         cursor: pointer;
 
+        .form-check {
+            display: flex;
+        }
+
         label {
             cursor: pointer;
             width: 100%;
+        }
+
+        &:hover {
+            background: #ced4da;
         }
     }
 }

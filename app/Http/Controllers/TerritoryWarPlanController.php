@@ -7,6 +7,7 @@ use App\Unit;
 use App\Guild;
 use App\Member;
 use App\SquadGroup;
+use App\DiscordRole;
 use App\TerritoryWarPlan;
 use App\Events\TWPlanChanged;
 use App\Events\TWPlanUserState;
@@ -97,14 +98,8 @@ class TerritoryWarPlanController extends Controller
             ->map(function($ally) {
                 return Member::with('roles')->where(['ally_code' => str_replace('-', '', $ally)])->firstOrFail();
             })
-            ->map(function($member) {
-                return [
-                    'ally_code' => $member->ally_code,
-                    'id' => $member->roles->discord_id,
-                ];
-            })
-            ->filter(function($data) {
-                return !is_null($data['id']);
+            ->filter(function($member) {
+                return !is_null($member->roles->discord_id);
             })
         ;
 
@@ -113,14 +108,19 @@ class TerritoryWarPlanController extends Controller
         }
 
         $members->each(function($member) use ($plan) {
-            broadcast(new \App\Events\BotCommand([
-                'command' => 'send-dms',
-                'members' => [$member],
-                'url' => "twp/{$plan->id}/member",
-                'message' => 'Here are your defensive assignments for this TW! Please ask if you have any questions!',
-                'tag' => ['dm', "plan:{$plan->id}", "member:".$member['ally_code']],
-            ]));
+            $member->roles->dm_status = DiscordRole::DM_PENDING;
+            $member->push();
+            broadcast(new \App\Events\DMState($plan, ['ally_code' => $member->ally_code, 'dm_status' => $member->roles->dm_status]));
         });
+
+        broadcast(new \App\Events\BotCommand([
+            'command' => 'send-dms',
+            'members' => $members->map(function ($member) { return [ 'ally_code' => $member->ally_code, 'id' => $member->roles->discord_id ]; }),
+            'url' => "twp/{$plan->id}/member",
+            'message' => 'Here are your defensive assignments for this TW! Please ask if you have any questions!',
+            'tag' => ['dm', "plan:{$plan->id}"],
+            'context' => "$plan->id",
+        ]));
 
         return response()->json(['success' => true]);
     }

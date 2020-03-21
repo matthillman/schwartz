@@ -63,6 +63,7 @@ Vue.component('auto-checkbox', require('./components/util/AutoCheckbox.vue').def
 Vue.component('auto-text-field', require('./components/util/AutoTextField.vue').default);
 Vue.component('auto-select', require('./components/util/AutoSelect.vue').default);
 Vue.component('tooltip', require('./components/util/Tooltip.vue').default);
+Vue.component('status', require('./components/util/StatusCircle.vue').default);
 
 Vue.component('mini-squad-table', require('./components/MiniSquadTable.vue').default);
 Vue.component('highlight-widget', require('./components/HighlightWidget.vue').default);

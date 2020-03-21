@@ -19,4 +19,5 @@ Route::group(['middleware' => 'client'], function() {
     Route::post('/registration/{id}/{discord}/{server?}', 'APIController@register');
     Route::delete('/registration/{id}/{server?}', 'APIController@deleteRegistration');
     Route::post('/guild-query-response', 'APIController@guildQueryResponse')->name('bot.guild.response');
+    Route::post('/send-dm-response', 'APIController@sendDmResponse')->name('bot.dm.response');
 });

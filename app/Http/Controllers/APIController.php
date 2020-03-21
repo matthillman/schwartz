@@ -7,6 +7,7 @@ use App\Guild;
 use App\Member;
 use App\AllyCodeMap;
 use App\DiscordRole;
+use App\TerritoryWarPlan;
 use App\Jobs\ProcessUser;
 use App\Jobs\ProcessGuild;
 use Illuminate\Http\Request;
@@ -91,5 +92,28 @@ class APIController extends Controller
             }
         }
 
+    }
+
+    public function sendDmResponse(Request $request) {
+        $discordID = $request->input('member');
+
+        $plan = TerritoryWarPlan::findOrFail($request->input('context'));
+
+        $role = DiscordRole::where('discord_id', $discordID)->firstOrFail();
+        $role->dm_status = $request->input('success') ? DiscordRole::DM_SUCCESS : min($role->dm_status, 0) + DiscordRole::DM_FAILED;
+        $role->save();
+
+        if ($role->dm_status < 0 && abs($role->dm_status) < 5) {
+            broadcast(new \App\Events\BotCommand([
+                'command' => 'send-dms',
+                'members' => [[ 'ally_code' => $role->ally->ally_code, 'id' => $role->discord_id ]],
+                'url' => "twp/{$plan->id}/member",
+                'message' => 'Here are your defensive assignments for this TW! Please ask if you have any questions!',
+                'tag' => ['dm', "plan:{$plan->id}"],
+                'context' => "$plan->id",
+            ]));
+        }
+
+        broadcast(new \App\Events\DMState($plan, ['ally_code' => $role->ally->ally_code, 'dm_status' => $role->dm_status]));
     }
 }
