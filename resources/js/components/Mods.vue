@@ -588,8 +588,8 @@
                     let suffix = '';
                     if (finalVal % 1 !== 0) {
                         suffix = '%'
-                        finalVal = (finalVal * 100).toFixed(2);
-                        modVal = ((modVal || 0) * 100).toFixed(2);
+                        finalVal = finalVal.toFixed(2);
+                        modVal = (modVal || 0).toFixed(2);
                     }
                     let result = `${finalVal}${suffix}`;
                     if (modVal > 0) {
@@ -630,7 +630,7 @@
                     }
                 }
 
-                return total;
+                return `${total}${attribute === 'critical chance' ? '%' : ''}`;
             },
             locationFor(shape, set) {
                 let mod = this.mods[set[shape]];

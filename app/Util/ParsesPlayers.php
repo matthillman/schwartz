@@ -138,53 +138,57 @@ trait ParsesPlayers {
         $translated['stats'] = $member_data['profileStatList'];
         $translated['arena'] = $member_data['pvpProfileList'];
 
-        $translated['roster'] = collect($member_data['rosterUnitList'])->map(function($unit) {
-            list($baseId, ) = explode(':', $unit['definitionId']);
-            $unitData = Unit::where(['base_id' => $baseId])->firstOrFail();
-
-            $r = [
-                'defId' => $unitData->base_id,
-                'nameKey' => $unitData->name,
-                'rarity' => $unit['currentRarity'],
-                'level' => $unit['currentLevel'],
-                'gear' => $unit['currentTier'],
-                'combatType' => $unitData->combat_type,
-                'crew' => $unitData->crew_list,
-                'gp' => 0,
-                'relic' => array_get($unit, 'relic', []),
-                'equipped' => array_get($unit, 'equipmentList', []),
-                'skills' => collect(array_get($unit, 'skillList', []))->map(function($skill) {
-                    $skill['tier'] += 2;
-                    return $skill;
-                }),
-                'mods' => collect($unit['equippedStatModList'])->map(function($modData) {
-                    $modStat = StatModList::findOrFail($modData['definitionId']);
-                    return [
-                        'id' => $modData['id'],
-                        'definitionId' => $modData['definitionId'],
-                        'level' => $modData['level'],
-                        'tier' => $modData['tier'],
-                        'slot' => $modStat->slot,
-                        'set' => $modStat->set,
-                        'pips' => $modStat->rarity,
-                        'primaryStat' => [
-                            'unitStat' => $modData['primaryStat']['stat']['unitStatId'],
-                            'value' =>  $modData['primaryStat']['stat']['unscaledDecimalValue'] / $this->statMultiplierFor($modData['primaryStat']['stat']['unitStatId']),
-                        ],
-                        'secondaryStat' => collect($modData['secondaryStatList'])->map(function($secondary) {
-                            return [
-                                'unitStat' => $secondary['stat']['unitStatId'],
-                                'value' => $secondary['stat']['unscaledDecimalValue'] / $this->statMultiplierFor($secondary['stat']['unitStatId']),
-                                'roll' => $secondary['statRolls'],
-                            ];
-                        }),
-                    ];
-                }),
-            ];
-            return $r;
-        });
+        $translated['roster'] = collect($member_data['rosterUnitList']);
 
         return $translated;
+    }
+
+    public function translateUnit($unit) {
+        list($baseId, ) = explode(':', $unit['definitionId']);
+        $unitData = Unit::where(['base_id' => $baseId])->firstOrFail();
+
+        $r = [
+            'defId' => $unitData->base_id,
+            'nameKey' => $unitData->name,
+            'rarity' => $unit['currentRarity'],
+            'level' => $unit['currentLevel'],
+            'gear' => $unit['currentTier'],
+            'combatType' => $unitData->combat_type,
+            'crew' => $unitData->crew_list,
+            'gp' => 0,
+            'relic' => array_get($unit, 'relic', []),
+            'equipped' => array_get($unit, 'equipmentList', []),
+            'skills' => collect(array_get($unit, 'skillList', []))->map(function($skill) {
+                $skill['tier'] += 2;
+                return $skill;
+            }),
+            'mods' => collect($unit['equippedStatModList']),
+        ];
+        return $r;
+    }
+
+    public function translateMod($modData) {
+        $modStat = StatModList::findOrFail($modData['definitionId']);
+        return [
+            'id' => $modData['id'],
+            'definitionId' => $modData['definitionId'],
+            'level' => $modData['level'],
+            'tier' => $modData['tier'],
+            'slot' => $modStat->slot,
+            'set' => $modStat->set,
+            'pips' => $modStat->rarity,
+            'primaryStat' => [
+                'unitStat' => $modData['primaryStat']['stat']['unitStatId'],
+                'value' =>  $modData['primaryStat']['stat']['unscaledDecimalValue'] / $this->statMultiplierFor($modData['primaryStat']['stat']['unitStatId']),
+            ],
+            'secondaryStat' => collect($modData['secondaryStatList'])->map(function($secondary) {
+                return [
+                    'unitStat' => $secondary['stat']['unitStatId'],
+                    'value' => $secondary['stat']['unscaledDecimalValue'] / $this->statMultiplierFor($secondary['stat']['unitStatId']),
+                    'roll' => $secondary['statRolls'],
+                ];
+            }),
+        ];
     }
 
     private function statMultiplierFor($stat) {
@@ -268,7 +272,8 @@ trait ParsesPlayers {
         $roster = collect($member_data['roster']);
         $member_data = null;
         unset($member_data);
-        $mappedRoster = $roster->map(function($unit) use ($member, $modUser, $stats) {
+        $mappedRoster = $roster->map(function($rawUnit) use ($member, $modUser, $stats) {
+            $unit = $this->translateUnit($rawUnit);
             if (is_null($unit['combatType'])) {
                 $unit['combatType'] = 1;
             }
@@ -284,12 +289,13 @@ trait ParsesPlayers {
                 'rarity' => $unit['rarity'],
                 'relic' => array_get($unit, 'relic.currentTier', 0),
                 'stats' => array_get($statsEntry, 'stats', array_get($unit, 'stats', [])),
-                'raw' => collect($unit)->except('stats')->toArray(),
+                'raw' => collect($rawUnit)->except('stats')->toArray(),
             ];
             // if ($isChar) {
             //     $character['power'] = $this->getAdjustedPower($character);
             // }
-            $mods = collect($unit['mods'] ?? [])->map(function($mod) use ($character, $modUser) {
+            $mods = collect($unit['mods'] ?? [])->map(function($rawMod) use ($character, $modUser) {
+                $mod = $this->translateMod($rawMod);
                 $modItem = [
                     "uid" => $mod["id"],
                     'slot' => (new ModSlot(+$mod['slot']))->getKey(),
@@ -302,7 +308,7 @@ trait ParsesPlayers {
                     "tier" => $mod["tier"],
                     "primary_type" => (new UnitStat($mod["primaryStat"]["unitStat"]))->getKey(),
                     "primary_value" => $mod["primaryStat"]["value"],
-                    'raw' => $mod,
+                    'raw' => $rawMod,
                 ];
 
                 collect([1, 2, 3, 4])->each(function($index) use ($mod, &$modItem) {

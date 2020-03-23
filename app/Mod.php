@@ -57,9 +57,9 @@ class Mod extends Model
     public function getRollsAttribute() {
         $rolls = [];
 
-        if (isset($this->raw['secondaryStat'])) {
-            foreach ($this->raw['secondaryStat'] as $secondary) {
-                $rolls[(new UnitStat($secondary['unitStat']))->getKey()] = $secondary['roll'];
+        if (isset($this->raw['secondaryStatList'])) {
+            foreach ($this->raw['secondaryStatList'] as $secondary) {
+                $rolls[(new UnitStat($secondary['stat']['unitStatId']))->getKey()] = $secondary['statRolls'];
             }
         }
 

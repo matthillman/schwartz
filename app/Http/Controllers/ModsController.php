@@ -50,13 +50,14 @@ class ModsController extends Controller
         $unitID = request()->input('unit');
         $modIDs = request()->input('mods');
 
-        $unitData = Character::findOrFail($unitID)->rawData->data;
-        $unitData['mods'] = collect($modIDs)->map(function($modID) {
+        $character = Character::findOrFail($unitID);
+        $unitData = $character->rawData->data;
+        $unitData['equippedStatModList'] = collect($modIDs)->map(function($modID) {
             return CharacterMod::where('uid', $modID)->firstOrFail()->raw;
         })->toArray();
 
-        $updated = stats()->addStatsTo([$unitData])->first();
+        $updated = stats()->addStatsTo([['rosterUnitList' => [$unitData]]])->first();
 
-        return $updated['stats'];
+        return $updated[$character->unit_name]['stats'];
     }
 }
