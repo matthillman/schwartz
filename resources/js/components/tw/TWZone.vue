@@ -174,7 +174,7 @@ export default {
             && (!member.usedSquads || !member.usedSquads.has(this.squads[squadID].leader_id));
         },
         memberFor(ally_code) {
-            return this.members.find(m => m.ally_code == ally_code) || { player: `BOB (${ally_code})`, characters: [] };
+            return this.members.find(m => m.ally_code == ally_code) || { player: `BOB (${ally_code})`, ally_code, characters: [] };
         },
         charForMember(ally_code, base_id) {
             const member = this.memberFor(ally_code);
