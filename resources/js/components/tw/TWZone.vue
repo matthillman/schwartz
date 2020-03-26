@@ -69,7 +69,7 @@
                                                 <tbody>
                                                     <tr class="squad-row tooltip-row">
                                                         <td v-for="char_id in squads[squadID].additional_members.slice(4)" :key="char_id">
-                                                            <div>
+                                                            <div v-if="charForMember(ally_code, base_id)">
                                                             <character
                                                                 :character="charForMember(ally_code, char_id)"
                                                                 no-stats no-mods no-zetas
@@ -169,12 +169,12 @@ export default {
                 .filter(m => !this.zoneData[squadID].includes(m.ally_code));
         },
         memberAvailable(member, squadID) {
-            if (!member.ally_code) { return false; }
+            if (!member || !member.ally_code) { return false; }
             return !this.zoneData[squadID].includes(member.ally_code)
             && (!member.usedSquads || !member.usedSquads.has(this.squads[squadID].leader_id));
         },
         memberFor(ally_code) {
-            return this.members.find(m => m.ally_code == ally_code) || { player: "BOB", characters: [] };
+            return this.members.find(m => m.ally_code == ally_code) || { player: `BOB (${ally_code})`, characters: [] };
         },
         charForMember(ally_code, base_id) {
             const member = this.memberFor(ally_code);
