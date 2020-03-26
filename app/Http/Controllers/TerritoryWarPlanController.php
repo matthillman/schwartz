@@ -115,7 +115,7 @@ class TerritoryWarPlanController extends Controller
 
         broadcast(new \App\Events\BotCommand([
             'command' => 'send-dms',
-            'members' => $members->map(function ($member) { return [ 'ally_code' => $member->ally_code, 'id' => $member->roles->discord_id ]; }),
+            'members' => $members->map(function ($member) { return [ 'ally_code' => $member->ally_code, 'id' => $member->roles->discord_id ]; })->values(),
             'url' => "twp/{$plan->id}/member",
             'message' => 'Here are your defensive assignments for this TW! Please ask if you have any questions!',
             'tag' => ['dm', "plan:{$plan->id}"],
