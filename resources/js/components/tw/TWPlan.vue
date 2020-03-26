@@ -308,6 +308,7 @@ export default {
                     const members = p[squadID];
                     for (const ally_code of members) {
                         const member = this.ourMembers.find(m => m.ally_code == ally_code);
+                        if (!member) { continue; }
                         const memberSquads = member.usedSquads || new Set;
                         memberSquads.add(this.squads[squadID].leader_id);
                         member.usedSquads = memberSquads;
