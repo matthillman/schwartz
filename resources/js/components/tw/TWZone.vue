@@ -174,10 +174,11 @@ export default {
             && (!member.usedSquads || !member.usedSquads.has(this.squads[squadID].leader_id));
         },
         memberFor(ally_code) {
-            return this.members.find(m => m.ally_code == ally_code) || { player: "BOB" };
+            return this.members.find(m => m.ally_code == ally_code) || { player: "BOB", characters: [] };
         },
         charForMember(ally_code, base_id) {
-            const char = this.memberFor(ally_code).characters.filter(c => c.unit_name == base_id);
+            const member = this.memberFor(ally_code);
+            const char = member.characters.filter(c => c.unit_name == base_id);
             if (char.length) { return char[0]; }
             return null;
         },
