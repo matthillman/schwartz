@@ -113,6 +113,19 @@ class TerritoryWarPlanController extends Controller
         $units = Unit::whereIn('base_id', $unitIDs)->get()->keyBy('base_id');
 
         $members->each(function($member) use ($plan, $squads, $units) {
+            $hasAssignments = collect(range(1, 10))
+            ->map(function($zone) use ($plan) {
+                return ['number' => $zone, 'plan' => $plan->{"zone_$zone"}];
+            })
+            ->filter(function($zone) use ($member) {
+                return $zone['plan']->flatten()->contains($member->ally_code);
+            })->count() > 0;
+
+            if (!$hasAssignments || $member->discord->discord_id == null) {
+                \Log::info("Tried sending DM to member that didn't need one", [$hasAssignments, $member->discord->toJson()]);
+                return;
+            }
+
             $member->roles->dm_status = DiscordRole::DM_PENDING;
             $member->push();
             broadcast(new \App\Events\DMState($plan, ['ally_code' => $member->ally_code, 'dm_status' => $member->roles->dm_status]));
