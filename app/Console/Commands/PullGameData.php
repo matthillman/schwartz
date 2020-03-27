@@ -280,7 +280,6 @@ class PullGameData extends Command
             "/api/data/helpEntryList.json",
             "/api/data/linkedStoreItemList.json",
             "/api/data/materialList.json",
-            "/api/data/metadata.json",
             "/api/data/modRecommendationList.json",
             "/api/data/mysteryBoxList.json",
             "/api/data/mysteryStatModList.json",
@@ -318,6 +317,7 @@ class PullGameData extends Command
             "/api/data/unlockAnnouncementDefinitionList.json",
             "/api/data/warDefinitionList.json",
             "/api/data/xpTableList.json",
+            "/api/data/metadata.json",
         ]);
     }
 }
