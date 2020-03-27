@@ -15,16 +15,17 @@ class DiscordMessage extends Notification implements ShouldQueue
     use Queueable;
 
     public $message;
-
+    public $embed;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($message)
+    public function __construct($message, $embed = [])
     {
         $this->message = $message;
+        $this->embed = $embed;
         $this->queue = 'notifications';
     }
 
@@ -41,7 +42,7 @@ class DiscordMessage extends Notification implements ShouldQueue
 
     public function toDiscord($notifiable)
     {
-        return Message::create($this->message);
+        return Message::create($this->message, $this->embed);
     }
 
     /**
@@ -54,6 +55,7 @@ class DiscordMessage extends Notification implements ShouldQueue
     {
         return [
             'message' => $this->message,
+            'embed' => $this->embed,
         ];
     }
 }

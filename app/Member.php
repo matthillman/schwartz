@@ -5,10 +5,13 @@ namespace App;
 use DB;
 use ScoutElastic\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use NotificationChannels\Discord\Discord;
 
 class Member extends Model
 {
     use Searchable;
+    use Notifiable;
     use Util\MetaChars;
 
     protected $fillable = ['url', 'ally_code'];
@@ -230,5 +233,25 @@ class Member extends Model
                 ];
             }),
         );
+    }
+
+    public function getDiscordPrivateChannelIdAttribute($value) {
+        if ($this->user) {
+            return $this->user->discord_private_channel_id;
+        }
+        if (is_null($value)) {
+            $channelID = app(Discord::class)->getPrivateChannel($this->discord_id);
+            $this->user->discord_private_channel_id = $channelID;
+            $this->user->save();
+
+            return $channelID;
+        }
+
+        return $value;
+    }
+
+    public function routeNotificationForDiscord()
+    {
+        return $this->discord_private_channel_id;
     }
 }

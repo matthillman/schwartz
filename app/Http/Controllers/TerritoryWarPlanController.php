@@ -11,6 +11,7 @@ use App\DiscordRole;
 use App\TerritoryWarPlan;
 use App\Events\TWPlanChanged;
 use App\Events\TWPlanUserState;
+use App\Notifications\DiscordMessage;
 
 use Illuminate\Http\Request;
 
@@ -91,7 +92,7 @@ class TerritoryWarPlanController extends Controller
     }
 
     public function sendDMs(Request $request, $plan) {
-        $plan = TerritoryWarPlan::findOrFail($plan);
+        $plan = TerritoryWarPlan::with('guild.members.stats')->findOrFail($plan);
         Gate::authorize('edit-guild', $plan->guild->id);
 
         $members = collect(explode(',', $request->get('members')))
@@ -107,20 +108,67 @@ class TerritoryWarPlanController extends Controller
             return http_500("No members to DM");
         }
 
-        $members->each(function($member) use ($plan) {
+        $squads = $plan->squad_group->squads->keyBy('id');
+        $unitIDs = $plan->squad_group->squads->pluck('additional_members')->flatten()->merge($plan->squad_group->squads->pluck('leader_id'))->unique();
+        $units = Unit::whereIn('base_id', $unitIDs)->get()->keyBy('base_id');
+
+        $members->each(function($member) use ($plan, $squads, $units) {
             $member->roles->dm_status = DiscordRole::DM_PENDING;
+            $member->push();
+            broadcast(new \App\Events\DMState($plan, ['ally_code' => $member->ally_code, 'dm_status' => $member->roles->dm_status]));
+
+            $member->notify(new DiscordMessage("View in a prettier format: ". route('tw-plan.member.assignment', ['plan' => $plan->id, 'ally_code' => $member->ally_code]), [
+                'title' => 'TW Defense Assignments',
+                'description' => 'Here are your defensive assignments for this TW! Please ask if you have any questions!',
+                'url' => route('tw-plan.member.assignment', ['plan' => $plan->id, 'ally_code' => $member->ally_code]),
+                'fields' => collect(range(1, 10))
+                    ->map(function($zone) use ($plan) {
+                        return ['number' => $zone, 'plan' => $plan->{"zone_$zone"}];
+                    })
+                    ->filter(function($zone) use ($member) {
+                        return $zone['plan']->flatten()->contains($member->ally_code);
+                    })
+                    ->flatMap(function($zone) use ($squads, $units, $member) {
+                        return $zone['plan']
+                            ->filter(function($members) use ($member) {
+                                return in_array($member->ally_code, $members);
+                            })
+                            ->map(function($members, $squadID) use ($zone, $squads, $units) {
+                                $squad = $squads->get($squadID);
+                                return [
+                                    'name' => "Zone " . $zone['number'],
+                                    'value' => '**' . $squad->display . "**\n" .
+                                        "  🛡 " .$units->get($squad->leader_id)->name ."\n" .
+                                        (
+                                            $units->get($squad->leader_id)->combat_type == 1 ?
+                                                collect($squad->additional_members)->reduce(function($s, $base_id) use ($units) {
+                                                    return "$s    • " . $units->get($base_id)->name . "\n";
+                                                }, '') :
+                                                collect($squad->additional_members)->slice(0, 3)->reduce(function($s, $base_id) use ($units) {
+                                                    return "$s    • " . $units->get($base_id)->name . "\n";
+                                                }, '') . "*REINFORCEMENTS*\n" .
+                                                collect($squad->additional_members)->slice(3)->reduce(function($s, $base_id) use ($units) {
+                                                    return "$s    • " . $units->get($base_id)->name . "\n";
+                                                }, '')
+                                        )
+                                ];
+                            });
+                    })
+            ]));
+
+            $member->roles->dm_status = DiscordRole::DM_SUCCESS;
             $member->push();
             broadcast(new \App\Events\DMState($plan, ['ally_code' => $member->ally_code, 'dm_status' => $member->roles->dm_status]));
         });
 
-        broadcast(new \App\Events\BotCommand([
-            'command' => 'send-dms',
-            'members' => $members->map(function ($member) { return [ 'ally_code' => $member->ally_code, 'id' => $member->roles->discord_id ]; })->values(),
-            'url' => "twp/{$plan->id}/member",
-            'message' => 'Here are your defensive assignments for this TW! Please ask if you have any questions!',
-            'tag' => ['dm', "plan:{$plan->id}"],
-            'context' => "$plan->id",
-        ]));
+        // broadcast(new \App\Events\BotCommand([
+        //     'command' => 'send-dms',
+        //     'members' => $members->map(function ($member) { return [ 'ally_code' => $member->ally_code, 'id' => $member->roles->discord_id ]; })->values(),
+        //     'url' => "twp/{$plan->id}/member",
+        //     'message' => 'Here are your defensive assignments for this TW! Please ask if you have any questions!',
+        //     'tag' => ['dm', "plan:{$plan->id}"],
+        //     'context' => "$plan->id",
+        // ]));
 
         return response()->json(['success' => true]);
     }
