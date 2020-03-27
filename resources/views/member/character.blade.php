@@ -21,13 +21,16 @@
                                     'noStats' => true,
                                     'size' => 'giant',
                                 ])
-                                <div class="relic-portrait medium {{ $character->alignment }}{{ $character->relic <= 1 ? ' locked' : '' }}">
-                                    <div class="backdrop">
-                                        <img src="/images/gear/{{ $character->unit->relic_image }}.png" alt="">
-                                        @if($character->relic > 2)<div class="tier">{{ $character->relic - 2 }}</div>@endif
+                                @if ($character->combat_type == 1)
+                                    <div class="relic-portrait medium {{ $character->alignment }}{{ $character->relic <= 1 ? ' locked' : '' }}">
+                                        <div class="backdrop">
+                                            <img src="/images/gear/{{ $character->unit->relic_image }}.png" alt="">
+                                            @if($character->relic > 2)<div class="tier">{{ $character->relic - 2 }}</div>@endif
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
                             </div>
+                            @if ($character->combat_type == 1)
                             <div class="mod-details {{ $character->alignment }}">
                                 @if ($character->mods->count())
                                 @foreach (['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross'] as $shape)
@@ -42,6 +45,20 @@
                                 @else
                                     <div>No mods found</div>
                                 @endif
+                            </div>
+                            @endif
+                            <div class="items-needed stat-list column">
+                                <div class="row justify-content-center align-items-baseline stat-header"><div>Materials Needed to max Abilities</div></div>
+                                @forelse ($character->ability_materials_needed as $icon => $amount)
+                                    <div class="row justify-content-between">
+                                        <img src="/images/units/abilities/{{ $icon }}.png">
+                                        <span>{{ number_format($amount) }}</span>
+                                    </div>
+                                @empty
+                                <div class="row justify-content-between">
+                                    <div>Abilities Maxed!</div>
+                                </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>

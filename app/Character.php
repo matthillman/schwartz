@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Util\GameData;
 use App\Util\KeyStats;
 use App\Util\RecommendsStats;
 use SwgohHelp\Enums\UnitStat;
@@ -61,15 +62,6 @@ class Character extends Model
         return $this->hasOne(CharactersRaw::class);
     }
 
-    // public function getPowerAttribute($value) {
-    //     static $relicBonus = [ 0, 759, 1594, 2505, 3492, 4554, 6072, 7969 ];
-
-    //     if ($this->relic >= 2) {
-    //         return $value + $relicBonus[$this->relic - 2];
-    //     }
-
-    //     return $value;
-    // }
     public function getAlignmentAttribute() {
         return $this->unit->alignment;
     }
@@ -213,6 +205,31 @@ class Character extends Model
 
             return [UnitStat::$key()->getValue() => $rank];
         });
+    }
+
+    public function getAbilityMaterialsNeededAttribute() {
+        $skills = GameData::skills();
+        $recipes = GameData::recipes();
+        $materials = GameData::materials();
+
+        $totals = [];
+        foreach ($this->rawData->data['skillList'] as $skill) {
+            $skillDef = $skills->get($skill['id']);
+            $tiers = collect($skillDef['tierList']);
+
+            if ($skill['tier'] < $tiers->count()) {
+                foreach ($tiers->slice($skill['tier'] + 1) as $tier) {
+                    $recipe = $recipes->get($tier['recipeId']);
+
+                    foreach ($recipe['ingredientsList'] as $ingredient) {
+                        $key = $materials->get($ingredient['id'])['iconKey'] ?? $ingredient['id'];
+                        $totals[$key] = ($totals[$key] ?? 0) + $ingredient['maxQuantity'];
+                    }
+                }
+            }
+        }
+
+        return $totals;
     }
 
     public function __get($key)

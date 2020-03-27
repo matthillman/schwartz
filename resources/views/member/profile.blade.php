@@ -35,6 +35,14 @@
                                         </div>
                                     </button>
                                 </form>
+                                <form method="GET" action="{{ route('member.ships', ['ally' => $member->ally_code]) }}" >
+                                    <button type="submit" class="btn btn-primary">
+                                        <div class="flex-center">
+                                            <ion-icon name="planet"></ion-icon>
+                                            <span>{{ __('Ships') }}</span>
+                                        </div>
+                                    </button>
+                                </form>
                             </div>
                             @endperson
 

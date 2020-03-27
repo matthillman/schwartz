@@ -113,6 +113,7 @@ Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
     Route::get('/member/mods/{character}', 'MemberController@characterMods')->name('member.character_mods');
     Route::get('/member/{ally}', 'MemberController@show')->name('member.profile');
     Route::get('/member/{ally}/characters', 'MemberController@characters')->name('member.characters');
+    Route::get('/member/{ally}/ships', 'MemberController@characters')->name('member.ships');
     Route::get('/member/{ally}/character/{id}', 'MemberController@showCharacter')->name('member.character');
     Route::get('/member/{ally}/{team}', 'MemberController@listTeams')->name('member.teams');
     Route::get('/member-search', 'SearchController@searchMembers')->name('search.members');

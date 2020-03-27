@@ -78,7 +78,9 @@ class MemberController extends Controller
     public function characters(Request $request, $allyCode) {
         $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
 
-        return view('member.characters', [
+        $view = $request->route()->named('member.characters') ? 'member.characters' : 'member.ships';
+
+        return view($view, [
             'member' => $member,
             'categories' => Category::visibleCategories(),
             'selected_category' => Category::where('category_id', $request->category)->first(),

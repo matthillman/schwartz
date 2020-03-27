@@ -510,6 +510,20 @@ $base: 80px;
                 }
             }
         }
+
+        .items-needed {
+            background-image: radial-gradient(ellipse at bottom center, $light-navy, $dark-navy);
+            font-weight: 400;
+            color: $white;
+            text-shadow: 1px 1px 0 $gray-900;
+            margin: 8px auto;
+
+            img {
+                width: 22px;
+                box-sizing: content-box;
+            }
+
+        }
     }
 
 }

@@ -60,6 +60,56 @@
                 </div>
             </div>
 
+            @user('accounts')
+                <div class="card">
+                    <div class="card-header"><h2>Your Accounts</h2></div>
+
+                    <div class="card-body">
+                        <div class="guild-list">
+                        @forelse(auth()->user()->accounts as $member)
+                            <div class="row">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" v-model="memberCompareArray" :value="`{{ $member->ally_code }}`">
+                                </div>
+                                <div class="grow">
+                                    <div>{{ $member->player }}</div>
+                                    <div class="small-note">{{ preg_replace('/^(\d{3})(\d{3})(\d{3})$/', "$1–$2–$3", $member->ally_code) }}</div>
+                                    <div class="small-note">{{ number_format($member->gp) }}</div>
+                                </div>
+
+                                <span class="status-indicator" v-if="modJobStatusByAllyCode[`{{ $member->ally_code }}`]">
+                                    <svg v-if="modJobStatusByAllyCode[`{{ $member->ally_code }}`] == 'completed'" class="fill-success" viewBox="0 0 20 20" style="width: 1.5rem; height: 1.5rem;">
+                                        <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM6.7 9.29L9 11.6l4.3-4.3 1.4 1.42L9 14.4l-3.7-3.7 1.4-1.42z"></path>
+                                    </svg>
+
+                                    <svg v-if="modJobStatusByAllyCode[`{{ $member->ally_code }}`] == 'reserved' || modJobStatusByAllyCode[`{{ $member->ally_code }}`] == 'pending'" class="fill-warning" viewBox="0 0 20 20" style="width: 1.5rem; height: 1.5rem;">
+                                        <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM7 6h2v8H7V6zm4 0h2v8h-2V6z"/>
+                                    </svg>
+
+                                    <svg v-if="modJobStatusByAllyCode[`{{ $member->ally_code }}`] == 'failed'" class="fill-danger" viewBox="0 0 20 20" style="width: 1.5rem; height: 1.5rem;">
+                                        <path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm1.41-1.41A8 8 0 1 0 15.66 4.34 8 8 0 0 0 4.34 15.66zm9.9-8.49L11.41 10l2.83 2.83-1.41 1.41L10 11.41l-2.83 2.83-1.41-1.41L8.59 10 5.76 7.17l1.41-1.41L10 8.59l2.83-2.83 1.41 1.41z"/>
+                                    </svg>
+                                </span>
+                                <button type="button" @@click="go(`/member/{{ $member->ally_code }}`)" class="btn btn-primary btn-icon" title="Profile"><ion-icon name="person" size="medium"></ion-icon></button>
+                                <button type="button" @@click="go(`/member/{{ $member->ally_code }}/characters`)"  class="btn btn-primary btn-icon" title="Characters"><ion-icon name="list" size="medium"></ion-icon></button>
+                                <button type="button" @@click="go(`/member/{{ $member->ally_code }}/ships`)"  class="btn btn-primary btn-icon" title="Ships"><ion-icon name="planet" size="medium"></ion-icon></button>
+                                <a href="{{ $member->url }}" target="_gg" class="gg-link">
+                                    @include('shared.bb8')
+                                </a>
+                                <form method="POST" :action="`/member/{{ $member->id }}/refresh`">
+                                    @method('PUT')
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="refresh" size="medium"></ion-icon></button>
+                                </form>
+                            </div>
+                        @empty
+                            <div>No accounts found for the current user 😞</div>
+                        @endforelse
+                        </div>
+                    </div>
+                </div>
+            @enduser
+
             <div class="card">
                 <div class="card-header"><h2>Find a Player</h2></div>
                 <div class="card-body guild-list">
@@ -71,7 +121,7 @@
                         <div class="grow">
                             <div>@{{ result.item.player }}</div>
                             <div class="small-note">@{{ result.item.ally_code.replace(/^(\d{3})(\d{3})(\d{3})$/, "$1–$2–$3") }}</div>
-                            <div class="small-note">@{{ result.item.gp.toLocaleString() }}M</div>
+                            <div class="small-note">@{{ result.item.gp.toLocaleString() }}</div>
                         </div>
 
                         <span class="status-indicator" v-if="modJobStatusByAllyCode[result.item.ally_code]">
@@ -89,6 +139,7 @@
                         </span>
                         <button type="button" @@click="go(`/member/${result.item.ally_code}`)" class="btn btn-primary btn-icon" title="Profile"><ion-icon name="person" size="medium"></ion-icon></button>
                         <button type="button" @@click="go(`/member/${result.item.ally_code}/characters`)"  class="btn btn-primary btn-icon" title="Characters"><ion-icon name="list" size="medium"></ion-icon></button>
+                        <button type="button" @@click="go(`/member/${result.item.ally_code}/ships`)"  class="btn btn-primary btn-icon" title="Ships"><ion-icon name="planet" size="medium"></ion-icon></button>
                         <a :href="result.item.url" target="_gg" class="gg-link">
                             @include('shared.bb8')
                         </a>
