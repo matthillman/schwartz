@@ -130,7 +130,7 @@ class TerritoryWarPlanController extends Controller
             $member->push();
             broadcast(new \App\Events\DMState($plan, ['ally_code' => $member->ally_code, 'dm_status' => $member->roles->dm_status]));
 
-            $member->notify(new DiscordMessage("View in a prettier format: ". route('tw-plan.member.assignment', ['plan' => $plan->id, 'ally_code' => $member->ally_code]), [
+            $embed = [
                 'title' => 'TW Defense Assignments',
                 'description' => 'Here are your defensive assignments for this TW! Please ask if you have any questions!',
                 'url' => route('tw-plan.member.assignment', ['plan' => $plan->id, 'ally_code' => $member->ally_code]),
@@ -150,7 +150,8 @@ class TerritoryWarPlanController extends Controller
                                 $squad = $squads->get($squadID);
                                 return [
                                     'name' => "Zone " . $zone['number'],
-                                    'value' => '**' . $squad->display . "**\n" .
+                                    'value' => '**' . $squad->display . "**\n"
+                                        .
                                         "  🛡 " .$units->get($squad->leader_id)->name ."\n" .
                                         (
                                             $units->get($squad->leader_id)->combat_type == 1 ?
@@ -169,7 +170,11 @@ class TerritoryWarPlanController extends Controller
                             });
                     })
                     ->all()
-            ]));
+            ];
+
+            $message = new DiscordMessage("View in a prettier format: ". route('tw-plan.member.assignment', ['plan' => $plan->id, 'ally_code' => $member->ally_code]), $embed);
+
+            $member->notify($message);
 
             $member->roles->dm_status = DiscordRole::DM_SUCCESS;
             $member->push();

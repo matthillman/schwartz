@@ -236,18 +236,21 @@ class Member extends Model
     }
 
     public function getDiscordPrivateChannelIdAttribute($value) {
-        if ($this->user) {
-            return $this->user->discord_private_channel_id;
-        }
-        if (is_null($value)) {
-            $channelID = app(Discord::class)->getPrivateChannel($this->discord_id);
-            $this->user->discord_private_channel_id = $channelID;
-            $this->user->save();
+        return $this->roles->discord_private_channel_id;
+    //     if ($this->user) {
+    //         return $this->user->discord_private_channel_id;
+    //     }
 
-            return $channelID;
-        }
+    //     if (is_null($value)) {
+    //         $channelID = app(Discord::class)->getPrivateChannel($this->discord->discord_id);
+    //         dd('$channelID', $channelID);
+    //         $this->discord_private_channel_id = $channelID;
+    //         $this->user->save();
 
-        return $value;
+    //         return $channelID;
+    //     }
+
+    //     return $value;
     }
 
     public function routeNotificationForDiscord()
