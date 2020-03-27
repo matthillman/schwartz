@@ -64,7 +64,7 @@ class JobsController extends Controller
             })
             ->filter(function ($job) use ($request) {
                 return array_reduce(explode(',', $request->tags), function($c, $tag) use ($job) {
-                    return $c && in_array($tag, $job->payload->tags);
+                    return $c && in_array($tag, collect($job->payload->tags)->values()->all());
                 }, true);
             })
             ->values();
