@@ -151,9 +151,11 @@ class TerritoryWarPlanController extends Controller
                                                     return "$s    • " . $units->get($base_id)->name . "\n";
                                                 }, '')
                                         )
+                                    ,
                                 ];
                             });
                     })
+                    ->all()
             ]));
 
             $member->roles->dm_status = DiscordRole::DM_SUCCESS;
