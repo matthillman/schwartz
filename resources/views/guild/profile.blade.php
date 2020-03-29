@@ -34,6 +34,7 @@
                 </div>
 
                 @foreach($guilds as $guild)
+                @if($guild)
                 <div class="card-body">
                     <h2>{{ $guild->name }}</h2>
                     <div class="small-note">Defeine the ID of the discord server where your guild roles are defined. These roles are used to authorize other guild-related actions.</div>
@@ -70,6 +71,7 @@
                         @endforeach
                     </collapsable>
                 </div>
+                @endif
                 @endforeach
 
             </div>
