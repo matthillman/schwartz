@@ -212,13 +212,15 @@ class Character extends Model
         $recipes = GameData::recipes();
         $materials = GameData::materials();
 
+        $skillList = $this->unit->skills->concat($this->unit->crew_list->pluck('skillReferenceList')->flatten(1))->pluck('skillId');
+        $ourSkills = collect($this->rawData->data['skillList'])->keyBy('id');
         $totals = [];
-        foreach ($this->rawData->data['skillList'] as $skill) {
-            $skillDef = $skills->get($skill['id']);
+        foreach ($skillList as $skill) {
+            $skillDef = $skills->get($skill);
             $tiers = collect($skillDef['tierList']);
-
-            if ($skill['tier'] < $tiers->count()) {
-                foreach ($tiers->slice($skill['tier'] + 1) as $tier) {
+            $thisTier = $ourSkills->get($skill)['tier'] ?? -1;
+            if ($thisTier < $tiers->count()) {
+                foreach ($tiers->slice($thisTier + 1) as $tier) {
                     $recipe = $recipes->get($tier['recipeId']);
 
                     foreach ($recipe['ingredientsList'] as $ingredient) {

@@ -2,6 +2,7 @@
 
 namespace App\Util;
 
+use Cache;
 use App\Unit;
 use SwgohHelp\Enums\UnitStat;
 use SwgohHelp\Enums\Alignment;
@@ -9,9 +10,10 @@ use SwgohHelp\Enums\Alignment;
 trait MetaChars {
 
     public static function getCompareCharacters() {
-        static $chars;
-        if (is_null($chars)) {
+        return Cache::store('game-data')->remember('meta:compare-chars', null, function() {
             $chars = collect([
+                'GLREY' =>               'Rey',
+                'SUPREMELEADERKYLOREN' =>'SL Kylo',
                 'GENERALSKYWALKER' =>    'Gen. Skywalker',
                 'DARTHREVAN' =>          'Darth Revan',
                 'DARTHMALAK' =>          'Malak',
@@ -29,13 +31,13 @@ trait MetaChars {
                 $unit = $units->where('base_id', $id)->first();
                 return [$id => ['name' => $name, 'alignment' => strtolower($unit->alignment)]];
             });
-        }
 
-        return $chars;
+            return $chars;
+        });
     }
+
     public static function getKeyCharacters() {
-        static $chars;
-        if (is_null($chars)) {
+        return Cache::store('game-data')->remember('meta:key-chars', null, function() {
             $chars = collect([
                 'WATTAMBOR' =>          'Wat Tambor',
                 'BASTILASHANDARK' =>    'Bastila',
@@ -50,13 +52,12 @@ trait MetaChars {
                 $unit = $units->where('base_id', $id)->first();
                 return [$id => ['name' => $name, 'alignment' => strtolower($unit->alignment)]];
             });
-        }
 
-        return $chars;
+            return $chars;
+        });
     }
     public static function getKeyShips() {
-        static $chars;
-        if (is_null($chars)) {
+        return Cache::store('game-data')->remember('meta:key-ships', null, function() {
             $chars = collect([
                 'CAPITALNEGOTIATOR' =>  'Negotiator',
                 'CAPITALMALEVOLENCE' => 'Malevolence',
@@ -70,14 +71,13 @@ trait MetaChars {
                 $unit = $units->where('base_id', $id)->first();
                 return [$id => ['name' => $name, 'alignment' => strtolower($unit->alignment)]];
             });
-        }
 
-        return $chars;
+            return $chars;
+        });
     }
 
     public static function getCompareStats() {
-        static $stats;
-        if (is_null($stats)) {
+        return Cache::store('game-data')->remember('meta:compare-stats', null, function() {
             $stats = collect([
                 ['stat' => UnitStat::UNITSTATSPEED(), 'key' => 'speed', 'display' => ''],
                 ['stat' => UnitStat::UNITSTATMAXHEALTH(), 'key' => 'health', 'display' => ''],
@@ -87,9 +87,9 @@ trait MetaChars {
                 ['stat' => UnitStat::UNITSTATATTACKDAMAGE(), 'key' => 'offense', 'display' => 'P'],
                 ['stat' => UnitStat::UNITSTATABILITYPOWER(), 'key' => 'offense', 'display' => 'S'],
             ]);
-        }
 
-        return $stats;
+            return $stats;
+        });
     }
 
 }

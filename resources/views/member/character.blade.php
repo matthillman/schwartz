@@ -7,7 +7,7 @@
             <div class="card dark-back">
                 <div class="card-header glass-back row justify-content-start align-items-baseline">
                     <button type="button" @@click="back" class="btn btn-dark btn-icon back-button">
-                        <ion-icon name="chevron-back-circle" size="medium"></ion-icon>
+                        <ion-icon name="play" size="medium"></ion-icon>
                     </button>
                     <h2>{{ $member->player }}'s {{ $character->display_name }}</h2>
                 </div>

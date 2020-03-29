@@ -14,8 +14,9 @@ class Unit extends Model
     protected $fillable = ['base_id'];
 
     protected $casts = [
-        'crew_list' => 'array',
+        'crew_list' => 'collection',
         'category_list' => 'array',
+        'skills' => 'collection',
     ];
 
     protected $indexConfigurator = Search\Indexes\UnitIndexConfigurator::class;

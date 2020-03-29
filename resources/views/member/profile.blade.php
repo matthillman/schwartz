@@ -26,23 +26,19 @@
                             </div>
 
                             @person
-                            <div class="column">
-                                <form method="GET" action="{{ route('member.characters', ['ally' => $member->ally_code]) }}" >
-                                    <button type="submit" class="btn btn-primary">
-                                        <div class="flex-center">
-                                            <ion-icon name="list"></ion-icon>
-                                            <span>{{ __('Characters') }}</span>
-                                        </div>
-                                    </button>
-                                </form>
-                                <form method="GET" action="{{ route('member.ships', ['ally' => $member->ally_code]) }}" >
-                                    <button type="submit" class="btn btn-primary">
-                                        <div class="flex-center">
-                                            <ion-icon name="planet"></ion-icon>
-                                            <span>{{ __('Ships') }}</span>
-                                        </div>
-                                    </button>
-                                </form>
+                            <div class="column align-items-stretch">
+                                <button type="submit" class="btn btn-primary" @@click="go(`{{ route('member.characters', ['ally' => $member->ally_code]) }}`)">
+                                    <div class="flex-center">
+                                        <ion-icon name="list"></ion-icon>
+                                        <span>{{ __('Characters') }}</span>
+                                    </div>
+                                </button>
+                                <button type="submit" class="btn btn-primary" @@click="go(`{{ route('member.ships', ['ally' => $member->ally_code]) }}`)">
+                                    <div class="flex-center">
+                                        <ion-icon name="planet"></ion-icon>
+                                        <span>{{ __('Ships') }}</span>
+                                    </div>
+                                </button>
                             </div>
                             @endperson
 

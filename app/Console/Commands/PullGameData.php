@@ -136,6 +136,7 @@ class PullGameData extends Command
                         $unit->crew_list = $data['crewList'] ?: [];
                         $unit->relic_image = isset($data['relicDefinition']) ? $data['relicDefinition']['nameKey'] : '';
                         $unit->category_list = $data['categoryIdList'];
+                        $unit->skills = $data['skillReferenceList'];
 
                         $unit->save();
 

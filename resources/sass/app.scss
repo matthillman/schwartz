@@ -659,8 +659,30 @@ table.sortable {
   }
 }
 
-.back-button {
+.btn.btn.btn-icon.back-button {
   margin-right: 8px;
+  border-radius: 50%;
+  border: 1px solid white;
+  border-top-color: $overlay-navy;
+  border-bottom-color: $overlay-navy;
+  background: linear-gradient(
+    to bottom,
+    $light-navy,
+    $light-navy 5%,
+    $dark-navy 35%,
+    $dark-navy 65%,
+    $light-navy 95%,
+    $light-navy
+  );
+  padding: 4px;
+
+  background-size: 100% 4px;
+  color: $white;
+  box-shadow: 0 0 3px $dark-navy;
+  ion-icon {
+    transform: rotate(180deg) translateX(1px);
+    background-image: radial-gradient(ellipse at 44% center, $overlay-navy, transparent 65%);
+  }
 }
 
 .no-resize {
