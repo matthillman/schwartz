@@ -6,9 +6,7 @@
         <div class="col-12">
             <div class="card dark-back">
                 <div class="card-header glass-back row justify-content-start align-items-baseline">
-                    <button type="button" @@click="back" class="btn btn-dark btn-icon back-button">
-                        <ion-icon name="play" size="medium"></ion-icon>
-                    </button>
+                    @include('shared.back')
                     <h2>{{ $member->player }}'s {{ $character->display_name }}</h2>
                 </div>
                 <div class="card-body character-profile row">

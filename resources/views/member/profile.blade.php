@@ -8,11 +8,14 @@
                     <div class="card-body" highlight="none">
                         <div class="row justify-content-between align-items-start">
                             <div class="column align-items-start grow">
-                                <h1>
-                                    <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
-                                        <span>{{ $member->player }}</span>
-                                    </a>
-                                </h1>
+                                <div class="row no-margin align-items-center">
+                                    @include('shared.back')
+                                    <h1>
+                                        <a href="https://swgoh.gg{{ $member->url }}" target="_gg">
+                                            <span>{{ $member->player }}</span>
+                                        </a>
+                                    </h1>
+                                </div>
                                 <div class="note"><strong>Ally Code:</strong> <span>{{ $member->ally_code}}</span></div>
 
                                 <div class="row no-margin guild-info glass-back" @@click="go('/guild/{{ $member->guild->id }}')">

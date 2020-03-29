@@ -6,11 +6,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header row justify-content-between align-items-baseline">
-                    @person
-                    <button type="button" @@click="back" class="btn btn-dark btn-icon back-button">
-                        <ion-icon name="play" size="medium"></ion-icon>
-                    </button>
-                    @endperson
+                    @include('shared.back')
                     <h2 class="flex-grow">{{ $member->player }}'s @isset($selected_category) <strong>{{ $selected_category->description }}</strong>@endisset Characters</h2>
                 </div>
                 @person
