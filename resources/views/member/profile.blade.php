@@ -96,10 +96,10 @@
                         <h2>Key Characters</h2>
 
                         @include('shared.unit_table', [
-                            'characters' => ['GENERALSKYWALKER', 'PADMEAMIDALA', 'C3POLEGENDARY', 'JEDIKNIGHTREVAN', 'ANAKINKNIGHT']
+                            'characters' => ['GLREY', 'GENERALSKYWALKER', 'PADMEAMIDALA', 'C3POLEGENDARY', 'JEDIKNIGHTREVAN', 'ANAKINKNIGHT']
                         ])
                         @include('shared.unit_table', [
-                            'characters' => ['DARTHREVAN', 'DARTHMALAK', 'GRIEVOUS', 'GEONOSIANBROODALPHA', 'DARTHTRAYA']
+                            'characters' => ['SUPREMELEADERKYLOREN', 'DARTHREVAN', 'DARTHMALAK', 'GRIEVOUS', 'GEONOSIANBROODALPHA', 'DARTHTRAYA']
                         ])
                         @include('shared.unit_table', [
                             'characters' => ['CAPITALNEGOTIATOR', 'CAPITALMALEVOLENCE', 'MILLENNIUMFALCON']
