@@ -56,7 +56,7 @@
                                         <h1>{{ zone }}</h1>
                                         <div>{{ getTeamsInZone(zone) }} {{ getTeamsInZone(zone) == 1 ? 'team' : 'teams' }}</div>
                                         <div class="row no-margin justify-content-center align-items-start">
-                                            <div class="column char-image-column" v-for="leader_id in getLeadersForZone(zone)" :key="leader_id">
+                                            <div class="column char-image-column" v-for="leader_id in getLeadersForZone(zone).filter(l => !!l)" :key="leader_id">
                                                 <div class="char-image-square small" :class="[units[leader_id].alignment]">
                                                     <img :src="`/images/units/${leader_id}.png`">
                                                 </div>
@@ -344,7 +344,15 @@ export default {
         },
 
         getPlanForZone(zone) {
-            return this.ourPlan[`zone_${zone}`] || {};
+            let plan = this.ourPlan[`zone_${zone}`] || {};
+
+            for (const squad in plan) {
+                if (!this.squads[squad]) {
+                    delete plan[squad];
+                }
+            }
+
+            return plan;
         },
         getNotesForZone(zone) {
             return this.ourPlan[`zone_${zone}_notes`] || '';
@@ -356,7 +364,7 @@ export default {
             return ally_code !== null && Object.values(this.getPlanForZone(zone)).flat().includes(ally_code);
         },
         getLeadersForZone(zone) {
-            return Array.from(new Set(Object.keys(this.getPlanForZone(zone)).map(s => this.squads[s].leader_id)));
+            return Array.from(new Set(Object.keys(this.getPlanForZone(zone)).map(s => this.squads[s] ? this.squads[s].leader_id : null)));
         },
 
         addSquad(zone, squadID) {

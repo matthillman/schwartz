@@ -69,7 +69,7 @@
                                                 <tbody>
                                                     <tr class="squad-row tooltip-row">
                                                         <td v-for="char_id in squads[squadID].additional_members.slice(4)" :key="char_id">
-                                                            <div v-if="charForMember(ally_code, base_id)">
+                                                            <div v-if="charForMember(ally_code, char_id)">
                                                             <character
                                                                 :character="charForMember(ally_code, char_id)"
                                                                 no-stats no-mods no-zetas
