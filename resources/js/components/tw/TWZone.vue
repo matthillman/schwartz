@@ -1,10 +1,10 @@
 <template>
     <div class="card-body">
-        <div v-show-slide="!dragMode">
+        <div v-if="!dragMode">
             <div class="small-note">Notes:</div>
             <div class="notes-field" contenteditable @blur="updateNotes">{{ notes }}</div>
         </div>
-        <div v-show-slide="!dragMode" class="form-group row no-margin align-items-start">
+        <div v-if="!dragMode" class="form-group row no-margin align-items-start">
             <v-select
                 class="grow"
                 :options="availableSquads()"
@@ -89,7 +89,7 @@
                 </table>
             </div>
 
-            <div v-show-slide="!dragMode" class="form-group row no-margin align-items-start add-member">
+            <div v-if="!dragMode" class="form-group row no-margin align-items-start add-member">
                 <v-select
                     class="grow"
                     :options="availableMembers(squadID)"
