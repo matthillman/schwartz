@@ -147,6 +147,18 @@ class PullGameData extends Command
                             ]);
                         }
 
+                        $downloadedSkillsImages = collect(Storage::disk('images')->files('units/skills'))->map(function($f) {
+                            return basename($f);
+                        });
+                        foreach ($unit->skills->concat($unit->crew_list->pluck('skillReferenceList')->flatten(1))->pluck('skillId') as $skill) {
+                            if (!$downloadedSkillsImages->contains("$skill.png")) {
+                                $this->info("Fetching ability image from swgoh.gg ($skill)");
+                                guzzle()->get("https://swgoh.gg/game-asset/a/$skill/", [
+                                    'sink' => base_path("public/images/units/skills/$skill.png"),
+                                ]);
+                            }
+                        }
+
                         $unitSkills[] = ['baseId' => $data['baseId'], 'skills' => collect($data['skillReferenceList'])->pluck('skillId')];
                     }
                     return true;
