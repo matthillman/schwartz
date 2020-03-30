@@ -23,9 +23,7 @@
                 </div>
                 @endperson
                 <div class="card-body character-list dark-back" highlight="none">
-                    @foreach ($member->characters()->with('zetas')->where('combat_type', 1)->get()->sortByDesc('power')->filter(function($char) use ($selected_category) {
-                        return is_null($selected_category) || in_array($selected_category->category_id, $char->category_list);
-                    })->chunk(6) as $chunk)
+                    @foreach ($units->sortByDesc('power')->chunk(6) as $chunk)
                     <div class="col-12 row">
                         @foreach ($chunk as $character)
                         <a class="col-2 character-wrapper" href="{{ route('member.character', ['ally' => $member->ally_code, 'id' => $character->unit_name ]) }}">
@@ -39,6 +37,18 @@
                         @endforeach
                     </div>
                     @endforeach
+                    <div class="col-12 row no-margin justify-content-around glass-back">
+                        <div>Materials to Max Abilities</div>
+
+                        @forelse (App\Character::materialsNeededForSkills($units->pluck('skill_list')) as $icon => $amount)
+                            <div>
+                                <img src="/images/units/abilities/{{ $icon }}.png" width="22">
+                                <span>{{ number_format($amount) }}</span>
+                            </div>
+                        @empty
+                            <div>All Abilities Maxed!</div>
+                        @endforelse
+                    </div>
                 </div>
             </div>
 

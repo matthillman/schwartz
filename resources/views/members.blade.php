@@ -91,7 +91,7 @@
                                     </svg>
                                 </span>
                                 <button type="button" @@click="go(`/member/{{ $member->ally_code }}`)" class="btn btn-primary btn-icon" title="Profile"><ion-icon name="person" size="medium"></ion-icon></button>
-                                <button type="button" @@click="go(`/member/{{ $member->ally_code }}/characters`)"  class="btn btn-primary btn-icon" title="Characters"><ion-icon name="list" size="medium"></ion-icon></button>
+                                <button type="button" @@click="go(`/member/{{ $member->ally_code }}/characters`)"  class="btn btn-primary btn-icon" title="Characters"><ion-icon name="people-circle-outline" size="medium"></ion-icon></button>
                                 <button type="button" @@click="go(`/member/{{ $member->ally_code }}/ships`)"  class="btn btn-primary btn-icon" title="Ships"><ion-icon name="planet" size="medium"></ion-icon></button>
                                 <a href="{{ $member->url }}" target="_gg" class="gg-link">
                                     @include('shared.bb8')
@@ -138,7 +138,7 @@
                             </svg>
                         </span>
                         <button type="button" @@click="go(`/member/${result.item.ally_code}`)" class="btn btn-primary btn-icon" title="Profile"><ion-icon name="person" size="medium"></ion-icon></button>
-                        <button type="button" @@click="go(`/member/${result.item.ally_code}/characters`)"  class="btn btn-primary btn-icon" title="Characters"><ion-icon name="list" size="medium"></ion-icon></button>
+                        <button type="button" @@click="go(`/member/${result.item.ally_code}/characters`)"  class="btn btn-primary btn-icon" title="Characters"><ion-icon name="people-circle-outline" size="medium"></ion-icon></button>
                         <button type="button" @@click="go(`/member/${result.item.ally_code}/ships`)"  class="btn btn-primary btn-icon" title="Ships"><ion-icon name="planet" size="medium"></ion-icon></button>
                         <a :href="result.item.url" target="_gg" class="gg-link">
                             @include('shared.bb8')

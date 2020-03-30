@@ -77,13 +77,19 @@ class MemberController extends Controller
 
     public function characters(Request $request, $allyCode) {
         $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
+        $wantsChars = $request->route()->named('member.characters');
 
-        $view = $request->route()->named('member.characters') ? 'member.characters' : 'member.ships';
+        $view = $wantsChars ? 'member.characters' : 'member.ships';
+        $selectedCategory = Category::where('category_id', $request->category)->first();
+        $units = $member->characters()->with('zetas')->where('combat_type', $wantsChars ? 1 : 2)->get()->filter(function($char) use ($selectedCategory) {
+            return is_null($selectedCategory) || in_array($selectedCategory->category_id, $char->category_list);
+        });
 
         return view($view, [
             'member' => $member,
+            'units' => $units,
             'categories' => Category::visibleCategories(),
-            'selected_category' => Category::where('category_id', $request->category)->first(),
+            'selected_category' => $selectedCategory,
         ]);
     }
 

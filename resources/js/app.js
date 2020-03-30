@@ -98,15 +98,15 @@ new Vue({
 	data,
 	watch: {
 		memberCompare: function(newVal) {
-			const newCompare = this.memberCompareArray.join('\n');
+			const newCompare = this.memberCompareArray.join('\n').trim();
 
 			if (newCompare != newVal) {
-				this.memberCompareArray = newVal.split('\n');
+				this.memberCompareArray = newVal.split('\n').filter(m => !!m);
 			}
 
 		},
 		memberCompareArray: function(newVal) {
-			const newCompare = newVal.join('\n');
+			const newCompare = newVal.join('\n').trim();
 
 			if (newCompare != this.memberCompare) {
 				this.memberCompare = newCompare;

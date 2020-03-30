@@ -32,7 +32,7 @@
                             <div class="column align-items-stretch">
                                 <button type="submit" class="btn btn-primary" @@click="go(`{{ route('member.characters', ['ally' => $member->ally_code]) }}`)">
                                     <div class="flex-center">
-                                        <ion-icon name="list"></ion-icon>
+                                        <ion-icon name="people-circle-outline"></ion-icon>
                                         <span>{{ __('Characters') }}</span>
                                     </div>
                                 </button>

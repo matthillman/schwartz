@@ -7,6 +7,7 @@ use App\Util\KeyStats;
 use App\Util\RecommendsStats;
 use SwgohHelp\Enums\UnitStat;
 use SwgohHelp\Enums\Alignment;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Character extends Model
@@ -207,18 +208,32 @@ class Character extends Model
         });
     }
 
-    public function getAbilityMaterialsNeededAttribute() {
+    public function getSkillListAttribute() {
+        $skillList = $this->unit->skills->concat($this->unit->crew_list->pluck('skillReferenceList')->flatten(1))->pluck('skillId');
+        $ourSkills = collect($this->rawData->data['skillList'])->keyBy('id');
+
+        return $skillList->map(function($skill) use ($ourSkills) {
+            return collect([
+                'id' => $skill,
+                'tier' => $ourSkills->get($skill)['tier'] ?? -1,
+            ]);
+        });
+    }
+
+    public static function materialsNeededForSkills(Collection $skillList) {
+        if (!$skillList->first()->has('id')) {
+            $skillList = $skillList->flatten(1);
+        }
+
         $skills = GameData::skills();
         $recipes = GameData::recipes();
         $materials = GameData::materials();
 
-        $skillList = $this->unit->skills->concat($this->unit->crew_list->pluck('skillReferenceList')->flatten(1))->pluck('skillId');
-        $ourSkills = collect($this->rawData->data['skillList'])->keyBy('id');
         $totals = [];
         foreach ($skillList as $skill) {
-            $skillDef = $skills->get($skill);
+            $skillDef = $skills->get($skill->get('id'));
             $tiers = collect($skillDef['tierList']);
-            $thisTier = $ourSkills->get($skill)['tier'] ?? -1;
+            $thisTier = $skill->get('tier', -1);
             if ($thisTier < $tiers->count()) {
                 foreach ($tiers->slice($thisTier + 1) as $tier) {
                     $recipe = $recipes->get($tier['recipeId']);
@@ -232,6 +247,10 @@ class Character extends Model
         }
 
         return $totals;
+    }
+
+    public function getAbilityMaterialsNeededAttribute() {
+        return static::materialsNeededForSkills($this->skill_list);
     }
 
     public function __get($key)
