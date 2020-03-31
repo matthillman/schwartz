@@ -270,7 +270,7 @@ class Character extends Model
 
                 foreach ($recipe['ingredientsList'] as $ingredient) {
                     $material = $materials->get($ingredient['id']);
-                    if ($material['tier'] > $currentTier) {
+                    if (!is_null($material) && $material['tier'] > $currentTier) {
                         $skill['image'] = $material['iconKey'];
                         $currentTier = $material['tier'];
                     }
