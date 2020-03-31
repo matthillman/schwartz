@@ -16,6 +16,9 @@ class GameData {
     public static function materials() {
         return static::getCached('materialList.json');
     }
+    public static function abilities() {
+        return static::getCached('abilityList.json');
+    }
 
     private static function getCached($file) {
         return Cache::store('game-data')->remember($file, null, function() use ($file) {

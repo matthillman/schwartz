@@ -7,28 +7,106 @@
             <div class="card dark-back">
                 <div class="card-header glass-back row justify-content-start align-items-baseline">
                     @include('shared.back')
-                    <h2>{{ $member->player }}'s {{ $character->display_name }}</h2>
+                    <div class="column">
+                        <h2>{{ $character->display_name }}</h2>
+                        <div class="small-note">{{ $member->player }}</div>
+                    </div>
                 </div>
                 <div class="card-body character-profile row">
                     <div class="col-6">
                         <div class="column justify-content-center character-info-wrapper">
-                            <div class="row justify-content-between align-items-center portrait-wrapper {{ $character->alignment }}">
+                            <div class="row justify-content-between {{ $character->is_ship ? 'align-items-start ship' : 'align-items-center char' }} portrait-wrapper {{ $character->alignment }}">
+                                @if ($character->is_ship)
+                                <div class="column">
+                                    @foreach ($character->crew_display_list->slice(0, 2) as $crew)
+                                        <div class="row no-margin justify-content-between align-items-center pilot-wrapper left glass-back">
+                                            <div class="ability-wrapper {{ $crew['character']->alignment }}">
+                                                <tooltip>
+                                                    <img class="ability" src="/images/units/skills/{{ $crew['id'] }}.png">
+                                                    @isset($crew['image'])
+                                                        <img class="ability-flair" src="/images/units/abilities/{{ $crew['image'] }}.png">
+                                                    @elseif($crew['tier'] >= 0)
+                                                        <div class="ability-flair"><div class="value">{{ $crew['tier'] + 1 }}</div></div>
+                                                    @endisset
+                                                    <template #tooltip>
+                                                        <h4 class="whitespace-nowrap">{{ $crew['name'] }}</h4>
+                                                        <p class="ability-description">{!! $crew['description'] !!}</p>
+                                                    </template>
+                                                </tooltip>
+                                            </div>
+                                            @include('shared.char', [
+                                                'character' => $crew['character'],
+                                                'noMods' => true,
+                                                'noStats' => true,
+                                                'size' => 'medium',
+                                            ])
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @endif
                                 @include('shared.char', [
                                     'character' => $character,
                                     'noMods' => true,
                                     'noStats' => true,
                                     'size' => 'giant',
                                 ])
-                                @if ($character->combat_type == 1)
+                                @if ($character->is_char)
                                     <div class="relic-portrait medium {{ $character->alignment }}{{ $character->relic <= 1 ? ' locked' : '' }}">
                                         <div class="backdrop">
                                             <img src="/images/gear/{{ $character->unit->relic_image }}.png" alt="">
                                             @if($character->relic > 2)<div class="tier">{{ $character->relic - 2 }}</div>@endif
                                         </div>
                                     </div>
+                                @else
+                                <div class="column">
+                                    @if($character->crew_display_list->count() > 2)
+                                    <div class="row no-margin justify-content-between align-items-center pilot-wrapper right glass-back">
+                                        @foreach ($character->crew_display_list->slice(2) as $crew)
+                                            @include('shared.char', [
+                                                'character' => $crew['character'],
+                                                'noMods' => true,
+                                                'noStats' => true,
+                                                'size' => 'medium',
+                                            ])
+                                            <div class="ability-wrapper {{ $crew['character']->alignment }}">
+                                                <tooltip>
+                                                    <img class="ability" src="/images/units/skills/{{ $crew['id'] }}.png">
+                                                    @isset($crew['image'])
+                                                        <img class="ability-flair" src="/images/units/abilities/{{ $crew['image'] }}.png">
+                                                    @elseif($crew['tier'] >= 0)
+                                                        <div class="ability-flair"><div class="value">{{ $crew['tier'] + 1 }}</div></div>
+                                                    @endisset
+                                                    <template #tooltip>
+                                                        <h4 class="whitespace-nowrap">{{ $crew['name'] }}</h4>
+                                                        <p class="ability-description">{!! $crew['description'] !!}</p>
+                                                    </template>
+                                                </tooltip>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    @endif
+                                </div>
                                 @endif
                             </div>
-                            @if ($character->combat_type == 1)
+                            <div class="row no-margin justify-content-center align-items-center ability-row">
+                                @foreach ($character->skill_display_list as $skill)
+                                    <div class="ability-wrapper {{ $character->alignment }}">
+                                        <tooltip>
+                                            <img class="ability" src="/images/units/skills/{{ $skill['id'] }}.png">
+                                            @isset($skill['image'])
+                                                <img class="ability-flair" src="/images/units/abilities/{{ $skill['image'] }}.png">
+                                            @elseif($skill['tier'] >= 0)
+                                                <div class="ability-flair"><div class="value">{{ $skill['tier'] + 1 }}</div></div>
+                                            @endisset
+                                            <template #tooltip>
+                                                <h4 class="whitespace-nowrap">{{ $skill['name'] }}</h4>
+                                                <p class="ability-description">{!! $skill['description'] !!}</p>
+                                            </template>
+                                        </tooltip>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @if ($character->is_char)
                             <div class="mod-details {{ $character->alignment }}">
                                 @if ($character->mods->count())
                                 @foreach (['square', 'arrow', 'diamond', 'triangle', 'circle', 'cross'] as $shape)

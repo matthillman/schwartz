@@ -395,21 +395,22 @@ $base: 80px;
             text-shadow: -1px -1px 0 #000,2px -1px 0 #000,2px 2px 0 #000,-1px 2px 0 #000,2px 3px 0 #000,1px 3px 0 #000,2px 3px 0 #000
         }
 
-        &.locked::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: rgba($color: $black, $alpha: 0.6);
-            border-radius: 50%;
-            background-image: url(/images/gear/lock.png);
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-size: 33%;
-        }
     }
+}
+
+.locked::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba($color: $black, $alpha: 0.6);
+    border-radius: 50%;
+    background-image: url(/images/gear/lock.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 33%;
 }
 
 @include portrait(80px);
@@ -461,7 +462,12 @@ $base: 80px;
         }
     }
     .portrait-wrapper {
-        padding: 16px calc(((100% - 208px * 2) / 2) + ((208px - 150px) / 2));
+        &.char {
+            padding: 16px calc(((100% - 208px * 2) / 2) + ((208px - 150px) / 2));
+        }
+        &.ship {
+            padding: 16px 0;
+        }
         margin: 0;
         background-image: radial-gradient(ellipse at bottom center, $light-navy, $dark-navy);
     }
@@ -470,9 +476,27 @@ $base: 80px;
         max-width: 500px;
         border: 1px solid $gray-800;
         border-radius: 4px;
-        overflow: hidden;
         margin: 0 auto;
 
+        .pilot-wrapper.glass-back {
+            border-radius: 35px;
+            margin-bottom: 4px;
+
+            &.left {
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+                padding: 2px 6px 4px 2px;
+            }
+            &.right {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                padding: 2px 2px 4px 6px;
+            }
+
+            > :first-child {
+                margin-right: 4px;
+            }
+        }
         .mod-details {
             background-image: radial-gradient(ellipse at top center, $light-navy, $dark-navy);
 
@@ -526,6 +550,66 @@ $base: 80px;
         }
     }
 
+}
+
+.ability-row {
+    background-image: radial-gradient(ellipse at top center, $light-navy, $dark-navy);
+}
+.ability-wrapper {
+    position: relative;
+    border: 3px double $overlay-navy;
+    box-shadow: 0 0 2px $white;
+    border-radius: 4px;
+    margin: 4px;
+
+    &.light {
+        border-color: $dark-navy;
+    }
+
+    &.dark {
+        border-color: #27080c;
+    }
+
+    &.neutral {
+        border-color: #222;
+    }
+
+    img.ability {
+        width: 44px;
+    }
+
+    .ability-flair {
+        width: 20px;
+        position: absolute;
+        bottom: -8px;
+        right: -8px;
+    }
+
+    div.ability-flair {
+        text-align: center;
+        vertical-align: middle;
+        box-sizing: border-box;
+        border: 1px solid $light-navy;
+        background: $dark-navy;
+        padding: 0;
+        line-height: 1;
+        bottom: 0;
+        right: 0;
+        font-size: 13px;
+        width: 15px;
+        height: 15px;
+
+        > .value {
+            position: relative;
+            color: #FFF;
+            text-shadow: 0 1px 0 black;
+        }
+    }
+}
+
+.ability-description {
+    min-width: 300px;
+    white-space: pre-wrap;
 }
 
 .stat-list {

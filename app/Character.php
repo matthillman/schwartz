@@ -130,6 +130,9 @@ class Character extends Model
     public function getIsShipAttribute() {
         return $this->combat_type !== 1;
     }
+    public function getIsCharAttribute() {
+        return $this->combat_type == 1;
+    }
     public function getIsCapitalShipAttribute() {
         return $this->is_ship && starts_with($this->unit_name, 'CAPITAL');
     }
@@ -208,7 +211,28 @@ class Character extends Model
         });
     }
 
+    public function getCrewDisplayListAttribute() {
+        $ourSkills = collect($this->rawData->data['skillList'])->keyBy('id');
+        return $this->unit->crew_list->map(function($crew) use ($ourSkills) {
+            $skill = static::displaySkill($ourSkills[$crew['skillReferenceList'][0]['skillId']]);
+            $skill->put('character', $this->member->characters()->where('unit_name', $crew['unitId'])->first());
+            return $skill;
+        });
+    }
+
     public function getSkillListAttribute() {
+        $skillList = $this->unit->skills->pluck('skillId');
+        $ourSkills = collect($this->rawData->data['skillList'])->keyBy('id');
+
+        return $skillList->map(function($skill) use ($ourSkills) {
+            return collect([
+                'id' => $skill,
+                'tier' => $ourSkills->get($skill)['tier'] ?? -1,
+            ]);
+        });
+    }
+
+    public function getAllSkillsAttribute() {
         $skillList = $this->unit->skills->concat($this->unit->crew_list->pluck('skillReferenceList')->flatten(1))->pluck('skillId');
         $ourSkills = collect($this->rawData->data['skillList'])->keyBy('id');
 
@@ -217,6 +241,48 @@ class Character extends Model
                 'id' => $skill,
                 'tier' => $ourSkills->get($skill)['tier'] ?? -1,
             ]);
+        });
+    }
+
+    private static function displaySkill($skill) {
+        $skills = GameData::skills();
+        $recipes = GameData::recipes();
+        $materials = GameData::materials();
+        $abilities = GameData::abilities();
+
+        $skill = Collection::wrap($skill);
+
+        $skillDef = $skills->get($skill->get('id'));
+
+        $ability = $abilities->get($skillDef['abilityReference']);
+        $skill['name'] = __('messages.' . $ability['nameKey']);
+        $skill['description'] = preg_replace('/\[-\]\[\/c\]/', '</span>',
+            preg_replace('/\[c\]\[([0-9A-Fa-f]{6})\]/', '<span :style="{color: `#$1`}">', __('messages.' . $ability['descKey']))
+        );
+
+        if ($skill->get('tier') >= 0) {
+            $tier = $skillDef['tierList'][$skill->get('tier')];
+
+            if ($skill->get('tier') == count($skillDef['tierList']) - 1) {
+                $recipe = $recipes->get($tier['recipeId']);
+                $currentTier = 0;
+
+                foreach ($recipe['ingredientsList'] as $ingredient) {
+                    $material = $materials->get($ingredient['id']);
+                    if ($material['tier'] > $currentTier) {
+                        $skill['image'] = $material['iconKey'];
+                        $currentTier = $material['tier'];
+                    }
+                }
+            }
+        }
+
+        return $skill;
+    }
+
+    public function getSkillDisplayListAttribute() {
+        return $this->skill_list->map(function($list) {
+            return static::displaySkill($list);
         });
     }
 
@@ -250,7 +316,7 @@ class Character extends Model
     }
 
     public function getAbilityMaterialsNeededAttribute() {
-        return static::materialsNeededForSkills($this->skill_list);
+        return static::materialsNeededForSkills($this->all_skills);
     }
 
     public function __get($key)

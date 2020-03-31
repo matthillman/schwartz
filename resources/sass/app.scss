@@ -728,6 +728,10 @@ table.sortable {
   cursor: grab;
 }
 
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
 @import "grid";
 @import "mods";
 @import "units";
