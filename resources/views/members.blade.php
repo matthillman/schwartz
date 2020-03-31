@@ -74,7 +74,8 @@
                                 <div class="grow">
                                     <div>{{ $member->player }}</div>
                                     <div class="small-note">{{ preg_replace('/^(\d{3})(\d{3})(\d{3})$/', "$1–$2–$3", $member->ally_code) }}</div>
-                                    <div class="small-note">{{ number_format($member->gp) }}</div>
+                                    <div class="small-note">{{ number_format($member->gp) }} GP</div>
+                                    <div class="small-note">{{ $member->guild->name ?? 'Guildless' }}</div>
                                 </div>
 
                                 <span class="status-indicator" v-if="modJobStatusByAllyCode[`{{ $member->ally_code }}`]">
@@ -121,7 +122,8 @@
                         <div class="grow">
                             <div>@{{ result.item.player }}</div>
                             <div class="small-note">@{{ result.item.ally_code.replace(/^(\d{3})(\d{3})(\d{3})$/, "$1–$2–$3") }}</div>
-                            <div class="small-note">@{{ result.item.gp.toLocaleString() }}</div>
+                            <div class="small-note">@{{ result.item.gp.toLocaleString() }} GP</div>
+                            <div class="small-note">@{{ result.item.guild.name || 'Guildless' }}</div>
                         </div>
 
                         <span class="status-indicator" v-if="modJobStatusByAllyCode[result.item.ally_code]">
