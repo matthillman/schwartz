@@ -215,7 +215,7 @@ class Character extends Model
         $ourSkills = collect($this->rawData->data['skillList'])->keyBy('id');
         return $this->unit->crew_list->map(function($crew) use ($ourSkills) {
             $id = $crew['skillReferenceList'][0]['skillId'];
-            $skill = isset($ourSkills[$id]) ? static::displaySkill($ourSkills[$id]) : [ 'id' => $id, 'tier' => -1 ];
+            $skill = static::displaySkill($ourSkills[$id] ?? [ 'id' => $id, 'tier' => -1 ]);
             $skill->put('character', $this->member->characters()->where('unit_name', $crew['unitId'])->first());
             return $skill;
         });
