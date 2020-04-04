@@ -63,7 +63,7 @@ class AuthServiceProvider extends ServiceProvider
 
             if ($squadGroup->guild_id === -1) { return $user->id === $squadGroup->user_id; }
 
-            if (!$squadGroup->published) { return false; }
+            if (!$squadGroup->publish) { return false; }
 
             return $squadGroup->id == 1 || $squadGroup->guild_id === 0 || Gate::allows('in-guild', $squadGroup->guild);
         });
