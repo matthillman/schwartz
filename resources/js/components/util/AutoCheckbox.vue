@@ -2,7 +2,7 @@
     <div class="row align-items-center no-margin wrapper">
         <button
             v-if="button"
-            class="btn btn-icon with-text btn-primary"
+            class="btn btn-icon with-text btn-primary striped"
             @click="isChecked = !isChecked"
         >
             <ion-icon :name="iconName" size="small"></ion-icon>

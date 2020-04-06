@@ -5,7 +5,7 @@
             <div v-if="helpNote.length" class="small-note">{{ helpNote }}</div>
         </div>
         <div class="search-results-wrapper" v-if="results || searching">
-            <div class="column" v-for="item in results.data" :key="item.id">
+            <div :class="resultsClass" v-for="item in results.data" :key="item.id">
                 <slot v-bind:item="item">
                     {{item.name}}
                 </slot>
@@ -69,6 +69,10 @@ export default {
             type: String,
             default: '',
         },
+        resultsClass: {
+            type: Array,
+            default: ['column'],
+        }
     },
     data() {
         return {

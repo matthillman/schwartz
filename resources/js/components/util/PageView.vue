@@ -1,7 +1,7 @@
 <template>
     <div class="page-wrapper">
         <div class="page-container" :style="{ transform: `translateX(${offset}px)` }">
-            <div class="card" v-for="page in pageRange()" :key="page">
+            <div class="card radiant-back" v-for="page in pageRange()" :key="page">
                 <slot name="page" v-bind:page="page">{{ page }}</slot>
             </div>
         </div>

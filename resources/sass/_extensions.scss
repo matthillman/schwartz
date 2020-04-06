@@ -43,6 +43,14 @@
     }
 }
 
+.vs__dropdown-toggle {
+    background: $white;
+}
+
+.header {
+    border-bottom: unset;
+}
+
 popover {
     [slot="content"] {
         display: none;
@@ -126,6 +134,47 @@ popover {
     }
 }
 
+.pop-menu {
+    ul {
+        margin: 0;
+        overflow: hidden;
+        border-radius: 0;
+        max-height: calc(11.6 * 36px);
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+
+        li {
+            scroll-snap-align: start;
+            height: 36px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            strong {
+                font-size: larger;
+                background-color: $dark-navy;
+                color: $white;
+                padding: 4px;
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
+        }
+    }
+
+    a {
+        display: inline-block;
+        width: 100%;
+        padding: 8px 8px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $primary;
+            color: white;
+            text-decoration: none;
+        }
+    }
+}
+
 .btn.inverted {
     outline: none;
     box-shadow: none;
@@ -162,6 +211,28 @@ popover {
 
     > :first-child {
         margin-right: 4px;
+    }
+}
+
+.radiant-back {
+    .page-item {
+        .page-link {
+            background-color: $light-navy;
+            color: $sw-yellow;
+            border-color: lighten($sw-yellow, 10%);
+            transition: background-color 0.3s ease-out;
+        }
+        &:not(.active) a.page-link:hover {
+            background-color: lighten($light-navy, 10%);
+        }
+        &.active .page-link {
+            background-color: $bg-light-navy;
+            color: $white;
+        }
+        &.disabled .page-link {
+            background-color: $light-navy;
+            color: $overlay-navy;
+        }
     }
 }
 

@@ -5,14 +5,16 @@
         <span class="sort-label">Sort by:</span>
         <v-select :options="stats" v-model="sorted" :clearable="false">
             <template v-slot:option="stat">
-                <div class="row no-margin  align-items-center">
-                    <span class="mod-set-image tier-5 mini" :class="stat.key"></span>
+                <div class="row no-margin align-items-center">
+                    <ion-icon v-if="stat.key === 'power'" name="flash" size="micro"></ion-icon>
+                    <span v-else class="mod-set-image tier-5 mini" :class="stat.key"></span>
                     <span>{{ stat.label }}</span>
                 </div>
             </template>
             <template v-slot:selected-option="stat">
                 <div class="row no-margin align-items-center">
-                    <span class="mod-set-image tier-5 mini" :class="stat.key"></span>
+                    <ion-icon v-if="stat.key === 'power'" name="flash" size="micro"></ion-icon>
+                    <span v-else class="mod-set-image tier-5 mini" :class="stat.key"></span>
                     <span>{{ stat.label }}</span>
                 </div>
             </template>
@@ -22,7 +24,10 @@
         <table class="sortable">
             <thead>
                 <tr>
-                    <th class="header">Member</th>
+                    <th class="header clickable"
+                        @click="sortBy(null)"
+                        :class="{sorted: sortCharacter === null, reverse: sortCharacter === null && reversed}"
+                    ><span>Member</span></th>
                     <th v-for="unit in units" :key="unit.base_id"
                         @click="sortBy(unit.base_id)"
                         class="clickable"
@@ -37,7 +42,7 @@
                     <a :href="`/member/${member.ally_code}`">
                         <span>{{ member.player }}</span>
                     </a>
-                    <div class="small-note">Power: {{ member.characters.filter(c => baseIDs.includes(c.unit_name)).reduce((t, c) => t + c.power, 0) }}</div>
+                    <div class="small-note">Power: {{ member.characters.filter(c => baseIDs.includes(c.unit_name)).reduce((t, c) => t + c.power, 0).toLocaleString() }}</div>
                 </td>
                 <td v-for="unit in units" :key="unit.base_id">
                     <div class="team-set">
@@ -63,6 +68,7 @@
         data: function() {
             return {
                 stats: [
+                    {label: 'Power', value: 'power', key: 'power'},
                     {label: 'Speed', value: UnitStat.UNITSTATSPEED, key: 'speed'},
                     {label: 'Offense', value: UnitStat.UNITSTATATTACKDAMAGE, key: 'offense'},
                     {label: 'Special Offense', value: UnitStat.UNITSTATABILITYPOWER, key: 'offense'},
@@ -93,14 +99,19 @@
             	this.sortCharacter = base_id;
             },
             sortMembers: function() {
+                const sortIDs = this.sortCharacter === null ? this.units.map(u => u.base_id) : [this.sortCharacter];
                 let sorted = this.members.sort((a, b) => {
-                    let charA = a.characters.find(c => c.unit_name === this.sortCharacter);
-                    let charB = b.characters.find(c => c.unit_name === this.sortCharacter);
+                    const totals = sortIDs.reduce((total, base_id) => {
+                        let charA = a.characters.find(c => c.unit_name === base_id);
+                        let charAVal = charA ? (this.sorted.value === 'power' ? charA.power : charA.stats.final[this.sorted.value]) : 0;
 
-                    let charAVal = charA ? charA.stats.final[this.sorted.value] : 0;
-                    let charBVal = charB ? charB.stats.final[this.sorted.value] : 0;
+                        let charB = b.characters.find(c => c.unit_name === base_id);
+                        let charBVal = charB ? (this.sorted.value === 'power' ? charB.power : charB.stats.final[this.sorted.value]) : 0;
 
-                    return charAVal - charBVal;
+                        return {a: total.a + charAVal, b: total.b + charBVal};
+                    }, {a: 0, b: 0})
+
+                    return totals.a - totals.b;
                });
                if (!this.reversed) {
                    sorted.reverse();
@@ -121,6 +132,8 @@
 </script>
 
 <style lang="scss" scoped>
+@import "../../sass/_variables.scss";
+
 .member-list {
     margin-top: 16px;
 
@@ -135,6 +148,10 @@
     &.clickable:hover {
         text-decoration: underline;
     }
+}
+
+[name="flash"] {
+    color: $sw-yellow;
 }
 
 .stat-filter {

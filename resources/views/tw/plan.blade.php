@@ -6,18 +6,24 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header row no-margin justify-content-between align-items-start">
-                    <div class="column">
+                    <div class="column grow">
                         <h2>TW Plan: {{ $plan->name }}</h2>
                         <div class="small-note">{{ $plan->guild->name }}</div>
                     </div>
 
                     <div class="column">
-                        <button class="btn btn-primary btn-icon with-text" @@click="go(`{{ route('squads', ['group' => $plan->squad_group->id ]) }}`)">
+                        <button class="btn btn-primary btn-icon with-text striped" @@click="go(`{{ route('guild.members', ['guild' => $plan->guild->id, 'team' => $plan->squad_group->id, 'mode' => 'guild', 'index' => 0]) }}`, true)">
+                            <ion-icon name="eye" size="small"></ion-icon>
+                            <span>View for Guild</span>
+                        </button>
+                    </div>
+                    <div class="column">
+                        <button class="btn btn-primary btn-icon with-text striped" @@click="go(`{{ route('squads', ['group' => $plan->squad_group->id ]) }}`)">
                             <ion-icon name="body" size="small"></ion-icon>
                             <span>Edit Squads</span>
                         </button>
 
-                        <button class="btn btn-primary btn-icon with-text" @@click="showGlobalModal = !showGlobalModal">
+                        <button class="btn btn-primary btn-icon with-text striped" @@click="showGlobalModal = !showGlobalModal">
                             <ion-icon name="add" size="small"></ion-icon>
                             <span>Add a Squad</span>
                         </button>
@@ -35,7 +41,7 @@
                             <unit-select :placeholder="`Leader`" @@input="val => set('leader_id', val ? val.base_id : null)" required></unit-select>
                             <input class="form-control" type="text" placeholder="Squad Name" id="name" name="name" required>
                             <input class="form-control" type="text" placeholder="Squad Description" id="description" name="description" required>
-                            <button type="submit" class="btn btn-primary">{{ __('Add') }}</button>
+                            <button type="submit" class="btn btn-primary striped"><span>{{ __('Add') }}</span></button>
                         </div>
                         <div class="row no-margin add-row input-group add-squad-row multiple">
                             <unit-select multiple :placeholder="`Other Members`" @@input="val => set('other_members', val.map(u => u.base_id).reduce((c, u) => [c, u].join(','), '') )"></unit-select>

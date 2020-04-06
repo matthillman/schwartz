@@ -13,18 +13,16 @@
             <span v-if="!tab.iconOnly">{{ tab.title }}</span>
         </a>
 
-        <popover v-if="hiddenTabs.length" class="teams right" :name="`more-tabs`">
-            <div slot="face">
-                <button class="btn btn-primary inverted btn-icon">
-                    <ion-icon name="ellipsis-horizontal-circle-outline" size="medium"></ion-icon>
-                </button>
-            </div>
-            <div slot="content">
+        <popup v-if="hiddenTabs.length" class="right" :name="`more-tabs`">
+            <button class="btn btn-primary inverted btn-icon">
+                <ion-icon name="ellipsis-horizontal-circle-outline" size="medium"></ion-icon>
+            </button>
+            <template #menu>
                 <ul>
                     <li v-for="tab in hiddenTabs" :key="tab.title"><a :class="{selected: selected == tab.index}" @click.prevent="$emit('changed', tab)">{{ tab.title }}</a></li>
                 </ul>
-            </div>
-        </popover>
+            </template>
+        </popup>
     </div>
 </template>
 

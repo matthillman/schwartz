@@ -1,5 +1,5 @@
 <div class="column">
-    <div class="row">
+    <div class="row cut-corner">
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" v-model="guildCompare" value="{{ $guild->guild_id }}" :disabled="guildCompare.length >= 2 && !guildCompare.includes('{{ $guild->guild_id }}')">
         </div>
@@ -22,14 +22,13 @@
             </svg>
         </span>
 
-        <popover class="teams" name="teams-{{ $guild->id }}">
-            <div slot="face">
-                <button class="btn btn-primary btn-icon with-text"><ion-icon name="list" size="medium"></ion-icon><span>Teams</span></button>
-            </div>
-            <div slot="content">
+
+        <popup>
+            <button class="btn btn-primary btn-icon with-text striped"><ion-icon name="list" size="medium"></ion-icon><span>Teams</span></button>
+
+            <template #menu>
                 <ul>
                 @foreach ($squads as $squad)
-                    @if($guild->id === array_get($squad, 'guild') || !isset($squad['guild']))
                     <li>
                         @if (array_get($squad, 'separator', false))
                         <strong>{{ $squad['label'] }}</strong>
@@ -37,25 +36,20 @@
                         <a href="{{ route('guild.members', ['guild' => $guild->id, 'team' => $squad['value'], 'mode' => 'guild', 'index' => 0]) }}">{{ $squad['label'] }}</a>
                         @endif
                     </li>
-                    @endif
                 @endforeach
                 </ul>
-            </div>
-        </popover>
+            </template>
+        </popup>
 
-        <form method="GET" action="{{ route('guild.modsList', ['guild' => $guild->id]) }}">
-            <button type="submit" class="btn btn-primary btn-icon"><span class="mod-set-image speed tier-6"></span></button>
-        </form>
-        <form method="GET" action="{{ route('guild.guild', ['guild' => $guild->id]) }}">
-            <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="people" size="medium"></ion-icon></button>
-        </form>
-        <a href="{{ $guild->url }}" target="_gg" class="gg-link">
+        <button @@click="go(`{{ route('guild.modsList', ['guild' => $guild->id]) }}`)" class="btn btn-primary btn-icon striped"><span class="mod-set-image speed tier-6"></span></button>
+        <button @@click="go(`{{ route('guild.guild', ['guild' => $guild->id]) }}`)" class="btn btn-primary btn-icon striped"><ion-icon name="people" size="medium"></ion-icon></button>
+        <a href="{{ $guild->url }}" target="_gg" class="gg-link striped round">
             @include('shared.bb8')
         </a>
         <form method="POST" action="{{ route('guild.refresh', ['guild' => $guild->id]) }}">
             @method('PUT')
             @csrf
-            <button type="submit" class="btn btn-primary btn-icon"><ion-icon name="refresh" size="medium"></ion-icon></button>
+            <button type="submit" class="btn btn-primary btn-icon striped"><ion-icon name="refresh" size="medium"></ion-icon></button>
         </form>
     </div>
 </div>

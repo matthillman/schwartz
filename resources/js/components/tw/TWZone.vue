@@ -20,7 +20,7 @@
                     <mini-squad-table :squad="squad" :units="units"></mini-squad-table>
                 </template>
             </v-select>
-            <button class="btn btn-primary" @click="addSquad">Add to Zone</button>
+            <button class="btn btn-primary striped" @click="addSquad"><span>Add to Zone</span></button>
         </div>
 
         <div v-for="(zoneMembers, squadID) in zoneData" :key="`${squadID}-${zoneMembers.length}`"
@@ -101,8 +101,8 @@
                     :selectable="member => memberAvailable(member, squadID)"
                 >
                 </v-select>
-                <button class="btn btn-primary" @click="addMember(squadID)">Add</button>
-                <button class="btn btn-secondary btn-icon" @click="$emit('add-multiple', zone, squadID)">
+                <button class="btn btn-primary striped" @click="addMember(squadID)"><span>Add</span></button>
+                <button class="btn btn-secondary btn-icon striped" @click="$emit('add-multiple', zone, squadID)">
                     <tooltip>
                         <ion-icon name="duplicate" size="small"></ion-icon>
                         <template #tooltip>
@@ -341,6 +341,7 @@ export default {
 
 .notes-field {
     border: 1px solid $gray-300;
+    background: $white;
     border-radius: 4px;
     color: $gray-900;
     margin: 0 0 16px;

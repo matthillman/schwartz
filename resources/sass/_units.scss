@@ -9,17 +9,42 @@
 [highlight] > div.row {
     margin: 0;
 }
+
+// $m: ();
+
+// @for $i from 0 to 4 {
+//     $m: $m, radial-gradient(circle at ($i%2)*100% floor($i/2)*100%, var(--stop-list));
+// }
+
 .unit-list, .guild-list {
     .row {
-        margin-bottom: 8px;
+        margin: 0 0 8px;
         justify-content: stretch;
         align-items: center;
-        padding: 4px 16px;
 
+        &.cut-corner {
+            --r: 22px;
+
+            --stop-list: transparent var(--r), #000 0;
+            position: relative;
+            padding: var(--r);
+            background: rgba($overlay-navy, .85);
+            &:nth-child(even) {
+                mask: radial-gradient(circle at 0 0, var(--stop-list)),
+                      radial-gradient(circle at 100% 100%, var(--stop-list));
+            }
+            &:nth-child(odd) {
+                mask: radial-gradient(circle at 0 100%, var(--stop-list)),
+                      radial-gradient(circle at 100% 0, var(--stop-list));
+            }
+            -webkit-mask-composite: source-in, source-in, source-in, xor;
+            /* autoprefixer: ignore next */
+            mask-composite: intersect;
+            border-radius: 8px;
+        }
     }
 
-    &.unit-list .row:not(:last-child),
-    &.guild-list .column:not(:last-child), &.guild-list .column.border-bottom {
+    &.unit-list .row:not(:last-child), &.guild-list .column.border-bottom {
         border-bottom: 1px solid grey;
     }
 }
@@ -152,6 +177,7 @@
     }
 }
 
+$highlight-colors: (#ceffa4, #b39acd, #f5eda3);
 .team-set, .character-wrapper {
     > .popover {
         &, > .popover__face {
@@ -168,103 +194,149 @@
         color: black;
         justify-content: flex-start;
 
-        background-color: red;
+        // background-color: red;
+    }
 
-        &[gear="13"] {
-            background-color: none;
-            background: linear-gradient(to top, rgba($color: #fe150d, $alpha: 0.5), rgba($color: #eadb39, $alpha: 0.5))
-        }
+    [highlight] & {
+        --highlight-color: #{rgb-values-from($red)};
 
-        &[gear="12"] {
-            background-color: rgba($color: #eadb39, $alpha: 0.5);
-        }
+        // Everything has the stars attribute
+        [stars] {
+            overflow: hidden;
+            --bg-color: var(--highlight-color);
+            background-color: rgba(var(--bg-color), var(--bg-alpha, 0.75));
+            // box-shadow: inset 0 0 6px 0px rgba(var(--highlight-color), 0.65);
 
-        &[gear="11"], &[gear="10"] {
-            background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+            .character {
+                box-shadow: 0 0 46px 20px rgba(var(--highlight-color), 0.95);
+            }
         }
     }
 
     [highlight="none"] & [gear] {
         @include navy-gradient-background;
+        --highlight-color: #{rgb-values-from($bg-dark-navy)};
     }
+
+    [highlight]:not([highlight="none"]) & [gear] {
+        &[gear="13"] {
+            // background-color: none;
+            // background: linear-gradient(to top, rgba($color: #fe150d, $alpha: 0.5), rgba($color: #eadb39, $alpha: 0.5))
+            --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+
+            &.light {
+                --highlight-color: #{rgb-values-from($light-navy)};
+                --bg-color: #{rgb-values-from(#4ca1ff)};
+                --bg-alpha: 0.95;
+            }
+
+            &.dark {
+                --highlight-color: #{rgb-values-from($light-red)};
+                --bg-color: #{rgb-values-from(#ff8682)};
+                --bg-alpha: 0.95;
+            }
+        }
+
+        &[gear="12"] {
+            // background-color: rgba($color: #eadb39, $alpha: 0.5);
+            --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+        }
+
+        &[gear="11"], &[gear="10"] {
+            // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+            --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
+        }
+    }
+
     [highlight="stars"] & [stars] {
-        background-color: red;
+        // background-color: red;
         &[stars="7"] {
-            background-color: rgba($color: #eadb39, $alpha: 0.5);
+            // background-color: rgba($color: #eadb39, $alpha: 0.5);
+            --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
         }
     }
     [highlight="power"] & [power] {
-        background: none;
-        background-color: red;
+        // background: none;
+        // background-color: red;
         &[power="1"] {
-            background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+            // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+            --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
         }
         &[power="2"], &[power="3"], &[power="4"], &[power="5"], &[power="6"] {
-            background-color: rgba($color: #eadb39, $alpha: 0.5);
+            // background-color: rgba($color: #eadb39, $alpha: 0.5);
+            --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
         }
     }
 
     [highlight="power-stars"] & [stars] {
-        background: none;
-        background-color: red;
+        // background: none;
+        // background-color: red;
         &[stars="7"] {
             &[power="1"], &[power="2"] {
-                background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+                // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
             }
             &[power="3"], &[power="4"], &[power="5"], &[power="6"] {
-                background-color: rgba($color: #eadb39, $alpha: 0.5);
+                // background-color: rgba($color: #eadb39, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
             }
         }
     }
 
     [highlight="power-plus"] & [stars] {
-        background: none;
-        background-color: red;
+        // background: none;
+        // background-color: red;
         &[stars="7"] {
             &[power="4"] {
-                background-color: rgba($color: #99ff33, $alpha: 0.5);
+                // background-color: rgba($color: #99ff33, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from(nth($highlight-colors, 1))};
             }
             &[power="5"] {
-                background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+                // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
             }
             &[power="6"] {
-                background-color: rgba($color: #eadb39, $alpha: 0.5);
+                // background-color: rgba($color: #eadb39, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
             }
         }
     }
 
     [highlight="mods"] & [mod-grade] {
-        background: none;
-        background-color: red;
+        // background: none;
+        // background-color: red;
         &[mod-grade="1"] {
-            background-color: rgba($color: #ff5500, $alpha: 0.5);
+            // background-color: rgba($color: #ff5500, $alpha: 0.5);
+            --highlight-color: #{rgb-values-from($swgoh-orange)};
         }
         &[mod-grade="2"] {
-            background-color: rgba($color: #99ff33, $alpha: 0.5);
+            // background-color: rgba($color: #99ff33, $alpha: 0.5);
+            --highlight-color: #{rgb-values-from(nth($highlight-colors, 1))};
         }
         &[mod-grade="3"] {
-            background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+            // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+            --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
         }
         &[mod-grade="4"] {
-            background-color: rgba($color: #eadb39, $alpha: 0.5);
+            // background-color: rgba($color: #eadb39, $alpha: 0.5);
+            --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
         }
 
+        .stat {
+            border: 1px solid rgba($color: black, $alpha: 0.5);
 
-        .stat[grade="0"] {
-            border: 1px solid rgba($color: black, $alpha: 0.5);
-            background-color: rgba($color: red, $alpha: 1);
-        }
-        .stat[grade="1"] {
-            border: 1px solid rgba($color: black, $alpha: 0.5);
-            background-color: rgba($color: #ff5500, $alpha: 1);
-        }
-        .stat[grade="2"] {
-            border: 1px solid rgba($color: black, $alpha: 0.5);
-            background-color: rgba($color: #99ff33, $alpha: 1);
-        }
-        .stat[grade="3"] {
-            border: 1px solid rgba($color: black, $alpha: 0.5);
-            background-color: rgba($color: rebeccapurple, $alpha: 1);
+            &[grade="0"] {
+                background-color: rgba($color: red, $alpha: 1);
+            }
+            &[grade="1"] {
+                background-color: rgba($color: #ff5500, $alpha: 1);
+            }
+            &[grade="2"] {
+                background-color: rgba($color: #99ff33, $alpha: 1);
+            }
+            &[grade="3"] {
+                background-color: rgba($color: rebeccapurple, $alpha: 1);
+            }
         }
     }
 }
@@ -286,6 +358,7 @@
         display: flex;
         align-items: baseline;
         justify-content: center;
+        z-index: 5;
 
         &.zeta-list {
             text-align: center;
@@ -379,20 +452,20 @@
             border-color: nth($mod-colors, 1);
         }
         &[priority="4"] {
-            background-color: rgba($color: nth($mod-colors, 2), $alpha: 0.5);
-            border-color: nth($mod-colors, 2);
+            background-color: rgba($color: nth($highlight-colors, 1), $alpha: 0.5);
+            border-color: nth($highlight-colors, 1);
         }
         &[priority="3"] {
             background-color: rgba($color: nth($mod-colors, 3), $alpha: 0.5);
             border-color: nth($mod-colors, 3);
         }
         &[priority="2"] {
-            background-color: rgba($color: nth($mod-colors, 4), $alpha: 0.5);
-            border-color: nth($mod-colors, 4);
+            background-color: rgba($color: nth($highlight-colors, 2), $alpha: 0.5);
+            border-color: nth($highlight-colors, 2);
         }
         &[priority="1"] {
-            background-color: rgba($color: nth($mod-colors, 5), $alpha: 0.5);
-            border-color: nth($mod-colors, 5);
+            background-color: rgba($color: nth($highlight-colors, 3), $alpha: 0.5);
+            border-color: nth($highlight-colors, 3);
         }
         &[relic="0"] {
             border-color: red;

@@ -109,16 +109,20 @@ trait Squads {
                 break;
             case 'glkylo':
                 $teams = [
+                    'Kylo' => ['SUPREMELEADERKYLOREN'],
                     'Challenge 1' => ['KYLORENUNMASKED', 'FIRSTORDERTROOPER', 'FIRSTORDEROFFICERMALE'],
                     'Challenge 2' => ['KYLOREN', 'PHASMA', 'FIRSTORDEREXECUTIONER'],
                     'Challenge 3' => ['SMUGGLERHAN', 'FOSITHTROOPER', 'FIRSTORDERSPECIALFORCESPILOT'],
+                    'Challenge 4' => ['GENERALHUX', 'FIRSTORDERTIEPILOT', 'EMPERORPALPATINE', 'CAPITALFINALIZER'],
                 ];
                 break;
             case 'glrey':
                 $teams = [
+                    'Rey' => ['GLREY'],
                     'Challenge 1' => ['REYJEDITRAINING', 'FINN', 'RESISTANCETROOPER'],
                     'Challenge 2' => ['REY', 'RESISTANCEPILOT', 'POE'],
                     'Challenge 3' => ['EPIXFINN', 'AMILYNHOLDO', 'ROSETICO'],
+                    'Challenge 4' => ['EPIXPOE', 'BB8', 'SMUGGLERCHEWBACCA', 'CAPITALRADDUS'],
                 ];
                 break;
             default:
@@ -168,6 +172,14 @@ trait Squads {
             $guildSquads = $guildSquads->concat($s);
         }
 
-        return $globalSquads->concat($defaultSquads)->concat($guildSquads);
+        $personalSquads = SquadGroup::where('user_id', auth()->user()->id)->get()->map(function($group) use ($account) {
+            return ['label' => $group->name, 'value' => $group->id, 'guild' => -1];
+        });
+
+        if (!$hideSeparators && $personalSquads->count() > 0) {
+            $personalSquads->prepend(['label' => 'Personal Squads', 'separator' => true, 'guild' => -1]);
+        }
+
+        return $globalSquads->concat($defaultSquads)->concat($guildSquads)->concat($personalSquads);
     }
 }

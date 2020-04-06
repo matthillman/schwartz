@@ -12,12 +12,32 @@
             <h1>{{ guilds[0].name }}</h1>
         </div>
         <div class="flex-center spacing">
-            <div><span>6•:</span> {{ items | sumProp('six_dot') | numberWithCommas }}</div>
-            <div><span>25+ Speed:</span> {{ items | sumProp('speed_25') | numberWithCommas }}</div>
-            <div><span>20+ Speed:</span> {{ items | sumProp('speed_20') | numberWithCommas }}</div>
-            <div><span>15+ Speed:</span> {{ items | sumProp('speed_15') | numberWithCommas }}</div>
-            <div><span>10+ Speed:</span> {{ items | sumProp('speed_10') | numberWithCommas }}</div>
-            <div><span>100+ Offense:</span> {{ items | sumProp('offense_100') | numberWithCommas }}</div>
+            <div><span>6•:&nbsp;</span>{{ items | sumProp('six_dot') | numberWithCommas }}</div>
+
+            <div class="row justify-content-center align-items-center">
+                <span>25+</span> <span class="mod-set-image speed tier-5 mini"></span><span>:&nbsp;</span>
+                <span>{{ items | sumProp('speed_25') | numberWithCommas }}</span>
+            </div>
+
+            <div class="row justify-content-center align-items-center">
+                <span>20+</span> <span class="mod-set-image speed tier-5 mini"></span><span>:&nbsp;</span>
+                <span>{{ items | sumProp('speed_20') | numberWithCommas }}</span>
+            </div>
+
+            <div class="row justify-content-center align-items-center">
+                <span>15+</span> <span class="mod-set-image speed tier-5 mini"></span><span>:&nbsp;</span>
+                <span>{{ items | sumProp('speed_15') | numberWithCommas }}</span>
+            </div>
+
+            <div class="row justify-content-center align-items-center">
+                <span>10+</span> <span class="mod-set-image speed tier-5 mini"></span><span>:&nbsp;</span>
+                <span>{{ items | sumProp('speed_10') | numberWithCommas }}</span>
+            </div>
+
+            <div class="row justify-content-center align-items-center">
+                <span>100</span> <span class="mod-set-image offense tier-5 mini"></span><span>:&nbsp;</span>
+                <span>{{ items | sumProp('offense_100') | numberWithCommas }}</span>
+            </div>
         </div>
 	    <list
 	    	:columns="columns"

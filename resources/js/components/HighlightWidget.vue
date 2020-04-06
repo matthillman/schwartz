@@ -15,6 +15,7 @@
         data: function() {
             return {
                 stats: [
+                    'none',
                     'stars',
                     'power',
                     'power-plus',
@@ -46,6 +47,7 @@
 </script>
 
 <style lang="scss" scoped>
+@import "../../sass/_variables.scss";
 .sort-label {
     margin-right: 4px;
 }
@@ -53,6 +55,17 @@
 .btn {
     padding: 2px .75rem;
     cursor: pointer;
+
+    .radiant-back & {
+        background-color: $light-navy;
+
+        color: $sw-yellow;
+
+        &.selected {
+            background-color: $bg-light-navy;
+            color: $white
+        }
+    }
 }
 
 .row {

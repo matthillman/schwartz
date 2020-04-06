@@ -121,19 +121,11 @@
     }
 }
 
-.popover.guild-squads {
+.guild-squads {
     margin-top: 4px;
-    background: none;
-    .popover__face {
-        > div {
-            > button {
-                width: 100%;
-                border-radius: 8px;
-            }
-        }
-    }
 
-    &.open .popover__container {
-        width: 200px;
+    .pop-trigger > button {
+        width: 100%;
+        border-radius: 8px;
     }
 }

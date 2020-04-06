@@ -12,7 +12,7 @@
             <div class="row add-row input-group">
                 <input class="form-control" type="text" placeholder="Group Name" v-model="name">
                 <v-select :options="guilds" placeholder="Guild" v-model="squadGuild"></v-select>
-                <button class="btn btn-primary" @click="makeGroup">Add Group</button>
+                <button class="btn btn-primary striped" @click="makeGroup"><span>Add Group</span></button>
             </div>
         </div>
         <div slot="footer">
@@ -31,8 +31,9 @@
                         :label="`Name`"
                         :value="group.title"
                         @changed="val => update(group, val)"
-                    ></auto-text-field>
-                    <button class="btn btn-danger btn-icon" @click.prevent="deleteGroup = group"><ion-icon name="trash" size="medium"></ion-icon></button>
+                    >
+                        <button class="btn btn-danger btn-icon striped" @click.prevent="deleteGroup = group"><ion-icon name="trash" size="small"></ion-icon></button>
+                    </auto-text-field>
                 </div>
             </div>
         </div>
@@ -52,7 +53,7 @@
                 <div class="error" v-for="(error, id) of errors" :key="id">
                     {{ error }}
                 </div>
-                <button class="btn btn-danger" @click="removeGroup(deleteGroup)">Delete</button>
+                <button class="btn btn-danger striped" @click="removeGroup(deleteGroup)"><span>Delete</span></button>
             </div>
         </div>
     </modal>

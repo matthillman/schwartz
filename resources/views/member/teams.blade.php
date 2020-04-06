@@ -5,7 +5,7 @@
 <div class="container guild-members">
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card">
+            <div class="card radiant-back">
 
                     <div class="card-body" highlight="{{$highlight}}" v-highlight:[highlight]>
                         <div class="row justify-content-between align-items-baseline">

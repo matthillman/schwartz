@@ -6,7 +6,7 @@
         <div class="col-12">
             @include('shared.status');
 
-            <div class="card">
+            <div class="card radiant-back">
                 <div class="card-header"><h2>Squads</h2></div>
 
                 <squad-tabs
@@ -18,7 +18,7 @@
                 <div class="card-header row justify-content-between align-items-baseline no-margin">
                     <div class="column grow"><h4>{{ $group->name }}</h4><div class="small-note"><strong>{{ $group->guild_id === -1 ? "Personal" : ($group->guild_id === 0 ? "Global" : "{$group->guild->name}") }}</strong> Squad Group</div></div>
 
-                    <div class="column">
+                    <div class="column align-items-stretch">
                         @if ($group->guild_id > 0)
                         @can('edit-guild', $group->guild_id)
                         <convert-squad-to-plan
@@ -28,11 +28,10 @@
                         @endcan
                         @endif
 
-                        <popover class="teams" :name="`guild-squads`">
-                            <div slot="face">
-                                <button class="btn btn-primary btn-icon with-text"><ion-icon name="eye" size="small"></ion-icon><span>View For Guild</span></button>
-                            </div>
-                            <div slot="content">
+                        <popup class="guild-squads">
+                            <button class="btn btn-primary btn-icon with-text striped"><ion-icon name="eye" size="small"></ion-icon><span>View For Guild</span></button>
+
+                            <template #menu>
                                 <ul>
                                 @foreach ($guilds->where('value', '>', 0) as $guild)
                                     <li>
@@ -40,8 +39,8 @@
                                     </li>
                                 @endforeach
                                 </ul>
-                            </div>
-                        </popover>
+                            </template>
+                        </popup>
                     </div>
 
                     @if ($group->guild_id >= 0)
@@ -56,11 +55,9 @@
                 <collapsable card-body {{ !is_null($edit_squad->id)|| $chars->count() == 0 && $ships->count() == 0 ? 'start-open' : '' }}>
                     @if(is_null($edit_squad->id))
                     <template #top-trigger="{ open }">
-                        <button class="btn btn-primary btn-icon-text">
-                            <div class="row no-margin align-items-center">
-                                <ion-icon :name="open ? `chevron-down` : `chevron-forward`"></ion-icon> <span>Add a Squad</span>
-                            </div>
-                        </button>
+                        <div class="row no-margin align-items-start">
+                            <ion-icon :name="open ? `chevron-down` : `chevron-forward`" size="medium"></ion-icon> <h4>Add a Squad</h4>
+                        </div>
                     </template>
                     @endif
 
@@ -82,7 +79,7 @@
                                 ></unit-select>
                                 <input class="form-control" type="text" placeholder="Squad Name" id="name" name="name" value="{{$edit_squad->display}}" required>
                                 <input class="form-control" type="text" placeholder="Squad Description" id="description" name="description" value="{{$edit_squad->description}}" required>
-                                <button type="submit" class="btn btn-primary">{{ !is_null($edit_squad->id) ? __('Save') : __('Add') }}</button>
+                                <button type="submit" class="btn btn-primary striped"><span>{{ !is_null($edit_squad->id) ? __('Save') : __('Add') }}</span></button>
                             </div>
                             <div class="row no-margin align-items-start input-group add-squad-row multiple">
                                 <unit-select multiple
@@ -94,7 +91,7 @@
                                 ></unit-select>
 
                                 @if(!is_null($edit_squad->id))
-                                <button class="btn btn-danger" @@click.prevent="go(`{{ route('squads', ['group' => $group->id]) }}`)">{{ __('Cancel') }}</button>
+                                <button class="btn btn-danger striped" @@click.prevent="go(`{{ route('squads', ['group' => $group->id]) }}`)"><span>{{ __('Cancel') }}</span></button>
                                 @endif
                             </div>
                         </form>
@@ -155,11 +152,11 @@
                                         @endfor
                                         <td class="blank">
                                             <div class="column justify-content-around align-items-center">
-                                                <button @@click="go(`{{ route('squads', ['group' => $group->id, 'squad' => $squad->id ]) }}`)" class="btn btn-primary btn-icon"><ion-icon name="pencil" size="small"></ion-icon></button>
+                                                <button @@click="go(`{{ route('squads', ['group' => $group->id, 'squad' => $squad->id ]) }}`)" class="btn btn-primary btn-icon striped"><ion-icon name="pencil" size="small"></ion-icon></button>
                                                 <form class="column justify-content-center align-items-center" method="POST" action="{{ route('squad.delete', ['id' => $squad->id ]) }}">
                                                     @method('DELETE')
                                                     @csrf
-                                                    <button type="submit" class="btn btn-danger btn-icon"><ion-icon name="trash" size="small"></ion-icon></button>
+                                                    <button type="submit" class="btn btn-danger btn-icon striped"><ion-icon name="trash" size="small"></ion-icon></button>
                                                 </form>
                                             </div>
                                         </td>
@@ -178,8 +175,10 @@
                     </div>
                 @else
 
-                 @if($group->guild_id == 0)
+                    @if($group->guild_id == 0)
                     <collapsable card-body>
+                    @else
+                    <div class="card-body">
                     @endif
                         <form method="POST" :action="`/squads/message/{{ $group->guild_id > 0 ? $group->guild->admin_channel : '${messageChannel}' }}`">
                             @method('PUT')
@@ -190,19 +189,19 @@
                                 <label for="discord-channel">Discord Channel ID:</label>
                                 <input class="form-control" id="discord-channel" type="text" placeholder="Channel ID" v-model="messageChannel">
                                 @endif
-                                <button type="submit" :disabled="!selectedSquadArray.length" class="btn btn-primary">{{ $group->guild_id > 0 ? __('Send add messages for checked squads') : __('Send Messages') }}</button>
+                                <button type="submit" :disabled="!selectedSquadArray.length" class="btn btn-primary striped"><span>{{ $group->guild_id > 0 ? __('Send add messages for checked squads') : __('Send Messages') }}</span></button>
                             </div>
                         </form>
 
                     @if($group->guild_id == 0)
                         <template #top-trigger="{ open }">
-                            <button class="btn btn-primary btn-icon-text">
-                                <div class="row no-margin align-items-center">
-                                    <ion-icon :name="open ? `chevron-down` : `chevron-forward`"></ion-icon> <span>Send add messages for checked squads</span>
-                                </div>
-                            </button>
+                            <div class="row no-margin align-items-start">
+                                <ion-icon :name="open ? `chevron-down` : `chevron-forward`" size="medium"></ion-icon> <h4>Send add messages for checked squads</h4>
+                            </div>
                         </template>
                     </collapsable>
+                    @else
+                    </div>
                     @endif
                 @endif
             </div>

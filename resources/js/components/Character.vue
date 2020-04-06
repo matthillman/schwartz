@@ -74,8 +74,9 @@
       >
         <div class="stat-wrapper">
           <span class="stat">
-            <span>{{ formatStat(character.stats.final[keyStat.value]) }}</span>
-            <span class="mod-set-image tier-5 mini" :class="[keyStat.key]"></span>
+            <span>{{ formatStat(keyStat.key === 'power' ? character.power : character.stats.final[keyStat.value]).toLocaleString() }}</span>
+            <ion-icon v-if="keyStat.key === 'power'" name="flash" size="micro"></ion-icon>
+            <span v-else class="mod-set-image tier-5 mini" :class="[keyStat.key]"></span>
           </span>
         </div>
       </div>
@@ -265,6 +266,10 @@ export default {
 
 .characters {
     height: 100%;
+}
+
+[name="flash"] {
+    color: $sw-yellow;
 }
 
 .name-wrapper {

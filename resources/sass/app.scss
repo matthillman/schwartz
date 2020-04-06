@@ -21,6 +21,8 @@ $table-hover-bg: #f1f7fa;
 
 $header-border-color: #d5dfe9;
 
+$card-cap-bg: rgba($color: $black, $alpha: 0.03);
+$card-cap-bg-dark: rgba($color: $black, $alpha: 0.3);
 $card-bg-secondary: #fafafa;
 $card-shadow-color: none;
 
@@ -48,695 +50,859 @@ $container-max-widths: (
 ) !default;
 
 @import 'vendor/laravel/horizon/resources/sass/base';
+@import "extensions";
+
 
 html, body {
-  color: $text;
-  font-family: $font-family-sans-serif;
-  font-weight: 100;
-  height: 100vh;
-  margin: 0;
+    color: $text;
+    font-family: $font-family-sans-serif;
+    font-weight: 100;
+    height: 100vh;
+    margin: 0;
 }
 
 body {
-  background-color: #4f555d;
-  background: url(/images/main.jpg);
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+    background-color: #4f555d;
+    background: url(/images/main.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 
-  &.no-bg {
-    background: #4f555d;
-  }
+    &.no-bg {
+        background: #4f555d;
+    }
 }
 
 .navbar-laravel {
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-  position: -webkit-sticky;
-  top: 0;
-  z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 1000;
 
-  padding: 0.5rem 125px;
+    padding: 0.5rem 125px;
 }
 
 .full-height {
-  height: 100vh;
+    height: 100vh;
 }
 
 
 .card-body {
-  padding: 15px;
+    padding: 15px;
 }
 
 .column {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .flex-center {
-  align-items: center;
-  display: flex;
-  justify-content: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
 
 .flex-grow {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .flex-stay {
-  flex-grow: 0;
+    flex-grow: 0;
 }
 
 .fill-height {
-  height: 100%;
+    height: 100%;
 }
 
 .spacing > * {
-  margin: 8px 16px;
+    margin: 8px 16px;
 }
 
 .horizon-logo {
-  width: 24px;
-  height: 24px;
-  display: inline-block;
-  margin: 0 4px 0 0;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin: 0 4px 0 0;
 
-  .fill-primary {
-    fill: $white;
-  }
+    .fill-primary {
+        fill: $white;
+    }
 }
 
 .content {
-  width: 100%;
+    width: 100%;
 
-  h1:first-child {
-    margin-top: 0;
-  }
-
-  b, strong {
-    font-weight: 700;
-  }
-
-  em {
-    font-style: italic;
-  }
-
-  .markdown {
-    background: rgba(255, 255, 255, 0.9);
-    $margin: 32px;
-
-    h1, h2, h3, h4, h5 {
-      padding: .15em $margin;
+    h1:first-child {
+        margin-top: 0;
     }
 
-    h2 {
-      background-color: #a9a9a9;
+    b, strong {
+        font-weight: 700;
     }
 
-    h3 {
-      background-color: #c0c0c0;
+    em {
+        font-style: italic;
     }
 
-    & > p, & > ul, & > ol {
-      margin-right: $margin;
-      margin-left: $margin;
-    }
+    .markdown {
+        background: rgba(255, 255, 255, 0.9);
+        $margin: 32px;
 
-    li {
-      list-style-type: disc;
-      margin-left: 24px;
+        h1, h2, h3, h4, h5 {
+            padding: .15em $margin;
+        }
+
+        h2 {
+            background-color: #a9a9a9;
+        }
+
+        h3 {
+            background-color: #c0c0c0;
+        }
+
+        & > p, & > ul, & > ol {
+            margin-right: $margin;
+            margin-left: $margin;
+        }
+
+        li {
+            list-style-type: disc;
+            margin-left: 24px;
+        }
+        img {
+            width: 100%;
+        }
     }
-    img {
-      width: 100%;
-    }
-  }
 }
 
 @media (max-width: 1149px) {
-  .content {
-      padding-top: 74px;
-  }
+    .content {
+        padding-top: 74px;
+    }
 }
 
 @media (min-width: 110ex) {
-  .content {
-    .container {
-      width: 110ex;
+    .content {
+        .container {
+            width: 110ex;
 
-      &.guild-stats {
-        width: 120ex;
-      }
+            &.guild-stats {
+                width: 120ex;
+            }
+        }
     }
-  }
 }
 
 @media (max-width: 110ex) {
-  .content {
-    .markdown {
-      h1, h2, h3, h4, h5 {
-        font-size: 1.5rem;
-      }
+    .content {
+        .markdown {
+            h1, h2, h3, h4, h5 {
+                font-size: 1.5rem;
+            }
+        }
     }
-  }
 }
 
 .center {
-  text-align: center;
+    text-align: center;
 }
 
 .title {
-  font-size: 84px;
+    font-size: 84px;
 }
 
 .guides {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .links > a {
-  color: #636b6f;
-  padding: 0 25px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .1rem;
-  text-decoration: none;
-  text-transform: uppercase;
+    color: #636b6f;
+    padding: 0 25px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .1rem;
+    text-decoration: none;
+    text-transform: uppercase;
 }
 
 .m-b-md {
-  margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .logo {
-  width: 200px;
-  height: 42px;
+    width: 200px;
+    height: 42px;
 
-  svg {
-    width: 100%;
-    fill: #636b6f;
-  }
+    svg {
+        width: 100%;
+        fill: #636b6f;
+    }
 }
 
 .gg-link {
-  height: 35px;
-  width: 35px;
-  padding: 2px;
-  border: 1px solid;
-  display: inline-block;
-  border-color: $swgoh-orange;
-  background-color: $swgoh-orange;
-  border-radius: 8px;
-
-  svg {
-    height: 100%;
-    width: 100%;
-    fill: $white;
-  }
-
-  &:hover {
-    background-color: $white;
+    height: 35px;
+    width: 35px;
+    padding: 2px;
+    border: 1px solid;
+    display: inline-block;
+    border-color: $swgoh-orange;
+    background-color: $swgoh-orange;
+    border-radius: 8px;
 
     svg {
-      fill: $swgoh-orange;
+        height: 100%;
+        width: 100%;
+        fill: $white;
     }
-  }
+
+    &:hover {
+        background-color: $white;
+
+        svg {
+            fill: $swgoh-orange;
+        }
+    }
 }
 
 a:not(.gg-link) {
-  &[target="_gg"] {
-    position: relative;
+    &[target="_gg"] {
+        position: relative;
 
-    &:hover {
-      text-decoration: none;
-      span {
-        text-decoration: underline;
-      }
-      &::after {
-        content: '';
-        background-image: url(/images/bb8.svg);
-        width: 12px;
-        height: 12px;
-        display: inline-block;
-        background-repeat: no-repeat;
-        text-decoration: none;
-        margin-left: 4px;
+        &:hover {
+            text-decoration: none;
+            span {
+                text-decoration: underline;
+            }
+            &::after {
+                content: '';
+                background-image: url(/images/bb8.svg);
+                width: 12px;
+                height: 12px;
+                display: inline-block;
+                background-repeat: no-repeat;
+                text-decoration: none;
+                margin-left: 4px;
 
-        h1 & {
-          width: 28px;
-          height: 28px;
+                h1 & {
+                    width: 28px;
+                    height: 28px;
+                }
+            }
         }
-      }
     }
-  }
 }
 
 .row.align-items-center {
-  h1 {
-    margin-bottom: 0;
-  }
+    h1 {
+        margin-bottom: 0;
+    }
 }
 
 .card {
-  margin-top: 16px;
+    margin-top: 16px;
 
-  &:last-of-type {
-    margin-bottom: 16px;
-  }
-
-  .card-header {
-    margin: 0;
-  }
-
-  &.stripes {
-    .card-body:nth-child(odd) {
-      background: $gray-200;
+    &:last-of-type {
+        margin-bottom: 16px;
     }
-  }
 
-  &.row {
-    flex-direction: row;
-  }
+    .card-header {
+        margin: 0;
+    }
+
+    &.stripes {
+        .card-body:nth-child(odd) {
+            background: $gray-200;
+        }
+    }
+
+    &.row {
+        flex-direction: row;
+    }
 }
 
 .prospective-user {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  transition: background-color, 600ms, ease-in-out;
-  padding: 8px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    transition: background-color, 600ms, ease-in-out;
+    padding: 8px;
 
-  &:hover {
-    background-color: rgba($color: #636b6f, $alpha: 0.3);
-  }
+    &:hover {
+        background-color: rgba($color: #636b6f, $alpha: 0.3);
+    }
 }
 
 .icon {
-  font-size: 24px;
+    font-size: 24px;
 
-  .with-text & {
-    font-size: 18px;
-    margin-top: 1px;
-  }
+    .with-text & {
+        font-size: 18px;
+        margin-top: 1px;
+    }
 }
 
 .btn.btn-icon {
-  padding: 4px 6px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
+    padding: 4px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
 
-  & > :not(:first-child) {
-    margin-left: 4px;
-  }
+    & > :not(:first-child) {
+        margin-left: 4px;
+    }
 
-  &.with-text {
-    padding: 4px 12px;
-  }
+    &.with-text {
+        padding: 4px 12px;
+    }
 }
 
 .control-wrapper {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 .segmented-control.segmented-control {
-	border: 1px solid $primary;
-	border-radius: 2px;
-	margin-left: 5px;
-	width: unset;
-  text-transform: capitalize;
+    border: 1px solid $primary;
+    border-radius: 2px;
+    margin-left: 5px;
+    width: unset;
+    text-transform: capitalize;
 
-	> * {
-    cursor: pointer;
-    min-width: 44px;
-		padding: 4px 8px;
-		display: inline-block;
-		text-align: center;
-		border-right: 1px solid $primary;
-    outline: none;
-    transition-property: color, background-color;
-    transition-timing-function: ease;
-    transition-duration: 0.3s;
+    > * {
+        cursor: pointer;
+        min-width: 44px;
+        padding: 4px 8px;
+        display: inline-block;
+        text-align: center;
+        border-right: 1px solid $primary;
+        outline: none;
+        transition-property: color, background-color;
+        transition-timing-function: ease;
+        transition-duration: 0.3s;
 
-		&:last-child {
-			border-right: none;
+        &:last-child {
+            border-right: none;
+        }
+
+        &:hover {
+            color: #333333;
+            background-color: rgba($color: $primary, $alpha: 0.2)
+        }
+
+        &.selected {
+            background: $primary;
+            color: $white;
+        }
     }
-
-    &:hover {
-      color: #333333;
-      background-color: rgba($color: $primary, $alpha: 0.2)
-    }
-
-		&.selected {
-      background: $primary;
-      color: $white;
-		}
-	}
 }
 
 .list-table {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-  table {
-    margin: 24px 0;
-    th {
-      white-space: nowrap;
-    }
-    td, th {
-      padding: 4px 8px;
-      border-bottom: 1px solid #636b6f;
-    }
+    table {
+        margin: 24px 0;
+        th {
+            white-space: nowrap;
+        }
+        td, th {
+            padding: 4px 8px;
+            border-bottom: 1px solid #636b6f;
+        }
 
-    td:not(:first-of-type) {
-      text-align: right;
-      padding-right: 18px + 8px;
+        td:not(:first-of-type) {
+            text-align: right;
+            padding-right: 18px + 8px;
+        }
     }
-  }
 }
 
 table.sortable {
-  th {
-    vertical-align: bottom;
-    span {
-      display: flex;
-      align-items: center;
+    th {
+        vertical-align: bottom;
+        span {
+            display: flex;
+            align-items: center;
+        }
+
+        &:not(:first-of-type) span {
+            justify-content: flex-end;
+        }
+
+        span::after {
+            content: '';
+            display: block;
+            margin-top: 2px;
+            margin-left: 8px;
+            width: 10px;
+            height: 10px;
+            transform-origin: center 25%;
+            border: 5px solid transparent;
+
+            transition-property: transform, border-color;
+            transition-duration: 0.3s;
+            transition-timing-function: ease-out;
+        }
+
+        &.sorted span::after {
+            border-top-color: #636b6f;
+        }
+
+        &.reverse span::after {
+            transform: rotate(180deg);
+        }
     }
-
-    &:not(:first-of-type) span {
-      justify-content: flex-end;
-    }
-
-    span::after {
-      content: '';
-      display: block;
-      margin-top: 2px;
-      margin-left: 8px;
-      width: 10px;
-      height: 10px;
-      transform-origin: center 25%;
-      border: 5px solid transparent;
-
-      transition-property: transform, border-color;
-      transition-duration: 0.3s;
-      transition-timing-function: ease-out;
-    }
-
-
-    &.sorted span::after {
-      border-top-color: #636b6f;
-    }
-
-    &.reverse span::after {
-      transform: rotate(180deg);
-    }
-  }
 }
 
 .guild-stats .list-table {
-  table.sortable {
-    max-width: 100%;
+    table.sortable {
+        max-width: 100%;
 
-    span::after {
-      position: relative;
-      left: 8px;
-      margin-left: 0;
-    }
+        span::after {
+            position: relative;
+            left: 8px;
+            margin-left: 0;
+        }
 
-    td:not(:first-of-type) {
-      padding-right: 18px;
+        td:not(:first-of-type) {
+            padding-right: 18px;
+        }
     }
-  }
 }
 
 .comparison-container {
-  &.container {
-    --outer-width: calc(var(--header-column, 98px) + (var(--compare-count, 2) * var(--column-width, 300px)) + 16px + 16px + 30px + 2px);
-    width: var(--outer-width);
-    max-width: var(--outer-width);
-  }
-  .card {
-    background: url(/images/welcome/stars.jpg);
-    background-attachment: fixed;
-    background-size: cover;
-    color: $light-text;
-
-    .card-body {
-      padding: 8px;
-      margin: 4px 8px;
-      background-color: rgba($color: $white, $alpha: 0.125);
-      border-radius: 4px;
-
-      &:first-of-type {
-        margin-top: 8px;
-      }
-
-      &:last-of-type {
-        margin-bottom: 8px;
-      }
-
-      .section-head {
-        margin: 0 0 0 4px;
-        text-shadow: 0 1px 0 rgba($color: #000, $alpha: 0.8);
-      }
-
-      .locked-message {
-        margin: 8px 0;
-        background-color: rgba($color: #000, $alpha: 0.4);
-        border: 1px solid transparent;
-        background-clip: content-box;
-        border-collapse: collapse;
-        border-radius: 4px;
-
-        > strong {
-          padding: 8px;
-        }
-      }
-
-      .col-5, .col-2, .col-4, .col-1 {
-        padding: 0 4px;
-      }
-
-      .col-2 {
-        flex: 0 0 var(--header-column, 98px);
-        max-width: var(--header-column, 98px);
-
-        > * {
-          margin: 0 auto;
-          display: block;
-        }
-      }
-
-      --single-col-width: calc((100% - var(--header-column, 98px)) / var(--compare-count, 2));
-
-      .col-5 {
-        flex: 0 0 var(--single-col-width);
-        max-width: var(--single-col-width);
-      }
-      .col-1 {
-        flex: 0 0 88px;
-        max-width: 88px;
-      }
-      .col-4 {
-        flex: 0 0 calc(var(--single-col-width) - 88px);
-        max-width: calc(var(--single-col-width) - 88px);
-      }
-
-      .col-5 + .col-2, .col-12:not(.section-header) + .col-5 {
-        margin-top: 8px;
-      }
-
-      table {
-        border-collapse: separate;
-        table-layout: fixed;
-
-        td, th {
-          background-color: rgba($color: #000, $alpha: 0.4);
-          border: 1px solid transparent;
-          background-clip: content-box;
-          border-collapse: collapse;
-          border-radius: 4px;
-
-          &[winner] {
-            background-color: rgba($color: $white, $alpha: 0.1);
-          }
-          .zeta-image {
-            height: 23px;
-          }
-        }
-
-        tbody {
-          font-size: 12px;
-        }
-        tbody + thead::before, tbody + tbody::before {
-          content: '\200C';
-          line-height: 4px;
-          font-size: 0;
-          display: block;
-        }
-      }
+    &.container {
+        --outer-width: calc(var(--header-column, 98px) + (var(--compare-count, 2) * var(--column-width, 300px)) + 16px + 16px + 30px + 2px);
+        width: var(--outer-width);
+        max-width: var(--outer-width);
     }
+    .card {
+        background: url(/images/welcome/stars.jpg);
+        background-attachment: fixed;
+        background-size: cover;
+        color: $light-text;
 
-    .footer-logo {
-      margin: 0 8px 8px;
+        .card-body {
+            padding: 8px;
+            margin: 4px 8px;
+            background-color: rgba($color: $white, $alpha: 0.125);
+            border-radius: 4px;
+
+            &:first-of-type {
+                margin-top: 8px;
+            }
+
+            &:last-of-type {
+                margin-bottom: 8px;
+            }
+
+            .section-head {
+                margin: 0 0 0 4px;
+                text-shadow: 0 1px 0 rgba($color: #000, $alpha: 0.8);
+            }
+
+            .locked-message {
+                margin: 8px 0;
+                background-color: rgba($color: #000, $alpha: 0.4);
+                border: 1px solid transparent;
+                background-clip: content-box;
+                border-collapse: collapse;
+                border-radius: 4px;
+
+                > strong {
+                    padding: 8px;
+                }
+            }
+
+            .col-5, .col-2, .col-4, .col-1 {
+                padding: 0 4px;
+            }
+
+            .col-2 {
+                flex: 0 0 var(--header-column, 98px);
+                max-width: var(--header-column, 98px);
+
+                > * {
+                    margin: 0 auto;
+                    display: block;
+                }
+            }
+
+            --single-col-width: calc((100% - var(--header-column, 98px)) / var(--compare-count, 2));
+
+            .col-5 {
+                flex: 0 0 var(--single-col-width);
+                max-width: var(--single-col-width);
+            }
+            .col-1 {
+                flex: 0 0 88px;
+                max-width: 88px;
+            }
+            .col-4 {
+                flex: 0 0 calc(var(--single-col-width) - 88px);
+                max-width: calc(var(--single-col-width) - 88px);
+            }
+
+            .col-5 + .col-2, .col-12:not(.section-header) + .col-5 {
+                margin-top: 8px;
+            }
+
+            table {
+                border-collapse: separate;
+                table-layout: fixed;
+
+                td, th {
+                    background-color: rgba($color: #000, $alpha: 0.4);
+                    border: 1px solid transparent;
+                    background-clip: content-box;
+                    border-collapse: collapse;
+                    border-radius: 4px;
+
+                    &[winner] {
+                        background-color: rgba($color: $white, $alpha: 0.1);
+                    }
+                    .zeta-image {
+                        height: 23px;
+                    }
+                }
+
+                tbody {
+                    font-size: 12px;
+                }
+                tbody + thead::before, tbody + tbody::before {
+                    content: '\200C';
+                    line-height: 4px;
+                    font-size: 0;
+                    display: block;
+                }
+            }
+        }
+
+        .footer-logo {
+            margin: 0 8px 8px;
+        }
     }
-  }
 }
 .gear-table {
-  width: 100%;
+    width: 100%;
 
-  th, td {
-    text-align: center;
-    vertical-align: middle;
-  }
+    th, td {
+        text-align: center;
+        vertical-align: middle;
+    }
 
-  .mod-header-wrapper {
-    position: relative;
-    .mod-set-image, ion-icon {
-      position: relative;
-      top: 2px;
+    .mod-header-wrapper {
+        position: relative;
+        .mod-set-image, ion-icon {
+            position: relative;
+            top: 2px;
+        }
+        .overlay {
+            color: white;
+            font-weight: 700;
+            display: inline-block;
+        }
     }
-    .overlay {
-      color: white;
-      font-weight: 700;
-      display: inline-block;
-    }
-  }
 
 }
 
 .border-bottom {
-  padding-bottom: 16px;
-  border-bottom: 1px solid #ebebeb;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #ebebeb;
 }
 
 .small-note {
-  font-size: 10px;
+    font-size: 10px;
 }
 
 .card {
-  .card-header {
-    padding: $card-spacer-y $card-spacer-x;
-    margin-bottom: 0; // Removes the default margin-bottom of <hN>
-    color: $card-cap-color;
-    background-color: $card-cap-bg;
-    border-bottom: $card-border-width solid $card-border-color;
+    .card-header {
+        padding: $card-spacer-y $card-spacer-x;
+        margin-bottom: 0; // Removes the default margin-bottom of <hN>
+        color: $card-cap-color;
+        background-color: $card-cap-bg;
+        border-bottom: $card-border-width solid $card-border-color;
 
-    &:first-child {
-      @include border-radius($card-inner-border-radius $card-inner-border-radius 0 0);
+        &:first-child {
+            @include border-radius($card-inner-border-radius $card-inner-border-radius 0 0);
+        }
+
+        + .list-group {
+            .list-group-item:first-child {
+                border-top: 0;
+            }
+        }
+
+        > h1, > h2, > h3 {
+            margin-bottom: 0;
+        }
     }
 
-    + .list-group {
-      .list-group-item:first-child {
-        border-top: 0;
-      }
+    &.dark-back, &.radiant-back {
+        .card-header {
+            background-color: rgba($color: $white, $alpha: 0.95);
+        }
     }
-  }
 
-  .card-body.flush {
-    padding: 0;
-  }
+    .card-body.flush {
+        padding: 0;
+    }
 }
 
+// .card-header.cut-corner {
+//     background: transparent;
+//     position: relative;
+//     overflow: hidden;
+
+//     &::before {
+//         content: '';
+//         position: absolute;
+//         width: 30px;
+//         height: 30px;
+//         display: block;
+//         top: -14px;
+//         right: -14px;
+//         border-radius: 50%;
+//         box-shadow: 0 0 0 1000px $dark-navy;
+//         z-index: -1;
+//     }
+
+//     > * {
+//         z-index: 2;
+//         color: $white;
+//     }
+// }
+
 .element-overlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba($color: $white, $alpha: 0.75);
-  z-index: 2000;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba($color: $white, $alpha: 0.75);
+    z-index: 2000;
 }
 
 .row.no-margin {
-  margin-left: 0;
-  margin-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.item-margin {
+    > * + * {
+        margin-left: 8px;
+    }
 }
 
 .row.child-no-margin {
-  > * {
-    margin: 0;
-  }
+    > * {
+        margin: 0;
+    }
+}
+
+@mixin striped-button($color, $accent, $stripe: $dark-navy) {
+    border: 1px solid white;
+    border-top-color: $accent;
+    border-bottom-color: $accent;
+    background: linear-gradient(
+        to bottom,
+        $color,
+        $color 5%,
+        $stripe 35%,
+        $stripe 65%,
+        $color 95%,
+        $color
+    );
+    padding: 4px;
+    overflow: hidden;
+    color: $white;
+
+    background-size: 100% 4px;
+    box-shadow: 0 0 3px $stripe;
+    transition: box-shadow 0.3s ease-out;
+
+    position: relative;
+
+    &::before, &::after {
+        content: '';
+        background-image: linear-gradient(to bottom, $color 0%, $stripe 35%, $accent 100%);
+        transition: opacity 0.3s ease-out;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        opacity: 0.5;
+        z-index: 1;
+    }
+
+    &::after {
+        background-image: linear-gradient(to bottom, lighten($color, 5%) 0%, lighten($stripe, 5%) 35%, lighten($accent, 5%) 100%);
+        opacity: 0;
+        z-index: 2;
+    }
+
+   > * {
+        padding: 6px 8px;
+        z-index: 3;
+        position: relative;
+    }
+
+    &.btn-icon.with-text {
+        > :first-child {
+            padding: 0 0 0 8px;
+        }
+
+        > :last-child {
+            padding: 0 8px 0 0;
+        }
+    }
+
+    &.btn-icon:not(.with-text), &.round {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &::before {
+            background-image: radial-gradient(ellipse at center center, $accent, transparent 65%);
+            opacity: 1;
+        }
+
+        &::after {
+            background-image: radial-gradient(ellipse at center center, lighten($accent, 10%), transparent 65%);
+        }
+
+        > * {
+            border-radius: 50%;
+            padding: 4px;
+        }
+    }
+
+    &:hover {
+        box-shadow: 0 0 8px $accent;
+        &::after {
+            opacity: 0.5;
+        }
+
+        &.btn-icon:not(.with-text), &.round {
+            &::after {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+.btn.btn-primary.striped {
+    @include striped-button($color: $light-navy, $accent: $overlay-navy);
+}
+.btn.btn-secondary.striped {
+    @include striped-button($color: $secondary, $accent: $secondary, $stripe: darken($secondary, 5%));
+    color: $gray-900;
+}
+.btn.btn-warning.striped, .btn.btn-danger.striped {
+    @include striped-button($color: $dark-red, $accent: $light-red, $stripe: darken($dark-red, 5%));
 }
 
 .btn.btn.btn-icon.back-button {
-  margin-right: 8px;
-  border-radius: 50%;
-  border: 1px solid white;
-  border-top-color: $overlay-navy;
-  border-bottom-color: $overlay-navy;
-  background: linear-gradient(
-    to bottom,
-    $light-navy,
-    $light-navy 5%,
-    $dark-navy 35%,
-    $dark-navy 65%,
-    $light-navy 95%,
-    $light-navy
-  );
-  padding: 4px;
+    margin-right: 8px;
 
-  background-size: 100% 4px;
-  color: $white;
-  box-shadow: 0 0 3px $dark-navy;
-  ion-icon {
-    transform: rotate(180deg) translateX(1px);
-    background-image: radial-gradient(ellipse at 44% center, $overlay-navy, transparent 65%);
-  }
+    @include striped-button($color: $light-navy, $accent: $overlay-navy);
+    ion-icon {
+        transform: rotate(180deg) translateX(1px);
+    }
+}
+
+.gg-link.striped {
+    @include striped-button($color: darken($swgoh-orange, 15%), $accent: $swgoh-orange, $stripe: darken($swgoh-orange, 20%));
+
+    > * {
+        padding: 2px;
+    }
+    &:hover svg {
+        fill: $white;
+    }
 }
 
 .no-resize {
-  resize: none;
-}
-
-.glass-back {
-  background: rgba($color: $overlay-navy, $alpha: 0.6);
-  color: $gray-200;
-  text-shadow: 1px 1px 0 $gray-900;
-  padding: 8px;
-  border-radius: 8px;
+    resize: none;
 }
 
 .dark-back {
-  background-image: radial-gradient(ellipse at center 40%, $bg-dark-navy, $dark-navy);
+    background-image: radial-gradient(ellipse at center 40%, $bg-dark-navy, $dark-navy);
+}
+.radiant-back {
+    &.card {
+        background-color: transparent;
+    }
+    &.card-body, & > .card-body {
+        background-image: radial-gradient(ellipse at bottom center, rgba($color: $light-navy, $alpha: 0.95), rgba($color: $dark-navy, $alpha: 0.95));
+    }
+}
+
+.dark-back, .radiant-back {
+    .card-body {
+        color: $white;
+    }
+
+    a {
+        color: $sw-yellow;
+    }
+
+    // h1, h2, h3, h4 {
+    //     text-shadow: 1px 1px 0 $gray-900;
+    // }
+
+}
+
+.glass-back {
+    background: rgba($color: $overlay-navy, $alpha: 0.6);
+    color: $gray-200;
+    text-shadow: 1px 1px 0 $gray-900;
+    padding: 8px;
+    border-radius: 8px;
 }
 
 .space-right {
-  margin-right: 8px;
+    margin-right: 8px;
 }
 .space-left {
-  margin-left: 8px;
+    margin-left: 8px;
 }
 
 .input-group + .input-group {
-  margin-top: 4px;
+    margin-top: 4px;
 }
 
 .column {
-  button + button {
-    margin-top: 4px;
-  }
+    > button + button {
+        margin-top: 4px;
+    }
 }
 
 .discord-select {
-  .input-group-text {
-    width: 260px;
-  }
+    .input-group-text {
+        width: 260px;
+    }
 }
 
 [draggable="true"] {
-  cursor: grab;
+    cursor: grab;
 }
 
 .whitespace-nowrap {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 @import "grid";
 @import "mods";
 @import "units";
 @import "character";
-@import "extensions";
 @import "member";
 @import "squads";
 @import "tw-plan";

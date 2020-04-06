@@ -11,6 +11,9 @@ $overlay-navy: #197698;
 $light-navy: #1b426b;
 $dark-navy: #203751;
 
+$light-red: #f51431;
+$dark-red: #701c27;
+
 $bg-light-navy: #2c79c6;
 $bg-dark-navy: #1f2932;
 
@@ -75,6 +78,10 @@ $rainbow-colors: (
 }
 
 @mixin navy-gradient-background {
-     background: linear-gradient(to bottom, $bg-dark-navy 0%, $bg-light-navy 100%);
+     background: linear-gradient(to bottom, $bg-dark-navy 0%, $dark-navy 45%, $light-navy 70%, $bg-light-navy 100%);
      color: $white;
+}
+
+@function rgb-values-from($hex) {
+     @return red($hex), green($hex), blue($hex);
 }

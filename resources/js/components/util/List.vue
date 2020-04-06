@@ -68,4 +68,7 @@
             text-decoration: underline;
         }
     }
+    th {
+        font-weight: 800;
+    }
 </style>

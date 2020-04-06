@@ -63,6 +63,7 @@ Vue.component('auto-checkbox', require('./components/util/AutoCheckbox.vue').def
 Vue.component('auto-text-field', require('./components/util/AutoTextField.vue').default);
 Vue.component('auto-select', require('./components/util/AutoSelect.vue').default);
 Vue.component('tooltip', require('./components/util/Tooltip.vue').default);
+Vue.component('popup', require('./components/util/Popup.vue').default);
 Vue.component('status', require('./components/util/StatusCircle.vue').default);
 
 Vue.component('mini-squad-table', require('./components/MiniSquadTable.vue').default);
@@ -119,8 +120,12 @@ new Vue({
 		this.memberCompareArray = (this.memberCompare || '').split('\n');
 	},
 	methods: {
-		go(to) {
-			window.location = to;
+		go(to, newTab) {
+			if (newTab) {
+				window.open(to);
+			} else {
+				window.location = to;
+			}
 		},
 		back() {
 			window.history.back();

@@ -19,7 +19,7 @@
             <div class="col-8">
                 <div class="row no-margin justify-content-between align-items-baseline">
                     <h2>Zone Config</h2>
-                    <button class="btn btn-secondary btn-image with-text" @click="showSendDialog">
+                    <button class="btn btn-secondary btn-image with-text striped" @click="showSendDialog">
                         <ion-icon name="send" size="small"></ion-icon>
                         <span>Send Messages</span>
                     </button>
@@ -160,7 +160,7 @@
                     @changed="potentialAddMembers = $event"></member-filter>
             </template>
             <template #footer>
-                <button class="btn btn-primary" :disabled="!potentialAddMembers.length" @click="addMember(addMultipleZone, addMultiple, potentialAddMembers)">Assign Members</button>
+                <button class="btn btn-primary striped" :disabled="!potentialAddMembers.length" @click="addMember(addMultipleZone, addMultiple, potentialAddMembers)">Assign Members</button>
             </template>
         </modal>
 
@@ -173,7 +173,7 @@
                 </div>
             </template>
             <template #footer>
-                <button class="btn btn-danger" @click="deleteSquad(confirmDeleteSquad.z, confirmDeleteSquad.s)">Delete it</button>
+                <button class="btn btn-danger striped" @click="deleteSquad(confirmDeleteSquad.z, confirmDeleteSquad.s)">Delete it</button>
             </template>
         </modal>
 
@@ -207,7 +207,7 @@
                 </div>
             </template>
             <template #footer>
-                <button class="btn btn-primary" @click="sendDMs">Send DMs</button>
+                <button class="btn btn-primary striped" @click="sendDMs">Send DMs</button>
             </template>
         </modal>
     </div>

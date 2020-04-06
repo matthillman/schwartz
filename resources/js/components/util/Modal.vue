@@ -19,7 +19,7 @@
           <div class="modal-footer">
             <slot name="footer">
             </slot>
-            <button v-if="!noClose" class="modal-default-button btn btn-primary" @click="$emit('close')">Close</button>
+            <button v-if="!noClose" class="modal-default-button btn btn-primary striped" @click="$emit('close')"><span>Close</span></button>
           </div>
         </div>
       </div>

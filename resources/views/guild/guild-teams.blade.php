@@ -5,20 +5,23 @@
 <div class="container guild-members">
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card">
+            <div class="card radiant-back">
                 <div class="card-header row justify-content-between align-items-center">
                     <div class="column">
                         <h2>{{ $title }}</h2>
                         <div class="note">{{ $guild->name }}</div>
                     </div>
 
-                    <div>
-                        <form method="GET" action="{{ route('guild.members', ['guild' => $guild->id, 'team' => $team, 'mode' => 'members']) }}" >
-                            <div class="row add-row">
-                                <button type="submit" class="btn btn-primary">{{ __('Group by Member') }}</button>
-                            </div>
-                        </form>
-                    </div>
+                    <popup>
+                        <button class="btn btn-primary striped"><span>{{ __('View for Member') }}</span></button>
+                        <template #menu>
+                            <ul>
+                                @foreach ($members as $member)
+                                    <li><a href="{{ route('member.teams', ['ally' => $member->ally_code, 'team' => $team]) }}">{{ $member->player }}</a></li>
+                                @endforeach
+                            </ul>
+                        </template>
+                    </popup>
                 </div>
 
                 @if ($teamKeys->count() > 1)

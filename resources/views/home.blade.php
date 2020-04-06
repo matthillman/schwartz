@@ -13,55 +13,47 @@
 
             @include('shared.status');
 
-            <div class="card">
+            <div class="card death-star-grid">
+                <div class="card-header"><h1>Tools</h1></div>
                 <div class="card-body">
-                    <div class="icon-grid">
 
-                        <div class="item">
-                            <div class="icon-wrapper"><a href="{{ route('guilds') }}"><div class="image"><ion-icon name="people" size="huge"></ion-icon></div></a></div>
-                            <div class="label"><a href="{{ route('guilds') }}">Guilds</a></div>
-                        </div>
-
-                        <div class="item">
-                            <div class="icon-wrapper"><a href="{{ route('members') }}"><div class="image"><ion-icon name="person" size="huge"></ion-icon></div></a></div>
-                            <div class="label"><a href="{{ route('members') }}">Players</a></div>
-                        </div>
-
-                        <div class="item">
-                            <div class="icon-wrapper"><a href="{{ route('auth.mods') }}"><div class="image"><div class="icon mod-image diamond speed tier-6 gold giant"></div></div></a></div>
-                            <div class="label"><a href="{{ route('auth.mods') }}">Mod Set Maker</a></div>
-                        </div>
-
-                        {{-- <div class="item">
-                            <div class="icon-wrapper"><a href="{{ route('tw-teams.index') }}"><div class="image"><ion-icon name="help-buoy" size="huge"></ion-icon></div></a></div>
-                            <div class="label"><a href="{{ route('tw-teams.index') }}">TW Team Counters</a></div>
-                        </div> --}}
-
-                        <div class="item">
-                            <div class="icon-wrapper"><a href="{{ route('squads') }}"><div class="image"><ion-icon name="save" size="huge"></ion-icon></div></a></div>
-                            <div class="label"><a href="{{ route('squads') }}">Squad Management</a></div>
-                        </div>
+                    <div class="item" @@click="go(`{{ route('guilds') }}`)">
+                        <div class="icon-wrapper"><div class="image"><ion-icon name="people" size="huge"></ion-icon></div></div>
+                        <div class="label"><h1>Guilds</h1></div>
                     </div>
+
+                    <div class="item" @@click="go(`{{ route('members') }}`)">
+                        <div class="icon-wrapper"><div class="image"><ion-icon name="person" size="huge"></ion-icon></div></div>
+                        <div class="label"><h1>Players</h1></div>
+                    </div>
+
+                    <div class="item" @@click="go(`{{ route('auth.mods') }}`)">
+                        <div class="icon-wrapper"><div class="image"><div class="icon mod-image diamond speed tier-6 gold giant"></div></div></div>
+                        <div class="label"><h1>Mod Set Maker</h1></div>
+                    </div>
+
+                    <div class="item" @@click="go(`{{ route('squads') }}`)">
+                        <div class="icon-wrapper"><div class="image"><ion-icon name="save" size="huge"></ion-icon></div></div>
+                        <div class="label"><h1>Squad Maker</h1></div>
+                    </div>
+
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">Schwartz Guilds</div>
+            <div class="card death-star-grid">
+                <div class="card-header"><h1>Schwartz Guilds</h1></div>
 
                 <div class="card-body">
-                    <div class="icon-grid">
 
-                        <div class="item">
-                            <div class="icon-wrapper"><a href="{{ route('schwartz.guilds') }}"><div class="image"><ion-icon name="list" size="huge"></ion-icon></div></a></div>
-                            <div class="label"><a href="{{ route('schwartz.guilds') }}">GP List</a></div>
-                        </div>
-
-                        <div class="item">
-                            <div class="icon-wrapper"><a href="{{ route('schwartz.mods') }}"><div class="image"><div class="icon mod-image arrow health tier-6 gold giant"></div></div></a></div>
-                            <div class="label"><a href="{{ route('schwartz.mods') }}">Mods</a></div>
-                        </div>
-
+                    <div class="item" @@click="go(`{{ route('schwartz.guilds') }}`)">
+                        <div class="icon-wrapper"><div class="image"><ion-icon name="list" size="huge"></ion-icon></div></div>
+                        <div class="label"><h1>GP List</h1></div>
                     </div>
+                    <div class="item" @@click="go(`{{ route('schwartz.mods') }}`)">
+                        <div class="icon-wrapper"><div class="image"><div class="icon mod-image arrow health tier-6 gold giant"></div></div></div>
+                        <div class="label"><h1>Mods</h1></div>
+                    </div>
+
                 </div>
             </div>
 

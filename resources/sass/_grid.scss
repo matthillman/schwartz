@@ -21,7 +21,8 @@
         position: relative;
         background-color: $primary;
 		border-radius: 17.544%;
-		border: 1px solid #e5e5e5;
+        border: 1px solid $light-navy;
+        transition: 0.3s background-color ease-out;
 
         &:hover {
             background-color: $hover;
@@ -56,11 +57,14 @@
             font-size: 21px;
             text-align: center;
             font-size: 14px;
+
+            .dark-back &, .radiant-back & {
+                color: $white;
+            }
         }
     }
 
 }
-
 
 @media only screen and (min-width: 3 * 150px + 2 * 10px) {
 	.icon-grid.inner {
@@ -88,6 +92,139 @@
 
         &:hover {
             background-color: $gray-400;
+        }
+    }
+}
+
+$m: 0.5rem;
+$p: .25rem;
+$min-w: 15rem;
+
+.death-star-grid {
+    --i: -1;
+    --j: -1;
+    --r: 4rem;
+
+    background-color: rgba($color: $bg-dark-navy, $alpha: 0.9);
+    background-blend-mode: luminosity;
+
+    .card-header {
+        position: relative;
+        text-align: center;
+        background-color: rgba($color: $white, $alpha: 0.9);
+        // color: $white;
+
+        &:before/*, &:after*/ {
+            position: absolute;
+            left: 50%;
+            content: '';
+        }
+
+        &:before {
+            top: 100%;
+            width: calc(.0625 * var(--r));
+            height: calc(2.25 * var(--r) + #{$m});
+            transform: translate(-50%);
+            background: rgba($color: $white, $alpha: 0.9) padding-box;
+        }
+
+        // &:after {
+        //     top: calc(#{$m} + 4.4 * var(--r));
+        //     padding: calc(.85 * var(--r));
+        //     border-radius: 50%;
+        //     transform: translate(-50%, - 50%);
+        //     // box-shadow: 0 0 0 5px #fff;
+        //     // background: #fff padding-box;
+        //     background: url(/images/ds-white.png);
+        //     background-position: center center;
+        //     background-size: cover;
+        //     background-repeat: no-repeat;
+        // }
+    }
+
+    .card-body {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 0 auto;
+        max-width: 1000px;
+
+        background: url(/images/ds-white.png);
+        background-position: center calc(2.625 * var(--r));
+        background-size: calc(2 * .85 * var(--r));
+        background-repeat: no-repeat;
+    }
+
+    .icon-wrapper, .label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+        padding: $p;
+        color: $white;
+    }
+
+    .icon-wrapper {
+        height: calc(2 * var(--r));
+        color: #e1bc4a;
+    }
+
+    .label {
+        min-width: 95%;
+        background: rgba($overlay-navy, .85);
+        text-align: center;
+
+        justify-content: flex-start;
+        text-align: left;
+        height: var(--r);
+
+        > h1 {
+            font-size: 18px;
+            padding: 0 $p;
+        }
+    }
+
+    .item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: stretch;
+        width: 40%;
+        overflow: hidden;
+        margin: $m;
+        min-width: $min-w;
+        border-radius: 1em;
+        cursor: pointer;
+
+        --stop-list: transparent var(--r), #000 0;
+        position: relative;
+        background-color: rgba($overlay-navy, .6);
+        transition: background-color 0.3s ease-out;
+
+        &:hover {
+            background-color: rgba($overlay-navy, .9);
+        }
+
+        @for $i from 0 to 4 {
+            &:nth-of-type(#{4 - $i}) {
+                mask: radial-gradient(circle at ($i%2)*100% floor($i/2)*100%, var(--stop-list));
+            }
+        }
+        -webkit-mask-composite: source-in, source-in, source-in, xor;
+        /* autoprefixer: ignore next */
+        mask-composite: intersect;
+
+        &:nth-of-type(3), &:nth-of-type(4) { flex-direction: column-reverse; }
+
+        &:nth-of-type(-n + 2) { --j: 1 }
+        &:nth-of-type(odd) { --i: 1 }
+
+        &:nth-of-type(even) {
+            .label {
+                justify-content: flex-end;
+                text-align: right;
+            }
         }
     }
 }

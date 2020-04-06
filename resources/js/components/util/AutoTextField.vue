@@ -4,8 +4,9 @@
             <span class="small-note">{{ label }}</span>
             <input type="text" class="form-control" size="30" v-model="textValue">
         </div>
-        <button class="btn btn-primary" @click="saveData">Save</button>
-        <ion-icon :class="{success: this.success}" name="checkmark-circle-outline" size="small"></ion-icon>
+        <button class="btn btn-primary striped" @click="saveData"><span>Save</span></button>
+        <slot></slot>
+        <ion-icon class="indicator" :class="{success: this.success}" name="checkmark-circle-outline" size="small"></ion-icon>
     </label>
 </template>
 
@@ -47,13 +48,13 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../../sass/_variables.scss";
-ion-icon {
+ion-icon.indicator {
     transition: opacity 300ms ease-in-out;
     opacity: 0;
     color: $green;
-    position: relative;
-    top: -10px;
-    left: -77px;
+    position: absolute;
+    top: 25px;
+    left: 225px;
     visibility: visible;
 
     &.success {
@@ -63,5 +64,17 @@ ion-icon {
 
 input {
     margin-right: 4px;
+}
+
+.input-group > * {
+    margin-right: 4px;
+
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &:not(div) {
+        margin-bottom: 2px;
+    }
 }
 </style>

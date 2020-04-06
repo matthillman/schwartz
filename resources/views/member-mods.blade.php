@@ -7,7 +7,7 @@
 <div class="container guild-stats">
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card">
+            <div class="card radiant-back">
                 <div class="card-header"><h2>Guilds</h2></div>
 
                 <div class="card-body">

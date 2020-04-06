@@ -15,8 +15,42 @@
             <div><span>Total:</span> {{ items | sumProp('gp') | numberWithCommas }}</div>
             <div><span>Char GP:</span> {{ items | sumProp('character_gp') | numberWithCommas }}</div>
             <div><span>Ship GP:</span> {{ items | sumProp('ship_gp') | numberWithCommas }}</div>
-            <div><span>Gear 13:</span> {{ items | sumProp('gear_13') | numberWithCommas }}</div>
-            <div><span>Gear 12:</span> {{ items | sumProp('gear_12') | numberWithCommas }}</div>
+        </div>
+        <div class="row no-margin justify-content-around align-items-center dark">
+            <div class="row no-margin justify-content-center align-items-center">
+                <div class="portrait relic-only centered">
+                    <div class="relic"><span class="value">7</span></div>
+                </div>
+                <div> {{ items | sumProp('relic_7') | numberWithCommas }}</div>
+            </div>
+            <div class="row no-margin justify-content-center align-items-center dark">
+                <div class="portrait relic-only centered">
+                    <div class="relic"><span class="value">6</span></div>
+                </div>
+                <div> {{ items | sumProp('relic_6') | numberWithCommas }}</div>
+            </div>
+            <div class="row no-margin justify-content-center align-items-center dark">
+                <div class="portrait relic-only centered">
+                    <div class="relic"><span class="value">5</span></div>
+                </div>
+                <div> {{ items | sumProp('relic_5') | numberWithCommas }}</div>
+            </div>
+
+            <div class="row no-margin justify-content-center align-items-center dark">
+                <div class="portrait mini centered">
+                    <div class="gear g13" style="--gear-image:url('/images/units/gear/gear-icon-g13.png');"></div>
+                    <span class="value">13</span>
+                </div>
+                <div> {{ items | sumProp('gear_13') | numberWithCommas }}</div>
+            </div>
+            <div class="row no-margin justify-content-center align-items-center dark">
+                <div class="portrait mini centered">
+                    <div class="gear g12" style="--gear-image:url('/images/units/gear/gear-icon-g12.png');"></div>
+                    <span class="value">12</span>
+                </div>
+                <div> {{ items | sumProp('gear_12') | numberWithCommas }}</div>
+            </div>
+
         </div>
 	    <list
 	    	:columns="columns"

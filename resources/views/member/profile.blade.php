@@ -30,17 +30,13 @@
 
                             @person
                             <div class="column align-items-stretch">
-                                <button type="submit" class="btn btn-primary" @@click="go(`{{ route('member.characters', ['ally' => $member->ally_code]) }}`)">
-                                    <div class="flex-center">
-                                        <ion-icon name="people-circle-outline"></ion-icon>
-                                        <span>{{ __('Characters') }}</span>
-                                    </div>
+                                <button class="btn btn-primary btn-icon with-text striped" @@click="go(`{{ route('member.characters', ['ally' => $member->ally_code]) }}`)">
+                                    <ion-icon name="people-circle-outline" size="medium"></ion-icon>
+                                    <span>{{ __('Characters') }}</span>
                                 </button>
-                                <button type="submit" class="btn btn-primary" @@click="go(`{{ route('member.ships', ['ally' => $member->ally_code]) }}`)">
-                                    <div class="flex-center">
-                                        <ion-icon name="planet"></ion-icon>
-                                        <span>{{ __('Ships') }}</span>
-                                    </div>
+                                <button class="btn btn-primary btn-icon with-text striped" @@click="go(`{{ route('member.ships', ['ally' => $member->ally_code]) }}`)">
+                                    <ion-icon name="planet" size="medium"></ion-icon>
+                                    <span>{{ __('Ships') }}</span>
                                 </button>
                             </div>
                             @endperson
