@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::post('/twp/squad/{squadID}', 'TerritoryWarPlanController@createFrom')->name('tw-plan.create.from-group');
     Route::get('/twp/{plan}', 'TerritoryWarPlanController@show')->name('tw-plan.edit');
     Route::put('/twp/{plan}/user', 'TerritoryWarPlanController@publishUserState')->name('tw-plan.user');
+    Route::put('/twp/{plan}/members', 'TerritoryWarPlanController@saveMembers')->name('tw-plan.members');
     Route::put('/twp/{plan}/{zone}', 'TerritoryWarPlanController@saveZone')->name('tw-plan.zone.save');
     Route::post('/twp/{plan}/dm', 'TerritoryWarPlanController@sendDMs')->name('tw-plan.send-dms');
 });

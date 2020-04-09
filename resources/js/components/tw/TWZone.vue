@@ -23,15 +23,7 @@
             <button class="btn btn-primary striped" @click="addSquad"><span>Add to Zone</span></button>
         </div>
 
-        <div v-for="(zoneMembers, squadID) in zoneData" :key="`${squadID}-${zoneMembers.length}`"
-            class="drop-target"
-            :class="{ over: dragTarget == squadID, targetable: dragMode, 'not-dropable': !dropOK }"
-            @dragover.prevent="onDragOver(squadID, $event)"
-            @dragenter="onDragEnter(squadID, $event)"
-            @dragleave.self="onDragLeave"
-            @drop.prevent.stop="onDrop(squadID, $event)"
-            @dragend="onDragLeave"
-        >
+        <div v-for="(zoneMembers, squadID) in zoneData" :key="`${squadID}-${zoneMembers.length}`">
             <div class="squad-wrapper">
                 <mini-squad-table :squad="squads[squadID]" :units="units" flex-width></mini-squad-table>
                 <button class="btn btn-danger btn-icon inverted" @click="deleteSquad(squads[squadID])"><ion-icon name="remove-circle" size="small"></ion-icon></button>
@@ -126,7 +118,7 @@ export default {
         squads: Object,
         units: Object,
         members: Array,
-        dragMode: Boolean,
+        // dragMode: Boolean,
     },
     data() {
         return {
@@ -134,6 +126,7 @@ export default {
             selectedMember: {},
             dragTarget: null,
             dropOK: false,
+            dragMode: false,
         };
     },
     methods: {
@@ -206,38 +199,6 @@ export default {
                 }]
             });
         },
-
-        onDragOver(squadID, evt) {
-            this.dragTarget = squadID;
-        },
-        onDragEnter(squadID, evt) {
-            this.dragTarget = squadID;
-
-            const packedCode = evt.dataTransfer.types.find(t => t.startsWith('ally:'));
-
-            if (packedCode) {
-                const ally_code = packedCode.split(':')[1];
-                const member = this.memberFor(ally_code);
-                this.dropOK = this.memberAvailable(member, squadID);
-            }
-
-        },
-        onDragLeave() {
-            this.dragTarget = null;
-            this.dropOK = false;
-        },
-        onDrop(squadID, evt) {
-            const ally_code = evt.dataTransfer.getData('text/plain');
-            const member = this.memberFor(ally_code);
-
-            if (this.memberAvailable(member, squadID)) {
-                this.selectedMember[squadID] = member;
-                this.addMember(squadID);
-            }
-
-            this.dragTarget = null;
-            this.dropOK = false;
-        },
     },
 }
 </script>
@@ -265,19 +226,6 @@ export default {
     overflow-x: visible !important;
     table:first-of-type, .add-member {
         margin-top: 4px;
-    }
-}
-
-.targetable {
-    padding: 15px;
-    border-radius: 8px;
-}
-
-.over.targetable {
-    background: $sw-yellow;
-    &.not-dropable {
-        background: $red;
-        cursor: not-allowed;
     }
 }
 

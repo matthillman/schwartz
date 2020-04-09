@@ -665,11 +665,15 @@ $base: 80px;
     }
 
     .stat-header {
-        &.row {
+        &.row, .row {
             background: $overlay-navy;
 
             &.with-stat {
                 background: $dark-navy;
+            }
+
+            ion-icon {
+                cursor: pointer;
             }
         }
 

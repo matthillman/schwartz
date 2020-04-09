@@ -17,6 +17,7 @@ class TerritoryWarPlan extends Model
         'zone_8' => 'collection',
         'zone_9' => 'collection',
         'zone_10' => 'collection',
+        'members' => 'collection',
     ];
 
     public function guild() {

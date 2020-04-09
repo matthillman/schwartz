@@ -30,7 +30,7 @@
                         <div v-for="(slice, index) in [[8, 9, 10], [5, 6, 7], [3, 4], [1, 2]]" :key="index" class="column no-margin zone-wrapper">
                             <div v-for="zone in slice" :key="zone"
                                 class="zone drop-target"
-                                :class="[`zone-${zone}`, { over: dragTarget == zone, 'not-dropable': !dropOK }]"
+                                :class="[`zone-${zone}`, { over: dragTarget == zone && !draggingMember, 'not-dropable': !dropOK && !draggingMember }]"
                                 @click="currentZone = zone"
                                 @dragover.prevent="onDragOver(zone, $event)"
                                 @dragenter="onDragEnter(zone, $event)"
@@ -89,7 +89,6 @@
                             :squads="squads"
                             :units="units"
                             :members="ourMembers"
-                            :drag-mode="!!draggingMember"
                             @add-squad="addSquad"
                             @remove-squad="(z, s) => confirmDeleteSquad = {z, s}"
                             @add-member="addMember"
@@ -126,17 +125,18 @@
                 <div class="defense-list">
                     <div class="stat-list column">
                         <div class="row justify-content-between align-items-baseline stat-header">
-                            <div>Member</div>
+                            <div class="row justify-content-between align-items-center">Member&nbsp;<ion-icon name="pencil" size="small" @click="selectMembers = true"></ion-icon></div>
                             <div>Banners</div>
                         </div>
                         <a :href="`/twp/${plan.id}/member/${member.ally_code}`"
+                            :ref="`member_${member.ally_code}`"
                             class="row justify-content-between"
-                            :class="{ dragging: draggingMember == member.ally_code }"
+                            :class="{ dragging: draggingMember && draggingMember.ally_code == member.ally_code }"
                             v-for="member in ourMembers"
                             :key="member.bannerKey"
                             draggable="true"
-                            @dragstart.self="onDragStart(member, $event)"
-                            @dragend.self="onDragEnd"
+                            @dragstart.self="onMemberDragStart(member, $event)"
+                            @dragend.self="onMemberDragEnd"
                             @mouseenter="overMember(member)"
                             @mouseleave="leaveMember(member)"
                         >
@@ -145,6 +145,26 @@
                         </a>
                     </div>
                 </div>
+
+                <drop-target
+                    :anchor="dragMemberRef"
+                >
+                    <div class="column align-content-center drop-wrapper">
+                        <h4>Drop to Assign</h4>
+                        <div
+                            v-for="(members, squadID) in getPlanForZone(currentZone)" :key="squadID"
+                            class="drop-target"
+                            :class="{ over: dragTarget == squadID && draggingMember, targetable: draggingMember, 'not-dropable': !dropOK && draggingMember }"
+                            @dragover.prevent="onMemberDragOver(squadID, $event)"
+                            @dragenter="onMemberDragEnter(squadID, $event)"
+                            @dragleave.self="onMemberDragLeave"
+                            @drop.prevent.stop="onMemberDrop(squadID, $event)"
+                            @dragend="onMemberDragLeave"
+                        >
+                            <mini-squad-table :squad="squads[squadID]" :units="units" flex-width></mini-squad-table>
+                        </div>
+                    </div>
+                </drop-target>
 
             </div>
         </div>
@@ -163,7 +183,6 @@
                 <button class="btn btn-primary striped" :disabled="!potentialAddMembers.length" @click="addMember(addMultipleZone, addMultiple, potentialAddMembers)">Assign Members</button>
             </template>
         </modal>
-
 
         <modal v-if="confirmDeleteSquad" @close="confirmDeleteSquad = null">
             <template #header><h3>Are you sure you want to delete this squad?</h3></template>
@@ -210,6 +229,37 @@
                 <button class="btn btn-primary striped" @click="sendDMs">Send DMs</button>
             </template>
         </modal>
+
+        <modal v-if="selectMembers" @close="selectMembers = null">
+            <template #header><h3>Active Members</h3></template>
+            <template #body>
+                <div>
+                    The members active for this TW are:
+                </div>
+                <div class="row no-margin justify-content-end">
+
+                    <button class="btn btn-primary btn-icon with-text inverted" @click="includedAllyCodes = members.map(m => m.ally_code)">
+                        <ion-icon name="checkbox" size="small"></ion-icon>
+                        <span>Select All</span>
+                    </button>
+                    <button class="btn btn-primary btn-icon with-text inverted" @click="includedAllyCodes = []">
+                        <ion-icon name="square" size="small"></ion-icon>
+                        <span>Select None</span>
+                    </button>
+                </div>
+                <div class="checkbox-list-wrapper">
+                    <div v-for="member in members" :key="member.ally_code">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" v-model="includedAllyCodes" :value="member.ally_code" :id="`include-${member.ally_code}`">
+                            <label class="form-check-label" :for="`include-${member.ally_code}`">{{ member.player }}</label>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template #footer>
+                <div>{{ includedAllyCodes.length }}/50</div>
+            </template>
+        </modal>
     </div>
 </template>
 
@@ -217,6 +267,7 @@
 export default {
     components: {
         'member-filter': require('./MemberFilter.vue').default,
+        'drop-target': require('./DragTarget.vue').default,
     },
     props: {
         userId: Number,
@@ -224,8 +275,10 @@ export default {
         squads: Object,
         units: Object,
         members: Array,
+        activeMembers: Array,
     },
     mounted() {
+        this.ourMembers = this.members.filter(m => this.includedAllyCodes.includes(m.ally_code));
         Echo.join(`plan.${this.plan.id}`)
             .here(users => {
                 this.userList = users;
@@ -250,14 +303,17 @@ export default {
                 this.userList.sort((a, b) => a.name.localeCompare(b.name))
             })
             .listen('.plan.changed', event => {
-                this.updateData(event.zone, event.change);
+                if (event.zone > 0) {
+                    this.updateData(event.zone, event.change);
+                } else {
+                    this.includedAllyCodes = JSON.parse(event.change.members);
+                }
             })
             .listen('.user.changed', e => {
                 this.userList.find(u => u.id == e.user.id).zone = e.user.zone;
                 this.$forceUpdate();
             })
             .listen('.member.dm.status', e => {
-                console.warn('dm update', e);
                 this.ourMembers.find(m => m.ally_code == e.member.ally_code).dm_status = e.member.dm_status;
                 this.$forceUpdate();
             })
@@ -269,8 +325,10 @@ export default {
         return {
             currentZone: 1,
             ourPlan: this.plan,
-            ourMembers: this.members,
+            includedAllyCodes: this.activeMembers.length ? this.activeMembers : this.members.map(m => m.ally_code),
+            ourMembers: [],
             draggingMember: null,
+            dragMemberRef: null,
             draggingSquad: null,
             addMultiple: null,
             addMultipleZone: null,
@@ -278,6 +336,7 @@ export default {
             confirmDeleteSquad: null,
             highlightMember: null,
             sendMessages: null,
+            selectMembers: null,
             membersToMessage: [],
             user: {},
             userList: [],
@@ -289,7 +348,33 @@ export default {
         currentZone() {
             this.user.zone = this.currentZone;
             this.pushUserState();
-        }
+        },
+        selectMembers() {
+            if (this.selectMembers !== null) {
+                return;
+            }
+
+            if (this.includedAllyCodes.length == 0) {
+                alert("You must have at least one member in the plan");
+
+                this.selectMembers = true;
+                return;
+            }
+            this.ourMembers = this.members.filter(m => this.includedAllyCodes.includes(m.ally_code));
+
+            this.members.filter(m => !this.includedAllyCodes.includes(m.ally_code)).forEach(m => {
+                m.bannerCount = 0;
+                for (const index of [...Array(10).keys()]) {
+                    for (const squadID in this.getPlanForZone(index + 1)) {
+                        this.deleteMember(index + 1, squadID, m, true);
+                    }
+
+                    this.saveData(index + 1);
+                }
+            });
+
+            this.saveMembers();
+        },
     },
     methods: {
         memberDifference(squad) {
@@ -374,6 +459,14 @@ export default {
             }
         },
         deleteSquad(zone, squadID) {
+            const members = this.getPlanForZone(zone)[squadID];
+            for (const ally_code of members) {
+                const member = this.ourMembers.find(m => m.ally_code == ally_code);
+                if (!member) { continue; }
+                const memberSquads = member.usedSquads || new Set;
+                memberSquads.delete(this.squads[squadID].leader_id);
+                member.usedSquads = memberSquads;
+            }
             delete this.getPlanForZone(zone)[squadID];
             this.saveData(zone);
             this.$refs[`zone_${zone}`].$forceUpdate();
@@ -404,10 +497,19 @@ export default {
                 this.potentialAddMembers = [];
             }
         },
-        deleteMember(zone, squadID, member) {
+        deleteMember(zone, squadID, member, skipSave) {
             const index = this.getPlanForZone(zone)[squadID].indexOf(member.ally_code);
-            this.getPlanForZone(zone)[squadID].splice(index, 1);
-            this.saveData(zone);
+            if (index > -1) {
+                this.getPlanForZone(zone)[squadID].splice(index, 1);
+
+                const memberSquads = member.usedSquads || new Set;
+                memberSquads.delete(this.squads[squadID].leader_id);
+                member.usedSquads = memberSquads;
+
+                if (!skipSave) {
+                    this.saveData(zone);
+                }
+            }
         },
 
         updateNotes(zone, notes) {
@@ -427,17 +529,38 @@ export default {
             return this.members.filter(m => this.memberAvailable(m, zone, squadID));
         },
 
-        onDragStart(member, evt) {
+        onMemberDragStart(member, evt) {
             evt.dataTransfer.effectAllowed = 'move';
             evt.dataTransfer.setData('text/plain', member.ally_code);
             evt.dataTransfer.setData(`ally:${member.ally_code}`, '');
-            this.draggingMember = member.ally_code;
-            if (!this.isInViewport(this.$refs.pageContainer.$el)) {
-                setTimeout(() => this.$refs.pageContainer.$el.scrollIntoView(true), 100);
+            this.draggingMember = member;
+            this.dragMemberRef = evt.target;
+        },
+        onMemberDragEnd() {
+            this.draggingMember = null;
+            this.dragMemberRef = null;
+        },
+        onMemberDragOver(squadID, evt) {
+            this.dragTarget = squadID;
+        },
+        onMemberDragEnter(squadID, evt) {
+            this.dragTarget = squadID;
+
+            const packedCode = evt.dataTransfer.types.find(t => t.startsWith('ally:'));
+
+            if (packedCode) {
+                this.dropOK = this.memberAvailable(this.draggingMember, this.currentZone, squadID);
             }
         },
-        onDragEnd() {
-            this.draggingMember = null;
+        onMemberDragLeave() {
+            this.dragTarget = null;
+            this.dropOK = false;
+        },
+        onMemberDrop(squadID, evt) {
+            this.addMember(this.currentZone, squadID, this.draggingMember);
+
+            this.dragTarget = null;
+            this.dropOK = false;
         },
 
         onDragStartSquad(squad, evt) {
@@ -456,16 +579,21 @@ export default {
         },
 
         onDragOver(zone, evt) {
+            if (!this.draggingSquad) { return; }
             this.dragTarget = zone;
         },
         onDragEnter(zone, evt) {
+            if (!this.draggingSquad) { return; }
             this.dragTarget = zone;
 
             const packedCode = evt.dataTransfer.types.find(t => t.startsWith('squad:'));
 
             if (packedCode) {
                 const squadID = packedCode.split(':')[1];
-                this.dropOK = !Object.keys(this.getPlanForZone(zone)).includes(squadID) && !!this.squads[squadID];
+
+                this.dropOK = !Object.keys(this.getPlanForZone(zone)).includes(squadID) && !!this.squads[squadID] && (
+                    (this.units[this.squads[squadID].leader_id].combat_type == 2) == [5, 8].includes(zone)
+                );
             }
 
         },
@@ -552,6 +680,16 @@ export default {
             }
 
         },
+        async saveMembers() {
+            try {
+                await axios.put(`/twp/${this.ourPlan.id}/members`, {
+                    members: JSON.stringify(this.includedAllyCodes),
+                });
+            } catch (error) {
+                console.error(error);
+            }
+
+        },
         async pushUserState() {
             try {
                 await axios.put(`/twp/${this.ourPlan.id}/user`, {
@@ -576,6 +714,33 @@ export default {
 }
 .overview-button {
     margin: 8px 0;
+}
+.targetable {
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.over.targetable {
+    background: $sw-yellow;
+    &.not-dropable {
+        background: $red;
+        cursor: not-allowed;
+    }
+}
+
+.drop-wrapper {
+    padding: 8px;
+
+    > * {
+        margin-bottom: 8px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+    h4 {
+        text-align: center;
+    }
 }
 </style>
 
@@ -677,4 +842,5 @@ export default {
     top: 3px;
     right: 0;
 }
+
 </style>

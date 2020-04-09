@@ -41,6 +41,10 @@
     border-collapse: separate;
     width: 100%;
 
+    .vs__selected & {
+        width: auto;
+    }
+
     td, th {
         color: $white;
         background: radial-gradient(ellipse at center center, scale-color($color: $light-navy, $lightness: 10%), $light-navy);
@@ -111,6 +115,16 @@
                     margin: 3px auto;
                 }
             }
+        }
+
+        &:nth-child(even) .squad-row td {
+            background: $light-navy;
+            background-clip: content-box;
+        }
+
+        &:nth-child(odd) .squad-row td {
+            background: $dark-navy;
+            background-clip: content-box;
         }
     }
 }

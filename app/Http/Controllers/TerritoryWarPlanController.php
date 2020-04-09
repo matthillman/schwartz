@@ -80,6 +80,19 @@ class TerritoryWarPlanController extends Controller
         return response()->json(['success' => true]);
     }
 
+    function saveMembers(Request $request, $id) {
+        $plan = TerritoryWarPlan::findOrFail($id);
+
+        Gate::authorize('edit-guild', $plan->guild->id);
+
+        $plan->members = json_decode($request->get('members', '[]'));
+        $plan->save();
+
+        broadcast(new TWPlanChanged($plan, 0, $request->input()))->toOthers();
+
+        return response()->json(['success' => true]);
+    }
+
     public function publishUserState(Request $request, $id) {
 
         $plan = TerritoryWarPlan::findOrFail($id);
