@@ -52,11 +52,11 @@
                                 </div>
                             </button>
                         </template>
-                        @foreach ($guild->members->sortBy('player') as $member)
+                        @foreach ($guild->members->sortBy('player', SORT_NATURAL|SORT_FLAG_CASE) as $member)
                         <div class="input-group discord-select row no-margin">
                             <auto-select
                                 :route="`{{ route('member.update.discord', ['ally' => $member->ally_code]) }}`"
-                                :options="{{ $guild->discordMemberOptions()->sortBy('label')->values()->toJson() }}"
+                                :options="{{ $guild->discordMemberOptions()->sortBy('label', SORT_NATURAL|SORT_FLAG_CASE)->values()->toJson() }}"
                                 @if ($member->discord->discord_id)
                                 :value="`{{ $member->discord->discord_id }}`"
                                 @endif

@@ -54,7 +54,7 @@
                     :plan="{{ $plan->toJson() }}"
                     :squads="{{ $squads->toJson() }}"
                     :units="{{ $units->whereIn('base_id', $unitIDs)->keyBy('base_id')->toJson() }}"
-                    :members="{{ $plan->guild->members->map(function($m) use ($unitIDs) { return $m->characterSet($unitIDs)->put('dm_status', $m->roles->dm_status); })->sortBy('player')->values()->toJson() }}"
+                    :members="{{ $plan->guild->members->map(function($m) use ($unitIDs) { return $m->characterSet($unitIDs)->put('dm_status', $m->roles->dm_status); })->sortBy('player', SORT_NATURAL|SORT_FLAG_CASE)->values()->toJson() }}"
                     :active-members="{{ $plan->members }}"
                 ></tw-plan>
             </div>
