@@ -526,7 +526,7 @@ export default {
             && (!member.usedSquads || !member.usedSquads.has(this.squads[squadID].leader_id));
         },
         availableMembersFor(zone, squadID) {
-            return this.members.filter(m => this.memberAvailable(m, zone, squadID));
+            return this.ourMembers.filter(m => this.memberAvailable(m, zone, squadID));
         },
 
         onMemberDragStart(member, evt) {
