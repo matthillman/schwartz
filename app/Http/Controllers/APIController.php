@@ -64,7 +64,7 @@ class APIController extends Controller
     }
 
     public function register(Request $request, $id, $discord, $server = null) {
-        $existing = User::where(['discord_id' => $id])->allyCodeForGuild($server);
+        $existing = User::where(['discord_id' => $id])->firstOrNew()->allyCodeForGuild($server);
         if (is_null($existing)) {
             $server = null;
         }
