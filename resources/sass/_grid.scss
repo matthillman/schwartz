@@ -216,7 +216,7 @@ $min-w: 15rem;
         }
         /* autoprefixer: ignore next */
         mask-composite: intersect;
-        -webkit-mask-composite: xor;
+        -webkit-mask-composite: destination-atop;
 
         &:nth-of-type(3), &:nth-of-type(4) { flex-direction: column-reverse; }
 
