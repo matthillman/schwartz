@@ -385,6 +385,10 @@ trait ParsesPlayers {
                 return null;
             }
             $character = $memberChars->where('unit_name', $zeta->character_id)->first();
+            if (is_null($character)) {
+                // this only happens if one GL is unlocked, but not both as they share a skill
+                return null;
+            }
             return [
                 'zeta_id' => $zeta->id,
                 'character_id' => $character->id,
