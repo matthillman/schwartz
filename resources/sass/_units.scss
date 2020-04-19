@@ -30,10 +30,16 @@
             padding: var(--r);
             background: rgba($overlay-navy, .85);
             &:nth-child(even) {
+                /* autoprefixer: ignore next */
+                -webkit-mask-box-image: radial-gradient(circle at 0 0, var(--stop-list)),
+                      radial-gradient(circle at 100% 100%, var(--stop-list));
                 mask: radial-gradient(circle at 0 0, var(--stop-list)),
                       radial-gradient(circle at 100% 100%, var(--stop-list));
             }
             &:nth-child(odd) {
+                /* autoprefixer: ignore next */
+                -webkit-mask-box-image: radial-gradient(circle at 0 100%, var(--stop-list)),
+                      radial-gradient(circle at 100% 0, var(--stop-list));
                 mask: radial-gradient(circle at 0 100%, var(--stop-list)),
                       radial-gradient(circle at 100% 0, var(--stop-list));
             }
