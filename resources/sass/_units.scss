@@ -45,7 +45,7 @@
                 mask: radial-gradient(circle at 0 100%, var(--stop-list)),
                       radial-gradient(circle at 100% 0, var(--stop-list));
             }
-            -webkit-mask-composite: source-in, source-in, source-in, xor;
+            // -webkit-mask-composite: source-in, source-in, source-in, xor;
             /* autoprefixer: ignore next */
             mask-composite: intersect;
             border-radius: 8px;

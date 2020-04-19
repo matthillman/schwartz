@@ -214,7 +214,7 @@ $min-w: 15rem;
                 mask: radial-gradient(circle at ($i%2)*100% floor($i/2)*100%, var(--stop-list));
             }
         }
-        -webkit-mask-composite: source-in, source-in, source-in, xor;
+        // -webkit-mask-composite: source-in, source-in, source-in, xor;
         /* autoprefixer: ignore next */
         mask-composite: intersect;
 
