@@ -377,15 +377,19 @@ trait ParsesPlayers {
         $this->info("${logPrefix}⬅ Done with character insert.");
 
         $zetaList = static::getZetaList();
-        $skills = $roster->pluck('skillList')->flatten(1)->where('tier', 6)->pluck('id');
+        $skills = $roster->pluck('skillList')->flatten(1)->whereIn('id', $zetaList->pluck('skill_id'))->keyBy('id');
         $memberChars = $member->characters()->get();
-        $zetas = $zetaList->whereIn('skill_id', $skills)->map(function($zeta) use ($memberChars) {
+        $zetas = $zetaList->whereIn('skill_id', $skills->pluck('id'))->map(function($zeta) use ($memberChars, $skills) {
+            $skill = $skills->get($zeta->skill_id);
+            if ($skill['tier'] < $zeta->tier) {
+                return null;
+            }
             $character = $memberChars->where('unit_name', $zeta->character_id)->first();
             return [
                 'zeta_id' => $zeta->id,
                 'character_id' => $character->id,
             ];
-        });
+        })->filter(function($z) { return !is_null($z); });
         $memberChars = null;
         unset($memberChars);
         $skills = null;

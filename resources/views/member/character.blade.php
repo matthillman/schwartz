@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-12">
             <div class="card dark-back">
-                <div class="card-header glass-back row justify-content-start align-items-baseline">
+                <div class="card-header row justify-content-start align-items-baseline">
                     @include('shared.back')
                     <div class="column">
                         <h2>{{ $character->display_name }}</h2>

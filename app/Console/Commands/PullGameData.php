@@ -184,26 +184,29 @@ class PullGameData extends Command
                         $name = $abilityNames[$data['abilityReference']];
                         $class = (preg_match('/^(.+)skill_/', $data['id'], $matches)) ? trim($matches[1]) : null;
 
-                        $charRef = $unitSkills->first(function($value) use ($data) {
+                        $charRefs = $unitSkills->filter(function($value) use ($data) {
                             return $value['skills']->contains($data['id']);
                         });
 
-                        if (is_null($charRef)) {
+                        if (is_null($charRefs)) {
                             \Log::warning("Failed to find character for zeta", [$data['id']]);
                             return;
                         }
 
-                        $baseId = $charRef['baseId'];
+                        $charRefs->each(function($charRef) use ($data, $name, $class) {
+                            $baseId = $charRef['baseId'];
 
-                        $zeta = Zeta::firstOrNew([
-                            'skill_id' => $data['id'],
-                            'character_id' => $baseId
-                        ]);
+                            $zeta = Zeta::firstOrNew([
+                                'skill_id' => $data['id'],
+                                'character_id' => $baseId,
+                            ]);
 
-                        $zeta->name = $name;
-                        $zeta->class = $class;
-                        $zeta->skill_id = $data['id'];
-                        $zeta->save();
+                            $zeta->name = $name;
+                            $zeta->class = $class;
+                            $zeta->skill_id = $data['id'];
+                            $zeta->tier = count($data['tierList']) - 1;
+                            $zeta->save();
+                        });
                     }
                     return true;
                 }
