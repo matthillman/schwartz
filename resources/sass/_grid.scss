@@ -103,7 +103,7 @@ $min-w: 15rem;
 .death-star-grid {
     --i: -1;
     --j: -1;
-    --r: 4rem;
+    --r: 64px;
 
     background-color: rgba($color: $bg-dark-navy, $alpha: 0.9);
     background-blend-mode: luminosity;
@@ -210,6 +210,7 @@ $min-w: 15rem;
             &:nth-of-type(#{4 - $i}) {
                 /* autoprefixer: ignore next */
                 --webkit-mask-box-image: radial-gradient(circle at #{($i%2)*100%} #{floor($i/2)*100%}, var(--stop-list));
+                /* autoprefixer: ignore next */
                 mask: radial-gradient(circle at ($i%2)*100% floor($i/2)*100%, var(--stop-list));
             }
         }
