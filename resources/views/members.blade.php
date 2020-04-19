@@ -126,8 +126,8 @@
                     </div>
                     <div class="grow">
                         <h4>@{{ result.item.player }}</h4>
-                        <div>@{{ result.item.ally_code.replace(/^(\d{3})(\d{3})(\d{3})$/, "$1–$2–$3") }}</div>
-                        <div>@{{ result.item.gp.toLocaleString() }} GP</div>
+                        <div class="small-note">@{{ result.item.ally_code.replace(/^(\d{3})(\d{3})(\d{3})$/, "$1–$2–$3") }}</div>
+                        <div class="small-note">@{{ result.item.gp.toLocaleString() }} GP</div>
                     </div>
 
                     <div class="column align-items-end">
