@@ -208,15 +208,12 @@ $min-w: 15rem;
 
         @for $i from 0 to 4 {
             &:nth-of-type(#{4 - $i}) {
-                /* autoprefixer: ignore next */
-                --webkit-mask-box-image: radial-gradient(circle at #{($i%2)*100%} #{floor($i/2)*100%}, var(--stop-list));
-                /* autoprefixer: ignore next */
-                mask: radial-gradient(circle at ($i%2)*100% floor($i/2)*100%, var(--stop-list));
+                mask: radial-gradient(circle at #{($i%2)*100%} #{floor($i/2)*100%}, var(--stop-list));
             }
         }
         /* autoprefixer: ignore next */
         mask-composite: intersect;
-        -webkit-mask-composite: destination-atop;
+        -webkit-mask-composite: source-in, xor;
 
         &:nth-of-type(3), &:nth-of-type(4) { flex-direction: column-reverse; }
 
