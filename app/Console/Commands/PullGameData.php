@@ -142,9 +142,13 @@ class PullGameData extends Command
 
                         if (!empty($unit->relic_image) && !Storage::disk('images')->exists("gear/$unit->relic_image.png")) {
                             $this->info("Fetching relic image from swgoh.gg");
-                            guzzle()->get("https://swgoh.gg/static/img/assets/$unit->relic_image.png", [
-                                'sink' => base_path("public/images/gear/$unit->relic_image.png"),
-                            ]);
+                            try {
+                                guzzle()->get("https://swgoh.gg/static/img/assets/$unit->relic_image.png", [
+                                    'sink' => base_path("public/images/gear/$unit->relic_image.png"),
+                                ]);
+                            } catch (ClientException $e) {
+                                $this->error("Image not fetched [{$unit->relic_image}] " . $e->getMessage());
+                            }
                         }
 
                         $downloadedSkillsImages = collect(Storage::disk('images')->files('units/skills'))->map(function($f) {
@@ -153,9 +157,13 @@ class PullGameData extends Command
                         foreach ($unit->skills->concat($unit->crew_list->pluck('skillReferenceList')->flatten(1))->pluck('skillId') as $skill) {
                             if (!$downloadedSkillsImages->contains("$skill.png")) {
                                 $this->info("Fetching ability image from swgoh.gg ($skill)");
-                                guzzle()->get("https://swgoh.gg/game-asset/a/$skill/", [
-                                    'sink' => base_path("public/images/units/skills/$skill.png"),
-                                ]);
+                                try {
+                                    guzzle()->get("https://swgoh.gg/game-asset/a/$skill/", [
+                                        'sink' => base_path("public/images/units/skills/$skill.png"),
+                                    ]);
+                                } catch (ClientException $e) {
+                                    $this->error("Image not fetched [{$unit->relic_image}] " . $e->getMessage());
+                                }
                             }
                         }
 
