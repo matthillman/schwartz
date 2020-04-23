@@ -62,14 +62,25 @@ html, body {
 }
 
 body {
-    background-color: #4f555d;
-    background: url(/images/main.jpg);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
 
-    &.no-bg {
-        background: #4f555d;
+    &::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        height: 100vh;
+        left: 0;
+        right: 0;
+        z-index: -1;
+
+        background-color: #4f555d;
+        background: url(/images/main.jpg);
+        background-size: cover;
+        background-position: center;
+        background-attachment: scroll;
+
+        &.no-bg {
+            background: #4f555d;
+        }
     }
 }
 
