@@ -27,7 +27,7 @@
           v-if="!character.is_ship"
           class="character round"
           :src="`/images/units/${ character.unit_name }.png`"
-        />
+        >
         <div
           v-if="!character.is_ship"
           class="gear"
@@ -41,15 +41,15 @@
             :key="index"
             :class="{ full : character.rarity >= index, empty: character.rarity < index }"
             :src="`/images/units/stars/${character.rarity >= index ? 'active' : 'inactive'}.png`"
-          />
+          >
         </div>
 
         <div v-if="character.zetas && character.zetas.length" class="zetas">
-          <img src="/images/units/abilities/zeta.png" />
+          <img src="/images/units/abilities/zeta.png">
           <span class="value">{{ character.zetas.length }}</span>
         </div>
 
-        <div v-if="character.relic > 1" class="relic">
+        <div v-if="character.relic > 1 && character.gear_level > 12" class="relic">
           <span class="value">{{ character.relic - 2 }}</span>
         </div>
 
@@ -87,7 +87,7 @@
     </span>
 
     <modal v-if="modalMods" @close="modalMods = false">
-        <h3 slot="header">{{ member.player }}: {{ character.unit.name }}</h3>
+        <h3 slot="header">{{ member.player }}: {{ character.display_name }}</h3>
         <div slot="body" class="mod-details" :class="{'justify-content-center': fetchingMods}">
             <loading-indicator v-if="fetchingMods"></loading-indicator>
             <div
@@ -185,6 +185,8 @@ export default {
   },
   computed: {
     statGrade: function() {
+      if (!this.character.stat_grade) { return null; }
+
       let statValues = Object.values(this.character.stat_grade);
       return statValues.length
         ? statValues.reduce((c, v) => Math.min(c, v))

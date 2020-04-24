@@ -141,6 +141,29 @@ class Guild extends Model
             ->whereIn('guilds.guild_id', [$this->guild_id])
             ->get();
     }
+
+    public function averageMember($compareUnits = []) {
+        $member = $this->members()
+            ->with(['stats', 'characters.zetas'])
+            ->get()
+            ->map(function(Member $member) use($compareUnits) {
+                return $member->toCompareData($compareUnits)->toArray();
+            })
+            ->reduce(function($average, $member) {
+                return average_array($average, $member);
+            }, [])
+        ;
+        $member = round_array($member);
+
+        $member['player'] = "Average Joe";
+
+        return collect($member)->mapWithKeys(function($val, $key) {
+            if (is_array($val)) {
+                $val = collect($val);
+            }
+            return [$key => $val];
+        });
+    }
 }
 
 function testRegex($regex) {
@@ -157,4 +180,44 @@ function testRegex($regex) {
     ini_set('pcre.recursion_limit', $recursion_limit);
 
     return $valid;
+}
+
+function average_array($average, $array) {
+    foreach ($array as $key => $val) {
+        // echo "Considering $key => " . json_encode($val) . " -> [" . json_encode(array_get($average, $key)) . "]\n" ;
+        if (isset($average[$key])) {
+            if (is_array($val)) {
+                $average[$key] = average_array($average[$key], $val);
+            } else if (is_string($val) || is_bool($val)) {
+                $average[$key] = $val;
+            } else if (is_numeric($val)) {
+                $average[$key] = ($val + $average[$key]) / 2;
+            } else if (is_null($val)) {
+                // skip it
+            } else {
+                \Log::error("Got an unexpected value averaging members", [$key, json_encode($val)]);
+            }
+        } else {
+            $average[$key] = $val;
+        }
+    }
+
+    return $average;
+}
+function round_array($array) {
+    foreach ($array as $key => $val) {
+        if (is_array($val)) {
+            $array[$key] = round_array($val);
+        } else if (is_string($val) || is_bool($val)) {
+            $array[$key] = $val;
+        } else if (is_numeric($val)) {
+            $array[$key] = intval(round($val));
+        } else if (is_null($val)) {
+            // skip it
+        } else {
+            \Log::error("Got an unexpected value rounding members", [$key, json_encode($val)]);
+        }
+    }
+
+    return $array;
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Gate;
 use App\Unit;
+use App\Guild;
 use App\Member;
 use App\Category;
 use App\Character;
@@ -197,9 +198,15 @@ class MemberController extends Controller
 
         $members = collect(explode(',', $request->get('members')))
             ->map(function($ally) {
+                if (starts_with($ally, 'g')) {
+                    return Guild::where('guild_id', substr($ally, 1))->firstOrFail();
+                }
                 return Member::with(['stats','characters.zetas', 'guild'])->where(['ally_code' => str_replace('-', '', $ally)])->firstOrFail();
             })
             ->map(function($member) use ($compareUnits) {
+                if ($member instanceof Guild) {
+                    return $member->averageMember($compareUnits);
+                }
                 return $member->toCompareData($compareUnits);
             })
         ;

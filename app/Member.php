@@ -225,7 +225,7 @@ class Member extends Model
     }
 
     public function extractStats($c) {
-        return collect([strtolower("{$c->unit_name}") => $c])->merge(
+        return collect([strtolower("{$c->unit_name}") => $c->makeHidden(['unit', 'member', 'stat_grade'])])->merge(
             static::getCompareStats()->mapWithKeys(function($stat) use ($c) {
                 $k = $stat['stat']->getKey();
                 return [

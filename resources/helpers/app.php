@@ -19,6 +19,14 @@ if (!function_exists('shitty_bot')) {
 		return app('shitty_bot');
 	}
 }
+if (!function_exists('mod_bonus')) {
+	function mod_bonus($stat, $stats) {
+        if (is_string($stat)) {
+            $stat = \SwgohHelp\Enums\UnitStat::$stat();
+        }
+        return array_get($stats, 'mods.'.$stat->getValue(), null);
+	}
+}
 if (!function_exists('format_stat')) {
 	function format_stat($value, $stat) {
 		if (!is_numeric($value)) {
