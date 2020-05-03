@@ -106,6 +106,9 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::post('/twp/{plan}/dm', 'TerritoryWarPlanController@sendDMs')->name('tw-plan.send-dms');
 });
 
+Route::get('sheet/gp/{guild?}', 'GuildController@listGP')->name('guild.gp');
+Route::get('sheet/guild_mods/{guild}', 'GuildController@listMods')->name('guild.mods');
+
 Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
     Route::get('/relics', 'RelicController@index')->name('relic.recommendations');
     Route::get('/relics/{ally}', 'RelicController@relicMember')->name('member.relic.recommendations');
