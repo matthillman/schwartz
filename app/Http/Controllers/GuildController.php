@@ -159,20 +159,54 @@ class GuildController extends Controller
         ]);
     }
 
-    public function guildGP($id) {
-        $guild = Guild::where('id', $id)->get();
-        return view('gp', [
-            'guilds' => $guild,
-            'members' => $guild->first()->members,
-        ]);
+    public function guildGP(Request $request, $id) {
+        $guild = Guild::where('id', $id)->firstOrFail();
+        if ($request->route()->named('guild.guild.sheet')) {
+            return view('shared.import-list', [
+                'columns' => [
+                    'player' => 'Member',
+                    'gp' => 'Galactic Power',
+                    'character_gp' => 'Character GP',
+                    'ship_gp' => 'Ship GP',
+                    'gear_13' => 'Gear 13',
+                    'gear_12' => 'Gear 12',
+                    'relic_7' => 'R7',
+                    'relic_6' => 'R6',
+                    'relic_5' => 'R5',
+                ],
+                'data' => $guild->members,
+                'title' => $guild->name,
+            ]);
+        } else {
+            return view('gp', [
+                'guilds' => collect([$guild]),
+                'members' => $guild->members,
+            ]);
+        }
     }
 
-    public function guildMods($id) {
-        $guild = Guild::where('id', $id)->get();
-        return view('member-mods', [
-            'guilds' => $guild,
-            'mods' => $guild->first()->mod_data,
-        ]);
+    public function guildMods(Request $request, $id) {
+        $guild = Guild::where('id', $id)->firstOrFail();
+        if ($request->route()->named('guild.modsList.sheet')) {
+            return view('shared.import-list', [
+                'columns' => [
+                    'player' => 'Member',
+                    'six_dot' => '6•',
+                    'speed_25' => 'Speed 25+',
+                    'speed_20' => 'Speed 20+',
+                    'speed_15' => 'Speed 15+',
+                    'speed_10' => 'Speed 10+',
+                    'offense_100' => 'Offense 100+',
+                ],
+                'data' => $guild->mod_data,
+                'title' => $guild->name,
+            ]);
+        } else {
+            return view('member-mods', [
+                'guilds' => collect([$guild]),
+                'mods' => $guild->mod_data,
+            ]);
+        }
     }
 
     public function listGP($guild = null) {
