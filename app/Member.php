@@ -126,8 +126,8 @@ class Member extends Model
             "level" => $this->level,
             "title" => $this->title,
             "portrait" => $this->portrait,
-            "squad_rank" => array_get($this->arena, '0.rank', 0),
-            "fleet_rank" => array_get($this->arena, '1.rank', 0),
+            "squad_rank" => $this->squad_rank,
+            "fleet_rank" => $this->fleet_rank,
         ];
     }
 
@@ -138,6 +138,22 @@ class Member extends Model
     public function getGuildNameAttribute() {
         if (is_null($this->guild)) { return ''; }
         return $this->guild->name;
+    }
+
+    public function getSquadRankAttribute() {
+        return array_get($this->arena, '0.rank', 0);
+    }
+
+    public function getFleetRankAttribute() {
+        return array_get($this->arena, '1.rank', 0);
+    }
+
+    public function getHasGlReyAttribute() {
+        return $This->characters()->where('unit_name', 'GLREY')->exists();
+    }
+
+    public function getHasGlKyloAttribute() {
+        return $This->characters()->where('unit_name', 'SUPREMELEADERKYLOREN')->exists();
     }
 
     public function getGear12Attribute() {
