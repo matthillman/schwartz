@@ -160,7 +160,8 @@ class GuildController extends Controller
     }
 
     public function guildGP(Request $request, $id) {
-        $guild = Guild::where('id', $id)->firstOrFail();
+        $key = request()->input('guild_id', 0) == 1 ? 'guild_id' : 'id';
+        $guild = Guild::where($key, $id)->firstOrFail();
         if ($request->route()->named('guild.guild.sheet')) {
             return view('shared.import-list', [
                 'columns' => [
@@ -190,7 +191,8 @@ class GuildController extends Controller
     }
 
     public function guildMods(Request $request, $id) {
-        $guild = Guild::where('id', $id)->firstOrFail();
+        $key = request()->input('guild_id', 0) == 1 ? 'guild_id' : 'id';
+        $guild = Guild::where($key, $id)->firstOrFail();
         if ($request->route()->named('guild.modsList.sheet')) {
             return view('shared.import-list', [
                 'columns' => [
