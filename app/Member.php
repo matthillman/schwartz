@@ -149,11 +149,11 @@ class Member extends Model
     }
 
     public function getHasGlReyAttribute() {
-        return $This->characters()->where('unit_name', 'GLREY')->exists();
+        return $this->characters()->where('unit_name', 'GLREY')->exists();
     }
 
     public function getHasGlKyloAttribute() {
-        return $This->characters()->where('unit_name', 'SUPREMELEADERKYLOREN')->exists();
+        return $this->characters()->where('unit_name', 'SUPREMELEADERKYLOREN')->exists();
     }
 
     public function getGear12Attribute() {
