@@ -135,11 +135,11 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td {{ $winner['relic_seven']->contains($id) ? 'winner' : '' }}>{{ number_format($member['relic_seven']) }}</td>
-                                    <td {{ $winner['relic_six']->contains($id) ? 'winner' : '' }}>{{ number_format($member['relic_six']) }}</td>
-                                    <td {{ $winner['relic_five']->contains($id) ? 'winner' : '' }}>{{ number_format($member['relic_five']) }}</td>
-                                    <td {{ $winner['r_total']->contains($id) ? 'winner' : '' }}>{{ number_format($member['relic_seven'] + $member['relic_six'] + $member['relic_five']) }}</td>
-                                    <td {{ $winner['r_three_plus']->contains($id) ? 'winner' : '' }}>{{ number_format($member['relic_seven'] + $member['relic_six'] + $member['relic_five'] + $member['relic_four'] + $member['relic_three']) }}</td>
+                                    <td {{ $winner['relic_seven']->contains($id) ? 'winner' : '' }}>{{ number_format(array_get($member, 'relic_seven', 0)) }}</td>
+                                    <td {{ $winner['relic_six']->contains($id) ? 'winner' : '' }}>{{ number_format(array_get($member, 'relic_six', 0)) }}</td>
+                                    <td {{ $winner['relic_five']->contains($id) ? 'winner' : '' }}>{{ number_format(array_get($member, 'relic_five', 0)) }}</td>
+                                    <td {{ $winner['r_total']->contains($id) ? 'winner' : '' }}>{{ number_format(array_get($member, 'relic_seven', 0) + array_get($member, 'relic_six', 0) + array_get($member, 'relic_five', 0)) }}</td>
+                                    <td {{ $winner['r_three_plus']->contains($id) ? 'winner' : '' }}>{{ number_format(array_get($member, 'relic_seven', 0) + array_get($member, 'relic_six', 0) + array_get($member, 'relic_five', 0) + array_get($member, 'relic_four', 0) + array_get($member, 'relic_three', 0)) }}</td>
                                 </tr>
                             </tbody>
                             <thead>
@@ -181,7 +181,7 @@
                                     <td {{ $winner['gear_twelve']->contains($id) ? 'winner' : '' }}>{{ number_format($member['gear_twelve']) }}</td>
                                     <td {{ $winner['gear_eleven']->contains($id) ? 'winner' : '' }}>{{ number_format($member['gear_eleven']) }}</td>
                                     <td {{ $winner['g_total']->contains($id) ? 'winner' : '' }}>{{ number_format($member['gear_thirteen'] + $member['gear_twelve'] + $member['gear_eleven']) }}</td>
-                                    <td {{ $winner['r_all']->contains($id) ? 'winner' : '' }}>{{ number_format($member['relic_seven'] + $member['relic_six'] + $member['relic_five'] + $member['relic_four'] + $member['relic_three'] + $member['relic_two'] + $member['relic_one']) }}</td>
+                                    <td {{ $winner['r_all']->contains($id) ? 'winner' : '' }}>{{ number_format(array_get($member, 'relic_seven', 0) + array_get($member, 'relic_six', 0) + array_get($member, 'relic_five', 0) + array_get($member, 'relic_four', 0) + array_get($member, 'relic_three', 0) + array_get($member, 'relic_two', 0) + array_get($member, 'relic_one', 0)) }}</td>
                                 </tr>
                             </tbody>
                         </table>
