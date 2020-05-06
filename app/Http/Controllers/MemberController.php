@@ -249,16 +249,16 @@ class MemberController extends Controller
             $gFirst = $first['g_total']->first();
             $totals = [
                 'r_total' => [
-                    'm1' => $rFirst['relic_seven'] + $rFirst['relic_six'] + $rFirst['relic_five'],
-                    'm2' => $second['relic_seven'] + $second['relic_six'] + $second['relic_five'],
+                    'm1' => array_get($rFirst, 'relic_seven', 0) + array_get($rFirst, 'relic_six', 0) + array_get($rFirst, 'relic_five', 0),
+                    'm2' => array_get($second, 'relic_seven', 0) + array_get($second, 'relic_six', 0) + array_get($second, 'relic_five', 0),
                 ],
                 'r_three_plus' => [
-                    'm1' => $rFirst['relic_seven'] + $rFirst['relic_six'] + $rFirst['relic_five'] + $rFirst['relic_four'] + $rFirst['relic_three'],
-                    'm2' => $second['relic_seven'] + $second['relic_six'] + $second['relic_five'] + $second['relic_four'] + $second['relic_three'],
+                    'm1' => array_get($rFirst, 'relic_seven', 0) + array_get($rFirst, 'relic_six', 0) + array_get($rFirst, 'relic_five', 0) + array_get($rFirst, 'relic_four', 0) + array_get($rFirst, 'relic_three', 0),
+                    'm2' => array_get($second, 'relic_seven', 0) + array_get($second, 'relic_six', 0) + array_get($second, 'relic_five', 0) + array_get($second, 'relic_four', 0) + array_get($second, 'relic_three', 0),
                 ],
                 'r_all' => [
-                    'm1' => $rFirst['relic_seven'] + $rFirst['relic_six'] + $rFirst['relic_five'] + $rFirst['relic_four'] + $rFirst['relic_three'] + $rFirst['relic_two'] + $rFirst['relic_one'],
-                    'm2' => $second['relic_seven'] + $second['relic_six'] + $second['relic_five'] + $second['relic_four'] + $second['relic_three'] + $second['relic_two'] + $second['relic_one'],
+                    'm1' => array_get($rFirst, 'relic_seven', 0) + array_get($rFirst, 'relic_six', 0) + array_get($rFirst, 'relic_five', 0) + array_get($rFirst, 'relic_four', 0) + array_get($rFirst, 'relic_three', 0) + array_get($rFirst, 'relic_two', 0) + array_get($rFirst, 'relic_one', 0),
+                    'm2' => array_get($second, 'relic_seven', 0) + array_get($second, 'relic_six', 0) + array_get($second, 'relic_five', 0) + array_get($second, 'relic_four', 0) + array_get($second, 'relic_three', 0) + array_get($second, 'relic_two', 0) + array_get($second, 'relic_one', 0),
                 ],
                 'g_total' => [
                     'm1' => $gFirst['gear_thirteen'] + $gFirst['gear_twelve'] + $gFirst['gear_eleven'],
