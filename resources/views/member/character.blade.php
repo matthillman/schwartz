@@ -169,6 +169,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="card-footer">
+                    @bot
+                    <div class="row justify-content-end footer-logo">
+                        <div class="logo">@include('shared.logo')</div>
+                    </div>
+                    @endbot
+                </div>
             </div>
 
         </div>
