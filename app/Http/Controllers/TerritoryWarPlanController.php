@@ -161,9 +161,12 @@ class TerritoryWarPlanController extends Controller
                             })
                             ->map(function($members, $squadID) use ($zone, $squads, $units) {
                                 $squad = $squads->get($squadID);
+                                $notes = $zone['plan']->{'zone_' . $zone['number'] .'_notes'};
                                 return [
                                     'name' => "Zone " . $zone['number'],
-                                    'value' => '**' . $squad->display . "**\n"
+                                    'value' => (strlen($notes) ? "> $notes\n" : '')
+                                        .
+                                        '**' . $squad->display . "**\n"
                                         .
                                         "  🛡 " .$units->get($squad->leader_id)->name ."\n" .
                                         (
