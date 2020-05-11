@@ -69,6 +69,10 @@ export default {
     table-layout: fixed;
 }
 
+th div {
+    padding: 2px 4px;
+}
+
 .tooltip-row td {
     width: 43px;
     height: 40px;

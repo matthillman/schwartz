@@ -130,8 +130,8 @@
                         </div>
                         <a :href="`/twp/${plan.id}/member/${member.ally_code}`"
                             :ref="`member_${member.ally_code}`"
-                            class="row justify-content-between"
-                            :class="{ dragging: draggingMember && draggingMember.ally_code == member.ally_code }"
+                            class="row justify-content-start member-tooltip-wrapper"
+                            :class="{ dragging: draggingMember && draggingMember.ally_code == member.ally_code, duplicate: member.duplicates && member.duplicates.size }"
                             v-for="member in ourMembers"
                             :key="member.bannerKey"
                             draggable="true"
@@ -140,8 +140,18 @@
                             @mouseenter="overMember(member)"
                             @mouseleave="leaveMember(member)"
                         >
-                            <div>{{ member.player }}</div>
-                            <div>{{ member.bannerCount }}</div>
+                            <tooltip :disabled="!member.duplicates || !member.duplicates.size">
+                                <div class="row justify-content-between">
+                                    <div>{{ member.player }}</div>
+                                    <div>{{ member.bannerCount }}</div>
+                                </div>
+
+                                <template #tooltip>
+                                    <div v-if="member.duplicates && member.duplicates.size">
+                                        <mini-squad-table :squad="squadifyDupes(member)" :units="units" flex-width></mini-squad-table>
+                                    </div>
+                                </template>
+                            </tooltip>
                         </a>
                     </div>
                 </div>
@@ -279,6 +289,16 @@ export default {
     },
     mounted() {
         this.ourMembers = this.members.filter(m => this.includedAllyCodes.includes(m.ally_code));
+        for (const index of [...Array(10).keys()]) {
+            const zone = index + 1;
+            let plan = this.getPlanForZone(zone)
+
+            for (const squad in plan) {
+                if (!this.squads[squad]) {
+                    delete plan[squad];
+                }
+            }
+        }
         Echo.join(`plan.${this.plan.id}`)
             .here(users => {
                 this.userList = users;
@@ -397,6 +417,7 @@ export default {
                         const memberSquads = member.usedSquads || new Set;
                         memberSquads.add(this.squads[squadID].leader_id);
                         member.usedSquads = memberSquads;
+                        member.duplicates = this.getDuplicatesSet(member);
                     }
                 }
             }
@@ -427,15 +448,31 @@ export default {
 
             return total;
         },
+        getDuplicatesSet(member) {
+            let dupes = new Set;
+            let used = new Set;
+            for (const index of [...Array(10).keys()]) {
+                const zone = index + 1;
+                const plan = this.getPlanForZone(zone);
+                Object.keys(plan)
+                    .filter(s =>  plan[s].find(m => m === member.ally_code) !== undefined)
+                    .map(squad => [this.squads[squad].leader_id, ...this.squads[squad].additional_members])
+                    .forEach(unitList => unitList.forEach(unit =>  used.has(unit) ? dupes.add(unit) : used.add(unit)));
+            }
+
+            return dupes;
+        },
+        squadifyDupes(member) {
+            if (member.duplicates && member.duplicates.size) {
+                let asArray = [...member.duplicates];
+
+                return {display: "Duplicate Assignments", leader_id: asArray[0], additional_members: asArray.slice(1)};
+            }
+            return {leader_id: 'LEEROY', additional_members: []};
+        },
 
         getPlanForZone(zone) {
             let plan = this.ourPlan[`zone_${zone}`] || {};
-
-            for (const squad in plan) {
-                if (!this.squads[squad]) {
-                    delete plan[squad];
-                }
-            }
 
             return plan;
         },
@@ -741,6 +778,20 @@ export default {
     h4 {
         text-align: center;
     }
+}
+
+.member-tooltip-wrapper {
+    > div {
+        width: calc(100% + 16px);
+    }
+}
+
+.duplicate {
+    position: relative;
+    cursor: pointer;
+
+    border: 2px solid $light-red;
+    background: rgba($color: $dark-red, $alpha: 0.5) !important;
 }
 </style>
 

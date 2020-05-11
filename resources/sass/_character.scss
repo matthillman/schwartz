@@ -627,6 +627,9 @@ $base: 80px;
 
     .row {
         margin: 0;
+    }
+
+    > .row {
         &:not(:last-child) {
             margin-bottom: 4px;
         }

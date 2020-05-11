@@ -727,7 +727,6 @@ table.sortable {
         $color
     );
     padding: 4px;
-    overflow: hidden;
     color: $white;
 
     background-size: 100% 4px;
@@ -747,6 +746,7 @@ table.sortable {
         right: 0;
         opacity: 0.5;
         z-index: 1;
+        border-radius: 8px;
     }
 
     &::after {

@@ -16,6 +16,12 @@
 <script>
 import { createPopper } from '@popperjs/core';
 export default {
+    props: {
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data() {
         return {
             show: false,
@@ -41,6 +47,7 @@ export default {
         },
 
         doShow() {
+            if (this.disabled) { return; }
             this.show = true;
             this.layout();
         },
