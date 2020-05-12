@@ -1,11 +1,6 @@
 <template>
     <div class="mods">
         <div class="row top">
-            <label class="file-label" v-if="user == 0"><input type="file" id="mods-json" v-on:change="filePicked"> <span>Load Mods Export File</span></label>
-            <p class="instructions" v-if="user == 0">
-                Download a copy of <a href="https://docs.google.com/spreadsheets/d/1aba4x-lzrrt7lrBRKc1hNr5GoK5lFNcGWQZbRlU4H18/copy" target="_gdocs">this spreadsheet</a> and follow
-                the instructions to export a json file containing your mod information. Then press the button to the left and select that file.
-            </p>
             <div v-if="user > 0">
                 <input type="text" v-model="swgoh" placeholder="Ally code (ex: 552325555)" :disabled="syncing">
                 <button class="btn btn-secondary" @click="triggerSync" :disabled="syncing || !connected()">Import from swgoh</button>
@@ -20,14 +15,14 @@
             </div>
         </div>
         <div v-show="modsArray.length">
-            <h2>5* Speed Arrows</h2>
+            <h2>5•+ Speed Arrows</h2>
             <div class="arrows">
                 <div v-for="(count, set) in speedArrowCounts" :key="set">
                     <div class="mod-image arrow gold" :class="[set, `tier-1`]"></div> {{ count }}
                 </div>
             </div>
 
-            <div class="row justify-content-between">
+            <div class="row no-margin justify-content-between">
                 <button class="btn btn-primary" @click="addSet">Add Mod Set</button>
                 <div class="btn" :class="{'btn-primary': !hideCompletedSets, 'btn-secondary': hideCompletedSets}" @click="hideCompletedSets = !hideCompletedSets">
                     {{ hideCompletedSets ? 'Show all sets' : 'Only show sets with movement' }}
@@ -366,7 +361,7 @@
             },
             speedArrowCounts() {
                 return this.speedArrows.reduce((counts, mod) => {
-                    if (mod.pips == 5) {
+                    if (mod.pips >= 5) {
                         counts[mod.set] += 1;
                     }
                     return counts;
