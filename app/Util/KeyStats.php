@@ -14,6 +14,7 @@ trait KeyStats {
                 "DAKA" => UnitStat::UNITSTATMAXHEALTH(),
                 "SITHMARAUDER" => UnitStat::UNITSTATATTACKDAMAGE(),
                 "ANAKINKNIGHT" => UnitStat::UNITSTATATTACKDAMAGE(),
+                "GENERALSKYWALKER" => UnitStat::UNITSTATATTACKDAMAGE(),
                 "HANSOLO" => UnitStat::UNITSTATATTACKDAMAGE(),
                 "ENFYSNEST" => UnitStat::UNITSTATRESISTANCE(),
                 "BOSSK" => UnitStat::UNITSTATRESISTANCE(),
