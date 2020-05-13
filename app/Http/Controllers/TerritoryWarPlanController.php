@@ -149,7 +149,7 @@ class TerritoryWarPlanController extends Controller
                 'url' => route('tw-plan.member.assignment', ['plan' => $plan->id, 'ally_code' => $member->ally_code]),
                 'fields' => collect(range(1, 10))
                     ->map(function($zone) use ($plan) {
-                        return ['number' => $zone, 'plan' => $plan->{"zone_$zone"}];
+                        return ['number' => $zone, 'plan' => $plan->{"zone_$zone"}, 'notes' => $plan->{"zone_{$zone}_notes"}];
                     })
                     ->filter(function($zone) use ($member) {
                         return $zone['plan']->flatten()->contains($member->ally_code);
@@ -161,7 +161,7 @@ class TerritoryWarPlanController extends Controller
                             })
                             ->map(function($members, $squadID) use ($zone, $squads, $units) {
                                 $squad = $squads->get($squadID);
-                                $notes = $zone['plan']->{'zone_' . $zone['number'] .'_notes'};
+                                $notes = $zone['notes'];
                                 return [
                                     'name' => "Zone " . $zone['number'],
                                     'value' => (strlen($notes) ? "> $notes\n" : '')
