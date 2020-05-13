@@ -4,7 +4,7 @@
             @mouseenter="doShow()"
             @focus="doShow()"
             @mouseleave="doHide()"
-            @blue="doHide()"
+            @blur="doHide()"
         ><slot>Title</slot></div>
         <div ref="tooltip" :show="show" class="pop-tooltip">
             <slot name="tooltip"></slot>

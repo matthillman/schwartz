@@ -90,7 +90,7 @@ export default {
 
         &::before {
             content: '';
-            transform: rotate(45deg);
+            transform: rotate(135deg);
             background: white;
             border: 1px solid #adb5bd;
             border-right-color: transparent;

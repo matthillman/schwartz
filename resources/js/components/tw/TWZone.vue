@@ -94,7 +94,7 @@
                 >
                 </v-select>
                 <button class="btn btn-primary striped" @click="addMember(squadID)"><span>Add</span></button>
-                <button class="btn btn-secondary btn-icon striped" @click="$emit('add-multiple', zone, squadID)">
+                <button class="btn btn-secondary btn-icon striped squareish" @click="$emit('add-multiple', zone, squadID)">
                     <tooltip>
                         <ion-icon name="duplicate" size="small"></ion-icon>
                         <template #tooltip>
@@ -208,7 +208,7 @@ export default {
 .player-info > td:first-of-type {
     width: 140px;
 
-    > div {
+    > div > div {
         padding: 2px 4px;
     }
 }
@@ -224,9 +224,17 @@ export default {
 
 .zone-member-wrapper {
     overflow-x: visible !important;
-    table:first-of-type, .add-member {
+    table:first-of-type {
         margin-top: 4px;
     }
+}
+
+.add-member {
+    margin-top: 4px;
+}
+
+.form-group.row > * + * {
+    margin-left: 4px;
 }
 
 .name-wrapper, .squad-wrapper {

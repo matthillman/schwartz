@@ -12,17 +12,6 @@
                     </div>
 
                     <div class="column">
-                        <button class="btn btn-primary btn-icon with-text striped" @@click="go(`{{ route('guild.members', ['guild' => $plan->guild->id, 'team' => $plan->squad_group->id, 'mode' => 'guild', 'index' => 0]) }}`, true)">
-                            <ion-icon name="eye" size="small"></ion-icon>
-                            <span>View for Guild</span>
-                        </button>
-                    </div>
-                    <div class="column">
-                        <button class="btn btn-primary btn-icon with-text striped" @@click="go(`{{ route('squads', ['group' => $plan->squad_group->id ]) }}`)">
-                            <ion-icon name="body" size="small"></ion-icon>
-                            <span>Edit Squads</span>
-                        </button>
-
                         <button class="btn btn-primary btn-icon with-text striped" @@click="showGlobalModal = !showGlobalModal">
                             <ion-icon name="add" size="small"></ion-icon>
                             <span>Add a Squad</span>

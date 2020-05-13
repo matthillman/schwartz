@@ -793,6 +793,12 @@ table.sortable {
             border-radius: 50%;
             padding: 4px;
         }
+
+        &.squareish {
+            &, > * {
+                border-radius: 8px;
+            }
+        }
     }
 
     &:hover {

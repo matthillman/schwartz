@@ -105,9 +105,15 @@
             <div class="col-4">
                 <collapsable start-open>
                     <template #top-trigger="{ open }">
-                        <div class="row no-margin align-items-start">
-                            <ion-icon :name="open ? `chevron-down` : `chevron-forward`" size="medium"></ion-icon>
-                            <h4>Squads</h4>
+                        <div class="row no-margin justify-content-between align-items-center">
+                            <div class="row no-margin align-items-start">
+                                <ion-icon :name="open ? `chevron-down` : `chevron-forward`" size="medium"></ion-icon>
+                                <h4>Squads</h4>
+                            </div>
+                            <div>
+                                <a :href="`/guild/${plan.guild.id}/${plan.squad_group.id}/guild/0`" target="_blank"><ion-icon name="eye" size="medium"></ion-icon></a>
+                                <a :href="`/squads?group=${plan.squad_group.id}`"><ion-icon name="pencil" size="medium"></ion-icon></a>
+                            </div>
                         </div>
                     </template>
                     <mini-squad-table v-for="squad in squads" :key="squad.id"
@@ -128,9 +134,9 @@
                             <div class="row justify-content-between align-items-center">Member&nbsp;<ion-icon name="pencil" size="small" @click="selectMembers = true"></ion-icon></div>
                             <div>Banners</div>
                         </div>
-                        <a :href="`/twp/${plan.id}/member/${member.ally_code}`"
+                        <div :href="`/twp/${plan.id}/member/${member.ally_code}`"
                             :ref="`member_${member.ally_code}`"
-                            class="row justify-content-start member-tooltip-wrapper"
+                            class="row justify-content-between member-banners"
                             :class="{ dragging: draggingMember && draggingMember.ally_code == member.ally_code, duplicate: member.duplicates && member.duplicates.size }"
                             v-for="member in ourMembers"
                             :key="member.bannerKey"
@@ -140,19 +146,20 @@
                             @mouseenter="overMember(member)"
                             @mouseleave="leaveMember(member)"
                         >
-                            <tooltip :disabled="!member.duplicates || !member.duplicates.size">
-                                <div class="row justify-content-between">
-                                    <div>{{ member.player }}</div>
-                                    <div>{{ member.bannerCount }}</div>
-                                </div>
-
-                                <template #tooltip>
-                                    <div v-if="member.duplicates && member.duplicates.size">
-                                        <mini-squad-table :squad="squadifyDupes(member)" :units="units" flex-width></mini-squad-table>
-                                    </div>
-                                </template>
-                            </tooltip>
-                        </a>
+                            <div class="row no-margin justify-content-start align-items-center">
+                                <a :href="`/twp/${plan.id}/member/${member.ally_code}`"><ion-icon name="eye" size="small"></ion-icon></a>
+                                <div>{{ member.player }}</div>
+                                <tooltip v-if="member.duplicates && member.duplicates.size">
+                                    <ion-icon name="warning" size="small" class="warning"></ion-icon>
+                                    <template #tooltip>
+                                        <div v-if="member.duplicates && member.duplicates.size">
+                                            <mini-squad-table :squad="squadifyDupes(member)" :units="units" flex-width></mini-squad-table>
+                                        </div>
+                                    </template>
+                                </tooltip>
+                            </div>
+                            <div>{{ member.bannerCount }}</div>
+                        </div>
                     </div>
                 </div>
 
@@ -186,11 +193,11 @@
                     :squad="squads[addMultiple]"
                     :members="availableMembersFor(addMultipleZone, addMultiple)"
                     :units="units"
-                    :max="25 - getTeamsInZone(addMultipleZone)"
+                    :max="Math.ceil(includedAllyCodes.length / 2) - getTeamsInZone(addMultipleZone)"
                     @changed="potentialAddMembers = $event"></member-filter>
             </template>
             <template #footer>
-                <button class="btn btn-primary striped" :disabled="!potentialAddMembers.length" @click="addMember(addMultipleZone, addMultiple, potentialAddMembers)">Assign Members</button>
+                <button class="btn btn-primary striped" :disabled="!potentialAddMembers.length" @click="addMember(addMultipleZone, addMultiple, potentialAddMembers)"><span>Assign Members</span></button>
             </template>
         </modal>
 
@@ -202,7 +209,7 @@
                 </div>
             </template>
             <template #footer>
-                <button class="btn btn-danger striped" @click="deleteSquad(confirmDeleteSquad.z, confirmDeleteSquad.s)">Delete it</button>
+                <button class="btn btn-danger striped" @click="deleteSquad(confirmDeleteSquad.z, confirmDeleteSquad.s)"><span>Delete it</span></button>
             </template>
         </modal>
 
@@ -236,7 +243,7 @@
                 </div>
             </template>
             <template #footer>
-                <button class="btn btn-primary striped" @click="sendDMs">Send DMs</button>
+                <button class="btn btn-primary striped" @click="sendDMs"><span>Send DMs</span></button>
             </template>
         </modal>
 
@@ -746,6 +753,16 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../../sass/_variables.scss";
+.row {
+    > .col-8, > .col-4 {
+        &:first-child {
+            padding-left: 0;
+        }
+        &:last-child {
+            padding-right: 0;
+        }
+    }
+}
 .defense-list {
     margin-top: 16px;
 }
@@ -780,9 +797,15 @@ export default {
     }
 }
 
-.member-tooltip-wrapper {
+.member-banners {
     > div {
-        width: calc(100% + 16px);
+        > * {
+            line-height: 1;
+        }
+
+        > * + * {
+            margin-left: 4px;
+        }
     }
 }
 

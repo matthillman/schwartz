@@ -47,7 +47,7 @@ return [
             'app_id' => env('ECHO_ID'),
             'options' => [
                 'port' => 6001,
-                'host' => 'schwartz.dev',
+                'host' => 'schwartz.test',
             ],
         ],
 

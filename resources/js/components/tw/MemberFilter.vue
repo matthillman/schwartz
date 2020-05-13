@@ -31,7 +31,7 @@
                 <input class="form-control" type="number" min="1" max="25" step="1" width="6" v-model="limit">
             </div>
 
-            <button class="btn btn-primary" @click="sortList">Find</button>
+            <button class="btn btn-primary striped" @click="sortList"><span>Find</span></button>
 
         </div>
 
@@ -191,6 +191,12 @@ export default {
     }
 }
 
+.input-group {
+    > * + * {
+        margin-left: 4px;
+    }
+}
+
 .results-wrapper {
     width: 500px;
     margin: 8px auto;
@@ -218,7 +224,7 @@ export default {
        > td:nth-child(2) {
             width: 240px;
 
-            > div {
+            > div > div {
                 padding: 2px 4px;
             }
         }

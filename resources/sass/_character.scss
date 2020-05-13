@@ -645,14 +645,8 @@ $base: 80px;
         &:nth-child(even) {
             background-color: $dark-navy;
         }
-    }
 
-    a.row {
-        color: $white;
-
-        &:hover {
-            text-decoration: none;
-
+        &:not(.stat-header):hover {
             &:nth-child(odd) {
                 background: scale-color($color: $light-navy, $lightness: 15%);
             }
@@ -660,6 +654,14 @@ $base: 80px;
             &:nth-child(even) {
                 background-color: scale-color($color: $dark-navy, $lightness: 15%);;
             }
+        }
+    }
+
+    a {
+        color: $white;
+
+        &:hover {
+            text-decoration: none;
         }
     }
 

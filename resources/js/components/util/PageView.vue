@@ -45,9 +45,13 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../../sass/_variables.scss";
+$card-width: 450px;
+
 .page-wrapper {
     overflow-x: hidden;
     overflow-y: visible;
+    width: $card-width;
+    margin: 0 auto;
 }
 
 .page-container {
@@ -62,7 +66,6 @@ export default {
     transform: translateX(0px);
 
     .card {
-        $card-width: 450px;
         width: $card-width;
         min-width: $card-width;
         max-width: $card-width;
