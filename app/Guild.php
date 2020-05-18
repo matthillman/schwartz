@@ -50,6 +50,10 @@ class Guild extends Model
         return $this->hasMany(Member::class);
     }
 
+    public function stats() {
+        return $this->hasOne(GuildStat::class)->withDefault();
+    }
+
     public function getOfficerRoleRegexAttribute($value) {
         if (testRegex($value)) {
             return $value;
@@ -79,12 +83,18 @@ class Guild extends Model
     public static function getCompareData($guild1, $guild2) {
         $chars = static::getCompareCharacters();
 
-        $data = DB::table('guild_unit_counts')
-            ->whereIn('guild_id', [$guild1->guild_id, $guild2->guild_id])
-            ->get();
+        // $data = DB::table('guild_unit_counts')
+        //     ->whereIn('guild_id', [$guild1->guild_id, $guild2->guild_id])
+        //     ->get();
 
-        $g1Data = (array)$data->firstWhere('guild_id', $guild1->guild_id);
-        $g2Data = (array)$data->firstWhere('guild_id', $guild2->guild_id);
+        // $g1Data = (array)$data->firstWhere('guild_id', $guild1->guild_id);
+        // $g2Data = (array)$data->firstWhere('guild_id', $guild2->guild_id);
+
+        $g1Stats = GuildStat::where('guild_id', $guild1->id)->firstOrFail();
+        $g2Stats = GuildStat::where('guild_id', $guild2->id)->firstOrFail();
+
+        $g1Data = $g1Stats->unit_data;
+        $g2Data = $g2Stats->unit_data;
 
         $zetas = DB::table('character_zeta')
             ->join('characters', 'character_id', '=', 'characters.id')
@@ -100,12 +110,15 @@ class Guild extends Model
         $g1Data['zetas'] = $g1Zetas['zetas'];
         $g2Data['zetas'] = $g2Zetas['zetas'];
 
-        $mods = DB::table('guild_mod_counts')
-            ->whereIn('guild_id', [$guild1->guild_id, $guild2->guild_id])
-            ->get();
+        // $mods = DB::table('guild_mod_counts')
+        //     ->whereIn('guild_id', [$guild1->guild_id, $guild2->guild_id])
+        //     ->get();
 
-        $g1Mods = (array)$mods->firstWhere('guild_id', $guild1->guild_id);
-        $g2Mods = (array)$mods->firstWhere('guild_id', $guild2->guild_id);
+        // $g1Mods = (array)$mods->firstWhere('guild_id', $guild1->guild_id);
+        // $g2Mods = (array)$mods->firstWhere('guild_id', $guild2->guild_id);
+
+        $g1Mods = $g1Stats->mod_data;
+        $g2Mods = $g2Stats->mod_data;
 
         foreach ($g1Mods as $key => $count) {
             $g1Data['mods_' . $key] = $count;
@@ -116,6 +129,8 @@ class Guild extends Model
 
         $g1Data['name'] = $guild1->name;
         $g2Data['name'] = $guild2->name;
+        $g1Data['guild_id'] = $guild1->guild_id;
+        $g2Data['guild_id'] = $guild2->guild_id;
 
         return collect([$guild1->guild_id => $g1Data, $guild2->guild_id => $g2Data]);
     }

@@ -102,7 +102,7 @@ class Member extends Model
     }
 
     public function stats() {
-        return $this->hasOne(MemberStat::class, 'ally_code', 'ally_code');
+        return $this->hasOne(MemberStatistic::class)->withDefault();
     }
 
     public function raw() {
@@ -157,63 +157,63 @@ class Member extends Model
     }
 
     public function getGear12Attribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->gear_twelve;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('gear_twelve');
     }
 
     public function getGear13Attribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->gear_thirteen;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('gear_thirteen');
     }
 
     public function getRelic3Attribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->relic_three;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('relic_three');
     }
 
     public function getRelic5Attribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->relic_five;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('relic_five');
     }
 
     public function getRelic6Attribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->relic_six;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('relic_six');
     }
 
     public function getRelic7Attribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->relic_seven;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('relic_seven');
     }
 
     public function getSixDotAttribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->six_dot;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('six_dot');
     }
 
     public function getSpeed10Attribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->ten_plus;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('ten_plus');
     }
 
     public function getSpeed15Attribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->fifteen_plus;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('fifteen_plus');
     }
 
     public function getSpeed20Attribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->twenty_plus;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('twenty_plus');
     }
 
     public function getSpeed25Attribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->twenty_five_plus;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('twenty_five_plus');
     }
 
     public function getOffense100Attribute() {
-        if (is_null($this->stats)) { return 0; }
-        return $this->stats->one_hundred_offense;
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('one_hundred_offense');
     }
 
     public function getZetasAttribute() {
@@ -222,7 +222,7 @@ class Member extends Model
 
     public function toCompareData($unitList = []) {
         $compareData = collect($this->compare_data_base)
-            ->merge($this->stats)
+            ->merge($this->stats->data)
             ->merge([
                 'zetas' => $this->zetas->count(),
             ]);

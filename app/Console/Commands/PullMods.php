@@ -23,7 +23,7 @@ class PullMods extends Command
      *
      * @var string
      */
-    protected $signature = 'swgoh:mods {--skip-views} {user}';
+    protected $signature = 'swgoh:mods {user}';
 
     /**
      * The console command description.
@@ -40,7 +40,6 @@ class PullMods extends Command
     public function handle()
     {
         $arg = $this->argument('user');
-        $skipViewRefresh = $this->option('skip-views');
         $this->line("Starting scrape for user [$arg]");
 
         if (config('services.shitty_bot.active')) {
@@ -81,10 +80,6 @@ class PullMods extends Command
         $user->save();
 
         $this->parseMember($profile, null, '🥯 ');
-
-        if (!$skipViewRefresh) {
-            $this->call('swgoh:refresh-views');
-        }
 
         $this->line("Mods pulled, returning");
 

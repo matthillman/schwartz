@@ -25,6 +25,7 @@ use SwgohHelp\Enums\PlayerStatsIndex;
 class PullGuild extends Command
 {
     use \App\Util\ParsesPlayers;
+    use \App\Util\MetaChars;
 
     /**
      * The name and signature of the console command.
@@ -151,7 +152,82 @@ class PullGuild extends Command
         $guild->save();
         $this->info("Guild cleanup done.");
 
-        $this->call('swgoh:refresh-views');
+        // Update the guild stats table
+        $this->info("Updating guild stats");
+
+        $unitSelects = static::getCompareCharacters()->keys()->reduce(function($query, $char) {
+            return "$query
+                sum((characters.unit_name = '{$char}') :: int) as {$char},
+                sum((characters.unit_name = '{$char}' AND characters.gear_level = 11) :: int) as {$char}_11,
+                sum((characters.unit_name = '{$char}' AND characters.gear_level = 12) :: int) as {$char}_12,
+                sum((characters.unit_name = '{$char}' AND characters.gear_level = 13) :: int) as {$char}_13,
+                sum((characters.unit_name = '{$char}' AND characters.relic >= 7) :: int) as {$char}_r_total,
+                sum((characters.unit_name = '{$char}' AND characters.relic = 7) :: int) as {$char}_r5,
+                sum((characters.unit_name = '{$char}' AND characters.relic = 8) :: int) as {$char}_r6,
+                sum((characters.unit_name = '{$char}' AND characters.relic = 9) :: int) as {$char}_r7,
+            ";
+        }, '');
+
+        $unitStatData = collect(DB::select("SELECT
+                max(guilds.gp) as gp,
+                sum((characters.gear_level = 13) :: int) as gear_13,
+                sum((characters.gear_level = 12) :: int) as gear_12,
+                sum((characters.gear_level = 11) :: int) as gear_11,
+                sum((characters.relic = 9) :: int) as relic_7,
+                sum((characters.relic = 8) :: int) as relic_6,
+                sum((characters.relic = 7) :: int) as relic_5,
+                $unitSelects
+                count(distinct members.id) as member_count
+            from guilds
+            inner join members on members.guild_id = guilds.id
+            inner join characters on characters.member_id = members.id
+            where guilds.id = ?
+        ", [$guild->id]));
+
+        $modStatData = collect(DB::select("SELECT
+                sum((pips = 6)::int) as six_dot,
+                sum((speed >= 10)::int) as ten_plus,
+                sum((speed >= 15)::int) as fifteen_plus,
+                sum((speed >= 20)::int) as twenty_plus,
+                sum((speed >= 25)::int) as twenty_five_plus,
+                sum((offense >= 100)::int) as one_hundred_offense,
+                sum((offense >= 150)::int) as one_fifty_offense,
+                sum((offense_percent >= 4)::int) as four_percent_offense
+            from (
+                select
+                    mods.pips,
+                    CASE
+                        WHEN secondary_1_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_1_value)::numeric
+                        WHEN secondary_2_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_2_value)::numeric
+                        WHEN secondary_3_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_3_value)::numeric
+                        WHEN secondary_4_type = 'UNITSTATSPEED' THEN trim(trailing '%' from secondary_4_value)::numeric
+                    ELSE 0 END as speed,
+                    CASE
+                        WHEN secondary_1_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_1_value)::numeric
+                        WHEN secondary_2_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_2_value)::numeric
+                        WHEN secondary_3_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_3_value)::numeric
+                        WHEN secondary_4_type = 'UNITSTATOFFENSE' THEN trim(trailing '%' from secondary_4_value)::numeric
+                    ELSE 0 END as offense,
+                    CASE
+                        WHEN secondary_1_type = 'UNITSTATOFFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_1_value)::numeric
+                        WHEN secondary_2_type = 'UNITSTATOFFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_2_value)::numeric
+                        WHEN secondary_3_type = 'UNITSTATOFFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_3_value)::numeric
+                        WHEN secondary_4_type = 'UNITSTATOFFENSEPERCENTADDITIVE' THEN trim(trailing '%' from secondary_4_value)::numeric
+                    ELSE 0 END as offense_percent
+                from mods
+                inner join mod_users on mods.mod_user_id = mod_users.id
+                inner join members on mod_users.name = members.ally_code
+                inner join guilds on guilds.id = members.guild_id
+                where guilds.id = ?
+            ) mod_totals
+        ", [$guild->id]));
+
+        $guildStats = $guild->stats;
+        $guildStats->unit_data = $unitStatData->first();
+        $guildStats->mod_data = $modStatData->first();
+        $guildStats->save();
+
+        $this->info("Guild stats updated.");
 
         $time = Carbon::now()->diffInSeconds($start);
         $this->comment("Returning. Scrape took {$time} seconds.");
