@@ -42,7 +42,7 @@ class MakeGuildStats extends Migration
                 now() as updated_at
             FROM guild_unit_counts
             join guild_mod_counts on guild_unit_counts.guild_id = guild_mod_counts.guild_id
-            join guilds on guilds.id = guild_unit_counts.guild_id;
+            join guilds on guilds.guild_id = guild_unit_counts.guild_id;
         ");
 
         DB::statement("INSERT into member_statistics(member_id, data, created_at, updated_at)
