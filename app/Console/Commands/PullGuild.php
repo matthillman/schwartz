@@ -25,6 +25,7 @@ use SwgohHelp\Enums\PlayerStatsIndex;
 class PullGuild extends Command
 {
     use \App\Util\ParsesPlayers;
+    use \App\Util\UpdatesStats;
     use \App\Util\MetaChars;
 
     /**
@@ -130,6 +131,10 @@ class PullGuild extends Command
         $guild->save();
         $this->info("Guild saved.");
 
+        $guild->members()->searchable();
+
+        $this->info("Guild Members’ search info updated");
+
         $publicStore = Storage::disk('public');
 
         if (!$publicStore->exists("$guild->icon.png")) {
@@ -151,6 +156,12 @@ class PullGuild extends Command
         $guild->gp = $guild->members()->sum('gp');
         $guild->save();
         $this->info("Guild cleanup done.");
+
+        $this->info("Updating member stats");
+
+        $this->updateMemberStats($guild->members);
+
+        $this->info("Member stats updated.");
 
         // Update the guild stats table
         $this->info("Updating guild stats");

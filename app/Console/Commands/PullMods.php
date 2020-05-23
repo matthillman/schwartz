@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use DB;
 use App\Mod;
+use App\Member;
 use App\ModUser;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -17,6 +18,7 @@ use SwgohHelp\Enums\UnitStat;
 class PullMods extends Command
 {
     use \App\Util\ParsesPlayers;
+    use \App\Util\UpdatesStats;
 
     /**
      * The name and signature of the console command.
@@ -79,7 +81,16 @@ class PullMods extends Command
         $user->last_scrape = new \DateTime;
         $user->save();
 
-        $this->parseMember($profile, null, '🥯 ');
+        $memberId = $this->parseMember($profile, null, '🥯 ');
+        $member = Member::find($memberId);
+
+        $member->searchable();
+
+        $this->info("Updating member stats");
+
+        $this->updateMemberStats($member);
+
+        $this->info("Member stats updated.");
 
         $this->line("Mods pulled, returning");
 
