@@ -1,7 +1,14 @@
 <template>
     <form method="POST" :action="action">
         <slot></slot>
-        <input type="text" class="form-control" :name="name" v-model="txt" :ref="'input'" :class="{focused: txt.length}" @blur="focused = false" @focus="focused = true">
+        <input
+            type="text"
+            class="form-control"
+            :name="name"
+            v-model="txt"
+            :ref="'input'"
+            :class="{focused: txt.length}"
+        >
         <button type="submit" @click="focusOrSubmit($event)" class="btn btn-primary btn-icon striped">
             <ion-icon :name="txt.length ? 'checkmark-done' : icon" size="medium"></ion-icon>
         </button>
@@ -17,7 +24,6 @@ export default {
     },
     data() {
         return {
-            focused: false,
             txt: '',
         }
     },

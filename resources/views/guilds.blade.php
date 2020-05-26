@@ -24,7 +24,13 @@
 
             @user('accounts')
                 <div class="card radiant-back">
-                    <div class="card-header"><h2>Your Guilds</h2></div>
+                    <div class="card-header row no-margin justify-content-between align-items-center">
+                        <h2>Your Guilds</h2>
+
+                        <expanda-text name="ally_code" action="{{ route('members.register') }}" icon="person-add">
+                            @csrf
+                        </expanda-text>
+                    </div>
 
                     <div class="card-body">
                         <div class="guild-list">
