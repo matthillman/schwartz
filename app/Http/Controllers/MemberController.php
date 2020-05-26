@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Gate;
+use Artisan;
 use App\Unit;
 use App\Guild;
 use App\Member;
 use App\Category;
 use App\Character;
 use App\SquadGroup;
+use App\AllyCodeMap;
 use App\Jobs\ProcessUser;
 use Illuminate\Http\Request;
 use SwgohHelp\Enums\UnitStat;
@@ -30,14 +32,14 @@ class MemberController extends Controller
     public function addMember(Request $request) {
         ProcessUser::dispatch($request->member);
 
-        return redirect()->route('members')->with('memberStatus', "Member add queued");
+        return redirect()->route('members')->with('status', "Member add queued");
     }
 
     public function scrapeMember(Request $request, $id) {
         $member = Member::findOrFail($id);
         ProcessUser::dispatch($member->ally_code);
 
-        return redirect()->route('members')->with('memberStatus', "Member scrape queued");
+        return redirect()->route('members')->with('status', "Member scrape queued");
     }
 
     public function scrapeAllyCodes(Request $request) {
@@ -49,7 +51,7 @@ class MemberController extends Controller
                 ProcessUser::dispatch($member->ally_code);
             });
 
-        return back()->withInput()->with('memberStatus', "Member scrapes queued for " . $members->count() . " ally codes");
+        return back()->withInput()->with('status', "Member scrapes queued for " . $members->count() . " ally codes");
     }
 
     public function show($allyCode) {
@@ -74,6 +76,34 @@ class MemberController extends Controller
         $member->push();
 
         return response()->json(['success' => true]);
+    }
+
+    public function register(Request $request) {
+        $validated = $request->validate([
+            'ally_code' => 'required',
+        ]);
+
+        $allyCode = $validated['ally_code'];
+
+        $existing = AllyCodeMap::firstOrNew(['ally_code' => $allyCode]);
+
+        if ($existing->exists) {
+            return back()->withInput()->with('status-failed', "Ally Code $allyCode is already registered to another user");
+        }
+
+        $existing->discord_id = auth()->user()->discord_id;
+        $existing->save();
+
+        // the first call will at least ensure the profile is in the DB, even if they are not in a guild.
+        Artisan::queue('swgoh:mods', [
+            'user' => $allyCode
+        ]);
+        Artisan::queue('swgoh:guild', [
+            '--ally' => true,
+            'guild' => $allyCode
+        ]);
+
+        return back()->with('status', "Ally Code $allyCode registered successfully! Data is being updated now.");
     }
 
     public function characters(Request $request, $allyCode) {

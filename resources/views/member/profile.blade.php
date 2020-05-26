@@ -49,20 +49,59 @@
                                     <span><strong>Zetas:</strong> <span>{{ $member->zetas->count() }}</span></span>
                                 </div>
                                 <div class="row justify-content-between align-items-baseline">
-                                    <span><strong>R7:</strong> <span>{{ $member->relic_7 }}</span></span>
-                                    <span><strong>R6:</strong> <span>{{ $member->relic_6 }}</span></span>
-                                    <span><strong>R5:</strong> <span>{{ $member->relic_5 }}</span></span>
-                                    <span><strong>R3:</strong> <span>{{ $member->relic_3 }}</span></span>
-                                    <span><strong>G13:</strong> <span>{{ $member->gear_13 }}</span></span>
-                                    <span><strong>G12:</strong> <span>{{ $member->gear_12 }}</span></span>
+                                    <span class="row justify-content-center align-items-center">
+                                        <div class="portrait relic-only centered">
+                                            <div class="relic"><span class="value">7</span></div>
+                                        </div>
+                                        <span>:&nbsp;</span>
+                                        <span>{{ $member->relic_7 }}</span>
+                                    </span>
+                                    <span class="row justify-content-center align-items-center">
+                                        <div class="portrait relic-only centered">
+                                            <div class="relic"><span class="value">6</span></div>
+                                        </div>
+                                        <span>:&nbsp;</span>
+                                        <span>{{ $member->relic_6 }}</span>
+                                    </span>
+                                    <span class="row justify-content-center align-items-center">
+                                        <div class="portrait relic-only centered">
+                                            <div class="relic"><span class="value">5</span></div>
+                                        </div>
+                                        <span>:&nbsp;</span>
+                                        <span>{{ $member->relic_5 }}</span>
+                                    </span>
+                                    <span class="row justify-content-center align-items-center">
+                                        <div class="portrait relic-only centered">
+                                            <div class="relic"><span class="value">3</span></div>
+                                        </div>
+                                        <span>:&nbsp;</span>
+                                        <span>{{ $member->relic_3 }}</span>
+                                    </span>
+
+                                    <span class="row justify-content-center align-items-center">
+                                        <div class="portrait mini centered">
+                                            <div class="gear g13" style="--gear-image:url('/images/units/gear/gear-icon-g13.png');"></div>
+                                            <span class="value">13</span>
+                                        </div>
+                                        <span>:&nbsp;</span>
+                                        <span>{{ $member->gear_13 }}</span>
+                                    </span>
+                                    <span class="row justify-content-center align-items-center">
+                                        <div class="portrait mini centered">
+                                            <div class="gear g12" style="--gear-image:url('/images/units/gear/gear-icon-g12.png');"></div>
+                                            <span class="value">12</span>
+                                        </div>
+                                        <span>:&nbsp;</span>
+                                        <span>{{ $member->gear_12 }}</span>
+                                    </span>
                                 </div>
                                 <div class="row justify-content-between align-items-baseline">
                                     <span><strong>6•:</strong> <span>{{ $member->six_dot }}</span></span>
-                                    <span><strong>25+:</strong> <span>{{ $member->speed_25 }}</span></span>
-                                    <span><strong>20+:</strong> <span>{{ $member->speed_20 }}</span></span>
-                                    <span><strong>15+:</strong> <span>{{ $member->speed_15 }}</span></span>
-                                    <span><strong>10+:</strong> <span>{{ $member->speed_10 }}</span></span>
-                                    <span><strong>100+ offense:</strong> <span>{{ $member->offense_100 }}</span></span>
+                                    <span><div class="row justify-content-center align-items-center"><strong>25</strong> <span class="mod-set-image speed tier-5 mini"></span><span>:&nbsp;</span><span>{{ $member->speed_25 }}</span></div></span>
+                                    <span><div class="row justify-content-center align-items-center"><strong>20</strong> <span class="mod-set-image speed tier-5 mini"></span><span>:&nbsp;</span><span>{{ $member->speed_20 }}</span></div></span>
+                                    <span><div class="row justify-content-center align-items-center"><strong>15</strong> <span class="mod-set-image speed tier-5 mini"></span><span>:&nbsp;</span><span>{{ $member->speed_15 }}</span></div></span>
+                                    <span><div class="row justify-content-center align-items-center"><strong>10</strong> <span class="mod-set-image speed tier-5 mini"></span><span>:&nbsp;</span><span>{{ $member->speed_10 }}</span></div></span>
+                                    <span><div class="row justify-content-center align-items-center"><strong>100</strong> <span class="mod-set-image offense tier-5 mini"></span><span>:&nbsp;</span><span>{{ $member->offense_100 }}</span></div></span>
                                 </div>
                             </div>
                         </div>

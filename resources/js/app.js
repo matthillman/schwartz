@@ -65,6 +65,7 @@ Vue.component('auto-select', require('./components/util/AutoSelect.vue').default
 Vue.component('tooltip', require('./components/util/Tooltip.vue').default);
 Vue.component('popup', require('./components/util/Popup.vue').default);
 Vue.component('status', require('./components/util/StatusCircle.vue').default);
+Vue.component('expanda-text', require('./components/util/ExpandaText.vue').default);
 
 Vue.component('mini-squad-table', require('./components/MiniSquadTable.vue').default);
 Vue.component('highlight-widget', require('./components/HighlightWidget.vue').default);

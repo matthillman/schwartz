@@ -4,15 +4,7 @@
 <div class="container home">
     <div class="row justify-content-center">
         <div class="col-12">
-            @if (session('memberStatus'))
-            <div class="card">
-                <div class="card-body">
-                    <div class="alert alert-success">
-                        {{ session('memberStatus') }}
-                    </div>
-                </div>
-            </div>
-            @endif
+            @include('shared.status')
 
             <div class="card radiant-back">
                 <div class="card-header"><h2>Compare Players</h2></div>
@@ -61,14 +53,17 @@
             </div>
 
             <div class="card radiant-back">
-                <div class="card-header">
+                <div class="card-header row no-margin justify-content-between align-items-center">
                     <h2>Your Accounts</h2>
-                    
+
+                    <expanda-text name="ally_code" action="{{ route('members.register') }}" icon="person-add">
+                        @csrf
+                    </expanda-text>
                 </div>
 
                 <div class="card-body">
                     <div class="guild-list">
-                    @forelse(auth()->user()->accounts as $member)
+                    @forelse(auth()->user()->accounts->sortByDesc('gp') as $member)
                         <div class="row cut-corner">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" v-model="memberCompareArray" :value="`{{ $member->ally_code }}`">

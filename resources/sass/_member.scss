@@ -62,6 +62,8 @@ $base: 200px;
         .row {
             margin-left: 0;
             margin-right: 0;
+        }
+        > .row {
             margin-bottom: 8px;
         }
     }

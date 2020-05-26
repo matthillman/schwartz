@@ -28,8 +28,10 @@
 
                     <div class="card-body">
                         <div class="guild-list">
-                        @forelse(auth()->user()->accounts->pluck('guild') as $guild)
-                            @include('shared.guild_row', [ 'guild' => $guild, 'squads' => $squads])
+                        @forelse(auth()->user()->accounts->sortByDesc('gp')->pluck('guild') as $guild)
+                            @isset($guild['id'])
+                                @include('shared.guild_row', [ 'guild' => $guild, 'squads' => $squads])
+                            @endisset
                         @empty
                             <div>No guilds found for the current user 😞</div>
                         @endforelse

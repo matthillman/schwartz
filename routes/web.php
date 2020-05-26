@@ -64,6 +64,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
 
     Route::get('/members', 'MemberController@index')->name('members');
     Route::post('/members/compare', 'MemberController@compare')->name('members.post.compare');
+    Route::post('/members/register', 'MemberController@register')->name('members.register');
     Route::put('/member/{id}/refresh', 'MemberController@scrapeMember')->name('member.scrape');
     Route::post('/member/add', 'MemberController@addMember')->name('member.add');
     Route::put('/member/{ally}', 'MemberController@updateDiscordMapping')->name('member.update.discord');
