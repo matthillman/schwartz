@@ -52,7 +52,7 @@
                                 </div>
                             </button>
                         </template>
-                        @foreach ($guild->members->sortBy('player', SORT_NATURAL|SORT_FLAG_CASE) as $member)
+                        @foreach ($guild->members->sortBy('sort_name', SORT_NATURAL|SORT_FLAG_CASE) as $member)
                         <div class="input-group discord-select row no-margin">
                             <auto-select
                                 :route="`{{ route('member.update.discord', ['ally' => $member->ally_code]) }}`"

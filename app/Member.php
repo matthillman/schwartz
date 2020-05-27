@@ -140,6 +140,10 @@ class Member extends Model
         return $this->guild->name;
     }
 
+    public function getSortNameAttribute(){
+        return preg_replace('/^ìN /', '', $this->player, 1);
+    }
+
     public function getSquadRankAttribute() {
         return array_get($this->arena, '0.rank', 0);
     }
