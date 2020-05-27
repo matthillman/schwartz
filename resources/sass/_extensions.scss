@@ -10,7 +10,7 @@
 .form-group.row, .input-group {
     > .v-select {
         .vs__dropdown-toggle {
-            padding: 2px 0;
+            padding: 2px 0 6px;
             min-width: 250px;
         }
 
@@ -277,4 +277,8 @@ ion-icon {
             }
         }
     }
+}
+
+.input-group-prepend.input-group-prepend {
+    margin-right: -5px;
 }
