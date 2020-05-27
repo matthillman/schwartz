@@ -258,3 +258,23 @@ ion-icon {
 .alert:last-child {
     margin-bottom: 0;
 }
+
+.w-full {
+    width: 100%;
+}
+
+.toasted-container.toasted-container.top-right {
+    top: 8%;
+
+    .toasted.bubble.v-toast {
+        border: 1px solid $gray-800;
+
+        &.success {
+            @include striped-button($color: $green, $accent: $green, $stripe: darken($green, 3%));
+
+            &::before, &::after {
+                border-radius: 30px;
+            }
+        }
+    }
+}

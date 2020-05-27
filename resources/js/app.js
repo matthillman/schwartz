@@ -66,6 +66,8 @@ Vue.component('tooltip', require('./components/util/Tooltip.vue').default);
 Vue.component('popup', require('./components/util/Popup.vue').default);
 Vue.component('status', require('./components/util/StatusCircle.vue').default);
 Vue.component('expanda-text', require('./components/util/ExpandaText.vue').default);
+Vue.component('member-row', require('./components/util/MemberRow.vue').default);
+Vue.component('bb8', require('./components/util/BB8.vue').default);
 
 Vue.component('mini-squad-table', require('./components/MiniSquadTable.vue').default);
 Vue.component('highlight-widget', require('./components/HighlightWidget.vue').default);
@@ -172,5 +174,52 @@ new Vue({
 import Toasted from 'vue-toasted';
 
 Vue.use(Toasted, {
-	iconPack : 'custom-class'
+	iconPack : 'callback',
+	className: 'v-toast',
+	keepOnHover: true,
 });
+
+const toastOptions = {
+	icon: function() {
+		const i = document.createElement('ion-icon');
+		i.setAttribute('name', 'checkmark-circle');
+		i.setAttribute('size', 'medium');
+		return i;
+	},
+	iconPack : 'callback',
+	className: 'v-toast',
+	keepOnHover: true,
+	theme: 'bubble',
+	position: 'top-right',
+	type: 'success',
+	duration: 5000
+};
+
+Vue.toasted.register(
+	'striped',
+	message => {
+		const span = document.createElement('span');
+		span.innerText = message;
+		return span;
+	},
+	toastOptions
+)
+Vue.toasted.register(
+	'stripedWithRefresh',
+	message => {
+		const span = document.createElement('span');
+		span.innerText = message;
+		return span;
+	},
+	Object.assign({},
+		toastOptions,
+		{
+			action: {
+				text : 'Refresh',
+				onClick : () => {
+					window.location.reload(true);
+				}
+			}
+		}
+	)
+)

@@ -42,6 +42,17 @@ class MemberController extends Controller
         return redirect()->route('members')->with('status', "Member scrape queued");
     }
 
+    public function putScrapeMember(Request $request) {
+        $validated = $request->validate([
+            'id' => 'required',
+        ]);
+
+        $member = Member::findOrFail($validated['id']);
+        ProcessUser::dispatch($member->ally_code);
+
+        return response()->json([]);
+    }
+
     public function scrapeAllyCodes(Request $request) {
         $members = collect(preg_split('/\r\n|\r|\n/', $request->get('members')))
             ->map(function($ally) {
