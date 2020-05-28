@@ -11,11 +11,14 @@
                         <h2>Guild Discord Configuration</h2>
                         <div class="small-note">Only officers can update these items</div>
                     </div>
-                    <div>
+                    <div class="row no-margin justify-content-end align-items-center">
+                        <button class="btn btn-primary btn-icon striped" @@click="go(`https://discordapp.com/oauth2/authorize?client_id=454401959777271819&scope=bot&permissions=268954688`, true)">
+                            <ion-icon name="server" size="medium"></ion-icon>
+                        </button>
                         <form action="{{ route('guild.members.update') }}" method="POST">
                             @csrf
 
-                            <button class="btn btn-secondary btn-icon-text">
+                            <button class="btn btn-secondary btn-icon-text striped">
                                 <div class="row no-margin align-items-center">
                                     <ion-icon name="sync" size="small"></ion-icon> <span>Update Member List</span>
                                 </div>
