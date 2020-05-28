@@ -16,33 +16,33 @@
                         </div>
                     </div>
                 </td>
-                <td>
+                <td v-if="squad.additional_members.length >= maxUnits - 2">
                     <div v-if="squad.additional_members.length == maxUnits - 1 && squad.additional_members.length" class="column char-image-column">
-                    <div class="char-image-square small" :class="[units[ squad.additional_members[maxUnits - 2] ].alignment]">
-                        <img :src="`/images/units/${squad.additional_members[maxUnits - 2]}.png`">
+                        <div class="char-image-square small" :class="[units[ squad.additional_members[maxUnits - 2] ].alignment]">
+                            <img :src="`/images/units/${squad.additional_members[maxUnits - 2]}.png`">
+                        </div>
                     </div>
-                </div>
-                <div v-else-if="squad.additional_members.length > (maxUnits - 1)" class="column justify-content-center align-items-center extra-units">
-                    <tooltip>
-                        +{{ squad.additional_members.length - (maxUnits - 2) }}
-                        <template #tooltip>
-                            <table class="squad-table tooltip-table micro">
-                                <tbody>
-                                    <tr class="squad-row tooltip-row">
-                                        <td v-for="char_id in squad.additional_members.slice(maxUnits - 2)" :key="char_id">
-                                            <div class="column char-image-column">
-                                                <div class="char-image-square small" :class="[units[char_id].alignment]">
-                                                    <img :src="`/images/units/${char_id}.png`">
+                    <div v-else-if="squad.additional_members.length > (maxUnits - 1)" class="column justify-content-center align-items-center extra-units">
+                        <tooltip>
+                            +{{ squad.additional_members.length - (maxUnits - 2) }}
+                            <template #tooltip>
+                                <table class="squad-table tooltip-table micro">
+                                    <tbody>
+                                        <tr class="squad-row tooltip-row">
+                                            <td v-for="char_id in squad.additional_members.slice(maxUnits - 2)" :key="char_id">
+                                                <div class="column char-image-column">
+                                                    <div class="char-image-square small" :class="[units[char_id].alignment]">
+                                                        <img :src="`/images/units/${char_id}.png`">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </template>
-                    </tooltip>
-                </div>
-            </td>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </template>
+                        </tooltip>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
