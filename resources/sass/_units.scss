@@ -249,93 +249,109 @@ $highlight-colors: (#ceffa4, #b39acd, #f5eda3);
     }
 
     [highlight="stars"] & [stars] {
-        // background-color: red;
-        &[stars="7"] {
-            // background-color: rgba($color: #eadb39, $alpha: 0.5);
-            --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+        &.light.light, &.dark.dark {
+            // background-color: red;
+            &[stars="7"] {
+                // background-color: rgba($color: #eadb39, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+            }
         }
     }
     [highlight="power"] & [power] {
-        // background: none;
-        // background-color: red;
-        &[power="1"] {
-            // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
-            --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
-        }
-        &[power="2"], &[power="3"], &[power="4"], &[power="5"], &[power="6"] {
-            // background-color: rgba($color: #eadb39, $alpha: 0.5);
-            --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+        &.light.light, &.dark.dark {
+            // background: none;
+            // background-color: red;
+            &[power="1"] {
+                // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
+            }
+            &[power="2"], &[power="3"], &[power="4"], &[power="5"], &[power="6"] {
+                // background-color: rgba($color: #eadb39, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+            }
         }
     }
 
     [highlight="power-stars"] & [stars] {
-        // background: none;
-        // background-color: red;
-        &[stars="7"] {
-            &[power="1"], &[power="2"] {
-                // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
-                --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
-            }
-            &[power="3"], &[power="4"], &[power="5"], &[power="6"] {
-                // background-color: rgba($color: #eadb39, $alpha: 0.5);
-                --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+        &.light.light, &.dark.dark {
+            // background: none;
+            // background-color: red;
+            &[stars="7"] {
+                &[power="1"], &[power="2"] {
+                    // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+                    --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
+                }
+                &[power="3"], &[power="4"], &[power="5"], &[power="6"] {
+                    // background-color: rgba($color: #eadb39, $alpha: 0.5);
+                    --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+                }
             }
         }
     }
 
     [highlight="power-plus"] & [stars] {
-        // background: none;
-        // background-color: red;
-        &[stars="7"] {
-            &[power="4"] {
-                // background-color: rgba($color: #99ff33, $alpha: 0.5);
-                --highlight-color: #{rgb-values-from(nth($highlight-colors, 1))};
-            }
-            &[power="5"] {
-                // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
-                --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
-            }
-            &[power="6"] {
-                // background-color: rgba($color: #eadb39, $alpha: 0.5);
-                --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+        &.light.light, &.dark.dark {
+            // background: none;
+            // background-color: red;
+            &[stars="7"] {
+                &[power="4"] {
+                    // background-color: rgba($color: #99ff33, $alpha: 0.5);
+                    --highlight-color: #{rgb-values-from(nth($highlight-colors, 1))};
+                }
+                &[power="5"] {
+                    // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+                    --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
+                }
+                &[power="6"] {
+                    // background-color: rgba($color: #eadb39, $alpha: 0.5);
+                    --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+                }
             }
         }
     }
 
     [highlight="mods"] & [mod-grade] {
-        // background: none;
-        // background-color: red;
-        &[mod-grade="1"] {
-            // background-color: rgba($color: #ff5500, $alpha: 0.5);
-            --highlight-color: #{rgb-values-from($swgoh-orange)};
-        }
-        &[mod-grade="2"] {
-            // background-color: rgba($color: #99ff33, $alpha: 0.5);
-            --highlight-color: #{rgb-values-from(nth($highlight-colors, 1))};
-        }
-        &[mod-grade="3"] {
-            // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
-            --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
-        }
-        &[mod-grade="4"] {
-            // background-color: rgba($color: #eadb39, $alpha: 0.5);
-            --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
-        }
+        &.light.light, &.dark.dark {
+            &[mod-grade="0"] {
+                --highlight-color: #{rgb-values-from(#ff0000)};
+                --bg-color: #{rgb-values-from(#ff0000)};
+            }
+            &[mod-grade="1"] {
+                // background-color: rgba($color: #ff5500, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from($swgoh-orange)};
+                --bg-color: #{rgb-values-from(#ff5500)};
+            }
+            &[mod-grade="2"] {
+                // background-color: rgba($color: #99ff33, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from(nth($highlight-colors, 1))};
+                --bg-color: #{rgb-values-from(#99ff33)};
+            }
+            &[mod-grade="3"] {
+                // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from(nth($highlight-colors, 2))};
+                --bg-color: #{rgb-values-from(#663399)};
+            }
+            &[mod-grade="4"] {
+                // background-color: rgba($color: #eadb39, $alpha: 0.5);
+                --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+                --bg-color: #{rgb-values-from(#eadb39)};
+            }
 
-        .stat {
-            border: 1px solid rgba($color: black, $alpha: 0.5);
+            .stat {
+                border: 1px solid rgba($color: black, $alpha: 0.5);
 
-            &[grade="0"] {
-                background-color: rgba($color: red, $alpha: 1);
-            }
-            &[grade="1"] {
-                background-color: rgba($color: #ff5500, $alpha: 1);
-            }
-            &[grade="2"] {
-                background-color: rgba($color: #99ff33, $alpha: 1);
-            }
-            &[grade="3"] {
-                background-color: rgba($color: rebeccapurple, $alpha: 1);
+                &[grade="0"] {
+                    background-color: rgba($color: red, $alpha: 1);
+                }
+                &[grade="1"] {
+                    background-color: rgba($color: #ff5500, $alpha: 1);
+                }
+                &[grade="2"] {
+                    background-color: rgba($color: #99ff33, $alpha: 1);
+                }
+                &[grade="3"] {
+                    background-color: rgba($color: rebeccapurple, $alpha: 1);
+                }
             }
         }
     }

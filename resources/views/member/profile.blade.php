@@ -38,6 +38,10 @@
                                     <ion-icon name="planet" size="medium"></ion-icon>
                                     <span>{{ __('Ships') }}</span>
                                 </button>
+                                <button class="btn btn-primary btn-icon with-text striped" @@click="go(`{{ route('member.ships', ['ally' => $member->ally_code]) }}`)">
+                                    <ion-icon name="planet" size="medium"></ion-icon>
+                                    <span>{{ __('Ships') }}</span>
+                                </button>
                             </div>
                             @endperson
 
