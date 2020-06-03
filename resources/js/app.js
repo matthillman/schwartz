@@ -68,6 +68,7 @@ Vue.component('status', require('./components/util/StatusCircle.vue').default);
 Vue.component('expanda-text', require('./components/util/ExpandaText.vue').default);
 Vue.component('member-row', require('./components/util/MemberRow.vue').default);
 Vue.component('bb8', require('./components/util/BB8.vue').default);
+Vue.component('help', require('./components/util/Help.vue').default);
 
 Vue.component('mini-squad-table', require('./components/MiniSquadTable.vue').default);
 Vue.component('highlight-widget', require('./components/HighlightWidget.vue').default);
@@ -80,6 +81,7 @@ Vue.component('team-sort', require('./components/TeamSort.vue').default);
 Vue.component('tw-form', require('./components/TWForm.vue').default);
 
 Vue.component('squad-tabs', require('./components/SquadTabs.vue').default);
+Vue.component('stat-targets', require('./components/StatTargets.vue').default);
 Vue.component('convert-squad-to-plan', require('./components/ConvertSquadToPlan.vue').default);
 
 Vue.component('tw-plan', require('./components/tw/TWPlan.vue').default);

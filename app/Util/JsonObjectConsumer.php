@@ -23,7 +23,7 @@ class JsonObjectConsumer extends SubsetConsumerListener {
         $stream = Storage::disk('game_data')->readStream($fileName);
 
         try {
-            $listener = new \SwgohHelp\GuildListener($callback);
+            $listener = new \SwgohHelp\Listeners\GuildListener($callback);
             $parser = new \JsonStreamingParser\Parser($stream, $listener);
             $parser->parse();
         } finally {

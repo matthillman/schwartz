@@ -56,7 +56,7 @@ $secondary:     #FFCA47;
 
 $mod-colors: (
      #cdffff,
-     #99ff33,
+     $green,//  #99ff33,
      #1d99ff,
      #a35eff,
      $sw-yellow,
@@ -66,7 +66,7 @@ $rainbow-colors: (
      "red": #990000,
      "orange": #cc9900,
      "yellow": #cccc00,
-     "green": #33cc00,
+     "green": #2e8d0e,
      "blue": #336699,
      "purple": #9900cc,
 );

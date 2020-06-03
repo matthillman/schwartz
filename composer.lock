@@ -4,8 +4,47 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f914398f5c88a2e532e35a4b5089e8e",
+    "content-hash": "abb53581e2a3af729b260726a6bafaa2",
     "packages": [
+        {
+            "name": "andig/php-shunting-yard",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andig/php-shunting-yard.git",
+                "reference": "48f7ec59ae0e807ef6244e328f1cce7dfdd642e9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andig/php-shunting-yard/zipball/48f7ec59ae0e807ef6244e328f1cce7dfdd642e9",
+                "reference": "48f7ec59ae0e807ef6244e328f1cce7dfdd642e9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0||^5.0||^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "RR\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Refactored repack of https://github.com/andig/php-shunting-yard",
+            "homepage": "https://github.com/andig/php-shunting-yard",
+            "keywords": [
+                "equation",
+                "math",
+                "shunting yard"
+            ],
+            "time": "2017-12-27T14:41:21+00:00"
+        },
         {
             "name": "babenkoivan/scout-elasticsearch-driver",
             "version": "v4.2.1",
@@ -2847,6 +2886,35 @@
                 }
             ],
             "time": "2020-04-29T22:14:38+00:00"
+        },
+        {
+            "name": "matthillman/equation-solver",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/matthillman/Equation-Solver.git",
+                "reference": "30e060458abaa7210c7412f2acecce839689cab1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/matthillman/Equation-Solver/zipball/30e060458abaa7210c7412f2acecce839689cab1",
+                "reference": "30e060458abaa7210c7412f2acecce839689cab1",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Solver\\": "src/"
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Equation Solver",
+            "support": {
+                "source": "https://github.com/matthillman/Equation-Solver/tree/master"
+            },
+            "time": "2020-05-30T02:39:40+00:00"
         },
         {
             "name": "matthillman/swgoh-help",
@@ -6757,6 +6825,7 @@
                     "email": "jakub.onderka@gmail.com"
                 }
             ],
+            "abandoned": "php-parallel-lint/php-console-color",
             "time": "2018-09-29T17:23:10+00:00"
         },
         {
@@ -6803,6 +6872,7 @@
                 }
             ],
             "description": "Highlight PHP code in terminal",
+            "abandoned": "php-parallel-lint/php-console-highlighter",
             "time": "2018-09-29T18:48:56+00:00"
         },
         {
@@ -8289,6 +8359,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "matthillman/equation-solver": 20,
         "matthillman/swgoh-help": 20
     },
     "prefer-stable": true,

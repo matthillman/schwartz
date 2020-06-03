@@ -7,6 +7,7 @@ use JsonStreamingParser\Parser;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\StreamWrapper;
 use JsonStreamingParser\ParsingError;
+use SwgohHelp\Listeners\GuildListener;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use JsonStreamingParser\Listener\InMemoryListener;

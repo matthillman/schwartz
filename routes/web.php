@@ -98,6 +98,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::delete('/squads/group/{group}', 'SquadController@deleteGroup')->name('squads.group.delete');
     Route::put('/squads/group/{group}', 'SquadController@putGroup')->name('squads.group.update');
     Route::delete('/squad/{id}', 'SquadController@delete')->name('squad.delete');
+    Route::put('/squad/{id}/stats', 'SquadController@updateStats')->name('squad.stats');
     Route::put('/squads/message/{channel}', 'SquadController@sendDiscordMessages')->name('squads.message');
 
     Route::post('/twp/squad/{squadID}', 'TerritoryWarPlanController@createFrom')->name('tw-plan.create.from-group');

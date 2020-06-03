@@ -52,23 +52,24 @@
                                 </div>
                                 @endif
                                 <div><strong>Place these teams:</strong></div>
-                                <div class="team-wrapper dark-back">
                                 @foreach ($plan->{"zone_$zone"} as $squadID => $members)
+                                <div class="team-wrapper dark-back">
                                     @if (in_array($member['ally_code'], $members))
-                                    <div class="row no-margin">
+                                    <div class="column assignment-wrapper">
+                                        <h3 class="squad-name">{{ $squads[$squadID]->display }}</h3>
                                         @if (!$member->get('characters')->where('unit_name', $squads->get($squadID)->leader_id)->isEmpty())
-                                        <div class="character-bg-wrapper glass-back {{ $units[$squads->get($squadID)->leader_id]->combat_type == 1 ? '' : 'ship' }}">
-                                            <character
-                                                :character="{{ $member->get('characters')->where('unit_name', $squads->get($squadID)->leader_id)->first()->toJson() }}"
-                                                no-stats no-mods no-zetas
-                                                :classes="'large'"
-                                            ></character>
+                                        <div>
+                                            <div class="character-bg-wrapper glass-back {{ $units[$squads->get($squadID)->leader_id]->combat_type == 1 ? '' : 'ship' }}">
+                                                <character
+                                                    :character="{{ $member->get('characters')->where('unit_name', $squads->get($squadID)->leader_id)->first()->toJson() }}"
+                                                    no-stats no-mods no-zetas
+                                                    :classes="'large'"
+                                                ></character>
+                                            </div>
                                         </div>
                                         @else
                                         <div>LEADER NOT UNLOCKED</div>
                                         @endif
-                                        <div class="column justify-content-center align-items-center grow"><h3 class="squad-name">{{ $squads[$squadID]->display }}</h3></div>
-                                        </div>
 
                                         <div class="row no-margin">
                                             @if($units[$squads->get($squadID)->leader_id]->combat_type == 1)
@@ -120,9 +121,10 @@
                                             @endforeach
                                         </div>
                                         @endif
+                                    </div>
                                     @endif
-                                @endforeach
                                 </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>

@@ -91,7 +91,10 @@ class GuildController extends Controller
             Gate::authorize('view-squad', $group);
             $highlight = 'gear';
             $teams = $group->squads->mapWithKeys(function($squad) {
-                return [$squad->display => collect([$squad->leader_id])->concat($squad->additional_members)->toArray()];
+                return [$squad->display => [
+                    'chars' => collect([$squad->leader_id])->concat($squad->additional_members)->toArray(),
+                    'id' => $squad->id,
+                ]];
             });
             $teamKeys = $teams->keys();
             $team = $group->id;
@@ -101,14 +104,16 @@ class GuildController extends Controller
         }
 
         if (is_int($index) && $index < count($teamKeys)) {
+            $entry = $teams[$teamKeys[$index]];
             $teams = [
-                $teamKeys[$index] => $teams[$teamKeys[$index]],
+                $teamKeys[$index] => $entry['chars'],
             ];
+            Character::$inSquadID = $entry['id'];
         }
 
         $units = Unit::all();
         $teams = collect($teams)->mapWithKeys(function($team, $title) use ($units) {
-            return [$title => collect($team)->map(function($unit) use ($units) {
+            return [$title => collect(array_get($team, 'chars', $team))->map(function($unit) use ($units) {
                 return $units->first(function($u) use ($unit) { return $u->base_id === $unit; });
             })];
         });

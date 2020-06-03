@@ -161,6 +161,41 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    @if ($units->where('base_id', $squad->leader_id)->first()->is_char)
+                                    <tr class="stats-row">
+                                        <td class="blank" colspan="2">&nbsp;</td>
+                                        <td colspan="{{ $squad->stats->isEmpty() ? 1 + count($squads->max('additional_members')) : 1 }}">
+                                            <stat-targets
+                                                :squad="{{ $squad->toJson() }}"
+                                                :units="{{ $units->whereIn('base_id', collect($squad->leader_id)->concat($squad->additional_members))->keyBy('base_id')->toJson() }}"
+                                            ></stat-targets>
+                                        </td>
+                                        @if($squad->stats->isNotEmpty())
+                                            @foreach($squad->additional_members as $char_id)
+                                            <td>
+                                                @if($squad->stats->get($char_id))
+                                                <div class="column">
+                                                    @foreach($squad->stats->get($char_id) as $key => $stat)
+                                                        <div class="row no-margin align-items-center stat-slash">
+                                                            @if($key == 'power')
+                                                            <ion-icon name="flash" size="micro"></ion-icon>
+                                                            @else
+                                                            <span class="mod-set-image tier-5 mini {{ mod_image_for_stat(+$key) }}"></span>
+                                                            @endif
+                                                            <span>{{ implode('/', $stat['tier']) }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                                @endif
+                                            </td>
+                                            @endforeach
+                                            @for ($i = 0; $i < count($squads->max('additional_members')) - count($squad->additional_members); $i++)
+                                            <td><div>&nbsp;</div></td>
+                                            @endfor
+                                        @endif
+                                        <td class="blank">&nbsp;</td>
+                                    </tr>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>

@@ -1,6 +1,6 @@
 <template>
-    <div :class="{'card-body': cardBody}">
-        <div v-if="hasSlot('top-trigger')" class="trigger-wrapper" @click="open = !open">
+    <div :class="[{'card-body': cardBody}, styleClass]">
+        <div v-if="hasSlot('top-trigger')" class="trigger-wrapper" @click="toggle">
             <slot name="top-trigger" v-bind:open="open"></slot>
         </div>
         <div
@@ -10,7 +10,7 @@
         >
             <slot>Body</slot>
         </div>
-        <div v-if="hasSlot('trigger')" class="trigger-wrapper" @click="open = !open">
+        <div v-if="hasSlot('trigger')" class="trigger-wrapper" @click="toggle">
             <slot name="trigger" v-bind:open="open"></slot>
         </div>
     </div>
@@ -21,13 +21,20 @@ export default {
     props: {
         startOpen: Boolean,
         cardBody: Boolean,
+        styleClass: String,
+        value: Boolean,
     },
     mounted() {
-        this.open = this.startOpen;
+        this.open = this.startOpen || this.value;
     },
     data() {
         return {
             open: false,
+        }
+    },
+    watch: {
+        value() {
+            this.open = this.value;
         }
     },
     methods: {
@@ -40,6 +47,10 @@ export default {
         slideCloseStart(el) {
             el.target.style.overflow = 'hidden';
         },
+        toggle() {
+            this.open = !this.open;
+            this.$emit('input', this.open);
+        }
     }
 }
 </script>

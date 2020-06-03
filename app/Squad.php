@@ -10,7 +10,12 @@ class Squad extends Model
 
     protected $casts = [
         'additional_members' => 'array',
+        'stats' => 'collection',
     ];
+
+    public function group() {
+        return $this->belongsTo(SquadGroup::class);
+    }
 
     public function getOtherMembersAttribute() {
         return explode(',', $this->additional_members);

@@ -15,6 +15,8 @@ class Character extends Model
     use KeyStats;
     use RecommendsStats;
 
+    public static $inSquadID = null;
+
     protected $fillable = [
         'member_id',
         'unit_name',
@@ -121,7 +123,7 @@ class Character extends Model
             ->merge(
                 $this->stat_recommendation->keys()
                     ->mapWithKeys(function($k) {
-                        return $this->statDisplayPair(UnitStat::$k());
+                        return $this->statDisplayPair(new UnitStat($k));
                     })
             )->mapWithKeys(function($item, $key) {
                 return [UnitStat::$key()->getValue() => $item];
@@ -168,46 +170,67 @@ class Character extends Model
         return 0;
     }
 
+    public function getInSquadAttribute() {
+        return static::$inSquadID ? Squad::findOrFail(static::$inSquadID) : new Squad;
+    }
+
     public function getStatRecommendationAttribute() {
-        return $this->recommendationsFor($this->unit_name);
+        return $this->in_squad->stats ? collect($this->in_squad->stats->get($this->unit_name)) : collect();
     }
 
     public function getStatGradeAttribute() {
-        return $this->stat_recommendation->mapWithKeys(function ($levels, $key) {
-            $value = $this->$key;
-            $rankings = isset($levels['values']) ? $levels['values'] : $levels;
-            $highest = collect($rankings)->reverse()->first(function ($v) use ($value) { return $v <= $value; });
+        return $this->stat_recommendation->mapWithKeys(function ($recommendations, $key) {
+            $unitStat = new UnitStat($key);
+            $value = $this->{$unitStat->getKey()};
+            $rankings = array_get($recommendations, 'tier', []);
+            // Get the value of the highest tier our stat passes
+            $highest = collect($rankings)->first(function ($v) use ($value) { return $v <= $value; });
+            // get the index of that tier
+            $rankings = array_reverse($rankings);
             $rank = is_null($highest) ? 0 : (array_search($highest, $rankings) + 2);
 
-            if (isset($levels['values']) && $rank > 0) {
-                $related = collect($levels['related']);
+            // Comparisons only matter if we aren't already failing
+            if (isset($recommendations['related']) && $rank > 0) {
+                $related = collect($recommendations['related']);
                 $member = $this->member;
-                $rank = $related->keys()->reduce(function($rank, $unit) use ($related, $member, $key, $value) {
-                    $rChar = $member->characters()->where('unit_name', $unit)->first();
-                    if (is_null($rChar)) {
-                        return 1;
-                    }
-                    $rStat = $rChar->$key;
-                    $comparison = $related[$unit];
-                    $rVal = $rStat;
-                    if (is_array($comparison[1])) {
-                        foreach ($comparison[1] as $compPair) {
-                            $operator = $compPair[0];
-                            $adjustment = $compPair[1];
-                            $rVal = $this->adjustStat($rVal, $operator, $adjustment);
-                        }
-                    } else {
-                        $operator = '+';
-                        $adjustment = $comparison[1];
-                        $rVal = $this->adjustStat($rStat, $operator, $adjustment);
-                    }
-                    $rVal = intval($rVal);
+                $relatedUnits = $this->member->characters()->whereIn('unit_name', $related->keys())->get();
+                $rank = $relatedUnits->reduce(function($rank, $unit) use ($related, $unitStat, $value, $key) {
+                    $relatedBaseStat = $unit->{$unitStat->getKey()};
+                    $function = $related[$unit->unit_name];
 
-                    return $this->statCompare($value, $comparison[0], $rVal) ? $rank : 1;
+                    // Replace all references to the related unit with the actual base stat number
+                    $function = str_replace($unit->unit_name, $relatedBaseStat, $function);
+                    // Replaces references to us with the variable x so that it's an equation
+                    // the solver can handle
+                    $function = str_replace($this->unit_name, 'x', $function);
+
+                    $operator = [];
+                    if (preg_match('/(<[^=]|>[^=]|>=|<=)/', $function, $operator)) {
+                        $function = preg_replace('/(<[^=]|>[^=]|>=|<=)/', '=', $function);
+                    }
+
+                    $target = solve($function);
+
+                    if (!$this->isStatPercent($key)) {
+                        $target = floor($target);
+                    }
+
+                    $comparison = head($operator) ?: '=';
+                    $left = $target;
+                    $right = $value;
+                    if ($comparison != '=') {
+                        list($lhs, ) = explode('=', $function);
+                        if (str_contains($lhs, 'x')) {
+                            $left = $value;
+                            $right = $target;
+                        }
+                    }
+
+                    return $this->statCompare($left, $comparison, $right) ? $rank : 1;
                 }, $rank);
             }
 
-            return [UnitStat::$key()->getValue() => $rank];
+            return [$key => $rank];
         });
     }
 

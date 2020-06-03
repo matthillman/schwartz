@@ -27,6 +27,16 @@ if (!function_exists('mod_bonus')) {
         return array_get($stats, 'mods.'.$stat->getValue(), null);
 	}
 }
+if (!function_exists('mod_image_for_stat')) {
+	function mod_image_for_stat($stat) {
+		if (is_int($stat)) {
+			$stat = new \SwgohHelp\Enums\UnitStat($stat);
+		} else if (is_string($stat)) {
+            $stat = \SwgohHelp\Enums\UnitStat::$stat();
+        }
+        return $stat->displayString();
+	}
+}
 if (!function_exists('format_stat')) {
 	function format_stat($value, $stat) {
 		if (!is_numeric($value)) {
@@ -72,6 +82,28 @@ if (!function_exists('previous_route_name')) {
     function previous_route_name() {
         return app('router')->getRoutes()->match(app('request')->create(url()->previous()))->getName();
     }
+}
+
+if (!function_exists('solve')) {
+    /**
+     * Solves a linear equation and returns the solution for the single variable
+	 *
+     * @return Number
+     */
+	function solve($equation) {
+		list($lhs, $rhs) = explode('=', $equation);
+		$reduced = [];
+
+		foreach ([$lhs, $rhs] as $side) {
+			if (preg_match('/[a-zA-Z]/', $side)) {
+				$reduced[] = $side;
+			} else {
+				$reduced[] = \RR\Shunt\Parser::parse($side);
+			}
+		}
+
+		return +max( last((new \Solver\Solve(implode('=', $reduced), false))->solution() ) );
+	}
 }
 
 // if (!function_exists('guzzle')) {

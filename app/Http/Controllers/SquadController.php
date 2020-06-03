@@ -118,9 +118,24 @@ class SquadController extends Controller
     public function delete($id) {
         $squad = Squad::findOrFail($id);
         $group = $squad->squad_group_id;
+        Gate::authorize('edit-squad', $group);
         $squad->delete();
 
         return redirect()->route(previous_route_name(), ['group' => $group])->with('status', "Squad deleted");
+    }
+
+    public function updateStats(Request $request, $id) {
+        $squad = Squad::findOrFail($id);
+        Gate::authorize('edit-squad', $squad->squad_group_id);
+
+        $validated = $request->validate([
+            'stats' => 'required',
+        ]);
+
+        $squad->stats = $validated['stats'];
+        $squad->save();
+
+        return response()->json(['success' => true]);
     }
 
     public function addGroup(Request $request) {

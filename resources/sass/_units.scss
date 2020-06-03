@@ -324,7 +324,7 @@ $highlight-colors: (#ceffa4, #b39acd, #f5eda3);
             &[mod-grade="2"] {
                 // background-color: rgba($color: #99ff33, $alpha: 0.5);
                 --highlight-color: #{rgb-values-from(nth($highlight-colors, 1))};
-                --bg-color: #{rgb-values-from(#99ff33)};
+                --bg-color: #{rgb-values-from($green)};
             }
             &[mod-grade="3"] {
                 // background-color: rgba($color: rebeccapurple, $alpha: 0.5);
@@ -347,13 +347,46 @@ $highlight-colors: (#ceffa4, #b39acd, #f5eda3);
                     background-color: rgba($color: #ff5500, $alpha: 1);
                 }
                 &[grade="2"] {
-                    background-color: rgba($color: #99ff33, $alpha: 1);
+                    background-color: rgba($color: $green, $alpha: 1);
                 }
                 &[grade="3"] {
                     background-color: rgba($color: rebeccapurple, $alpha: 1);
                 }
             }
         }
+    }
+}
+
+.demo-swatch {
+    padding-left: 20px;
+    position: relative;
+
+    &::before {
+        content: '';
+        border: 8px solid transparent;
+        position: absolute;
+        top: calc(50% - 8px);
+        left: 0;
+
+    }
+    &.tier-0::before {
+        border-color: #ff0000;
+    }
+
+    &.tier-4::before {
+        border-color: #ff5500;
+    }
+
+    &.tier-1::before {
+        border-color: $green;
+    }
+
+    &.tier-2::before {
+        border-color: rebeccapurple;
+    }
+
+    &.tier-3::before {
+        border-color: #eadb39;
     }
 }
 

@@ -80,4 +80,11 @@ class Unit extends Model
     public function getAlignmentAttribute($value) {
         return strtolower((new Alignment($value))->getKey());
     }
+
+    public function getIsShipAttribute() {
+        return $this->combat_type !== 1;
+    }
+    public function getIsCharAttribute() {
+        return $this->combat_type == 1;
+    }
 }

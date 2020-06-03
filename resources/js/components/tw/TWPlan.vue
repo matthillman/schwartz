@@ -116,7 +116,7 @@
                             </div>
                         </div>
                     </template>
-                    <mini-squad-table v-for="squad in squads" :key="squad.id"
+                    <mini-squad-table v-for="squad in sortedSquads" :key="squad.id"
                         :squad="squad"
                         :units="units"
                         no-header
@@ -296,6 +296,38 @@ export default {
     },
     mounted() {
         this.ourMembers = this.members.filter(m => this.includedAllyCodes.includes(m.ally_code));
+        this.sortedSquads = Object.values(this.squads).sort((a, b) => {
+            const glList = ['GLREY', 'SUPREMELEADERKYLOREN'];
+            const metaList = ['GENERALSKYWALKER', 'JEDIKNIGHTREVAN', 'DARTHREVAN', 'GRIEVOUS', 'PADMEAMIDALA'];
+            const aIsGL = glList.includes(a.leader_id);
+            const bIsGL = glList.includes(b.leader_id);
+
+            if (aIsGL && !bIsGL) {
+                 return -1;
+            } else if (!aIsGL && bIsGL) {
+                return 1;
+            }
+
+            const aIsMeta = metaList.includes(a.leader_id);
+            const bIsMeta = metaList.includes(b.leader_id);
+
+            if (aIsMeta && !bIsMeta) {
+                 return -1;
+            } else if (!aIsMeta && bIsMeta) {
+                return 1;
+            }
+
+            const aIsShips = this.units[a.leader_id].combat_type == 2;
+            const bIsShips = this.units[b.leader_id].combat_type == 2;
+
+            if (aIsShips && !bIsShips) {
+                 return 1;
+            } else if (!aIsShips && bIsShips) {
+                return -1;
+            }
+
+            return a.leader_id.localeCompare(b.leader_id);
+        });
         for (const index of [...Array(10).keys()]) {
             const zone = index + 1;
             let plan = this.getPlanForZone(zone)
@@ -352,6 +384,7 @@ export default {
         return {
             currentZone: 1,
             ourPlan: this.plan,
+            sortedSquads: [],
             includedAllyCodes: this.activeMembers.length ? this.activeMembers : this.members.map(m => m.ally_code),
             ourMembers: [],
             draggingMember: null,

@@ -102,6 +102,7 @@ trait RecommendsStats {
     }
 
     private function statCompare($left, $operator, $right) {
+        $operator = trim($operator);
         switch ($operator) {
             case '>': return $left > $right;
             case '<': return $left < $right;
@@ -111,6 +112,75 @@ trait RecommendsStats {
 
             default: return false;
         }
+    }
+
+    private function isStatPercent($key) {
+        static $pct = [
+            false,//"None",
+            false,//"Health",
+            false,//"Strength",
+            false,//"Agility",
+            false,//"Intelligence",
+            false,//"Speed",
+            false,//"Physical Damage",
+            false,//"Special Damage", //"UNIT_STAT_ABILITY_POWER",
+            true,//"Armor", //"UNIT_STAT_ARMOR",
+            true,//"Resistance", //"UNIT_STAT_SUPPRESSION",
+            false,//"Armor Penetration", //"UNIT_STAT_ARMOR_PENETRATION",
+            false,//"Resistance Penetration", //"UNIT_STAT_SUPPRESSION_PENETRATION",
+            false,//"Dodge Rating", //"UNIT_STAT_DODGE_RATING",
+            false,//"Deflection Rating", //"UNIT_STAT_DEFLECTION_RATING",
+            true,//"Physical Critical Rating", //"UNIT_STAT_ATTACK_CRITICAL_RATING",
+            true,//"Special Critical Rating", //"UNIT_STAT_ABILITY_CRITICAL_RATING",
+            true,//"Critical Damage", 16
+            true,//"Potency", 17
+            true,//"Tenacity", 18
+            true,//"Dodge Chance", //"UNIT_STAT_DODGE_PERCENT_ADDITIVE",
+            true,//"Deflection Chance", //"UNIT_STAT_DEFLECTION_PERCENT_ADDITIVE",
+            true,//"Physical Critical Chance", //"UNIT_STAT_ATTACK_CRITICAL_PERCENT_ADDITIVE",
+            true,//"Special Critical Chance", //"UNIT_STAT_ABILITY_CRITICAL_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_ARMOR_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_SUPPRESSION_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_ARMOR_PENETRATION_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_SUPPRESSION_PENETRATION_PERCENT_ADDITIVE",
+            true,//"Health Steal",//"UNIT_STAT_HEALTH_STEAL", 27
+            false,//"Protection", 28
+            true,//"UNIT_STAT_SHIELD_PENETRATION",
+            true,//"UNIT_STAT_HEALTH_REGEN",
+            true,//"UNIT_STAT_ATTACK_DAMAGE_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_ABILITY_POWER_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_DODGE_NEGATE_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_DEFLECTION_NEGATE_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_ATTACK_CRITICAL_NEGATE_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_ABILITY_CRITICAL_NEGATE_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_DODGE_NEGATE_RATING",
+            true,//"UNIT_STAT_DEFLECTION_NEGATE_RATING",
+            true,//"UNIT_STAT_ATTACK_CRITICAL_NEGATE_RATING",
+            true,//"UNIT_STAT_ABILITY_CRITICAL_NEGATE_RATING",
+            false,//"Offense",
+            false,//"Defense",
+            true,//"UNIT_STAT_DEFENSE_PENETRATION",
+            true,//"UNIT_STAT_EVASION_RATING",
+            true,//"UNIT_STAT_CRITICAL_RATING",
+            true,//"UNIT_STAT_EVASION_NEGATE_RATING",
+            true,//"UNIT_STAT_CRITICAL_NEGATE_RATING",
+            true,//"Offense %", 48
+            true,//"Defense %", 49
+            true,//"UNIT_STAT_DEFENSE_PENETRATION_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_EVASION_PERCENT_ADDITIVE",
+            true,//"Accuracy", 52
+            true,//"Critical Chance", 53
+            true,//"Critical Avoidance", 54
+            true,//"Health %", 55
+            true,//"Protection %", 56
+            true,//"Speed %",// "UNIT_STAT_SPEED_PERCENT_ADDITIVE",
+            true,//"UNIT_STAT_COUNTER_ATTACK_RATING",
+            true,//"UNIT_STAT_TAUNT" 59
+            true,//"UNITSTATDEFENSEPENETRATIONTARGETPERCENTADDITIVE"
+            false,//"UNITSTATMASTERY" 61
+        ];
+
+        return $pct[+$key];
     }
 
 }
