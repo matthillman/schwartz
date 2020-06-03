@@ -34,6 +34,7 @@
     flex-wrap: nowrap;
     .btn.btn-primary, .btn.btn-danger {
         width: 72px;
+        white-space: nowrap;
     }
 }
 
@@ -43,6 +44,10 @@
 
     .vs__selected & {
         width: auto;
+    }
+
+    tr > :nth-child(2) {
+        max-width: 250px;
     }
 
     td, th {
