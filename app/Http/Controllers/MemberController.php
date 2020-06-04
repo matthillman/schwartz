@@ -94,7 +94,7 @@ class MemberController extends Controller
             'ally_code' => 'required',
         ]);
 
-        $allyCode = $validated['ally_code'];
+        $allyCode = str_replace('-', '', $validated['ally_code']);
 
         $existing = AllyCodeMap::firstOrNew(['ally_code' => $allyCode]);
 
