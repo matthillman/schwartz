@@ -166,7 +166,8 @@ class TerritoryWarPlanController extends Controller
                                     'name' => "Zone " . $zone['number'],
                                     'value' => (strlen($notes) ? "> $notes\n" : '')
                                         .
-                                        '**' . $squad->display . "**\n"
+                                        '**' . $squad->display . "**\n" .
+                                        (strlen($squad->description) ? ">  $squad->description\n" : '')
                                         .
                                         "  🛡 " .$units->get($squad->leader_id)->name ."\n" .
                                         (
