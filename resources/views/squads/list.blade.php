@@ -23,7 +23,7 @@
                         @can('edit-guild', $group->guild_id)
                         <convert-squad-to-plan
                             :group="{{ $group->toJson() }}"
-                            :plans="{{ $group->plans->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE)->toJson() }}"
+                            :plans="{{ $group->plans->sortByDesc('created_at')->toJson() }}"
                         ></convert-squad-to-plan>
                         @endcan
                         @endif

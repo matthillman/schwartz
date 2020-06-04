@@ -87,6 +87,31 @@ class SquadController extends Controller
 
         $editSquad = Squad::findOrNew($request->get('squad'));
 
+        $chars = collect($chars)->sort(function($a, $b) {
+            static $glList = ['GLREY', 'SUPREMELEADERKYLOREN'];
+            static $metaList = ['GENERALSKYWALKER', 'JEDIKNIGHTREVAN', 'DARTHREVAN', 'GRIEVOUS', 'PADMEAMIDALA'];
+
+            $aIsGL = in_array($a->leader_id, $glList);
+            $bIsGL = in_array($b->leader_id, $glList);
+
+            if ($aIsGL && !$bIsGL) {
+                 return -1;
+            } else if (!$aIsGL && $bIsGL) {
+                return 1;
+            }
+
+            $aIsMeta = in_array($a->leader_id, $metaList);
+            $bIsMeta = in_array($b->leader_id, $metaList);
+
+            if ($aIsMeta && !$bIsMeta) {
+                 return -1;
+            } else if (!$aIsMeta && $bIsMeta) {
+                return 1;
+            }
+
+            return strcasecmp($a->leader_id, $b->leader_id);
+        })->values();
+
         return view('squads.list', [
             'groups' => $tabs,
             'group' => $group,
