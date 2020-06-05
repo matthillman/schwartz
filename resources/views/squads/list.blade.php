@@ -176,7 +176,7 @@
                                                 @if($squad->stats->get($char_id))
                                                 <div class="column">
                                                     @foreach($squad->stats->get($char_id) as $key => $stat)
-                                                        <div class="row no-margin align-items-center stat-slash">
+                                                        <div class="row no-margin align-items-center no-wrap stat-slash">
                                                             @if($key == 'power')
                                                             <ion-icon name="flash" size="micro"></ion-icon>
                                                             @else

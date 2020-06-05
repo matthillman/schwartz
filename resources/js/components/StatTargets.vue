@@ -1,5 +1,5 @@
 <template>
-    <div class="row no-margin align-items-center">
+    <div class="row no-margin align-items-center no-wrap">
         <button class="btn btn-link btn-icon" :class="{'with-text' : !hasStatsDefined}" @click="showing = !showing">
             <ion-icon :name="hasStatsDefined ? 'pencil' : 'add-circle'" size="small"></ion-icon>
             <span v-if="!hasStatsDefined">Add stat targets</span>
