@@ -105,10 +105,16 @@ class GuildController extends Controller
 
         if (is_int($index) && $index < count($teamKeys)) {
             $entry = $teams[$teamKeys[$index]];
-            $teams = [
-                $teamKeys[$index] => $entry['chars'],
-            ];
-            Character::$inSquadID = $entry['id'];
+            if (isset($entry['id'])) {
+                $teams = [
+                    $teamKeys[$index] => $entry['chars'],
+                ];
+                Character::$inSquadID = $entry['id'];
+            } else {
+                $teams = [
+                    $teamKeys[$index] => $entry
+                ];
+            }
         }
 
         $units = Unit::all();
