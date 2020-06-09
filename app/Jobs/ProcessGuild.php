@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Redis;
 use Artisan;
 use App\Guild;
 use Illuminate\Bus\Queueable;
@@ -25,6 +26,20 @@ class ProcessGuild implements ShouldQueue
     public $timeout = 60 * 10;
 
     /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 20;
+
+    /**
+     * The maximum number of exceptions to allow before failing.
+     *
+     * @var int
+     */
+    public $maxExceptions = 1;
+
+    /**
      * Create a new job instance.
      *
      * @return void
@@ -41,13 +56,17 @@ class ProcessGuild implements ShouldQueue
      */
     public function handle()
     {
-        Artisan::call('swgoh:guild', [
-            'guild' => $this->guild
-        ]);
+        Redis::throttle('guild')->allow(2)->every(5 * 60)->then(function() {
+            Artisan::call('swgoh:guild', [
+                'guild' => $this->guild
+            ]);
 
-        broadcast(new GuildProcessed(
-            Guild::where(['guild_id' => $this->guild])->firstOrFail()
-        ));
+            broadcast(new GuildProcessed(
+                Guild::where(['guild_id' => $this->guild])->firstOrFail()
+            ));
+        }, function() {
+            return $this->release(5 * 60);
+        });
     }
 
     public function tags() {
