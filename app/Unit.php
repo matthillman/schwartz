@@ -88,4 +88,7 @@ class Unit extends Model
     public function getIsCharAttribute() {
         return $this->combat_type == 1;
     }
+    public function getHasUltimateAttribute() {
+        return $this->abilities->where('powerAdditiveTag', 'ultimate')->isNotEmpty();
+    }
 }

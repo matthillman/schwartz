@@ -203,11 +203,19 @@
                                                 <div class="relic"><span class="value">5</span></div>
                                             </div>
                                         </th>
-                                        <th {{ $winner[strtolower("${id}_r_total")] === $guild_id ? 'winner' : '' }}>
-                                            <div class="portrait relic-only centered">
-                                                <div class="relic"><span class="value">5+</span></div>
-                                            </div>
-                                        </th>
+                                        @if ($character['has_ultimate'])
+                                            <th class="ultimate" {{ $winner[strtolower("${id}_r_total")] === $guild_id ? 'winner' : '' }}>
+                                                <div class="portrait relic-only centered">
+                                                    <div class="relic"><span class="value">7</span></div>
+                                                </div>
+                                            </th>
+                                        @else
+                                            <th {{ $winner[strtolower("${id}_r_total")] === $guild_id ? 'winner' : '' }}>
+                                                <div class="portrait relic-only centered">
+                                                    <div class="relic"><span class="value">5+</span></div>
+                                                </div>
+                                            </th>
+                                        @endif
                                         <th {{ $winner[strtolower("${id}_13")] === $guild_id ? 'winner' : '' }}>
                                             <div class="portrait mini centered">
                                                 <div class="gear g13" style="--gear-image:url('/images/units/gear/gear-icon-g13.png');"></div>
@@ -233,7 +241,12 @@
                                         <td {{ $winner[strtolower("${id}_r7")] === $guild_id ? 'winner' : '' }}><span>{{ number_format($guild[strtolower("${id}_r7")]) }}</span></td>
                                         <td {{ $winner[strtolower("${id}_r6")] === $guild_id ? 'winner' : '' }}><span>{{ number_format($guild[strtolower("${id}_r6")]) }}</span></td>
                                         <td {{ $winner[strtolower("${id}_r5")] === $guild_id ? 'winner' : '' }}><span>{{ number_format($guild[strtolower("${id}_r5")]) }}</span></td>
+
+                                        @if ($character['has_ultimate'])
+                                        <td {{ $winner[strtolower("${id}_ultimate")] === $guild_id ? 'winner' : '' }}><span>{{ number_format(array_get($guild, strtolower("${id}_ultimate"), 0)) }}</span></td>
+                                        @else
                                         <td {{ $winner[strtolower("${id}_r_total")] === $guild_id ? 'winner' : '' }}><span>{{ number_format($guild[strtolower("${id}_r_total")]) }}</span></td>
+                                        @endif
                                         <td {{ $winner[strtolower("${id}_13")] === $guild_id ? 'winner' : '' }}><span>{{ number_format($guild[strtolower("${id}_13")]) }}</span></td>
                                         <td {{ $winner[strtolower("${id}_12")] === $guild_id ? 'winner' : '' }}><span>{{ number_format($guild[strtolower("${id}_12")]) }}</span></td>
                                         <td {{ $winner[strtolower("${id}_11")] === $guild_id ? 'winner' : '' }}><span>{{ number_format($guild[strtolower("${id}_11")]) }}</span></td>

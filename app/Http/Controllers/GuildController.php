@@ -264,7 +264,7 @@ class GuildController extends Controller
         $g1_id = $g1['guild_id'];
 
         $winners = collect($g1)->mapWithKeys(function($g1Val, $key) use ($g1_id, $g2) {
-            return [$key => $g1Val > $g2[$key] ? $g1_id : ($g1Val < $g2[$key] ? $g2['guild_id'] : 0)];
+            return [$key => $g1Val > array_get($g2, $key, 0) ? $g1_id : ($g1Val < array_get($g2, $key, 0) ? $g2['guild_id'] : 0)];
         });
 
         $g1RTotal = $g1['relic_7'] + $g1['relic_6'] + $g1['relic_5'];

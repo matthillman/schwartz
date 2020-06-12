@@ -29,7 +29,7 @@ trait MetaChars {
 
             $chars = $chars->mapWithKeys(function($name, $id) use ($units) {
                 $unit = $units->where('base_id', $id)->first();
-                return [$id => ['name' => $name, 'alignment' => strtolower($unit->alignment)]];
+                return [$id => ['name' => $name, 'alignment' => strtolower($unit->alignment), 'has_ultimate' => $unit->has_ultimate]];
             });
 
             return $chars;

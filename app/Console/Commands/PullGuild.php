@@ -176,6 +176,7 @@ class PullGuild extends Command
                 sum((characters.unit_name = '{$char}' AND characters.relic = 7) :: int) as {$char}_r5,
                 sum((characters.unit_name = '{$char}' AND characters.relic = 8) :: int) as {$char}_r6,
                 sum((characters.unit_name = '{$char}' AND characters.relic = 9) :: int) as {$char}_r7,
+                sum((characters.unit_name = '{$char}' AND jsonb_array_length((data->'purchasedAbilityIdList')::jsonb) > 0) :: int) as {$char}_ultimate,
             ";
         }, '');
 
@@ -192,6 +193,7 @@ class PullGuild extends Command
             from guilds
             inner join members on members.guild_id = guilds.id
             inner join characters on characters.member_id = members.id
+            inner join characters_raw on characters_raw.character_id = characters.id
             where guilds.id = ?
         ", [$guild->id]));
 
