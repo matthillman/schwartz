@@ -17,6 +17,7 @@ class Unit extends Model
         'crew_list' => 'collection',
         'category_list' => 'array',
         'skills' => 'collection',
+        'abilities' => 'collection',
     ];
 
     protected $indexConfigurator = Search\Indexes\UnitIndexConfigurator::class;

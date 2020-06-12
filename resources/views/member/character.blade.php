@@ -90,9 +90,11 @@
                             </div>
                             <div class="row no-margin justify-content-center align-items-center ability-row">
                                 @foreach ($character->skill_display_list as $skill)
-                                    <div class="ability-wrapper {{ $character->alignment }}">
+                                    <div class="ability-wrapper {{ $character->alignment }}{{ array_get($skill, 'ultimate', false) ? ' ultimate' : '' }}">
                                         <tooltip>
-                                            <img class="ability" src="/images/units/skills/{{ $skill['id'] }}.png">
+                                            <div class="ability{{ $skill['tier'] == -1 ? ' locked' : '' }}">
+                                                <img class="ability" src="/images/units/skills/{{ $skill['id'] }}.png">
+                                            </div>
                                             @isset($skill['image'])
                                                 <img class="ability-flair" src="/images/units/abilities/{{ $skill['image'] }}.png">
                                             @elseif($skill['tier'] >= 0)
@@ -150,14 +152,12 @@
                             <div class="stat-list column">
                             @foreach ($$side as $label => $stat)
                                 @if (is_array($stat))
-                                <div>
                                     <div class="row justify-content-center align-items-baseline stat-header"><div>{{ $label }}</div></div>
                                     @foreach ($stat as $l => $s)
                                     <div class="row justify-content-between">
                                         <div>{{ $l }}</div><div>{{ format_stat($character->$s, $s) }}@unless(is_null($character->modBonus($s)))<span class="bonus">({{ format_stat($character->modBonus($s), $s) }})</span>@endunless</div>
                                     </div>
                                     @endforeach
-                                </div>
                                 @else
                                     <div class="row justify-content-between align-items-baseline stat-header with-stat">
                                         <div>{{ $label }}</div><div>{{ format_stat($character->$stat, $stat) }}</div>

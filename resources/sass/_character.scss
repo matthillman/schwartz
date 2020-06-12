@@ -288,10 +288,13 @@ $base: 80px;
                 background-position: 0% 0%;
             }
             .dark & {
-                background-position: 0% 51%;
+                background-position: 0% 33.3333%;
             }
             .neutral & {
-                background-position: 0% 102%;
+                background-position: 0% 66.6666%;
+            }
+            .ultimate & {
+                background-position: 0% 100%;
             }
 
             > .value {
@@ -398,19 +401,29 @@ $base: 80px;
     }
 }
 
-.locked::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba($color: $black, $alpha: 0.6);
-    border-radius: 50%;
-    background-image: url(/images/gear/lock.png);
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 33%;
+.locked{
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba($color: $black, $alpha: 0.6);
+        border-radius: 50%;
+        background-image: url(/images/gear/lock.png);
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: 33%;
+    }
+
+    &.ability::after {
+        border-radius: 0;
+    }
+
+    .ultimate &.ability::after {
+        border-radius: 50%;
+    }
 }
 
 @include portrait(80px);
@@ -572,6 +585,31 @@ $base: 80px;
 
     &.neutral {
         border-color: #222;
+    }
+
+    &.ultimate {
+        border: none;
+        box-shadow: none;
+
+        div.ability {
+
+            &, & > img.ability {
+                border-radius: 50%;
+            }
+            position: relative;
+
+            &::before {
+                content: "";
+                background: url(/images/units/abilities/ult_ring.png);
+                top: -4px;
+                left: -4px;
+                right: -4px;
+                bottom: -4px;
+                position: absolute;
+                background-size: contain;
+                background-repeat: no-repeat;
+            }
+        }
     }
 
     img.ability {

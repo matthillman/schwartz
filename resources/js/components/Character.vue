@@ -6,7 +6,7 @@
         :power="character.highlight_power"
         :mod-grade="statGrade"
         class="character"
-        :class="[character.alignment, {clickable: showMods}]"
+        :class="[character.alignment, {clickable: showMods, ultimate: character.has_ultimate_ability}]"
         @click="onPopoverOpen"
     >
       <div

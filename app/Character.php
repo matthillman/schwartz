@@ -40,6 +40,7 @@ class Character extends Model
         'stat_grade',
         'base_speed',
         'display_name',
+        'has_ultimate_ability',
     ];
 
     protected $casts = [
@@ -73,6 +74,9 @@ class Character extends Model
     }
     public function getCategoryListAttribute() {
         return $this->unit->category_list;
+    }
+    public function getHasUltimateAbilityAttribute() {
+        return $this->skill_list->where('ultimate')->where('tier', '>', 0)->isNotEmpty();
     }
     public function getSpeedAttribute() {
         return $this->UNITSTATSPEED;
@@ -245,27 +249,47 @@ class Character extends Model
     }
 
     public function getSkillListAttribute() {
-        $skillList = $this->unit->skills->pluck('skillId');
-        $ourSkills = collect($this->rawData->data['skillList'])->keyBy('id');
-
-        return $skillList->map(function($skill) use ($ourSkills) {
-            return collect([
-                'id' => $skill,
-                'tier' => $ourSkills->get($skill)['tier'] ?? -1,
-            ]);
-        });
+        return $this->computeSkills();
     }
 
     public function getAllSkillsAttribute() {
-        $skillList = $this->unit->skills->concat($this->unit->crew_list->pluck('skillReferenceList')->flatten(1))->pluck('skillId');
+        return $this->computeSkills(true);
+    }
+
+    private function computeSkills($includeCrew = false) {
+        $skillList = $this->unit->skills;
+
+        if ($includeCrew) {
+            $skillList = $skillList->concat($this->unit->crew_list->pluck('skillReferenceList')->flatten(1));
+        }
+
+        $skillList = $skillList->pluck('skillId');
         $ourSkills = collect($this->rawData->data['skillList'])->keyBy('id');
 
-        return $skillList->map(function($skill) use ($ourSkills) {
+        $skillList = $skillList->map(function($skill) use ($ourSkills) {
             return collect([
                 'id' => $skill,
                 'tier' => $ourSkills->get($skill)['tier'] ?? -1,
             ]);
         });
+
+        $abilitiesWithoutSkills = $this->unit->abilities->filter(functioN($ability) {
+            return strlen($ability['unlockRecipeId']) > 0;
+        });
+
+        $ourPurchasedAbilities = collect($this->rawData->data['purchasedAbilityIdList']);
+
+        $abilitiesWithoutSkills = $abilitiesWithoutSkills->map(function($ability) use ($ourPurchasedAbilities) {
+            return collect([
+                'id' => $ability['abilityId'],
+                'tier' => $ourPurchasedAbilities->contains($ability['abilityId']) ? 1 : -1,
+                'ability' => true,
+                'recipe' => $ability['unlockRecipeId'],
+                'ultimate' => $ability['powerAdditiveTag'] == 'ultimate',
+            ]);
+        });
+
+        return $skillList->concat($abilitiesWithoutSkills);
     }
 
     private static function displaySkill($skill) {
@@ -276,9 +300,21 @@ class Character extends Model
 
         $skill = Collection::wrap($skill);
 
-        $skillDef = $skills->get($skill->get('id'));
+        if ($skill->get('ability', false)) {
+            $ability = $abilities->get($skill->get('id'));
+            $skillDef = [
+                'tierList' => [
+                    [], // initial state
+                    [
+                        'recipeId' => $skill->get('recipe'),
+                    ]
+                ]
+            ];
+        } else {
+            $skillDef = $skills->get($skill->get('id'));
+            $ability = $abilities->get($skillDef['abilityReference']);
+        }
 
-        $ability = $abilities->get($skillDef['abilityReference']);
         $skill['name'] = __('messages.' . $ability['nameKey']);
         $skill['description'] = preg_replace('/\[-\]\[\/c\]/', '</span>',
             preg_replace('/\[c\]\[([0-9A-Fa-f]{6})\]/', '<span :style="{color: `#$1`}">', __('messages.' . $ability['descKey']))
@@ -318,19 +354,34 @@ class Character extends Model
         $skills = GameData::skills();
         $recipes = GameData::recipes();
         $materials = GameData::materials();
+        $abilities = GameData::abilities();
 
         $totals = [];
         foreach ($skillList as $skill) {
-            $skillDef = $skills->get($skill->get('id'));
+            if ($skill->get('ability', false)) {
+                $ability = $abilities->get($skill->get('id'));
+                $skillDef = [
+                    'tierList' => [
+                        [], // initial state
+                        [
+                            'recipeId' => $skill->get('recipe'),
+                        ]
+                    ]
+                ];
+            } else {
+                $skillDef = $skills->get($skill->get('id'));
+            }
             $tiers = collect($skillDef['tierList']);
             $thisTier = $skill->get('tier', -1);
             if ($thisTier < $tiers->count()) {
                 foreach ($tiers->slice($thisTier + 1) as $tier) {
-                    $recipe = $recipes->get($tier['recipeId']);
+                    if (isset($tier['recipeId'])) {
+                        $recipe = $recipes->get($tier['recipeId']);
 
-                    foreach ($recipe['ingredientsList'] as $ingredient) {
-                        $key = $materials->get($ingredient['id'])['iconKey'] ?? $ingredient['id'];
-                        $totals[$key] = ($totals[$key] ?? 0) + $ingredient['maxQuantity'];
+                        foreach ($recipe['ingredientsList'] as $ingredient) {
+                            $key = $materials->get($ingredient['id'])['iconKey'] ?? $ingredient['id'];
+                            $totals[$key] = ($totals[$key] ?? 0) + $ingredient['maxQuantity'];
+                        }
                     }
                 }
             }
