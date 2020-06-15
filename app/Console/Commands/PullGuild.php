@@ -67,11 +67,13 @@ class PullGuild extends Command
         $this->info("Starting GuildParser for {$name}…");
 
         if (is_null($guild->id)) {
-            $guild->guild_id = $guildID;
-            $guild->name = $name;
-            $guild->url = 'not_scraped';
-            $guild->gp = 0;
-            $guild->save();
+            Guild::withoutSyncingToSearch(function() use ($guild) {
+                $guild->guild_id = $guildID;
+                $guild->name = $name;
+                $guild->url = 'not_scraped';
+                $guild->gp = 0;
+                $guild->save();
+            });
         }
 
 
@@ -124,11 +126,13 @@ class PullGuild extends Command
             }
         }
 
-        $guild->name = $parser->name();
-        $guild->gp = $parser->gp();
-        $guild->icon = array_get($parser->data, 'bannerLogo', array_get($parser->data, 'bannerLogoId'));
-        $guild->colors = array_get($parser->data, 'bannerColor', array_get($parser->data, 'bannerColorId'));
-        $guild->save();
+        Guild::withoutSyncingToSearch(function() use ($guild) {
+            $guild->name = $parser->name();
+            $guild->gp = $parser->gp();
+            $guild->icon = array_get($parser->data, 'bannerLogo', array_get($parser->data, 'bannerLogoId'));
+            $guild->colors = array_get($parser->data, 'bannerColor', array_get($parser->data, 'bannerColorId'));
+            $guild->save();
+        });
         $this->info("Guild saved.");
 
         $guild->members()->searchable();

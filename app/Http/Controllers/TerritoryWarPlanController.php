@@ -34,17 +34,28 @@ class TerritoryWarPlanController extends Controller
     }
 
     public function show(Request $request, $id) {
-        $plan = TerritoryWarPlan::with('guild.members.stats')->findOrFail($id);
+        // $plan = TerritoryWarPlan::with('guild.members.stats')->findOrFail($id);
+        $plan = TerritoryWarPlan::with('guild')->findOrFail($id);
 
         Gate::authorize('in-guild', $plan->guild->id);
 
-        $units = Unit::all()->sortBy('name')->values();
+        // $units = Unit::all()->sortBy('name')->values();
 
         return view('tw.plan', [
             'plan' => $plan,
-            'squads' => $plan->squad_group->squads->keyBy('id'),
-            'unitIDs' => $plan->squad_group->squads->pluck('additional_members')->flatten()->merge($plan->squad_group->squads->pluck('leader_id'))->unique()->toArray(),
-            'units' => $units,
+            // 'squads' => $plan->squad_group->squads->keyBy('id'),
+            // 'unitIDs' => $plan->squad_group->squads->pluck('additional_members')->flatten()->merge($plan->squad_group->squads->pluck('leader_id'))->unique()->toArray(),
+            // 'units' => $units,
+        ]);
+    }
+
+    public function getPlan(Request $request, $id) {
+        $plan = TerritoryWarPlan::findOrFail($id);
+
+        Gate::authorize('in-guild', $plan->guild->id);
+
+        return response()->json([
+            'plan' => $plan
         ]);
     }
 

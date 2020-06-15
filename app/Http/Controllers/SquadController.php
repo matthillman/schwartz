@@ -123,6 +123,20 @@ class SquadController extends Controller
         ]);
     }
 
+    public function getSquads($id) {
+        $group = SquadGroup::with('squads')->findOrFail($id);
+
+        Gate::authorize('view-squad', $group);
+
+        $squads = $group->squads;
+        $unitIDs = $squads->pluck('additional_members')->flatten()->merge($squads->pluck('leader_id'))->unique()->toArray();
+
+        return response()->json([
+            'squads' => $squads->keyBy('id'),
+            'units' => Unit::whereIn('base_id', $unitIDs)->get()->sortBy('name')->keyBy('base_id'),
+        ]);
+    }
+
     public function add(Request $request) {
         Gate::authorize('edit-squad', $request->group);
 

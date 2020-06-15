@@ -83,6 +83,25 @@ class GuildController extends Controller
         return redirect()->route('guilds')->with('guildStatus', "Guild scrape queued");
     }
 
+    public function getMemberData(Request $request, $guild) {
+        $guild = Guild::findOrFail($guild);
+        $unitIDs = explode(',', $request->units);
+        $members = $guild->members()->with(['characters' => function($query) use ($unitIDs) {
+                $query->with(['zetas', 'rawData'])->whereIn('unit_name', $unitIDs);
+            }])
+            ->get()
+            ->sortBy('sort_name', SORT_NATURAL|SORT_FLAG_CASE)
+            ->map(function($m) {
+                return collect([
+                    'url' => $m->url,
+                    'ally_code' => $m->ally_code,
+                    'player' => $m->player,
+                    'characters' => $m->characters
+                ])->put('dm_status', $m->roles->dm_status);
+            })->values();
+        return response()->json($members);
+    }
+
     public function listMembers($guild, $team, $mode = 'guild', int $index = PHP_INT_MAX) {
         $guild = Guild::findOrFail($guild);
         $group = null;

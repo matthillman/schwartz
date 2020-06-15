@@ -51,6 +51,11 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
     Route::resource('tw-teams', 'TerritoryCountersController');
     Route::resource('character-mods', 'UnitModPreferenceController');
 
+    Route::get('/twp/{plan}/data', 'TerritoryWarPlanController@getPlan')->name('tw-plan.get-data');
+    Route::get('/squads/{group}/data', 'SquadController@getSquads')->name('squads.get-data');
+    Route::get('/units/list', 'MetadataController@listUnits')->name('units.list');
+    Route::get('/guild/{guild}/members/data', 'GuildController@getMemberData')->name('guild.member-data');
+
     Route::get('/units', 'MetadataController@units')->name('units');
     Route::get('/categories', 'MetadataController@categories')->name('categories');
     Route::get('/guilds', 'GuildController@listGuilds')->name('guilds');

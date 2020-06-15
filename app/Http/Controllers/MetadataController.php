@@ -25,6 +25,10 @@ class MetadataController extends Controller
         return view('categories');
     }
 
+    public function unitList() {
+        return Unit::all()->sortBy('name')->values();
+    }
+
     public function ggUser($user, $param) {
         return redirect()->away("https://swgoh.gg/u/$user/$param");
     }

@@ -15,7 +15,12 @@
                 </div>
             </div>
         </div>
-        <div class="row no-margin">
+
+        <div class="column align-items-center justify-content-center" v-if="!sortedSquads.length">
+            <h2>Loading Plan Data…</h2>
+            <loading-indicator></loading-indicator>
+        </div>
+        <div class="row no-margin" v-if="sortedSquads.length">
             <div class="col-8">
                 <div class="row no-margin justify-content-between align-items-baseline">
                     <h2>Zone Config</h2>
@@ -111,8 +116,8 @@
                                 <h4>Squads</h4>
                             </div>
                             <div>
-                                <a :href="`/guild/${plan.guild.id}/${plan.squad_group.id}/guild/0`" target="_blank"><ion-icon name="eye" size="medium"></ion-icon></a>
-                                <a :href="`/squads?group=${plan.squad_group.id}`"><ion-icon name="pencil" size="medium"></ion-icon></a>
+                                <a :href="`/guild/${plan.guild.id}/${plan.squad_group_id}/guild/0`" target="_blank"><ion-icon name="eye" size="medium"></ion-icon></a>
+                                <a :href="`/squads?group=${plan.squad_group_id}`"><ion-icon name="pencil" size="medium"></ion-icon></a>
                             </div>
                         </div>
                     </template>
@@ -289,12 +294,15 @@ export default {
     props: {
         userId: Number,
         plan: Object,
-        squads: Object,
-        units: Object,
-        members: Array,
         activeMembers: Array,
     },
-    mounted() {
+    async mounted() {
+        const squadResponse = await axios.get(`/squads/${this.plan.squad_group_id}/data`);
+        this.squadData.data = squadResponse.data.squads;
+        this.unitData.data = squadResponse.data.units;
+        const memResponse = await axios.get(`/guild/${this.plan.guild.id}/members/data?units=${Object.keys(this.units).join(',')}`);
+        this.members.push(... memResponse.data);
+
         this.ourMembers = this.members.filter(m => this.includedAllyCodes.includes(m.ally_code));
         this.sortedSquads = Object.values(this.squads).sort((a, b) => {
             const glList = ['GLREY', 'SUPREMELEADERKYLOREN'];
@@ -402,7 +410,23 @@ export default {
             userList: [],
             dragTarget: null,
             dropOK: false,
+
+            squadData: {
+                data: {},
+            },
+            unitData: {
+                data: {},
+            },
+            members: [],
         };
+    },
+    computed: {
+        squads() {
+            return this.squadData.data;
+        },
+        units() {
+            return this.unitData.data;
+        }
     },
     watch: {
         currentZone() {
