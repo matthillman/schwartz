@@ -64,10 +64,11 @@ class APIController extends Controller
     }
 
     public function register(Request $request, $id, $discord, $server = null) {
-        $existing = User::where(['discord_id' => $id])->firstOrNew()->allyCodeForGuild($server);
+        $existing = User::firstOrNew(['discord_id' => $id])->allyCodeForGuild($server);
         if (is_null($existing)) {
             $server = null;
         }
+        $id = str_replace('-', '', $id);
         AllyCodeMap::upsert(['ally_code' => $id, 'server_id' => $server, 'discord_id' => $discord], "(discord_id, server_id, ally_code)");
         return response()->json([]);
     }
