@@ -71,7 +71,7 @@ class User extends Authenticatable
         }
 
         if (!$this->exists) {
-            $this->active = $this->accounts->reduce(function($c, $m) { return $c || $m->guild->schwartz; }, false);
+            $this->active = $this->accounts->isNotEmpty();
             $frax = User::where('discord_id', '297101898375364609')->first();
             if ($frax) {
                 $frax->notify(new \App\Notifications\DiscordMessage("New user login: $this->name ($this->discord) ($this->active)"));
