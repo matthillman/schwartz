@@ -126,7 +126,7 @@ class PullGuild extends Command
             }
         }
 
-        Guild::withoutSyncingToSearch(function() use ($guild) {
+        Guild::withoutSyncingToSearch(function() use ($guild, $parser) {
             $guild->name = $parser->name();
             $guild->gp = $parser->gp();
             $guild->icon = array_get($parser->data, 'bannerLogo', array_get($parser->data, 'bannerLogoId'));
