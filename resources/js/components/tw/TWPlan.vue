@@ -302,6 +302,7 @@ export default {
         this.unitData.data = squadResponse.data.units;
         const memResponse = await axios.get(`/guild/${this.plan.guild.id}/members/data?units=${Object.keys(this.units).join(',')}`);
         this.members.push(... memResponse.data);
+        this.includedAllyCodes.push(... (this.activeMembers.length ? this.activeMembers : this.members.map(m => m.ally_code)));
 
         this.ourMembers = this.members.filter(m => this.includedAllyCodes.includes(m.ally_code));
         this.sortedSquads = Object.values(this.squads).sort((a, b) => {
@@ -393,7 +394,7 @@ export default {
             currentZone: 1,
             ourPlan: this.plan,
             sortedSquads: [],
-            includedAllyCodes: this.activeMembers.length ? this.activeMembers : this.members.map(m => m.ally_code),
+            includedAllyCodes: [],
             ourMembers: [],
             draggingMember: null,
             dragMemberRef: null,
