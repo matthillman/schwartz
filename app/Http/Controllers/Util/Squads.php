@@ -172,7 +172,7 @@ trait Squads {
             $guildSquads = $guildSquads->concat($s);
         }
 
-        $personalSquads = SquadGroup::where('user_id', auth()->user()->id)->get()->map(function($group) use ($account) {
+        $personalSquads = SquadGroup::where('user_id', auth()->user()->id)->get()->map(function($group) {
             return ['label' => $group->name, 'value' => $group->id, 'guild' => -1];
         });
 
