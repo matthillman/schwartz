@@ -3,11 +3,12 @@
 namespace App\Util;
 
 use DB;
+use Illuminate\Support\Collection;
 
 trait UpdatesStats {
 
     function updateMemberStats($members) {
-        $allyCodes = collect($members)->pluck('ally_code')->map(function($c) { return "'$c'"; })->join(', ');
+        $allyCodes = Collection::wrap($members)->pluck('ally_code')->map(function($c) { return "'$c'"; })->join(', ');
         return DB::statement("INSERT into member_statistics(member_id, data, created_at, updated_at)
         select members.id, row_to_json(sums)::jsonb - 'ally_code' as data, now() as created_at, now() as updated_at
             from (

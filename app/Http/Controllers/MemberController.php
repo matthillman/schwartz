@@ -15,6 +15,8 @@ use App\Jobs\ProcessUser;
 use Illuminate\Http\Request;
 use SwgohHelp\Enums\UnitStat;
 
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+
 class MemberController extends Controller
 {
     use Util\Squads;
@@ -302,8 +304,8 @@ class MemberController extends Controller
                     'm2' => array_get($second, 'relic_seven', 0) + array_get($second, 'relic_six', 0) + array_get($second, 'relic_five', 0) + array_get($second, 'relic_four', 0) + array_get($second, 'relic_three', 0) + array_get($second, 'relic_two', 0) + array_get($second, 'relic_one', 0),
                 ],
                 'g_total' => [
-                    'm1' => $gFirst['gear_thirteen'] + $gFirst['gear_twelve'] + $gFirst['gear_eleven'],
-                    'm2' => $second['gear_thirteen'] + $second['gear_twelve'] + $second['gear_eleven'],
+                    'm1' => array_get($gFirst, 'gear_thirteen', 0) + array_get($gFirst, 'gear_twelve', 0) + array_get($gFirst, 'gear_eleven', 0),
+                    'm2' => array_get($second, 'gear_thirteen', 0) + array_get($second, 'gear_twelve', 0) + array_get($second, 'gear_eleven', 0),
                 ],
             ];
 
