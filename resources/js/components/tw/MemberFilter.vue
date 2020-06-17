@@ -64,6 +64,11 @@
                                         :classes="'mini'"
                                     ></character>
                                 </div>
+                                <div v-else class="column char-image-column">
+                                    <div class="char-image-square small locked" :class="[units[base_id].alignment]">
+                                        <img draggable="false" :src="`/images/units/${base_id}.png`">
+                                    </div>
+                                </div>
                             </td>
                             <td v-if="squad.additional_members.length > 4">
                                 <div class="column justify-content-center align-items-center extra-units">
