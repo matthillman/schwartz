@@ -161,7 +161,7 @@ class MemberController extends Controller
                     'Health' => 'UNITSTATMAXHEALTH',
                     'Protection' => 'UNITSTATMAXSHIELD',
                     'Speed' => 'UNITSTATSPEED',
-                    'Critical Damage' => 'UNITSTATCRITICALDAMAGE',
+                    'Crit Damage' => 'UNITSTATCRITICALDAMAGE',
                     'Potency' => 'UNITSTATACCURACY',
                     'Tenacity' => 'UNITSTATRESISTANCE',
                     'Health Steal' => 'UNITSTATHEALTHSTEAL',
@@ -171,25 +171,25 @@ class MemberController extends Controller
             'stats_right' => [
                 'Physical Offense' => [
                     'Damage' => 'UNITSTATATTACKDAMAGE',
-                    'Critical Chance' => 'UNITSTATATTACKCRITICALRATING',
+                    'Crit Chance' => 'UNITSTATATTACKCRITICALRATING',
                     'Armor Penetration' => 'UNITSTATARMORPENETRATION',
                     'Accuracy' => 'UNITSTATDODGENEGATERATING',
                 ],
                 'Physical Survivability' => [
                     'Armor' => 'UNITSTATARMOR',
                     'Dodge Chance' => 'UNITSTATDODGERATING',
-                    'Critical Avoidance' => 'UNITSTATATTACKCRITICALNEGATERATING',
+                    'Crit Avoidance' => 'UNITSTATATTACKCRITICALNEGATERATING',
                 ],
                 'Special Offense' => [
                     'Damage' => 'UNITSTATABILITYPOWER',
-                    'Critical Chance' => 'UNITSTATABILITYCRITICALRATING',
+                    'Crit Chance' => 'UNITSTATABILITYCRITICALRATING',
                     'Armor Penetration' => 'UNITSTATSUPPRESSIONPENETRATION',
                     'Accuracy' => 'UNITSTATDEFLECTIONNEGATERATING',
                 ],
                 'Special Survivability' => [
                     'Armor' => 'UNITSTATSUPPRESSION',
                     'Dodge Chance' => 'UNITSTATDEFLECTIONRATING',
-                    'Critical Avoidance' => 'UNITSTATABILITYCRITICALNEGATERATING',
+                    'Crit Avoidance' => 'UNITSTATABILITYCRITICALNEGATERATING',
                 ],
             ]
         ]);

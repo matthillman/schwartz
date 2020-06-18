@@ -97,7 +97,7 @@
                                             </div>
                                             @isset($skill['image'])
                                                 <img class="ability-flair" src="/images/units/abilities/{{ $skill['image'] }}.png">
-                                            @elseif($skill['tier'] >= 0)
+                                            @elseif(($skill['tier'] ?: -1) >= 0)
                                                 <div class="ability-flair"><div class="value">{{ $skill['tier'] + 1 }}</div></div>
                                             @endisset
                                             <template #tooltip>
