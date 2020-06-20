@@ -293,13 +293,9 @@ class Character extends Model
     }
 
     private static function displaySkill($skill) {
-        $skills = GameData::skills();
-        $recipes = GameData::recipes();
-        $materials = GameData::materials();
-        $abilities = GameData::abilities();
-
         $skill = Collection::wrap($skill);
 
+        $abilities = GameData::abilities();
         if ($skill->get('ability', false)) {
             $ability = $abilities->get($skill->get('id'));
             $skillDef = [
@@ -311,9 +307,12 @@ class Character extends Model
                 ]
             ];
         } else {
+            $skills = GameData::skills();
             $skillDef = $skills->get($skill->get('id'));
             $ability = $abilities->get($skillDef['abilityReference']);
+            $skills = null;
         }
+        $abilities = null;
 
         $skill['name'] = __('messages.' . $ability['nameKey']);
         $skill['description'] = preg_replace('/\[-\]\[\/c\]/', '</span>',
@@ -323,10 +322,13 @@ class Character extends Model
         if ($skill->get('tier') >= 0) {
             $tier = $skillDef['tierList'][$skill->get('tier')];
 
+            $recipes = GameData::recipes();
             if ($skill->get('tier') == count($skillDef['tierList']) - 1) {
                 $recipe = $recipes->get($tier['recipeId']);
+                $recipes = null;
                 $currentTier = 0;
 
+                $materials = GameData::materials();
                 foreach ($recipe['ingredientsList'] as $ingredient) {
                     $material = $materials->get($ingredient['id']);
                     if (!is_null($material) && $material['tier'] > $currentTier) {

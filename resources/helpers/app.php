@@ -69,6 +69,10 @@ if (!function_exists('format_stat')) {
 			$stat = $stat->getKey();
 		}
 
+		if (in_array($stat, [ 'UNITSTATATTACKCRITICALRATING', 'UNITSTATABILITYCRITICALRATING'])) {
+			$value = $value / 100;
+		}
+
 		return in_array($stat, $percent_stats) ? sprintf("%.1f%%", $value) : number_format($value);
 	}
 }
