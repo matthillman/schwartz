@@ -74,7 +74,7 @@
       >
         <div class="stat-wrapper">
           <span class="stat">
-            <span>{{ formatStat(keyStat.key === 'power' ? character.power : character.stats.final[keyStat.value]).toLocaleString() }}</span>
+            <span>{{ formatStat(keyStat.key === 'power' ? character.power : character.stats.final[keyStat.value], keyStat.value).toLocaleString() }}</span>
             <ion-icon v-if="keyStat.key === 'power'" name="flash" size="micro"></ion-icon>
             <span v-else class="mod-set-image tier-5 mini" :class="[keyStat.key]"></span>
           </span>
@@ -112,6 +112,29 @@
 
 <script>
 import { UnitStat } from "../util/swgoh-enums";
+
+const percent_stats = [
+  'UNITSTATCRITICALDAMAGE',
+  'UNITSTATATTACKCRITICALRATING',
+  'UNITSTATABILITYCRITICALRATING',
+  'UNITSTATRESISTANCE',
+  'UNITSTATACCURACY',
+  'UNITSTATCRITICALCHANCEPERCENTADDITIVE',
+  'UNITSTATHEALTHSTEAL',
+  'UNITSTATSHIELDPENETRATION',
+  'UNITSTATDODGENEGATERATING',
+  'UNITSTATARMOR',
+  'UNITSTATDODGERATING',
+  'UNITSTATATTACKCRITICALNEGATERATING',
+  'UNITSTATDEFLECTIONNEGATERATING',
+  'UNITSTATSUPPRESSION',
+  'UNITSTATDEFLECTIONRATING',
+  'UNITSTATABILITYCRITICALNEGATERATING',
+];
+
+function getStatKey(value) {
+  return Object.keys(UnitStat).find(key => UnitStat[key] === value);
+}
 
 function range(size, startAt = 0) {
   return [...Array(size).keys()].map(i => i + startAt);
@@ -205,12 +228,22 @@ export default {
   methods: {
     range,
     translate,
-    formatStat: function(value) {
-      if (/\./.test(`${value}`)) {
-        return `${Math.round(value * 10000) / 100}%`;
+    formatStat: function(value, stat) {
+      if (stat === 'power') {
+        return value;
       }
 
-      return value;
+      const statKey = getStatKey(stat);
+
+      if (!statKey) {
+        return value;
+      }
+
+      if ([ 'UNITSTATATTACKCRITICALRATING', 'UNITSTATABILITYCRITICALRATING' ].includes(statKey)) {
+        value = value / 100;
+      }
+
+      return percent_stats.includes(statKey) ? `${parseFloat(value).toFixed(1)}%` : parseInt(value);
     },
     onPopoverOpen: function() {
       if (this.noMods) { return; }
