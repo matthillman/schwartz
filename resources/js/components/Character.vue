@@ -63,7 +63,7 @@
       <div class="stat-container" v-if="showStats">
         <div v-for="(stat, key) in character.key_stats" :key="key" class="stat-wrapper">
           <span class="stat" :grade="character.stat_grade[key]">
-            <span>{{ stat[1] }}</span>
+            <span>{{ formatStat(stat[1], stat[0]).toLocaleString() }}</span>
             <span class="mod-set-image tier-5 mini" :class="[stat[0]]"></span>
           </span>
         </div>
