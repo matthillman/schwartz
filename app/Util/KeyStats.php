@@ -41,7 +41,7 @@ trait KeyStats {
 
     public function statDisplayPair($stat) {
         $val = array_get($this->stats, 'final.'.$stat->getValue(), 0);
-        return [$stat->getKey() => [$stat->displayString() , $this->isPercentStat($stat) ? ($val * 100) . "%" : $val ] ];
+        return [$stat->getKey() => [$stat->displayString() , $val ] ];
     }
 
 }
