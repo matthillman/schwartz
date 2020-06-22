@@ -14,6 +14,7 @@ trait MetaChars {
             $chars = collect([
                 'GLREY' =>               'Rey',
                 'SUPREMELEADERKYLOREN' =>'SL Kylo',
+                'JEDIKNIGHTLUKE' =>      'Jedi Luke',
                 'GENERALSKYWALKER' =>    'Gen. Skywalker',
                 'DARTHREVAN' =>          'Darth Revan',
                 'DARTHMALAK' =>          'Malak',
