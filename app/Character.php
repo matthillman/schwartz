@@ -185,7 +185,7 @@ class Character extends Model
     public function getStatGradeAttribute() {
         return $this->stat_recommendation->mapWithKeys(function ($recommendations, $key) {
             $unitStat = new UnitStat($key);
-            $value = $this->{$unitStat->getKey()};
+            $value = str_replace('%', '', format_stat($this->{$unitStat->getKey()}, $unitStat));
             $rankings = array_get($recommendations, 'tier', []);
             // Get the value of the highest tier our stat passes
             $highest = collect($rankings)->first(function ($v) use ($value) { return $v <= $value; });
