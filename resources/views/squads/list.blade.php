@@ -182,7 +182,7 @@
                                                             @else
                                                             <span class="mod-set-image tier-5 mini {{ mod_image_for_stat(+$key) }}"></span>
                                                             @endif
-                                                            <span>{{ implode('/', $stat['tier']) }}</span>
+                                                            <span>{{ implode('/', array_map(function($s) { return $s > 10000 ? sprintf("%dK", $s / 1000) : $s; }, $stat['tier'])) }}</span>
                                                         </div>
                                                     @endforeach
                                                 </div>

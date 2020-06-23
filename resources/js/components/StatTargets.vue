@@ -9,7 +9,7 @@
             <div v-for="(stat, key) in mutableStats[squad.leader_id]" :key="stat" class="row no-margin align-items-center stat-slash">
                 <ion-icon v-if="key === 'power'" name="flash" size="micro"></ion-icon>
                 <span v-else class="mod-set-image tier-5 mini" :class="iconForStatKey(key)"></span>
-                <span>{{ stat.tier.join('/') }}</span>
+                <span>{{ stat.tier.map(s => s > 10000 ? parseInt(s / 1000) + 'K' : s ).join('/') }}</span>
             </div>
         </div>
 
