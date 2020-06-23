@@ -187,7 +187,7 @@ class MemberController extends Controller
                     'Accuracy' => 'UNITSTATDEFLECTIONNEGATERATING',
                 ],
                 'Special Survivability' => [
-                    'Armor' => 'UNITSTATSUPPRESSION',
+                    'Resistance' => 'UNITSTATSUPPRESSION',
                     'Dodge Chance' => 'UNITSTATDEFLECTIONRATING',
                     'Crit Avoidance' => 'UNITSTATABILITYCRITICALNEGATERATING',
                 ],

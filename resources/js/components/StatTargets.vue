@@ -191,6 +191,8 @@ export default {
                 {label: 'Special Crit Chance', value: UnitStat.UNITSTATABILITYCRITICALRATING, key: 'critchance', short: 'SCC', },
                 {label: 'Tenacity', value: UnitStat.UNITSTATRESISTANCE, key: 'tenacity', short: 'Ten', },
                 {label: 'Potency', value: UnitStat.UNITSTATACCURACY, key: 'potency', short: 'Pot', },
+                {label: 'Armor', value: UnitStat.UNITSTATARMOR, key: 'defense', short: 'Armor', },
+                {label: 'Resistance', value: UnitStat.UNITSTATSUPPRESSION, key: 'defense', short: 'Res', },
                 {label: 'Power', value: 'power', key: 'power', short: 'Power'},
             ],
             saved: false,

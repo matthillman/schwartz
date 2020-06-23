@@ -79,6 +79,8 @@
                     {label: 'Protection', value: UnitStat.UNITSTATMAXSHIELD, key: 'health'},
                     {label: 'Tenacity', value: UnitStat.UNITSTATRESISTANCE, key: 'tenacity'},
                     {label: 'Potency', value: UnitStat.UNITSTATACCURACY, key: 'potency'},
+                    {label: 'Armor', value: UnitStat.UNITSTATARMOR, key: 'defense', },
+                    {label: 'Resistance', value: UnitStat.UNITSTATSUPPRESSION, key: 'defense', },
                 ],
                 sorted: {label: 'Speed', value: UnitStat.UNITSTATSPEED, key: 'speed'},
                 sortCharacter: null,
