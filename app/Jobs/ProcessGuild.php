@@ -58,20 +58,6 @@ class ProcessGuild implements ShouldQueue
      */
     public function handle(JobRepository $jobs)
     {
-        $hasJobScheduled = $jobs->getRecent(-1)
-            ->sortBy('id')
-            ->map(function ($job) {
-                return $this->decode($job);
-            })
-            ->filter(function ($job) {
-                return in_array('guild_id:' . $this->guild, collect($job->payload->tags)->values()->all());
-            })
-            ->isNotEmpty();
-
-        if ($hasJobScheduled) {
-            return;
-        }
-
         Redis::throttle(config('app.host') . '-guild')->allow(2)->every(5 * 60)->then(function() {
             Artisan::call('swgoh:guild', [
                 'guild' => $this->guild
