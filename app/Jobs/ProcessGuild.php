@@ -58,7 +58,7 @@ class ProcessGuild implements ShouldQueue
      */
     public function handle(JobRepository $jobs)
     {
-        $hasJobScheduled = $this->jobs->getRecent(-1)
+        $hasJobScheduled = $jobs->getRecent(-1)
             ->sortBy('id')
             ->map(function ($job) {
                 return $this->decode($job);
