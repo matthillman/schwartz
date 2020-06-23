@@ -12,6 +12,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
+use Laravel\Horizon\Contracts\JobRepository;
+
 class ProcessGuild implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -54,9 +56,23 @@ class ProcessGuild implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(JobRepository $jobs)
     {
-        Redis::throttle('guild')->allow(2)->every(5 * 60)->then(function() {
+        $hasJobScheduled = $this->jobs->getRecent(-1)
+            ->sortBy('id')
+            ->map(function ($job) {
+                return $this->decode($job);
+            })
+            ->filter(function ($job) {
+                return in_array('guild_id:' . $this->guild, collect($job->payload->tags)->values()->all());
+            })
+            ->isNotEmpty();
+
+        if ($hasJobScheduled) {
+            return;
+        }
+
+        Redis::throttle(config('app.host') . '-guild')->allow(2)->every(5 * 60)->then(function() {
             Artisan::call('swgoh:guild', [
                 'guild' => $this->guild
             ]);
@@ -65,11 +81,24 @@ class ProcessGuild implements ShouldQueue
                 Guild::where(['guild_id' => $this->guild])->firstOrFail()
             ));
         }, function() {
-            return $this->release(5 * 60);
+            return $this->release(30);
         });
     }
 
     public function tags() {
         return ['guild', 'guild_id:' . $this->guild];
+    }
+
+    /**
+     * Decode the given job.
+     *
+     * @param  object  $job
+     * @return object
+     */
+    protected function decode($job)
+    {
+        $job->payload = json_decode($job->payload);
+
+        return $job;
     }
 }
