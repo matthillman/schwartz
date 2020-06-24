@@ -67,7 +67,7 @@ class PullGuild extends Command
         $this->info("Starting GuildParser for {$name}…");
 
         if (is_null($guild->id)) {
-            Guild::withoutSyncingToSearch(function() use ($guild, $guildID) {
+            Guild::withoutSyncingToSearch(function() use ($guild, $guildID, $name) {
                 $guild->guild_id = $guildID;
                 $guild->name = $name;
                 $guild->url = 'not_scraped';
