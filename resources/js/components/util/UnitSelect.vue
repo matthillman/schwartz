@@ -48,6 +48,7 @@ export default {
             units: [],
             lastSearchTerm: '',
             unit: this.value,
+            searchID: 0,
         };
     },
     computed: {
@@ -59,12 +60,16 @@ export default {
         maybeDoSearch: _.debounce(async function(search, loading) {
             loading(true);
             this.lastSearchTerm = search;
+            const searchTime = (new Date).getTime();
+            this.searchID = searchTime;
             const response = await axios.get(`/unit-search?search=${search}`);
 
-            this.units = response.data.data;
+            if (this.searchID === searchTime) {
+                this.units = response.data.data;
+                loading(false);
+            }
 
-            loading(false);
-        }, 250),
+        }, 400),
     }
 }
 </script>
