@@ -15,7 +15,7 @@ use App\Jobs\ProcessUser;
 use Illuminate\Http\Request;
 use SwgohHelp\Enums\UnitStat;
 
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class MemberController extends Controller
 {
@@ -140,6 +140,10 @@ class MemberController extends Controller
     public function showCharacter($allyCode, $baseId) {
         $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
 
+        if (request_is_bot() && $member->stats->is_outdated) {
+            throw new ModelNotFoundException;
+        }
+
         return view('member.character', [
             'member' => $member,
             'character' => $member->characters()->with('zetas')->where('unit_name', $baseId)->firstOrFail(),
@@ -219,6 +223,10 @@ class MemberController extends Controller
 
     public function characterMods($character) {
         $c = Character::with(['member', 'unit', 'mods'])->findOrFail($character);
+
+        if (request_is_bot() && $c->member->stats->is_outdated) {
+            throw new ModelNotFoundException;
+        }
 
         return view('member.character_mods', [
             'character' => $c,
