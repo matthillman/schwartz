@@ -224,10 +224,6 @@ class MemberController extends Controller
     public function characterMods($character) {
         $c = Character::with(['member', 'unit', 'mods'])->findOrFail($character);
 
-        if (request_is_bot() && $c->member->stats->is_outdated) {
-            throw new ModelNotFoundException;
-        }
-
         return view('member.character_mods', [
             'character' => $c,
             'attributes' => [
