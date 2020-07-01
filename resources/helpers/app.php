@@ -109,6 +109,16 @@ if (!function_exists('solve')) {
 		return +max( last((new \Solver\Solve(implode('=', $reduced), false))->solution() ) );
 	}
 }
+if (!function_exists('request_is_bot')) {
+    /**
+     * Is the request from the bot?
+	 *
+     * @return Boolean
+     */
+	function request_is_bot() {
+		return stripos(request()->header('schwartz'), 'bot') !== false;
+	}
+}
 
 // if (!function_exists('guzzle')) {
 //     /**

@@ -76,7 +76,6 @@ class PullGuild extends Command
             });
         }
 
-
         if (config('services.shitty_bot.active')) {
             $this->info('Using swgoh.shittybots.me');
             $parser = new ShittyParser($guildID, $isAllyCode);
