@@ -69,7 +69,7 @@ if (!function_exists('format_stat')) {
 			$stat = $stat->getKey();
 		}
 
-		if (in_array($stat, [ 'UNITSTATATTACKCRITICALRATING', 'UNITSTATABILITYCRITICALRATING'])) {
+		if (in_array($stat, [ 'UNITSTATATTACKCRITICALRATING', 'UNITSTATABILITYCRITICALRATING']) && $value > 900) {
 			$value = $value / 100;
 		}
 
