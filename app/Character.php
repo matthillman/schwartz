@@ -230,7 +230,10 @@ class Character extends Model
                         }
                     }
 
-                    return $this->statCompare($left, $comparison, $right) ? $rank : 1;
+                    if (fmod($rank, 1) !== 0.00) {
+                        list(, $rank) = sscanf(1.5, '%d.%d');
+                    }
+                    return $this->statCompare($left, $comparison, $right) ? $rank : "1.$rank";
                 }, $rank);
             }
 

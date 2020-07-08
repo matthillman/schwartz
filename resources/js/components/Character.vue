@@ -62,7 +62,7 @@
       </span>
       <div class="stat-container" v-if="showStats">
         <div v-for="(stat, key) in character.key_stats" :key="key" class="stat-wrapper">
-          <span class="stat" :grade="character.stat_grade[key]">
+          <span class="stat" :grade="Math.trunc(character.stat_grade[key])">
             <span>{{ formatStat(stat[1], key).toLocaleString() }}</span>
             <span class="mod-set-image tier-5 mini" :class="[stat[0]]"></span>
           </span>
@@ -73,7 +73,7 @@
         v-if="showStats && !Object.keys(character.key_stats).map(k => +k).includes(keyStat.value)"
       >
         <div class="stat-wrapper">
-          <span class="stat">
+          <span class="stat" v-if="keyStat.key !== 'stats'">
             <span>{{ formatStat(keyStat.key === 'power' ? character.power : character.stats.final[keyStat.value], keyStat.value).toLocaleString() }}</span>
             <ion-icon v-if="keyStat.key === 'power'" name="flash" size="micro"></ion-icon>
             <span v-else class="mod-set-image tier-5 mini" :class="[keyStat.key]"></span>
@@ -210,7 +210,7 @@ export default {
     statGrade: function() {
       if (!this.character.stat_grade) { return null; }
 
-      let statValues = Object.values(this.character.stat_grade);
+      let statValues = Object.values(this.character.stat_grade).map(Math.trunc);
       return statValues.length
         ? statValues.reduce((c, v) => Math.min(c, v))
         : null;
@@ -229,7 +229,7 @@ export default {
     range,
     translate,
     formatStat: function(value, stat) {
-      if (stat === 'power') {
+      if (stat === 'power' || stat === 'stats') {
         return value;
       }
 
