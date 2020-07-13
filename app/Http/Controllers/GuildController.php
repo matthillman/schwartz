@@ -86,20 +86,24 @@ class GuildController extends Controller
     public function getMemberData(Request $request, $guild) {
         $guild = Guild::findOrFail($guild);
         $unitIDs = explode(',', $request->units);
-        $members = $guild->members()->with(['characters' => function($query) use ($unitIDs) {
+        $members = $guild->members()
+            ->with(['roles', 'characters' => function($query) use ($unitIDs) {
                 $query->with(['zetas', 'rawData'])->whereIn('unit_name', $unitIDs);
             }])
-            ->get()
-            ->sortBy('sort_name', SORT_NATURAL|SORT_FLAG_CASE)
+            ->orderBy("player")
+            ->cursor()
             ->map(function($m) {
                 return collect([
                     'url' => $m->url,
                     'ally_code' => $m->ally_code,
                     'player' => $m->player,
-                    'characters' => $m->characters
-                ])->put('dm_status', $m->roles->dm_status);
-            })->values();
-        return response()->json($members);
+                    'characters' => $m->characters,
+                    'sort_name' => $m->sort_name,
+                    ])
+                    ->put('dm_status', $m->roles->dm_status);
+                });
+        return response()->jsonStream($members);
+
     }
 
     public function listMembers($guild, $team, $mode = 'guild', int $index = PHP_INT_MAX) {

@@ -19,6 +19,7 @@
         <div class="column align-items-center justify-content-center" v-if="!sortedSquads.length">
             <h2>Loading Plan Data…</h2>
             <loading-indicator></loading-indicator>
+            <div class="small-note">(can take up to 30s)</div>
         </div>
         <div class="row no-margin" v-if="sortedSquads.length">
             <div class="col-8">
@@ -794,10 +795,12 @@ export default {
         },
         async pushUserState() {
             try {
-                await axios.put(`/twp/${this.ourPlan.id}/user`, {
-                    id: this.user.id,
-                    zone: this.currentZone,
-                });
+                if (this.userList.length > 1) {
+                    await axios.put(`/twp/${this.ourPlan.id}/user`, {
+                        id: this.user.id,
+                        zone: this.currentZone,
+                    });
+                }
 
                 this.updateBannerCount();
                 this.updateMemberSquadCount();

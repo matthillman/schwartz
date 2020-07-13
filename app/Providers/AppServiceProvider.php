@@ -6,8 +6,10 @@ use Horizon;
 use App\Database\UpsertBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\LazyCollection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Response;
 
 use Storage;
 use Google_Client;
@@ -35,6 +37,32 @@ class AppServiceProvider extends ServiceProvider
         });
         Blade::if('person', function() {
             return stripos(request()->header('schwartz'), 'bot') === false;
+        });
+
+        Response::macro('jsonStream', function (LazyCollection $value) {
+            return Response::stream(function() use ($value) {
+                echo "[";
+                flush();
+                set_time_limit(0);
+
+                $firstRow = true;
+                foreach ($value as $data) {
+                    if ($firstRow) {
+                        $firstRow = false;
+                    } else {
+                        echo ',';
+                    }
+
+                    echo $data->toJson();
+                    flush();
+
+                    $jsonData = null;
+                    $data = null;
+                }
+
+                echo ']';
+                flush();
+            });
         });
 
         $token = $this->app->make('config')->get('services.discord.token');
