@@ -16,7 +16,7 @@ const port = process.env.SWGOH_HELP_STATS_PORT || 3000;
 
 app.use(bodyParser.json({limit:'100mb'}));
 
-app.get('/', (req, res) => res.send('🍺'))
+app.get('/', (req, res) => res.send('🍺'));
 
 app.post('/api', (req, res, next) => {
 	const startTime = new Date;
