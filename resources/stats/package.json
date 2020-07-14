@@ -18,6 +18,7 @@
   "homepage": "https://github.com/matthillman/schwartz#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "node-env-file": "^0.1.8"
+    "node-env-file": "^0.1.8",
+    "shitty-swgoh-stats": "^2.0.1"
   }
 }
