@@ -153,7 +153,7 @@
                             @mouseleave="leaveMember(member)"
                         >
                             <div class="row no-margin justify-content-start align-items-center">
-                                <a :href="`/twp/${plan.id}/member/${member.ally_code}`"><ion-icon name="eye" size="small"></ion-icon></a>
+                                <a :href="`/twp/${plan.id}/member/${member.ally_code}`" target="_assignment"><ion-icon name="eye" size="small"></ion-icon></a>
                                 <div>{{ member.player }}</div>
                                 <tooltip v-if="member.duplicates && member.duplicates.size">
                                     <ion-icon name="warning" size="small" class="warning"></ion-icon>
