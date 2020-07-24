@@ -47,7 +47,7 @@ class Character extends Model
         'stats' => 'array',
     ];
 
-    protected $hidden = [ 'raw' ];
+    protected $hidden = [ 'raw', 'rawData' ];
 
     public function member() {
         return $this->belongsTo(Member::class);
