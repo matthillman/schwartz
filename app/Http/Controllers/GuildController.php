@@ -97,7 +97,7 @@ class GuildController extends Controller
                     'url' => $m->url,
                     'ally_code' => $m->ally_code,
                     'player' => $m->player,
-                    'characters' => $m->characters()->whereIn('unit_name', $unitIDs),
+                    'characters' => $m->characters()->whereIn('unit_name', $unitIDs)->get(),
                     'sort_name' => $m->sort_name,
                     ])
                     ->put('dm_status', $m->roles->dm_status);
