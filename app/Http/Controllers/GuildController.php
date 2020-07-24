@@ -92,12 +92,12 @@ class GuildController extends Controller
             }])
             ->orderBy("player")
             ->cursor()
-            ->map(function($m) {
+            ->map(function($m) use ($unitIDs) {
                 return collect([
                     'url' => $m->url,
                     'ally_code' => $m->ally_code,
                     'player' => $m->player,
-                    'characters' => $m->characters,
+                    'characters' => $m->characters()->whereIn('unit_name', $unitIDs),
                     'sort_name' => $m->sort_name,
                     ])
                     ->put('dm_status', $m->roles->dm_status);
