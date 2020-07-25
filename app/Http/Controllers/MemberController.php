@@ -182,7 +182,7 @@ class MemberController extends Controller
                 'Physical Survivability' => [
                     'Armor' => 'UNITSTATARMOR',
                     'Dodge Chance' => 'UNITSTATDODGERATING',
-                    'Crit Avoidance' => 'UNITSTATATTACKCRITICALNEGATERATING',
+                    'Crit Avoidance' => 'UNITSTATATTACKCRITICALNEGATEPERCENTADDITIVE',
                 ],
                 'Special Offense' => [
                     'Damage' => 'UNITSTATABILITYPOWER',
@@ -193,7 +193,7 @@ class MemberController extends Controller
                 'Special Survivability' => [
                     'Resistance' => 'UNITSTATSUPPRESSION',
                     'Dodge Chance' => 'UNITSTATDEFLECTIONRATING',
-                    'Crit Avoidance' => 'UNITSTATABILITYCRITICALNEGATERATING',
+                    'Crit Avoidance' => 'UNITSTATABILITYCRITICALNEGATEPERCENTADDITIVE',
                 ],
             ]
         ]);

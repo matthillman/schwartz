@@ -116,10 +116,6 @@ class Character extends Model
             $total = "$total (+10%)";
         }
 
-        if ($stat == 'UNITSTATCRITICALCHANCEPERCENTADDITIVE') {
-            $total = $total / 100;
-        }
-
         return $total;
     }
     public function getKeyStatsAttribute() {
