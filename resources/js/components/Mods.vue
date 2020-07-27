@@ -244,7 +244,7 @@
                     arrow: ['all', 'speed', 'offense', 'protection', 'health', 'crit avoidance'],
                     circle: ['all', 'protection', 'health'],
                     cross: ['all', 'offense', 'protection', 'health', 'potency', 'tenacity'],
-                    triangle: ['all', 'critical damage', 'offense', 'protection', 'health'],
+                    triangle: ['all', 'critical damage', 'offense', 'protection', 'health', 'critical chance'],
                 },
                 onlyPrimary: {
                     square: null,
