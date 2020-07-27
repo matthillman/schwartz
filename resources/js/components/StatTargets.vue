@@ -62,12 +62,13 @@
                         </div>
                         <collapsable v-for="stat in sortedStats" :key="stat.value" :value="openCard == stat.value" v-on:input="openCard = ($event ? stat.value : null)" styleClass="stat-target-container">
                             <template #top-trigger="{open}">
-                                <div class="row no-margin align-items-center">
+                                <div class="row no-margin align-items-center stat-header">
                                     <ion-icon :name="open ? `chevron-down` : `chevron-forward`" size="small"></ion-icon>
 
                                     <ion-icon v-if="stat.key === 'power'" name="flash" size="micro"></ion-icon>
                                     <span v-else class="mod-set-image tier-5 mini" :class="stat.key"></span>
                                     <span>{{ stat.label }}</span>
+                                    <button class="btn btn-danger btn-icon inverted" @click="deleteStat(stat)"><ion-icon name="remove-circle" size="small"></ion-icon></button>
                                 </div>
                             </template>
 
@@ -244,6 +245,9 @@ export default {
             this.openCard = this.newStat.value;
             this.newStat = this.unusedStats[0];
         },
+        deleteStat(stat) {
+            this.$delete(this.mutableStats[this.selected], stat.value);
+        },
         showRelated(stat, char_id) {
             this.$set(this.related, stat.value, char_id);
         },
@@ -394,6 +398,28 @@ export default {
             border: 4px solid $swgoh-orange;
             border-bottom-color: transparent;
             height: 11px;
+        }
+    }
+
+    .stat-header {
+        position: relative;
+
+        > button.btn-danger {
+            position: absolute;
+            left: -2px;
+            top: -2px;
+            opacity: 0;
+            transition: opacity 300ms ease-out;
+            background: white;
+            border-radius: 50%;
+            padding: 0px;
+            box-shadow: 0px 0px 2px black;
+        }
+
+        &:hover {
+            > button.btn-danger {
+                opacity: 1;
+            }
         }
     }
 
