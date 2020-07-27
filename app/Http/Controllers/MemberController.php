@@ -79,7 +79,7 @@ class MemberController extends Controller
     public function mods($allyCode) {
         $member = Member::with('mods')->where('ally_code', $allyCode)->firstOrFail();
 
-        return response()->jsonStream($member->mods);
+        return response()->json($member->setVisible(['player', 'guild_name', 'ally_code', 'mods']));
     }
 
     public function updateDiscordMapping(Request $request, $allyCode) {

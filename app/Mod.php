@@ -28,12 +28,26 @@ class Mod extends Model
         'secondary_3_type', 'secondary_3_value',
         'secondary_4_type', 'secondary_4_value',
         'raw',
+        'unit',
     ];
-    protected $appends = ['primary', 'secondaries', 'rolls'];
+    protected $appends = [
+        'primary',
+        'secondaries',
+        'rolls',
+        'location_id',
+        'location_alignment',
+    ];
 
     protected $casts = [
         'raw' => 'array',
     ];
+
+    public function user() {
+        return $this->belongsTo(ModUser::class, 'mod_user_id');
+    }
+    public function unit() {
+        return $this->belongsTo(Unit::class, 'location', 'base_id')->withDefault([ 'name' => null, 'alignment' => 1 ]);
+    }
 
     public function getPrimaryAttribute($value) {
         return [
@@ -79,19 +93,19 @@ class Mod extends Model
         }
     }
 
-    public function user() {
-        return $this->belongsTo(ModUser::class, 'mod_user_id');
+    public function getLocationAlignmentAttribute() {
+        return $this->unit->alignment;
+    }
+    public function getLocationIdAttribute() {
+        return $this->attributes['location'];
     }
 
     public function toArray() {
         $json = parent::toArray();
 
-        $char = Unit::where('base_id', $json['location'])->first();
-
-        $json['location_id'] = $json['location'];
-        $json['location_alignment'] = $char ? $char->alignment : 'neutral';
-        $json['location'] = $char ? $char->name : null;
+        $json['location'] = $this->unit->name;
 
         return $json;
     }
+
 }
