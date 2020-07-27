@@ -88,6 +88,8 @@ class Mod extends Model
 
         $char = Unit::where('base_id', $json['location'])->first();
 
+        $json['location_id'] = $json['location'];
+        $json['location_alignment'] = $char ? $char->alignment : 'neutral';
         $json['location'] = $char ? $char->name : null;
 
         return $json;
