@@ -76,6 +76,12 @@ class MemberController extends Controller
         ]);
     }
 
+    public function mods($allyCode) {
+        $member = Member::with('mods')->where('ally_code', $allyCode)->firstOrFail();
+
+        return response()->jsonStream($member->mods);
+    }
+
     public function updateDiscordMapping(Request $request, $allyCode) {
         $validated = $request->validate([
             'value' => 'required',
