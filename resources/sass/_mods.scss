@@ -164,7 +164,7 @@
     &::after {
       content: '';
       background: url('/images/mods/mod-icons.png');
-      $bg-size-x: 8 * $icon-grid-size;
+      $bg-size-x: 9 * $icon-grid-size;
       $bg-size-y: 6 * $icon-grid-size;
       background-size: $bg-size-x $bg-size-y;
       width: $icon-grid-size;
@@ -189,6 +189,7 @@
     &.critdamage::after { background-position-x: -1 * 5 * $icon-grid-size; }
     &.potency::after    { background-position-x: -1 * 6 * $icon-grid-size; }
     &.tenacity::after   { background-position-x: -1 * 7 * $icon-grid-size; }
+    &.critavoid::after  { background-position-x: -1 * 8 * $icon-grid-size; }
 
     &.tier-1::after { background-position-y: -1 * 0 * $icon-grid-size; }
     &.tier-2::after { background-position-y: -1 * 1 * $icon-grid-size; }
@@ -214,7 +215,7 @@
     display: inline-block;
     position: relative;
     background: url('/images/mods/mod-icons.png');
-    $bg-size-x: 8 * $icon-grid-size;
+    $bg-size-x: 9 * $icon-grid-size;
     $bg-size-y: 6 * $icon-grid-size;
     background-size: $bg-size-x $bg-size-y;
     width: $icon-grid-size;
@@ -228,6 +229,7 @@
     &.critdamage { background-position-x: -1 * 5 * $icon-grid-size; }
     &.potency    { background-position-x: -1 * 6 * $icon-grid-size; }
     &.tenacity   { background-position-x: -1 * 7 * $icon-grid-size; }
+    &.critavoid  { background-position-x: -1 * 8 * $icon-grid-size; }
 
     &.tier-1 { background-position-y: -1 * 0 * $icon-grid-size; }
     &.tier-2 { background-position-y: -1 * 1 * $icon-grid-size; }

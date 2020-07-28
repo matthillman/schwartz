@@ -194,6 +194,7 @@ export default {
                 {label: 'Potency', value: UnitStat.UNITSTATACCURACY, key: 'potency', short: 'Pot', },
                 {label: 'Armor', value: UnitStat.UNITSTATARMOR, key: 'defense', short: 'Armor', },
                 {label: 'Resistance', value: UnitStat.UNITSTATSUPPRESSION, key: 'defense', short: 'Res', },
+                {label: 'Crit Avoidance', value: UnitStat.UNITSTATATTACKCRITICALNEGATEPERCENTADDITIVE, key: 'critavoid', short: 'CA', },
                 {label: 'Power', value: 'power', key: 'power', short: 'Power'},
             ],
             saved: false,

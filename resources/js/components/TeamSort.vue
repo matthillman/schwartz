@@ -84,6 +84,7 @@
                     {label: 'Potency', value: UnitStat.UNITSTATACCURACY, key: 'potency'},
                     {label: 'Armor', value: UnitStat.UNITSTATARMOR, key: 'defense', },
                     {label: 'Resistance', value: UnitStat.UNITSTATSUPPRESSION, key: 'defense', },
+                    {label: 'Crit Avoidance', value: UnitStat.UNITSTATATTACKCRITICALNEGATEPERCENTADDITIVE, key: 'critavoid', },
                 ],
                 sorted: {label: 'Speed', value: UnitStat.UNITSTATSPEED, key: 'speed'},
                 sortCharacter: null,
