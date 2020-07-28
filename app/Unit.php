@@ -63,7 +63,7 @@ class Unit extends Model
         return $this->hasOne(UnitModPreference::class, 'unit_id', 'base_id');
     }
     public function getNameAttribute($value) {
-        return __('messages.'.$value);
+        return strlen($value) ? __('messages.'.$value) : $value;
     }
     public function getShortNameAttribute($value) {
         $name = $this->name;
