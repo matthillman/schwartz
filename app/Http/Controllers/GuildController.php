@@ -261,6 +261,24 @@ class GuildController extends Controller
         return response()->json($guild->mod_data);
     }
 
+    public function modObjects($guild) {
+        $guild = Guild::with('members.mods')->where('guild_id', $guild)->firstOrFail();
+
+        $members = $guild->members()
+            ->orderBy("player")
+            ->cursor()
+            ->map(function($m) use ($guild) {
+                return collect([
+                    'guild' => $guild->name,
+                    'ally_code' => $m->ally_code,
+                    'player' => $m->player,
+                    'mods' => $m->mods,
+                    'sort_name' => $m->sort_name,
+                    ]);
+                });
+        return response()->jsonStream($members);
+    }
+
     public function compareGuilds($first, $second) {
         if (preg_match('/^\d{3}-?\d{3}-?\d{3}$/', $first)) {
             $ally = preg_replace('/[^0-9]/', '', $first);

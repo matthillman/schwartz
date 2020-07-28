@@ -117,6 +117,7 @@ Route::group(['middleware' => ['auth:web,admin']], function() {
 Route::get('sheet/guild/{guild}', 'GuildController@guildGP')->name('guild.guild.sheet');
 Route::get('sheet/guild/{guild}/mods', 'GuildController@guildMods')->name('guild.modsList.sheet');
 Route::get('sheet/member/{ally_code}/mods', 'MemberController@mods')->name('member.modsList.sheet');
+Route::get('sheet/guild/{guild}/mod_data', 'GuildController@modObjects')->name('guild.modsObjects.sheet');
 
 Route::group(['middleware' => ['auth.or.client:web,admin,bot']], function() {
     Route::get('/relics', 'RelicController@index')->name('relic.recommendations');
