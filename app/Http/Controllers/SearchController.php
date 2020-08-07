@@ -65,6 +65,12 @@ class SearchController extends Controller
             $unit = Unit::search($request->search)->where('combat_type', 1)->first();
         }
 
-        return response()->json($member->characters()->where('unit_name', $unit->base_id)->firstOrFail());
+        $u = $member->characters()->where('unit_name', $unit->base_id)->first();
+
+        if ($u) {
+            return response()->json($u);
+        }
+
+        abort(404);
     }
 }
