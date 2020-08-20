@@ -280,6 +280,10 @@ class PullGameData extends Command
 
         Cache::store('game-data')->flush();
 
+        $this->info("Reloading the stat service…");
+        $response = guzzle()->post(config('services.swgoh_stats.url') . '/reload', []);
+        $this->info($response->getBody());
+
         $time = Carbon::now()->diffInSeconds($start);
         $this->comment("Returning. Fetching took {$time} seconds.");
         return 0;

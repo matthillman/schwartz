@@ -6,8 +6,13 @@ env(`${__dirname}/../../.env`);
 
 const fs = require('fs');
 const Stats = require('shitty-swgoh-stats');
-const statData = JSON.parse(fs.readFileSync(`${__dirname}/../../storage/app/game_data/crinolo_core`, 'utf8'));
-const sts = new Stats(statData);
+let sts = null;
+const reloadStats = () => {
+	const statData = JSON.parse(fs.readFileSync(`${__dirname}/../../storage/app/game_data/crinolo_core`, 'utf8'));
+	sts = new Stats(statData);
+};
+
+reloadStats();
 
 const express = require('express');
 var bodyParser = require('body-parser');
@@ -39,6 +44,12 @@ app.post('/api', (req, res, next) => {
 
 	res.json(obj);
 	next();
+});
+
+app.post('/reload', (req, res) => {
+	reloadStats();
+
+	res.send('🍻');
 });
 
 // log request
