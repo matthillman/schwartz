@@ -276,7 +276,7 @@ class Character extends Model
             return strlen($ability['unlockRecipeId']) > 0;
         });
 
-        $ourPurchasedAbilities = collect($this->rawData->data['purchasedAbilityIdList']);
+        $ourPurchasedAbilities = collect($this->rawData->data['purchasedAbilityIdList'] ?? []);
 
         $abilitiesWithoutSkills = $abilitiesWithoutSkills->map(function($ability) use ($ourPurchasedAbilities) {
             return collect([
