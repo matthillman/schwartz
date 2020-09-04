@@ -46,6 +46,9 @@
                 this.tags = response.data;
                 if (this.tags.length) {
                     this.tag = this.tags[0];
+                } else {
+                    this.tags = ['guild', 'mods', 'bot'];
+                    this.tag = this.tags[0];
                 }
             },
 
