@@ -47,7 +47,11 @@
                 if (this.tags.length) {
                     this.tag = this.tags[0];
                 } else {
-                    this.tags = ['guild', 'mods', 'bot'];
+                    this.tags = [
+                        {tag: 'guild'},
+                        {tag: 'mods'},
+                        {tag: 'bot'},
+                    ];
                     this.tag = this.tags[0];
                 }
             },
