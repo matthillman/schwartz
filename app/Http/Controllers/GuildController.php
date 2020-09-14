@@ -11,6 +11,7 @@ use App\Character;
 use App\SquadGroup;
 use App\Jobs\ProcessGuild;
 use Illuminate\Http\Request;
+use SwgohHelp\Enums\UnitStat;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -276,6 +277,36 @@ class GuildController extends Controller
                     'sort_name' => $m->sort_name,
                     ]);
                 });
+        return response()->jsonStream($members);
+    }
+
+    public function memberCharacterJson($guild) {
+        $guild = Guild::with('members.characters')->where('guild_id', $guild)->firstOrFail();
+
+        $members = $guild->members()
+            ->orderBy("player")
+            ->cursor()
+            ->mapWithKeys(function($m) use ($guild) {
+                return [
+                    $m->ally_code => collect([
+                        'player' => $m->player,
+                        'ally_code' => $m->ally_code,
+                        'characters' => $m->characters->mapWithKeys(function($c) {
+                            return collect([
+                                $c->unit_name => collect([
+                                    'unit_name' => $c->unit_name,
+                                    'gear_level' => $c->gear_level,
+                                    'power' => $c->power,
+                                    'level' => $c->level,
+                                    'combat_type' => $c->combat_type,
+                                    'rarity' => $c->rarity,
+                                    'relic' => $c->relic,
+                                ])->concat(collect(UnitStat::toArray())->keys()->skip(1)->mapWithKeys(fn($k) => [$k => $c->$k]))
+                            ]);
+                         })
+                    ])
+                    ];
+            });
         return response()->jsonStream($members);
     }
 
