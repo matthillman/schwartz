@@ -301,7 +301,7 @@ class GuildController extends Controller
                                     'combat_type' => $c->combat_type,
                                     'rarity' => $c->rarity,
                                     'relic' => $c->relic,
-                                ])->concat(collect(UnitStat::toArray())->keys()->skip(1)->mapWithKeys(fn($k) => [$k => $c->$k]))
+                                ])->merge(collect(UnitStat::toArray())->keys()->skip(1)->values()->mapWithKeys(fn($k) => [$k => $c->$k]))
                             ]);
                          })
                     ])
