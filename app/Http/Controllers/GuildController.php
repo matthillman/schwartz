@@ -283,7 +283,7 @@ class GuildController extends Controller
     public function memberCharacterJson($guild) {
         $guild = Guild::with('members.characters')->where('guild_id', $guild)->firstOrFail();
 
-        $members = $guild->members()->limit(1)
+        $members = $guild->members()
             ->orderBy("player")
             ->cursor()
             ->mapWithKeys(function($m) use ($guild) {
@@ -292,39 +292,37 @@ class GuildController extends Controller
                         'player' => $m->player,
                         'ally_code' => $m->ally_code,
                         'characters' => $m->characters()->where('combat_type', 1)->get()
-                            ->mapWithKeys(function($c) {
+                            ->map(function($c) {
                                 return collect([
-                                    $c->unit_name => collect([
-                                        'unit_name' => $c->unit_name,
-                                        'gear_level' => $c->gear_level,
-                                        'power' => $c->power,
-                                        'level' => $c->level,
-                                        'combat_type' => $c->combat_type,
-                                        'rarity' => $c->rarity,
-                                        'relic' => $c->relic,
-                                    ])->merge(collect(
-                                        [
-                                            'UNITSTATMAXHEALTH',
-                                            'UNITSTATSTRENGTH',
-                                            'UNITSTATAGILITY',
-                                            'UNITSTATINTELLIGENCE',
-                                            'UNITSTATSPEED',
-                                            'UNITSTATATTACKDAMAGE',
-                                            'UNITSTATABILITYPOWER',
-                                            'UNITSTATARMOR',
-                                            'UNITSTATSUPPRESSION',
-                                            'UNITSTATARMORPENETRATION',
-                                            'UNITSTATSUPPRESSIONPENETRATION',
-                                            'UNITSTATDODGERATING',
-                                            'UNITSTATDEFLECTIONRATING',
-                                            'UNITSTATATTACKCRITICALRATING ',
-                                            'UNITSTATABILITYCRITICALRATING',
-                                            'UNITSTATCRITICALDAMAGE',
-                                            'UNITSTATACCURACY',
-                                            'UNITSTATRESISTANCE',
-                                        ]
-                                    )->mapWithKeys(fn($k) => [$k => $c->$k]))
-                                ]);
+                                    'unit_name' => $c->unit_name,
+                                    'gear_level' => $c->gear_level,
+                                    'power' => $c->power,
+                                    'level' => $c->level,
+                                    'combat_type' => $c->combat_type,
+                                    'rarity' => $c->rarity,
+                                    'relic' => $c->relic,
+                                ])->merge(collect(
+                                    [
+                                        'UNITSTATMAXHEALTH',
+                                        'UNITSTATSTRENGTH',
+                                        'UNITSTATAGILITY',
+                                        'UNITSTATINTELLIGENCE',
+                                        'UNITSTATSPEED',
+                                        'UNITSTATATTACKDAMAGE',
+                                        'UNITSTATABILITYPOWER',
+                                        'UNITSTATARMOR',
+                                        'UNITSTATSUPPRESSION',
+                                        'UNITSTATARMORPENETRATION',
+                                        'UNITSTATSUPPRESSIONPENETRATION',
+                                        'UNITSTATDODGERATING',
+                                        'UNITSTATDEFLECTIONRATING',
+                                        'UNITSTATATTACKCRITICALRATING ',
+                                        'UNITSTATABILITYCRITICALRATING',
+                                        'UNITSTATCRITICALDAMAGE',
+                                        'UNITSTATACCURACY',
+                                        'UNITSTATRESISTANCE',
+                                    ]
+                                )->mapWithKeys(fn($k) => [$k => $c->$k]));
                             })
                     ])
                     ];
