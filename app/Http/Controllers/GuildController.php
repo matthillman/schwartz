@@ -289,6 +289,7 @@ class GuildController extends Controller
             ->mapWithKeys(function($m) use ($guild) {
                 return [
                     $m->ally_code => collect([
+                        'guild' => $guild->name,
                         'player' => $m->player,
                         'ally_code' => $m->ally_code,
                         'characters' => $m->characters()->where('combat_type', 1)->get()
