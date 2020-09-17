@@ -304,24 +304,38 @@ class GuildController extends Controller
                                     'relic' => $c->relic,
                                 ])->merge(collect(
                                     [
-                                        'UNITSTATMAXHEALTH',
                                         'UNITSTATSTRENGTH',
                                         'UNITSTATAGILITY',
                                         'UNITSTATINTELLIGENCE',
+                                        'UNITSTATMASTERY',
+
+                                        'UNITSTATMAXHEALTH',
+                                        'UNITSTATMAXSHIELD',
                                         'UNITSTATSPEED',
-                                        'UNITSTATATTACKDAMAGE',
-                                        'UNITSTATABILITYPOWER',
-                                        'UNITSTATARMOR',
-                                        'UNITSTATSUPPRESSION',
-                                        'UNITSTATARMORPENETRATION',
-                                        'UNITSTATSUPPRESSIONPENETRATION',
-                                        'UNITSTATDODGERATING',
-                                        'UNITSTATDEFLECTIONRATING',
-                                        'UNITSTATATTACKCRITICALRATING ',
-                                        'UNITSTATABILITYCRITICALRATING',
+
                                         'UNITSTATCRITICALDAMAGE',
                                         'UNITSTATACCURACY',
                                         'UNITSTATRESISTANCE',
+                                        'UNITSTATHEALTHSTEAL',
+                                        'UNITSTATSHIELDPENETRATION',
+
+                                        'UNITSTATATTACKDAMAGE',
+                                        'UNITSTATATTACKCRITICALRATING',
+                                        'UNITSTATARMORPENETRATION',
+                                        'UNITSTATDODGENEGATERATING',
+
+                                        'UNITSTATARMOR',
+                                        'UNITSTATDODGERATING',
+                                        'UNITSTATATTACKCRITICALNEGATEPERCENTADDITIVE',
+
+                                        'UNITSTATABILITYPOWER',
+                                        'UNITSTATABILITYCRITICALRATING',
+                                        'UNITSTATSUPPRESSIONPENETRATION',
+                                        'UNITSTATDEFLECTIONNEGATERATING',
+
+                                        'UNITSTATSUPPRESSION',
+                                        'UNITSTATDEFLECTIONRATING',
+                                        'UNITSTATABILITYCRITICALNEGATEPERCENTADDITIVE',
                                     ]
                                 )->mapWithKeys(fn($k) => [$k => $c->$k]));
                             })
