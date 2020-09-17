@@ -301,7 +301,7 @@ class GuildController extends Controller
                                     'level' => $c->level,
                                     'combat_type' => $c->combat_type,
                                     'rarity' => $c->rarity,
-                                    'relic' => $c->relic,
+                                    'relic' => max($c->relic - 2, 0),
                                 ])->merge(collect(
                                     [
                                         'UNITSTATSTRENGTH',
