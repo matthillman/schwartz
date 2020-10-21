@@ -78,7 +78,7 @@ return [
                 'connection' => 'redis',
                 'queue' => explode(',', env('HORIZON_QUEUES', 'default')),
                 'balance' => 'simple',
-                'processes' => 3,
+                'processes' => count(env('HORIZON_QUEUES', 'default')),
                 'tries' => 3,
             ],
         ],
