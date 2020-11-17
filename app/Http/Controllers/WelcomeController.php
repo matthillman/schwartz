@@ -27,6 +27,7 @@ class WelcomeController extends Controller
             $guildData = $sheetData->data($guild->guild_id);
             $guild->tb = $guildData->get('tb');
             $guild->stars = $guildData->get('stars');
+            $guild->kam = $guildData->get('kam');
             $guild->focus = $guildData->get('focus');
             $guild->raids = $guildData->get('raids');
             return $guild;
