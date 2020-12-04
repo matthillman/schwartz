@@ -23,7 +23,6 @@ class WildcardSearchRule extends SearchRule
             'must' => [
                 'query_string' => [
                     'query' => "*{$this->builder->query}*",
-                    'fuzziness' => 'auto',
                 ],
             ],
         ];
