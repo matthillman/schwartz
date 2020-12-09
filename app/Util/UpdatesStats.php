@@ -36,7 +36,8 @@ trait UpdatesStats {
                     char_sums.relic_four,
                     char_sums.relic_five,
                     char_sums.relic_six,
-                    char_sums.relic_seven
+                    char_sums.relic_seven,
+                    char_sums.relic_eight
                 from
                 (
                     select
@@ -94,7 +95,8 @@ trait UpdatesStats {
                         sum((characters_ranked.relic = 6)::int) as relic_four,
                         sum((characters_ranked.relic = 7)::int) as relic_five,
                         sum((characters_ranked.relic = 8)::int) as relic_six,
-                        sum((characters_ranked.relic = 9)::int) as relic_seven
+                        sum((characters_ranked.relic = 9)::int) as relic_seven,
+                        sum((characters_ranked.relic = 10)::int) as relic_eight
                     from (
                         select characters.*, rank() over (partition by member_id, combat_type order by power desc) from characters
                     ) characters_ranked

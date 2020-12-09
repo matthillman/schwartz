@@ -37,6 +37,13 @@
             </div>
 
             <div class="row no-margin justify-content-center align-items-center dark">
+                <div class="portrait relic-only centered">
+                    <div class="relic"><span class="value">5+</span></div>
+                </div>
+                <div> {{ items | sumProp('relic_5_plus') | numberWithCommas }}</div>
+            </div>
+
+            <div class="row no-margin justify-content-center align-items-center dark">
                 <div class="portrait mini centered">
                     <div class="gear g13" style="--gear-image:url('/images/units/gear/gear-icon-g13.png');"></div>
                     <span class="value">13</span>
@@ -105,6 +112,7 @@
 		            { prop: 'relic_7', label: 'R7', transform: numberWithCommas  },
 		            { prop: 'relic_6', label: 'R6', transform: numberWithCommas  },
 		            { prop: 'relic_5', label: 'R5', transform: numberWithCommas  },
+		            { prop: 'relic_5_plus', label: 'R5+', transform: numberWithCommas  },
                 ],
                 selected: 0,
                 syncing: false,

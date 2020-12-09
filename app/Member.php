@@ -25,7 +25,7 @@ class Member extends Model
         'guild_name',
         'profile_url',
         'gear_12', 'gear_13',
-        'relic_5', 'relic_6', 'relic_7',
+        'relic_5', 'relic_6', 'relic_7', 'relic_5_plus',
         'speed_10', 'speed_15', 'speed_20', 'speed_25',
         'offense_100',
     ];
@@ -190,6 +190,15 @@ class Member extends Model
     public function getRelic7Attribute() {
         if (is_null($this->stats->data)) { return 0; }
         return $this->stats->data->get('relic_seven');
+    }
+
+    public function getRelic8Attribute() {
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('relic_eight', 0);
+    }
+
+    public function getRelic5PlusAttribute() {
+        return $this->relic_5 + $this->relic_6 + $this->relic_7 + $this->relic_8;
     }
 
     public function getSixDotAttribute() {
