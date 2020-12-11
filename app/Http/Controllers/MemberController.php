@@ -208,6 +208,10 @@ class MemberController extends Controller
     public function listTeams($allyCode, $team) {
         $member = Member::with('characters.zetas')->where('ally_code', $allyCode)->firstOrFail();
 
+        if (request_is_bot() && $member->stats->is_outdated) {
+            throw new ModelNotFoundException;
+        }
+
         if (ctype_digit(strval($team))) {
             $group = SquadGroup::findOrFail($team);
             $highlight = 'gear';
