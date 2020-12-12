@@ -213,7 +213,10 @@ class MemberController extends Controller
         }
 
         if (ctype_digit(strval($team))) {
-            $group = SquadGroup::findOrFail($team);
+            $group = SquadGroup::find($team);
+            if (is_null($group)) {
+                abort(404);
+            }
             $highlight = 'gear';
             $teams = $group->squads->mapWithKeys(function($squad) {
                 return [$squad->display => collect([$squad->leader_id])->concat($squad->additional_members)->toArray()];
