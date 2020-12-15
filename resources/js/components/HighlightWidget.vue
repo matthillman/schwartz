@@ -7,6 +7,12 @@
                     <span>{{ labelFor(stat) }}</span>
                     <template #tooltip>
                         <div class="tooltip-wrapper">
+                            <template v-if="stat === 'relic'">
+                                <ul>
+                                    <li class="demo-swatch tier-3">&gt;= r5</li>
+                                    <li class="demo-swatch tier-0">&lt; r5</li>
+                                </ul>
+                            </template>
                             <template v-if="stat === 'power'">
                                 <ul>
                                     <li class="demo-swatch tier-3">&gt;= 17,500</li>
@@ -68,6 +74,7 @@
                     'power-plus',
                     'power-stars',
                     'gear',
+                    'relic',
                     'mods',
                 ],
                 selected: '',

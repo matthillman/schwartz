@@ -272,6 +272,19 @@ $highlight-colors: (#ceffa4, #b39acd, #f5eda3);
         }
     }
 
+    [highlight="relic"] & [relic] {
+        &.light.light, &.dark.dark {
+            --highlight-color: #{rgb-values-from(nth($highlight-colors, 3))};
+            --bg-color: var(--highlight-color);
+
+            &[relic="1"], &[relic="2"], &[relic="3"], &[relic="4"], &[relic="5"], &[relic="6"] {
+                --highlight-color: #{rgb-values-from($red)};
+                --bg-color: var(--highlight-color);
+                --bg-alpha: 0.75;
+            }
+        }
+    }
+
     [highlight="power-stars"] & [stars] {
         &.light.light, &.dark.dark {
             // background: none;
