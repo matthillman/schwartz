@@ -217,7 +217,7 @@ class MemberController extends Controller
             if (is_null($group)) {
                 abort(404);
             }
-            $highlight = ($team === 29 || $team === 28) ? 'relic' : 'gear';
+            $highlight = ($team == 29 || $team == 28) ? 'relic' : 'gear';
             $teams = $group->squads->mapWithKeys(function($squad) {
                 return [$squad->display => collect([$squad->leader_id])->concat($squad->additional_members)->toArray()];
             });

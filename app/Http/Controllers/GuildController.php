@@ -113,7 +113,7 @@ class GuildController extends Controller
         if (ctype_digit(strval($team))) {
             $group = SquadGroup::findOrFail($team);
             Gate::authorize('view-squad', $group);
-            $highlight = ($team === 29 || $team === 28) ? 'relic' : 'gear';
+            $highlight = ($team == 29 || $team == 28) ? 'relic' : 'gear';
             $teams = $group->squads->mapWithKeys(function($squad) {
                 return [$squad->display => [
                     'chars' => collect([$squad->leader_id])->concat($squad->additional_members)->toArray(),
