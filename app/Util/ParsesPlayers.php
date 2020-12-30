@@ -341,7 +341,7 @@ trait ParsesPlayers {
             $c = $subset->count();
             $index += 1;
             $this->info("${logPrefix}  ➡ Chunk ${index} (${c} rows)");
-            Mod::upsert($subset->toArray(), "(uid)");
+            Mod::upsert($subset->quoteValues()->toArray(), ["uid"]);
         });
         $mods = null;
         unset($mods);
@@ -368,7 +368,7 @@ trait ParsesPlayers {
 
         $cCount = $chars->count();
         $this->info("${logPrefix}➡ Doing the character insert (${cCount} rows)");
-        Character::upsert($chars->toArray(), "(member_id, unit_name)");
+        Character::upsert($chars->quoteValues()->toArray(), ["member_id", "unit_name"]);
 
         $chars = null;
         unset($chars);
@@ -409,7 +409,7 @@ trait ParsesPlayers {
         $zCount = $zetas->count();
         if ($zCount > 0) {
             $this->info("${logPrefix}➡ Doing the zeta insert (${zCount} rows)");
-            CharacterZeta::upsert($zetas->toArray(), "(character_id, zeta_id)");
+            CharacterZeta::upsert($zetas->quoteValues()->toArray(), ["character_id", "zeta_id"]);
             $this->info("${logPrefix}⬅ Done with zeta insert.");
 
             $existing = $member->characters->map(function($c) { return $c->zetas; })->collapse()->pluck('id');

@@ -79,9 +79,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Builder::macro('upsert', function(array $values, $conflict) {
-            $builder = new UpsertBuilder($this);
-            return $this->connection->insert($builder->getQuery($values, $conflict));
+        Collection::macro('quoteValues', function() {
+            return $this->transform(function($item) {
+                return collect($item)->mapWithKeys(function ($value, $key) {
+                    if (is_null($value)) {
+                        $value = 'NULL';
+                    }
+                    if (is_array($value)) {
+                        $value = json_encode($value);
+                    }
+
+                    return [$key => $value];
+                });
+            });
         });
 
         Collection::macro('flipWithKeys', function() {
