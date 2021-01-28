@@ -20,4 +20,5 @@ Route::group(['middleware' => 'client'], function() {
     Route::delete('/registration/{id}/{server?}', 'APIController@deleteRegistration');
     Route::post('/guild-query-response', 'APIController@guildQueryResponse')->name('bot.guild.response');
     Route::post('/send-dm-response', 'APIController@sendDmResponse')->name('bot.dm.response');
+    Route::post('/ping', 'APIController@ping');
 });

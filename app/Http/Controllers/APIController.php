@@ -15,6 +15,10 @@ use App\Jobs\ProcessGuildAlly;
 
 class APIController extends Controller
 {
+    public function ping() {
+        return response()->json(['pong' => true]);
+    }
+
     public function scrapeGuild(Request $request, $id) {
         $isAllyCode = preg_match('/^\d{3}-?\d{3}-?\d{3}$/', $id);
         if ($isAllyCode) {
