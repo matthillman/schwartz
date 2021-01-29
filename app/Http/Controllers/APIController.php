@@ -73,7 +73,7 @@ class APIController extends Controller
             $server = null;
         }
         $id = str_replace('-', '', $id);
-        AllyCodeMap::upsert(['ally_code' => $id, 'server_id' => $server, 'discord_id' => $discord], ["discord_id", "server_id", "ally_code)"]);
+        AllyCodeMap::upsert(['ally_code' => $id, 'server_id' => $server, 'discord_id' => $discord], ["discord_id", "server_id", "ally_code"]);
         return response()->json([]);
     }
 

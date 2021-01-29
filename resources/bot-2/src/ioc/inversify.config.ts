@@ -35,6 +35,8 @@ import { Image } from '../commands/image';
 import { TW } from '../commands/tw';
 import { Help } from '../commands/help';
 import { CommandList } from '../services/command-list';
+import { Pool } from 'pg';
+import { Patron } from '../services/patron';
 
 const container = new Container();
 const procEnv = parseInt(process.env.ENVIRONMENT);
@@ -61,10 +63,19 @@ container.bind<BotConfig>(TYPES.Config).toConstantValue(config);
 
 container.bind<Bot>(TYPES.Bot).to(Bot).inSingletonScope();
 container.bind<Client>(TYPES.Client).toConstantValue(new Client({
-    ws: { intents: ['GUILD_MEMBERS', 'GUILDS'] },
+    ws: { intents: ['GUILD_MEMBERS', 'GUILDS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES'] },
 }));
 container.bind<API>(TYPES.Api).to(API).inSingletonScope();
 
+container.bind<Pool>(TYPES.DBPool).toConstantValue(new Pool({
+    user: process.env.DB_USER,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    host: process.env.DB_HOST ?? '127.0.0.1',
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+    max: process.env.DB_MAX_CLIENTS ? parseInt(process.env.DB_MAX_CLIENTS) : 5,
+}));
+container.bind<Patron>(TYPES.Patron).to(Patron).inSingletonScope();
 container.bind<Broadcast>(TYPES.Broadcast).to(Broadcast).inSingletonScope();
 export type BroadcastProvider = () => Promise<Broadcast>;
 container.bind<BroadcastProvider>(TYPES.BroadcastProvider).toProvider<Broadcast>(context => {

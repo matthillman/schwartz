@@ -1,9 +1,11 @@
-import { Client, Guild, GuildChannel, Message, GuildMember, TextChannel, PartialGuildMember, Role } from 'discord.js';
+import { Client, Guild, GuildChannel, Message, GuildMember, TextChannel } from 'discord.js';
 import { inject, injectable } from 'inversify';
 import { TYPES } from './ioc/types';
 import { MessageResponder } from './services/message-responder';
 import { Environment, Settings } from './services/settings';
 import Enmap from 'enmap';
+import { Patron } from './services/patron';
+
 
 @injectable()
 export class Bot {
@@ -13,6 +15,7 @@ export class Bot {
         @inject(TYPES.Token) private token: string,
         @inject(TYPES.Settings) private settings: Settings,
         @inject(TYPES.SettingsDB) private settingsDB: Enmap,
+        @inject(TYPES.Patron) private patron: Patron,
     ) { }
 
     public async listen(): Promise<string> {
@@ -83,27 +86,14 @@ export class Bot {
         await welcomeChannel.send(welcomeMessage).catch(console.error);
     }
 
-    async onGuildMemberUpdate(member: GuildMember | PartialGuildMember) {
+    async onGuildMemberUpdate(member: GuildMember) {
         if (!member.guild && member.partial) {
             await member.fetch();
         }
 
         if (!member.guild || member.guild.id !== this.settings.config.botGuild) { return; }
 
-
-        const roles = new Map([
-            ['plaid', '793338563398991872'],
-            ['ludicrous', '793338106346471424'],
-            ['ridiculous', '793338361615745036'],
-        ]);
-
-
-        let highest: Role;
-        for (const [role, id] of roles.entries()) {
-            highest = member.roles.cache.find(r => r.id === id);
-            if (highest) { break; }
-        }
-
-        console.log(`[MEMBER UPDATE] Member ${member.nickname ?? member.displayName} updated to role level ${highest?.name ?? 'NONE'}`);
+        await this.patron.updatePatronLevelFor(member);
+        console.log(`Patron level for ${member.displayName}: ${await this.patron.patronLevelFor(member)}`);
     }
 }

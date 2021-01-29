@@ -71,13 +71,6 @@ export class Permissions {
                 level: PermLevel.support,
                 name: 'Bot Support',
                 check: async (message: Message) => {
-                    return message.channel.type === 'text' && message.guild.ownerID === message.author.id;
-                },
-            },
-            {
-                level: PermLevel.support,
-                name: 'Bot Support',
-                check: async (message: Message) => {
                     return settings.config.support.includes(message.author.id);
                 },
             },

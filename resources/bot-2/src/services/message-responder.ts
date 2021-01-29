@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { inject, injectable } from 'inversify';
-import { NoPermissionsError } from '../commands/command';
+import { NoPermissionsError, PatronError } from '../commands/command';
 import { Profile } from '../commands/profile';
 import { TYPES } from '../ioc/types';
 import { Settings } from './settings';
@@ -51,6 +51,12 @@ export class MessageResponder {
                     if (settings.systemNotice) {
                         message.channel.send(err.message);
                     }
+
+                    // We found the right command, just didn't have permissions
+                    return true;
+                }
+                if (err instanceof PatronError) {
+                    message.channel.send(err.message);
 
                     // We found the right command, just didn't have permissions
                     return true;

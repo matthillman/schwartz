@@ -7,6 +7,7 @@ import { Permissions, PermLevel } from '../services/permissions';
 import { Broadcast } from '../services/broadcast';
 import { BroadcastProvider } from '../ioc/inversify.config';
 import { inspect } from 'util';
+import { CombinedPatronLevel, Patron, PatronLevel } from '../services/patron';
 
 export enum CommandCategory {
     system = 'System',
@@ -25,6 +26,7 @@ export interface Command {
     name: string;
     aliases: string[];
     permissionLevel: PermLevel;
+    patronLevel: PatronLevel;
     guildOnly: boolean;
     help: HelpText;
 
@@ -37,10 +39,25 @@ export interface Command {
 const REACT_LIST = ['🍺', '🍻', '🥂', '🍷', '🥃', '🍸', '🍹', '🧉'];
 
 export class NoPermissionsError extends Error {
-    constructor(required: PermLevel, actual: PermLevel, requiredName: string, actualName: string) {
+    constructor(required: PermLevel, actual: PermLevel) {
         super(`You do not have permission to use this command.
- Your permission level is ${actual} (${requiredName})
- This command requires level ${required} (${actualName})`);
+ Your permission level is ${actual} (${PermLevel[actual].toTitleCase()})
+ This command requires level ${required} (${PermLevel[required].toTitleCase()})`);
+
+        // restore prototype chain
+        const actualProto = new.target.prototype;
+
+        if (Object.setPrototypeOf) { Object.setPrototypeOf(this, actualProto); }
+        else { (this as any).__proto__ = actualProto; }
+    }
+}
+
+export class PatronError extends Error {
+    constructor(required: PatronLevel, actual: CombinedPatronLevel) {
+        super(`You do not have the patron level to use this command.
+ Your patron level is ${actual.userLevel} (${PatronLevel[actual.userLevel].toTitleCase()})
+ Your guild's patron level is ${actual.guildLevel} (${PatronLevel[actual.guildLevel].toTitleCase()})
+ This command requires level ${required} (${PatronLevel[required].toTitleCase()})`);
 
         // restore prototype chain
         const actualProto = new.target.prototype;
@@ -55,12 +72,23 @@ export abstract class BaseCommand implements Command {
     abstract name: string;
     abstract aliases: string[];
     permissionLevel = PermLevel.owner;
+    patronLevel = PatronLevel.none;
+    // Implementation of this is such that patronLevel overrides userPatronLevel, but
+    // patronLevel check effectiveLevel, taking the guild sum into consideration,
+    // while userPatronLevel only looks at the specific user's level. This
+    // makes it possible to, say, restrict a command to the guild only
+    // after .plaid, but an individual user only needs .ridiculous
+    //
+    // Setting to .plaid by default so commands only have to specify it if they
+    // need to override it in such a situation
+    userPatronLevel = PatronLevel.plaid;
     guildOnly = false;
     abstract help: HelpText;
 
     @inject(TYPES.Permissions) protected permissions: Permissions;
     @inject(TYPES.Api) protected api: API;
     @inject(TYPES.Client) protected client: Client;
+    @inject(TYPES.Patron) protected patron: Patron;
 
     async handle(content: string, message: Message): Promise<boolean> {
         const args = content.trim().split(/ +/g);
@@ -68,15 +96,22 @@ export abstract class BaseCommand implements Command {
 
         if ([this.name, ...this.aliases].map(n => n.toLowerCase()).includes(givenCommand)) {
             const userLevel = await this.permissions.userLevelFrom(message);
-            if (userLevel >= this.permissionLevel) {
-                console.log(`[CMD] [${this.permissions.nameFor(userLevel)}] ${message.author.username} (${message.author.id}) ran command ${this.name} [${args}]`);
-                await this.execute(args, message);
-
-                await message.react('🎉');
-            } else {
-                console.error(`[CMD] [${this.permissions.nameFor(userLevel)}] ${message.author.username} (${message.author.id}) does not have permission for command ${this.name} [${args}]`);
-                throw new NoPermissionsError(this.permissionLevel, userLevel, this.permissions.nameFor(this.permissionLevel), this.permissions.nameFor(userLevel));
+            if (userLevel < this.permissionLevel) {
+                console.error(`[CMD] [${PermLevel[userLevel].toTitleCase()}] ${message.author.username} (${message.author.id}) does not have permission for command ${this.name} [${args}]`);
+                throw new NoPermissionsError(this.permissionLevel, userLevel);
             }
+
+            const memberPatronLevel = await this.patron.patronLevelFor(message.author);
+
+            if (memberPatronLevel.effectiveLevel < this.patronLevel && memberPatronLevel.userLevel < this.userPatronLevel) {
+                console.error(`[CMD] [${PatronLevel[memberPatronLevel.userLevel].toTitleCase()}] [${PermLevel[userLevel].toTitleCase()}] ${message.author.username} (${message.author.id}) does not have patron level for command ${this.name} [${args}]`);
+                throw new PatronError(this.patronLevel, memberPatronLevel);
+            }
+
+            console.log(`[CMD] [${PatronLevel[memberPatronLevel.userLevel].toTitleCase()}] [${PermLevel[userLevel].toTitleCase()}] ${message.author.username} (${message.author.id}) ran command ${this.name} [${args}]`);
+            await this.execute(args, message);
+
+            await message.react('🎉');
             return true;
         }
 

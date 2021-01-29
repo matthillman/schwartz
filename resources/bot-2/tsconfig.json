@@ -13,7 +13,8 @@
     ],
     "typeRoots": [
       // add path to @types
-      "node_modules/@types"
+      "node_modules/@types",
+      "src/typings.d.ts"
     ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
