@@ -2,12 +2,14 @@ import { GuildChannel, Message, TextChannel } from 'discord.js';
 import Enmap from 'enmap';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../ioc/types';
+import { PatronLevel } from '../services/patron';
 import { BaseCommand, Command, CommandCategory, HelpText  } from './command';
 
 @injectable()
 export class Recruiting extends BaseCommand {
     name = 'recruiting';
     aliases: string[] = [];
+    patronLevel = PatronLevel.plaid;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: 'Echos the profile command in *this* channel for any gg links found in the given channel',

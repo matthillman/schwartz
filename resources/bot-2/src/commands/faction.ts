@@ -1,11 +1,14 @@
 import { Message } from 'discord.js';
 import { injectable } from 'inversify';
+import { PatronLevel } from '../services/patron';
 import { CommandCategory, HelpText, SnapshotCommand } from './command';
 
 @injectable()
 export class Faction extends SnapshotCommand {
     name = 'faction';
     aliases: string[] = ['f'];
+    patronLevel = PatronLevel.plaid;
+    userPatronLevel = PatronLevel.ridiculous;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: `Shows a user's characters from the given faction`,

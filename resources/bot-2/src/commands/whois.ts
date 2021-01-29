@@ -1,13 +1,11 @@
 import { Message } from 'discord.js';
 import { injectable } from 'inversify';
-import { PatronLevel } from '../services/patron';
 import { BaseCommand, CommandCategory, HelpText  } from './command';
 
 @injectable()
 export class Whois extends BaseCommand {
     name = 'whois';
     aliases: string[] = ['whoami'];
-    patronLevel = PatronLevel.plaid;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: 'See all of the registered ally codes',

@@ -1,5 +1,7 @@
 import { Message } from 'discord.js';
 import { injectable } from 'inversify';
+import { PatronLevel } from '../services/patron';
+import { PermLevel } from '../services/permissions';
 import { BaseCommand, CommandCategory, HelpText } from './command';
 
 @injectable()
@@ -14,7 +16,10 @@ export class MyLevel extends BaseCommand {
 
     async execute(_args: string[], message: Message): Promise<boolean> {
         const level = await this.permissions.userLevelFrom(message);
-        await message.reply(`Your permission level is: ${level} - ${this.permissions.nameFor(level)}`);
+        const patron = await this.patron.patronLevelFor(message.author);
+        await message.reply(`Your permission level is: ${level} - ${PermLevel[level].toTitleCase()},
+your patron level is ${PatronLevel[patron.userLevel].toTitleCase()},
+your guild patron level is ${PatronLevel[patron.guildLevel].toTitleCase()}`);
 
         return true;
     }

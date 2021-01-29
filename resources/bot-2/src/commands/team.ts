@@ -1,5 +1,6 @@
 import { Message } from 'discord.js';
 import { injectable } from 'inversify';
+import { PatronLevel } from '../services/patron';
 import { CommandCategory, HelpText, SnapshotCommand } from './command';
 
 const teamList = [
@@ -19,6 +20,8 @@ const teamList = [
 export class Team extends SnapshotCommand {
     name = 'team';
     aliases: string[] = ['t'];
+    patronLevel = PatronLevel.plaid;
+    userPatronLevel = PatronLevel.ridiculous;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: 'Shows teams for a user',

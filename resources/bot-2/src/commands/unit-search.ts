@@ -1,11 +1,14 @@
 import { Message } from 'discord.js';
 import { injectable } from 'inversify';
+import { PatronLevel } from '../services/patron';
 import { CommandCategory, HelpText, SnapshotCommand } from './command';
 
 @injectable()
 export class UnitSearch extends SnapshotCommand {
     name = 'unitSearch';
     aliases: string[] = ['us', 'units'];
+    patronLevel = PatronLevel.plaid;
+    userPatronLevel = PatronLevel.ridiculous;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: 'Shows all unit search results for a given query',
