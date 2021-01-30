@@ -197,7 +197,13 @@ export abstract class SnapshotCommand extends BaseCommand {
         const givenCommand = (args.shift() ?? '').toLowerCase();
 
         if ([this.name, ...this.aliases].map(n => n.toLowerCase()).includes(givenCommand)) {
-            // this.message = message;
+            // Duplicating this check here to bail before we make any further requests
+            const memberPatronLevel = await this.patron.patronLevelFor(message.author);
+            if (memberPatronLevel.effectiveLevel < this.patronLevel && memberPatronLevel.userLevel < this.userPatronLevel) {
+                console.error(`[CMD] [${PatronLevel[memberPatronLevel.userLevel].toTitleCase()}] ${message.author.username} (${message.author.id}) does not have patron level for command ${this.name} [${args}]`);
+                throw new PatronError(this.patronLevel, memberPatronLevel);
+            }
+
             let wantsScrape = false;
             if (args[0] && (args[0].endsWith('scrape') || args[0] === '-s')) {
                 // remove the scrape argument

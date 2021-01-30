@@ -18,8 +18,8 @@ export class MyLevel extends BaseCommand {
         const level = await this.permissions.userLevelFrom(message);
         const patron = await this.patron.patronLevelFor(message.author);
         await message.reply(`Your permission level is: ${level} - ${PermLevel[level].toTitleCase()},
-your patron level is ${PatronLevel[patron.userLevel].toTitleCase()},
-your guild patron level is ${PatronLevel[patron.guildLevel].toTitleCase()}`);
+your patron level is ${patron.userLevel} - ${PatronLevel[patron.userLevel].toTitleCase()},
+your guild patron level is ${patron.guildLevel} - ${PatronLevel[patron.guildLevel].toTitleCase()}`);
 
         return true;
     }
