@@ -23,7 +23,7 @@ export class Bot {
         this.client.on('message', async message => await this.onMessage(message));
         this.client.on('guildCreate', async guild => await this.onGuildCreate(guild));
         this.client.on('guildMemberAdd', async member => await this.onGuildMemberAdd(member));
-        this.client.on('guildMemberUpdate', async (old, updated) => await this.onGuildMemberUpdate(updated));
+        this.client.on('guildMemberUpdate', async (_old, updated) => await this.onGuildMemberUpdate(updated));
         console.info(`Logging into discord`);
         return this.client.login(this.token);
     }
