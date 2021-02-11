@@ -43,7 +43,6 @@ export class MessageResponder {
 
         for (const command of [...this.commands.list, this.help]) {
             try {
-                console.debug(`Checking command ${command.name}`);
                 const handled = await command.handle(content, message);
                 if (handled) { return true; }
             } catch (err) {

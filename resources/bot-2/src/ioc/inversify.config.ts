@@ -37,6 +37,7 @@ import { Help } from '../commands/help';
 import { CommandList } from '../services/command-list';
 import { Pool } from 'pg';
 import { Patron } from '../services/patron';
+import { BotCommandHandler } from '../services/bot-command-handler';
 
 const container = new Container();
 const procEnv = parseInt(process.env.ENVIRONMENT);
@@ -62,6 +63,7 @@ container.bind<string>(TYPES.ApiHost).toConstantValue(process.env.BASE_URL);
 container.bind<BotConfig>(TYPES.Config).toConstantValue(config);
 
 container.bind<Bot>(TYPES.Bot).to(Bot).inSingletonScope();
+container.bind<BotCommandHandler>(TYPES.BotCommandHandler).to(BotCommandHandler).inSingletonScope();
 container.bind<Client>(TYPES.Client).toConstantValue(new Client({
     ws: { intents: ['GUILD_MEMBERS', 'GUILDS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES'] },
 }));

@@ -5,6 +5,7 @@ import { MessageResponder } from './services/message-responder';
 import { Environment, Settings } from './services/settings';
 import Enmap from 'enmap';
 import { Patron } from './services/patron';
+import { BotCommandHandler } from './services/bot-command-handler';
 
 
 @injectable()
@@ -12,6 +13,7 @@ export class Bot {
     constructor(
         @inject(TYPES.Client) private client: Client,
         @inject(TYPES.MessageResponder) private messageResponder: MessageResponder,
+        @inject(TYPES.BotCommandHandler) private botCommandHandler: BotCommandHandler,
         @inject(TYPES.Token) private token: string,
         @inject(TYPES.Settings) private settings: Settings,
         @inject(TYPES.SettingsDB) private settingsDB: Enmap,
@@ -29,6 +31,7 @@ export class Bot {
     }
 
     async onReady() {
+        await this.botCommandHandler.init();
         // Get the bot server and load all the members in the cache. Must do this in order
         // for guildMemberAdd to actually work the first time a role is changed
         const botServer = await this.client.guilds.fetch(this.settings.config.botGuild);

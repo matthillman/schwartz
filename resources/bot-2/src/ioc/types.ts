@@ -1,6 +1,7 @@
 export const TYPES = {
     Api: Symbol('Api'),
     Bot: Symbol('Bot'),
+    BotCommandHandler: Symbol('BotCommandHandler'),
     DBPool: Symbol('DBPool'),
     Patron: Symbol('Patron'),
     Broadcast: Symbol('Broadcast'),

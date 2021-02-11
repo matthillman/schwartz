@@ -7,6 +7,7 @@ import { TYPES } from '../ioc/types';
 export class Broadcast {
     private guildSubscribers: Broadcast.Subscriber[] = []
     private userSubscribers: Broadcast.Subscriber[] = []
+    private botSubscribers: Broadcast.Subscriber[] = []
 
     private readonly redis: Redis.Redis;
 
@@ -22,6 +23,10 @@ export class Broadcast {
 
     subscribeUser(id: string, callback: () => void) {
         this.userSubscribers.push({id, callback});
+    }
+
+    subscribeBotCommand(callback: (data: any) => void) {
+        this.botSubscribers.push({id: `${Date.now()}`, callback});
     }
 
     async subscribe() {
@@ -45,6 +50,10 @@ export class Broadcast {
                             listener.callback();
                         }
                     });
+                } else if (message.event === 'bot.command') {
+                    this.botSubscribers.forEach(listener => {
+                        listener.callback(message.data);
+                    });
                 }
             } catch (err) {
                 console.error(`No JSON Message [${err.message}]`);
@@ -59,7 +68,7 @@ export class Broadcast {
 export namespace Broadcast {
     export interface Subscriber {
         id: string,
-        callback: () => void,
+        callback: (data?: any) => void,
     };
 
     export interface RedisConfig {

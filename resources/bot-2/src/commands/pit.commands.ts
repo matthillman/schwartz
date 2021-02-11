@@ -277,6 +277,7 @@ export class PitStatus extends PitCommand {
     async run(_command: string, _args: string[], message: Message, pitInfo: PitCommandInfo): Promise<boolean> {
         const total = pitInfo.pitSettings.holding.reduce((tot, cur) => tot + cur.amount, 0);
         const memberCount = pitInfo.pitSettings.holding.length;
+        const sorted = pitInfo.pitSettings.holding.sort((a, b) => a > b ? -1 : (a < b ? 1 : 0))
 
         const damagePostedAt = pitInfo.pitSettings.postThreshold - (100 - pitInfo.pitSettings.starting);
         await message.channel.send({
@@ -287,7 +288,7 @@ Boss health level at **${pitInfo.pitSettings.starting}%**
 Posting damage at **${damagePostedAt.toFixed(2)}%**
 Damage needed: **${(damagePostedAt - total).toFixed(2)}%**
 \`\`\`
-${pitInfo.pitSettings.holding.reduce((c, m) => `${c}${`${m.amount.toFixed(2)}`.padStart(5)}%: ${m.name}\n`, '')}
+${sorted.reduce((c, m) => `${c}${`${m.amount.toFixed(2)}`.padStart(5)}%: ${m.name}\n`, '')}
 \`\`\``,
                 color: 0xfce34d,
                 footer: {
