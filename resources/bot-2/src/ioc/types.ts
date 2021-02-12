@@ -22,6 +22,7 @@ export const TYPES = {
     // .env
     Token: Symbol('Token'),
     Prefix: Symbol('Prefix'),
+    PatronActive: Symbol('PatronActive'),
     ApiClient: Symbol('ApiClient'),
     RedisClient: Symbol('RedisClient'),
     ApiHost: Symbol('ApiHost'),

@@ -89,6 +89,7 @@ export abstract class BaseCommand implements Command {
     @inject(TYPES.Api) protected api: API;
     @inject(TYPES.Client) protected client: Client;
     @inject(TYPES.Patron) protected patron: Patron;
+    @inject(TYPES.PatronActive) protected patronActive: boolean;
 
     async handle(content: string, message: Message): Promise<boolean> {
         const args = content.trim().split(/ +/g);
@@ -103,7 +104,7 @@ export abstract class BaseCommand implements Command {
 
             const memberPatronLevel = await this.patron.patronLevelFor(message.author);
 
-            if (memberPatronLevel.effectiveLevel < this.patronLevel && memberPatronLevel.userLevel < this.userPatronLevel) {
+            if (this.patronActive && memberPatronLevel.effectiveLevel < this.patronLevel && memberPatronLevel.userLevel < this.userPatronLevel) {
                 console.error(`[CMD] [${PatronLevel[memberPatronLevel.userLevel].toTitleCase()}] [${PermLevel[userLevel].toTitleCase()}] ${message.author.username} (${message.author.id}) does not have patron level for command ${this.name} [${args}]`);
                 throw new PatronError(this.patronLevel, memberPatronLevel);
             }
@@ -199,7 +200,7 @@ export abstract class SnapshotCommand extends BaseCommand {
         if ([this.name, ...this.aliases].map(n => n.toLowerCase()).includes(givenCommand)) {
             // Duplicating this check here to bail before we make any further requests
             const memberPatronLevel = await this.patron.patronLevelFor(message.author);
-            if (memberPatronLevel.effectiveLevel < this.patronLevel && memberPatronLevel.userLevel < this.userPatronLevel) {
+            if (this.patronActive && memberPatronLevel.effectiveLevel < this.patronLevel && memberPatronLevel.userLevel < this.userPatronLevel) {
                 console.error(`[CMD] [${PatronLevel[memberPatronLevel.userLevel].toTitleCase()}] ${message.author.username} (${message.author.id}) does not have patron level for command ${this.name} [${args}]`);
                 throw new PatronError(this.patronLevel, memberPatronLevel);
             }

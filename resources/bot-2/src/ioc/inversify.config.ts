@@ -57,6 +57,7 @@ const clientConfig: ClientConfig = {
 
 container.bind<string>(TYPES.Token).toConstantValue(process.env.TOKEN);
 container.bind<string>(TYPES.Prefix).toConstantValue(process.env.PREFIX);
+container.bind<boolean>(TYPES.PatronActive).toConstantValue(Number.parseInt(process.env.PATRON_ACTIVE) === 1);
 container.bind<ClientConfig>(TYPES.ApiClient).toConstantValue(clientConfig);
 container.bind<Broadcast.RedisConfig>(TYPES.RedisClient).toConstantValue({});
 container.bind<string>(TYPES.ApiHost).toConstantValue(process.env.BASE_URL);

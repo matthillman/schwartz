@@ -274,6 +274,8 @@ export class PitStatus extends PitCommand {
 
     protected requiresOpen = true;
 
+    @inject(TYPES.ApiHost) apiHost: string;
+
     async run(_command: string, _args: string[], message: Message, pitInfo: PitCommandInfo): Promise<boolean> {
         const total = pitInfo.pitSettings.holding.reduce((tot, cur) => tot + cur.amount, 0);
         const memberCount = pitInfo.pitSettings.holding.length;
@@ -292,11 +294,11 @@ ${sorted.reduce((c, m) => `${c}${`${m.amount.toFixed(2)}`.padStart(5)}%: ${m.nam
 \`\`\``,
                 color: 0xfce34d,
                 footer: {
-                  icon_url: 'https://schwartz.hillman.me/images/Logo@2x.png',
+                  icon_url: `${this.apiHost}/images/Logo@2x.png`,
                   text: 'Frax Bot',
                 },
                 thumbnail: {
-                  url: 'https://schwartz.hillman.me/images/rancor.png',
+                  url: `${this.apiHost}/images/rancor.png`,
                 },
             },
         });
