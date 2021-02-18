@@ -55,7 +55,7 @@ const clientConfig: ClientConfig = {
     scope: process.env.CLIENT_SCOPE,
 }
 
-container.bind<string>(TYPES.Token).toConstantValue(process.env.TOKEN);
+container.bind<string>(TYPES.Token).toConstantValue(process.env.DISCORD_BOT_TOKEN);
 container.bind<string>(TYPES.Prefix).toConstantValue(process.env.PREFIX);
 container.bind<boolean>(TYPES.PatronActive).toConstantValue(Number.parseInt(process.env.PATRON_ACTIVE) === 1);
 container.bind<ClientConfig>(TYPES.ApiClient).toConstantValue(clientConfig);
@@ -71,7 +71,7 @@ container.bind<Client>(TYPES.Client).toConstantValue(new Client({
 container.bind<API>(TYPES.Api).to(API).inSingletonScope();
 
 container.bind<Pool>(TYPES.DBPool).toConstantValue(new Pool({
-    user: process.env.DB_USER,
+    user: process.env.DB_USERNAME,
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST ?? '127.0.0.1',

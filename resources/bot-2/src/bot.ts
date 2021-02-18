@@ -6,6 +6,7 @@ import { Environment, Settings } from './services/settings';
 import Enmap from 'enmap';
 import { Patron } from './services/patron';
 import { BotCommandHandler } from './services/bot-command-handler';
+import { Pool } from 'pg';
 
 
 @injectable()
@@ -18,6 +19,7 @@ export class Bot {
         @inject(TYPES.Settings) private settings: Settings,
         @inject(TYPES.SettingsDB) private settingsDB: Enmap,
         @inject(TYPES.Patron) private patron: Patron,
+        @inject(TYPES.DBPool) private dbPool: Pool,
     ) { }
 
     public async listen(): Promise<string> {
@@ -38,11 +40,19 @@ export class Bot {
         await botServer.members.fetch();
         console.log(`Schwartz fetched ${botServer.name} ${botServer.nameAcronym}`);
 
+        const db = await this.dbPool.connect();
         let total = 0;
+        let values = [];
         for (const guild of this.client.guilds.cache.values()) {
             total += guild.memberCount;
             console.log(`[READY] In guild ${guild.name} [${guild.memberCount}]`);
+            values.concat(`(${guild.id}, ${guild.name})`);
+            db.query(`
+                insert into servers (server_id, name, created_at, updated_at) values ($1, $2, to_timestamp($3), to_timestamp($3))
+                on conflict (server_id) do update set name = excluded.name
+            `, [guild.id, guild.name, Math.floor(Date.now() / 1000)]);
         }
+        db.release();
 
         console.log(`[READY] ${this.client.user.tag}, ready to serve ${total} users in ${this.client.guilds.cache.size} servers.`);
         if (this.settings.config.env !== Environment.local) {
