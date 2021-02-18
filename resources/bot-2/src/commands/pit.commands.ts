@@ -304,7 +304,7 @@ ${sorted.reduce((c, m) => `${c}${`${m.amount.toFixed(2)}`.padStart(5)}%: ${m.nam
 \`\`\``,
                 color: 0xfce34d,
                 footer: {
-                  icon_url: `${this.apiHost}/images/Logo@2x.png`,
+                  icon_url: `${this.apiHost}/images/fb-logo.png`,
                   text: 'Frax Bot',
                 },
                 thumbnail: {

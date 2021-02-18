@@ -183,6 +183,7 @@ export class PageError extends Error {
 
 @injectable()
 export abstract class SnapshotCommand extends BaseCommand {
+    @inject(TYPES.ApiHost) private apiHost: string;
     @inject(TYPES.BroadcastProvider) private broadcastProvider: BroadcastProvider;
     private _broadcast: Broadcast;
     // private message: Message;
@@ -386,7 +387,7 @@ export abstract class SnapshotCommand extends BaseCommand {
                     color: 0xfce34d,
                     url: URL,
                     thumbnail: {
-                        url: 'https://schwartz.hillman.me/images/Logo@2x.png',
+                        url: `${this.apiHost}/images/fb-logo.png`,
                     },
                     image: {
                         url: `attachment://${name}.png`,
