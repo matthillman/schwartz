@@ -208,11 +208,15 @@ export class PitHolding extends PitCommand {
         const total = pitInfo.pitSettings.holding.reduce((tot, cur) => tot + cur.amount, 0);
         const gap = 100 - pitInfo.pitSettings.starting;
 
-        console.log(`${pitInfo.pitBossMention}${pitInfo.currentPhase} : ${total} >= (${pitInfo.pitSettings.postThreshold} - (100 - ${pitInfo.pitSettings.starting})) [${pitInfo.pitSettings.postThreshold - gap}]`);
+        console.log(`${pitInfo.pitBossMention}${pitInfo.currentPhase} : ${total} >= (${pitInfo.pitSettings.postThreshold} - (100 - ${pitInfo.pitSettings.starting})) [${pitInfo.pitSettings.postThreshold - gap}] [${pitInfo.pitSettings.notificationSent}]`);
 
-        if (!pitInfo.pitSettings.notificationSent && total >= (pitInfo.pitSettings.postThreshold - gap)) {
-            await message.channel.send(`${pitInfo.pitBossMention}${pitInfo.currentPhase} is loaded with ${total.toFixed(2)}% damage! Post threshold reached!`);
-            this.settings.set(message.channel.id, true, 'notificationSent');
+        if (total >= (pitInfo.pitSettings.postThreshold - gap)) {
+            if (!pitInfo.pitSettings.notificationSent) {
+                await message.channel.send(`${pitInfo.pitBossMention}${pitInfo.currentPhase} is loaded with ${total.toFixed(2)}% damage! Post threshold reached!`);
+                this.settings.set(message.channel.id, true, 'notificationSent');
+            }
+        } else {
+            this.settings.set(message.channel.id, false, 'notificationSent');
         }
 
         return true;
