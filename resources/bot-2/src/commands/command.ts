@@ -387,7 +387,7 @@ export abstract class SnapshotCommand extends BaseCommand {
                     color: 0xfce34d,
                     url: URL,
                     thumbnail: {
-                        url: `${this.apiHost}/images/fb-logo.png`,
+                        url: `${this.apiHost}/images/fb-square.png`,
                     },
                     image: {
                         url: `attachment://${name}.png`,
