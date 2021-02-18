@@ -66,7 +66,7 @@ export class Settings {
         const defaults = { ...defaultSettings, prefix: this.prefix ?? defaultSettings.prefix };
         if (!guild) { return defaults; }
 
-        this.settingsDB.ensure(guild.id, defaults);
+        this.settingsDB.ensure(guild.id, defaultSettings);
 
         const overrides = this.settingsDB.fetch(guild.id);
 
