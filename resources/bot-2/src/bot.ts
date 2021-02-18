@@ -23,6 +23,7 @@ export class Bot {
     ) { }
 
     public async listen(): Promise<string> {
+        console.log(`[BOT] Starting bot in env [${Environment[this.settings.config.env]}]`);
         this.client.on('ready', async () => await this.onReady());
         this.client.on('message', async message => await this.onMessage(message));
         this.client.on('guildCreate', async guild => await this.onGuildCreate(guild));
