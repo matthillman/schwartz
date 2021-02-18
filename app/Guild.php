@@ -13,7 +13,9 @@ class Guild extends Model
 
     protected $fillable = ['guild_id'];
 
-    protected $appends = [];
+    protected $appends = [ 'server_name' ];
+
+    protected $hidden = [ 'server' ];
 
     protected $indexConfigurator = Search\Indexes\GuildIndexConfigurator::class;
 
@@ -52,6 +54,14 @@ class Guild extends Model
 
     public function stats() {
         return $this->hasOne(GuildStat::class)->withDefault();
+    }
+
+    public function server() {
+        return $this->hasOne(Server::class, 'server_id', 'server_id')->withDefault();
+    }
+
+    public function getServerNameAttribute() {
+        return $this->server->name ?? '';
     }
 
     public function getOfficerRoleRegexAttribute($value) {
@@ -195,6 +205,29 @@ function testRegex($regex) {
     ini_set('pcre.recursion_limit', $recursion_limit);
 
     return $valid;
+}
+
+function combine_array($average, $array) {
+    foreach ($array as $key => $val) {
+        // echo "Considering $key => " . json_encode($val) . " -> [" . json_encode(array_get($average, $key)) . "]\n" ;
+        if (isset($average[$key])) {
+            if (is_array($val)) {
+                $average[$key] = average_array($average[$key], $val);
+            } else if (is_string($val) || is_bool($val)) {
+                $average[$key] = $val;
+            } else if (is_numeric($val)) {
+                $average[$key][] = $val;
+            } else if (is_null($val)) {
+                // skip it
+            } else {
+                \Log::error("Got an unexpected value averaging members", [$key, json_encode($val)]);
+            }
+        } else {
+            $average[$key] = $val;
+        }
+    }
+
+    return $average;
 }
 
 function average_array($average, $array) {
