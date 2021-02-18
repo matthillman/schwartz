@@ -79,6 +79,7 @@ export class PitOpen extends PitCommand {
                 return true;
             } else {
                 this.settings.set(message.channel.id, [], 'holding');
+                this.settings.set(message.channel.id, false, 'notificationSent');
             }
         }
 
@@ -136,8 +137,9 @@ export class PitStarting extends PitCommand {
         const total = pitInfo.pitSettings.holding.reduce((tot, cur) => tot + cur.amount, 0);
         const gap = 100 - amount;
 
-        if (total >= (pitInfo.pitSettings.postThreshold - gap)) {
-            await message.channel.send(`${pitInfo.pitBossMention}Phase ${pitInfo.currentPhase} is loaded with ${total}% damage! Post threshold reached!`);
+        if (!pitInfo.pitSettings.notificationSent && total >= (pitInfo.pitSettings.postThreshold - gap)) {
+            await message.channel.send(`${pitInfo.pitBossMention}Phase ${pitInfo.currentPhase} is loaded with ${total.toFixed(2)}% damage! Post threshold reached!`);
+            this.settings.set(message.channel.id, true, 'notificationSent');
         }
     }
 
@@ -162,6 +164,7 @@ export class PitPost extends PitCommand {
         await message.channel.send(`🐗 Post your damage for phase ${pitInfo.currentPhase}!\n\n${mentions}`);
 
         this.settings.set(message.channel.id, [], 'holding');
+        this.settings.set(message.channel.id, false, 'notificationSent');
 
         await message.channel.send(`🐗 ${pitInfo.pitBossMention} Post message sent for phase ${pitInfo.currentPhase}. You can now open the next phase.`);
         return true;
@@ -207,8 +210,9 @@ export class PitHolding extends PitCommand {
 
         console.log(`${pitInfo.pitBossMention}${pitInfo.currentPhase} : ${total} >= (${pitInfo.pitSettings.postThreshold} - (100 - ${pitInfo.pitSettings.starting})) [${pitInfo.pitSettings.postThreshold - gap}]`);
 
-        if (total >= (pitInfo.pitSettings.postThreshold - gap)) {
+        if (!pitInfo.pitSettings.notificationSent && total >= (pitInfo.pitSettings.postThreshold - gap)) {
             await message.channel.send(`${pitInfo.pitBossMention}${pitInfo.currentPhase} is loaded with ${total.toFixed(2)}% damage! Post threshold reached!`);
+            this.settings.set(message.channel.id, true, 'notificationSent');
         }
 
         return true;
@@ -258,9 +262,11 @@ export class PitSetPostThreshold extends PitCommand {
         const total = pitInfo.pitSettings.holding.reduce((tot, cur) => tot + cur.amount, 0);
         const gap = 100 - pitInfo.pitSettings.starting;
 
-        console.log(``)
         if (total >= (amount - gap)) {
-            await message.channel.send(`${pitInfo.pitBossMention}Phase ${pitInfo.currentPhase} is loaded with ${total.toFixed(2)}% damage! Post threshold reached!`);
+            if (!pitInfo.pitSettings.notificationSent) {
+                await message.channel.send(`${pitInfo.pitBossMention}Phase ${pitInfo.currentPhase} is loaded with ${total.toFixed(2)}% damage! Post threshold reached!`);
+                this.settings.set(message.channel.id, true, 'notificationSent');
+            }
         }
 
         return true;
@@ -322,6 +328,7 @@ export class PitClose extends PitCommand {
 
         this.settings.set(message.channel.id, 0, 'phase');
         this.settings.set(message.channel.id, [], 'holding');
+        this.settings.set(message.channel.id, false, 'notificationSent');
 
         await message.channel.send(`🐗 ${pitInfo.pitBossMention} Pit is closed!`);
         return true;

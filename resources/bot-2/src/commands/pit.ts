@@ -18,6 +18,7 @@ export interface PitSettings {
     bossRole: string;
     postThreshold: number;
     starting: number;
+    notificationSent: boolean;
 };
 
 const defaultPitSettings: PitSettings = {
@@ -26,6 +27,7 @@ const defaultPitSettings: PitSettings = {
     bossRole: 'Pit Boss',
     postThreshold: 105,
     starting: 100,
+    notificationSent: false,
 };
 
 @injectable()
