@@ -1,6 +1,7 @@
 import { Message } from 'discord.js';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../ioc/types';
+import { PermLevel } from '../services/permissions';
 import { BaseCommand, CommandCategory, HelpText  } from './command';
 import { GCompare } from './gcompare';
 
@@ -8,6 +9,7 @@ import { GCompare } from './gcompare';
 export class TW extends BaseCommand {
     name = 'tw';
     aliases: string[] = [];
+    permissionLevel = PermLevel.user;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: 'See **gcompare**',

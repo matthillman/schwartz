@@ -1,6 +1,7 @@
 import { Message } from 'discord.js';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../ioc/types';
+import { PermLevel } from '../services/permissions';
 import { BaseCommand, NoPermissionsError, HelpText, CommandCategory } from './command';
 import { ScheduleCommand, ScheduleList, ScheduleExecute, ScheduleAdd, ScheduleRemove } from './schedule.commands';
 
@@ -8,6 +9,7 @@ import { ScheduleCommand, ScheduleList, ScheduleExecute, ScheduleAdd, ScheduleRe
 export class Schedule extends BaseCommand {
     name = 'schedule';
     aliases: string[] = [];
+    permissionLevel = PermLevel.user;
     help: HelpText = {
         category: CommandCategory.misc,
         description: 'Echoes a pre-defined schedule creation message.',
