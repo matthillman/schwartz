@@ -25,9 +25,9 @@ export class Help extends BaseCommand {
         if (!command) {
             const visibleCommands = this.commands.list.filter(cmd => cmd.permissionLevel <= userLevel && (!!message.guild || !cmd.guildOnly))
             const longestNameLength = visibleCommands.reduce((longest, cmd) => Math.max(longest, cmd.name.length), 0);
-
+            const settings = this.settings.guildSettings(message.guild);
             let currentCategory = '';
-            let output = `= Command List =\n\n[Use ${this.settings.prefix}help [command] for details]\n`;
+            let output = `= Command List =\n\n[Use ${settings.prefix}help [command] for details]\n`;
             const sorted = visibleCommands.sort((a, b) => a.help.category > b.help.category ? 1 : ( a.name > b.name && a.help.category === b.help.category ? 1 : -1 ))
 
             for (const cmd of sorted) {
@@ -36,7 +36,7 @@ export class Help extends BaseCommand {
                     output += `\u200b\n== ${category} ==\n`;
                     currentCategory = category;
                 }
-                output += `${this.settings.prefix}${cmd.name}${' '.repeat(longestNameLength - cmd.name.length)} :: ${cmd.help.description}\n`;
+                output += `${settings.prefix}${cmd.name}${' '.repeat(longestNameLength - cmd.name.length)} :: ${cmd.help.description}\n`;
             }
             await message.channel.send(output, {code: `asciidoc`, split: { char: `\u200b` }});
         } else {
