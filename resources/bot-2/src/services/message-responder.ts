@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import { NoPermissionsError, PatronError } from '../commands/command';
 import { Profile } from '../commands/profile';
 import { TYPES } from '../ioc/types';
-import { Settings } from './settings';
+import { Environment, Settings } from './settings';
 import { Recruiting } from '../commands/recruiting';
 import { CommandList } from './command-list';
 import { Help } from '../commands/help';
@@ -35,11 +35,16 @@ export class MessageResponder {
         if (message.author.bot) { return Promise.reject(); }
         const settings = this.settings.guildSettings(message.guild);
         await this.recruiting.handleRecruitingWatch(message, this.profile);
-        const hasPrefix = message.content.indexOf(settings.prefix) === 0;
+        const trimmedContent = message.content.trim();
+        const hasPrefix = trimmedContent.indexOf(settings.prefix) === 0;
 
-        if (message.guild && !hasPrefix) { return Promise.reject(); }
+        if (this.settings.config.env === Environment.local) {
+            console.log(`[MR] [${!!message.guild}] [${hasPrefix}] [${settings.prefix}]`);
+        }
 
-        const content = hasPrefix ? message.content.slice(settings.prefix.length) : message.content;
+        if (!!message.guild && !hasPrefix) { return Promise.reject(); }
+
+        const content = hasPrefix ? trimmedContent.slice(settings.prefix.length) : trimmedContent;
 
         for (const command of [...this.commands.list, this.help]) {
             try {
