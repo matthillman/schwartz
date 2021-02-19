@@ -8,6 +8,7 @@ import { BaseCommand, CommandCategory, HelpText } from './command';
 export class MyLevel extends BaseCommand {
     name = 'myLevel';
     aliases: string[] = ['level'];
+    permissionLevel = PermLevel.user;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: 'Tells you your permission level for the current message location',

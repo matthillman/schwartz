@@ -1,12 +1,14 @@
 import { Message } from 'discord.js';
 import { injectable } from 'inversify';
 import { PatronLevel } from '../services/patron';
+import { PermLevel } from '../services/permissions';
 import { CommandCategory, HelpText, SnapshotCommand } from './command';
 
 @injectable()
 export class Unit extends SnapshotCommand {
     name = 'unit';
     aliases: string[] = ['u'];
+    permissionLevel = PermLevel.user;
     patronLevel = PatronLevel.plaid;
     userPatronLevel = PatronLevel.ridiculous;
     help: HelpText = {

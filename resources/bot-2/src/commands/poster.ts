@@ -1,11 +1,13 @@
 import { Message, MessageAttachment } from 'discord.js';
 import { injectable } from 'inversify';
+import { PermLevel } from '../services/permissions';
 import { CommandCategory, HelpText, SnapshotCommand } from './command';
 
 @injectable()
 export class Poster extends SnapshotCommand {
     name = 'poster';
     aliases: string[] = [];
+    permissionLevel = PermLevel.user;
     help: HelpText = {
         category: CommandCategory.misc,
         description: 'Shows the Schwartz recruiting poster',

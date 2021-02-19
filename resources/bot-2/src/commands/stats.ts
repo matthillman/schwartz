@@ -1,11 +1,13 @@
 import { Message, version } from 'discord.js';
 import { injectable } from 'inversify';
+import { PermLevel } from '../services/permissions';
 import { BaseCommand, CommandCategory, HelpText } from './command';
 
 @injectable()
 export class Stats extends BaseCommand {
     name = 'stats';
     aliases: string[] = [];
+    permissionLevel = PermLevel.user;
     help: HelpText = {
         category: CommandCategory.misc,
         description: 'Gives some useful bot statistics',

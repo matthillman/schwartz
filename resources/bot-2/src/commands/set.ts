@@ -3,6 +3,7 @@ import { inject, injectable } from 'inversify';
 import { inspect } from 'util';
 import { TYPES } from '../ioc/types';
 import { awaitReply } from '../services/message-responder';
+import { PermLevel } from '../services/permissions';
 import { Settings } from '../services/settings';
 import { BaseCommand, CommandCategory, HelpText } from './command';
 
@@ -10,6 +11,7 @@ import { BaseCommand, CommandCategory, HelpText } from './command';
 export class Configuration extends BaseCommand {
     name = 'set';
     aliases: string[] = ['setting', 'settings', 'conf'];
+    permissionLevel = PermLevel.moderator;
     help: HelpText = {
         category: CommandCategory.system,
         description: 'View or change settings for your server.',

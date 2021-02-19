@@ -3,12 +3,14 @@ import Enmap from 'enmap';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../ioc/types';
 import { PatronLevel } from '../services/patron';
+import { PermLevel } from '../services/permissions';
 import { BaseCommand, Command, CommandCategory, HelpText  } from './command';
 
 @injectable()
 export class Recruiting extends BaseCommand {
     name = 'recruiting';
     aliases: string[] = [];
+    permissionLevel = PermLevel.moderator;
     patronLevel = PatronLevel.plaid;
     help: HelpText = {
         category: CommandCategory.swgoh,

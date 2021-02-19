@@ -1,11 +1,13 @@
 import { Message } from 'discord.js';
 import { injectable } from 'inversify';
+import { PermLevel } from '../services/permissions';
 import { BaseCommand, CommandCategory, HelpText  } from './command';
 
 @injectable()
 export class Whois extends BaseCommand {
     name = 'whois';
     aliases: string[] = ['whoami'];
+    permissionLevel = PermLevel.user;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: 'See all of the registered ally codes',

@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../ioc/types';
 import { CommandList } from '../services/command-list';
+import { PermLevel } from '../services/permissions';
 import { Settings } from '../services/settings';
 import { BaseCommand, CommandCategory, HelpText  } from './command';
 
@@ -9,6 +10,7 @@ import { BaseCommand, CommandCategory, HelpText  } from './command';
 export class Help extends BaseCommand {
     name = 'help';
     aliases: string[] = ['?', 'h'];
+    permissionLevel = PermLevel.user;
     help: HelpText = {
         category: CommandCategory.system,
         description: 'Displays all the available commands for your permission level',

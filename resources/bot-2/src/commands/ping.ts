@@ -1,11 +1,13 @@
 import { Message } from 'discord.js';
 import { injectable } from 'inversify';
+import { PermLevel } from '../services/permissions';
 import { BaseCommand, CommandCategory, HelpText  } from './command';
 
 @injectable()
 export class Ping extends BaseCommand {
     name = 'ping';
     aliases: string[] = [];
+    permissionLevel = PermLevel.user;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: 'It... like... pings. Then Pongs. And it"s not Ping Pong.',

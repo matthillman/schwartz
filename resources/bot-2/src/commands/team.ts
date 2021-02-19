@@ -1,6 +1,7 @@
 import { Message } from 'discord.js';
 import { injectable } from 'inversify';
 import { PatronLevel } from '../services/patron';
+import { PermLevel } from '../services/permissions';
 import { CommandCategory, HelpText, SnapshotCommand } from './command';
 
 const teamList = [
@@ -20,6 +21,7 @@ const teamList = [
 export class Team extends SnapshotCommand {
     name = 'team';
     aliases: string[] = ['t'];
+    permissionLevel = PermLevel.user;
     patronLevel = PatronLevel.plaid;
     userPatronLevel = PatronLevel.ridiculous;
     help: HelpText = {
