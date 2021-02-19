@@ -31,6 +31,7 @@ const ROLE_MAP = new Map([
 
 @injectable()
 export class Patron {
+    private cache = {};
     constructor(
         @inject(TYPES.DBPool) private dbPool: Pool,
     ) { }
@@ -52,10 +53,17 @@ export class Patron {
         // console.debug(result);
         db.release();
 
+        if (this.cache[member.id]) {
+            delete this.cache[member.id];
+        }
+
         console.log(`[MEMBER UPDATE] Member ${member.nickname ?? member.displayName} (${member.id}) updated to role level ${patronLevel}`);
     }
 
     async patronLevelFor(member: GuildMember | User) {
+        if (this.cache[member.id]) {
+            return this.cache[member.id];
+        }
         const db = await this.dbPool.connect();
         const result = await db.query<PatronQueryResult>(`
             with guild_patrons as (
@@ -91,6 +99,8 @@ export class Patron {
 
         db.release();
 
-        return { effectiveLevel, userLevel: memberInfo.patron_level, guildLevel: memberInfo.guild_patron_level };
+        this.cache[member.id] = { effectiveLevel, userLevel: memberInfo.patron_level, guildLevel: memberInfo.guild_patron_level }
+
+        return this.cache[member.id];
     }
 }
