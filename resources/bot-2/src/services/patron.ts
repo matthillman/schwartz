@@ -91,7 +91,10 @@ export class Patron {
 
         const memberInfo = result.rows.find(r => r.discord_id === member.id);
 
-        if (!memberInfo) { return { effectiveLevel: PatronLevel.none, userLevel: PatronLevel.none, guildLevel: PatronLevel.none }; }
+        if (!memberInfo) {
+            this.cache[member.id] = { effectiveLevel: PatronLevel.none, userLevel: PatronLevel.none, guildLevel: PatronLevel.none };
+            return this.cache[member.id];
+        }
 
         const effectiveLevel = Math.min(Math.max(memberInfo.patron_level, memberInfo.schwartz, memberInfo.guild_patron_level), 3) as PatronLevel;
 
@@ -99,7 +102,7 @@ export class Patron {
 
         db.release();
 
-        this.cache[member.id] = { effectiveLevel, userLevel: memberInfo.patron_level, guildLevel: memberInfo.guild_patron_level }
+        this.cache[member.id] = { effectiveLevel, userLevel: memberInfo.patron_level, guildLevel: memberInfo.guild_patron_level };
 
         return this.cache[member.id];
     }
