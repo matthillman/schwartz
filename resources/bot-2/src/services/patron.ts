@@ -45,13 +45,11 @@ export class Patron {
             }
         }
 
-        const db = await this.dbPool.connect();
-        const result = await db.query(`
+        const result = await this.dbPool.query(`
         insert into patron_level (discord_id, patron_level, created_at, updated_at) values ($1::text, $2::smallint, to_timestamp($3), to_timestamp($3))
         on conflict (discord_id) do update set patron_level = excluded.patron_level, updated_at = excluded.updated_at
         `, [member.id, patronLevel, Math.floor(Date.now() / 1000)]);
         // console.debug(result);
-        db.release();
 
         if (this.cache[member.id]) {
             delete this.cache[member.id];
@@ -64,8 +62,7 @@ export class Patron {
         if (this.cache[member.id]) {
             return this.cache[member.id];
         }
-        const db = await this.dbPool.connect();
-        const result = await db.query<PatronQueryResult>(`
+        const result = await this.dbPool.query<PatronQueryResult>(`
             with guild_patrons as (
                 select guilds.id, max(case when guilds.schwartz then 3 else 0 end) as schwartz, sum(patron_level) as patron_level
                 from guilds
@@ -99,8 +96,6 @@ export class Patron {
         const effectiveLevel = Math.min(Math.max(memberInfo.patron_level, memberInfo.schwartz, memberInfo.guild_patron_level), 3) as PatronLevel;
 
         console.log(`[PATRON CHECK] Member ${member.id} has level ${effectiveLevel}`);
-
-        db.release();
 
         this.cache[member.id] = { effectiveLevel, userLevel: memberInfo.patron_level, guildLevel: memberInfo.guild_patron_level };
 
