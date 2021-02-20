@@ -1,4 +1,4 @@
-import { Client } from 'discord.js';
+import { Client, GuildMember } from 'discord.js';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../ioc/types';
 import { BroadcastProvider } from '../ioc/inversify.config';
@@ -49,16 +49,16 @@ export class BotCommandHandler {
                         } else {
                             members = [...members.members.values()];
                         }
-                        for (const member of members) {
-                            if (!role || role && member.roles.has(role.id)) {
+                        for (const member of members as GuildMember[]) {
+                            if (!role || role && member.roles.cache.has(role.id)) {
                                 response.push({
                                     id: member.id,
                                     guild: guild.id,
                                     username: member.user.username,
                                     discriminator: member.user.discriminator,
-                                    email: member.user.email,
+                                    email: '',
                                     avatar: member.user.avatar,
-                                    roles: [...member.roles.map(r => ({ id: r.id, name: r.name }))],
+                                    roles: [...member.roles.cache.map(r => ({ id: r.id, name: r.name }))],
                                 });
                             }
                         }
