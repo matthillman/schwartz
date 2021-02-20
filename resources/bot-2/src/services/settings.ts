@@ -63,7 +63,7 @@ export class Settings {
     }
 
     guildSettings(guild?: Guild): BotSettings {
-        const defaults = { ...defaultSettings, prefix: this.prefix ?? defaultSettings.prefix };
+        const defaults = { ...defaultSettings, prefix: this.prefix || defaultSettings.prefix };
         if (!guild) { return defaults; }
 
         this.settingsDB.ensure(guild.id, defaultSettings);
