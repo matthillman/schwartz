@@ -11,6 +11,8 @@ export class Broadcast {
 
     private readonly redis: Redis.Redis;
 
+    private subscriptionSetup = false;
+
     constructor(
         @inject(TYPES.RedisClient) config: Broadcast.RedisConfig,
     ) {
@@ -30,6 +32,9 @@ export class Broadcast {
     }
 
     async subscribe() {
+        if (this.subscriptionSetup) {
+            return;
+        }
         this.redis.on('pmessage', (_subscribed, channel, message) => {
             try {
                 message = JSON.parse(message);
@@ -61,6 +66,8 @@ export class Broadcast {
         });
 
         await this.redis.psubscribe('*').catch(err => console.error(`Redis could not subscribe [${err.message}]`));
+
+        this.subscriptionSetup = true;
     }
 }
 
