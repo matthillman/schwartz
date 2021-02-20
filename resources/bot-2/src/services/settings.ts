@@ -48,18 +48,18 @@ const defaultSettings: BotSettings = {
 
 @injectable()
 export class Settings {
-    private settingsDB: Enmap;
-    readonly prefix: string;
-    readonly config: BotConfig;
+    readonly _prefix: string;
 
     constructor(
-        @inject(TYPES.SettingsDB) settingsDB: Enmap,
+        @inject(TYPES.SettingsDB) readonly settingsDB: Enmap,
         @inject(TYPES.Prefix) prefix: string,
-        @inject(TYPES.Config) config: BotConfig,
+        @inject(TYPES.Config) readonly config: BotConfig,
     ) {
-        this.settingsDB = settingsDB;
-        this.prefix = prefix;
-        this.config = config;
+        this._prefix = prefix;
+    }
+
+    get prefix() {
+        return this._prefix || defaultSettings.prefix;
     }
 
     guildSettings(guild?: Guild): BotSettings {
