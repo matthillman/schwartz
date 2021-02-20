@@ -66,7 +66,7 @@ export class BotCommandHandler {
 
                     try {
                         const status = await this.api.post(`guild-query-response`, { response, role });
-                        console.log(`Posted guild query response: ${status}`);
+                        console.log(`Posted guild query response: ${JSON.stringify(status)}`);
                     } catch (e) {
                         console.error(e);
                     }
