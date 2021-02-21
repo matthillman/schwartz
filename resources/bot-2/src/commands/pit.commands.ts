@@ -289,7 +289,7 @@ export class PitStatus extends PitCommand {
     async run(_command: string, _args: string[], message: Message, pitInfo: PitCommandInfo): Promise<boolean> {
         const total = pitInfo.pitSettings.holding.reduce((tot, cur) => tot + cur.amount, 0);
         const memberCount = pitInfo.pitSettings.holding.length;
-        const sorted = pitInfo.pitSettings.holding.sort((a, b) => a > b ? -1 : (a < b ? 1 : 0))
+        const sorted = pitInfo.pitSettings.holding.sort((a, b) => a.amount > b.amount ? -1 : (a.amount < b.amount ? 1 : 0))
 
         const damagePostedAt = pitInfo.pitSettings.postThreshold - (100 - pitInfo.pitSettings.starting);
         await message.channel.send({
