@@ -24,10 +24,11 @@ process.on('uncaughtException', (err, origin) => {
 });
 
 process.on('unhandledRejection', err => {
-    console.error(`Unhandled rejection: ${err}`);
     if (err instanceof Error) {
         const errorMsg = err.stack.replace(new RegExp(`${__dirname}/`, 'g'), './');
-        console.error(`\tLine: ${errorMsg}`);
+        console.error(`Unhandled rejection: ${errorMsg}`);
+    } else {
+        console.error(`Unhandled rejection: ${err}`);
     }
 });
 
