@@ -35,9 +35,8 @@ const defaultPitSettings: PitSettings = {
 export class Pit extends BaseCommand {
     name = 'pit';
     aliases: string[] = [];
-    patronLevel = PatronLevel.ludicrous;
-
     permissionLevel = PermLevel.user;
+    patronLevel = PatronLevel.ludicrous;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: 'Challenge Tier Pit Helper. See *usage* command for more information',
