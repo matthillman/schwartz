@@ -403,6 +403,7 @@ export abstract class SnapshotCommand extends BaseCommand {
     protected async snapAndSend(message: Message, codes: string[], URL: string, nameOverride: string = null) {
         const codeList = codes.join(',');
         const failIndex = this.failed.indexOf(codeList);
+        const snapArgs = arguments;
 
         try {
             await this.doSnap(`${this.api.baseURL}${URL}`, message.channel, nameOverride ?? codes.join('_vs_'));
@@ -412,7 +413,7 @@ export abstract class SnapshotCommand extends BaseCommand {
             }
         } catch (err) {
             if (err instanceof PageError) {
-                setTimeout(() => this.snapAndSend.apply(this, arguments), 500);
+                setTimeout(() => this.snapAndSend.apply(this, snapArgs), 500);
                 return;
             }
 
@@ -437,8 +438,8 @@ export abstract class SnapshotCommand extends BaseCommand {
                 await scrape.call(this, id, async () => {
                     completeCount += 1;
                     if (completeCount === codes.length) {
-                        console.log(`Scrape finished, calling snapAndSend`, arguments);
-                        return this.snapAndSend.apply(this, arguments);
+                        console.log(`Scrape finished, calling snapAndSend`, snapArgs);
+                        return this.snapAndSend.apply(this, snapArgs);
                     } else {
                         await message.react(REACT_LIST[Math.floor(Math.random() * REACT_LIST.length)]);
                     }
