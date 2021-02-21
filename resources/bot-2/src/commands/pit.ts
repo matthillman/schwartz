@@ -2,6 +2,7 @@ import { Message, Role, Snowflake } from 'discord.js';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../ioc/types';
 import { PatronLevel } from '../services/patron';
+import { PermLevel } from '../services/permissions';
 import { Settings } from '../services/settings';
 import { BaseCommand, NoPermissionsError, HelpText, CommandCategory } from './command';
 import { PitCommand, PitOpen, PitPost, PitStarting, PitHolding, PitSetPostThreshold, PitStatus, PitSetRole, PitClose, PitHelp } from './pit.commands';
@@ -35,6 +36,8 @@ export class Pit extends BaseCommand {
     name = 'pit';
     aliases: string[] = [];
     patronLevel = PatronLevel.ludicrous;
+
+    permissionLevel = PermLevel.user;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: 'Challenge Tier Pit Helper. See *usage* command for more information',
