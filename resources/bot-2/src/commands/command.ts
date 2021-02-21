@@ -438,7 +438,6 @@ export abstract class SnapshotCommand extends BaseCommand {
                 await scrape.call(this, id, async () => {
                     completeCount += 1;
                     if (completeCount === codes.length) {
-                        console.log(`Scrape finished, calling snapAndSend`, snapArgs);
                         return this.snapAndSend.apply(this, snapArgs);
                     } else {
                         await message.react(REACT_LIST[Math.floor(Math.random() * REACT_LIST.length)]);
