@@ -141,6 +141,8 @@ export class PitStarting extends PitCommand {
             await message.channel.send(`${pitInfo.pitBossMention}Phase ${pitInfo.currentPhase} is loaded with ${total.toFixed(2)}% damage! Post threshold reached!`);
             this.settings.set(message.channel.id, true, 'notificationSent');
         }
+
+        return true;
     }
 
 }
