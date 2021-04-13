@@ -1,12 +1,14 @@
 import { Message } from 'discord.js';
 import { HTTPAlias } from 'got/dist/source';
 import { injectable } from 'inversify';
+import { PermLevel } from '../services/permissions';
 import { BaseCommand, CommandCategory, HelpText  } from './command';
 
 @injectable()
 export class Register extends BaseCommand {
     name = 'register';
     aliases: string[] = ['reg'];
+    permissionLevel = PermLevel.user;
     help: HelpText = {
         category: CommandCategory.swgoh,
         description: 'Register an ally code to a discord ID for later convenience',
