@@ -2,7 +2,7 @@
 
 namespace App;
 
-use ScoutElastic\Searchable;
+use Laravel\Scout\Searchable;
 use SwgohHelp\Enums\Alignment;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,41 +20,19 @@ class Unit extends Model
         'abilities' => 'collection',
     ];
 
-    protected $indexConfigurator = Search\Indexes\UnitIndexConfigurator::class;
-
-    protected $searchRules = [
-        Search\Rules\WildcardSearchRule::class,
-    ];
-
-    protected $mapping = [
-        'properties' => [
-            'base_id' => [
-                'type' => 'text',
-                'fields' => [
-                    'raw' => [
-                        'type' => 'keyword',
-                    ],
-                ]
-            ],
-            'name' => [
-                'type' => 'text',
-                'fields' => [
-                    'raw' => [
-                        'type' => 'keyword',
-                    ],
-                    'english' => [
-                      'type' => 'text',
-                      'analyzer' => 'english',
-                    ],
-                ]
-            ],
-        ]
-    ];
-
     public function toSearchableArray() {
         $array = $this->toArray();
 
-        $array['alignment'] = $this->attributes['alignment'];
+        unset($array['skills']);
+        unset($array['abilities']);
+        unset($array['url']);
+        unset($array['image']);
+        unset($array['power']);
+        unset($array['created_at']);
+        unset($array['updated_at']);
+        unset($array['relic_image']);
+        $array['crew_list'] = collect($array['crew_list'])->pluck('unitId')->join(' ');
+        $array['category_list'] = collect($array['category_list'])->join(' ');
 
         return $array;
     }

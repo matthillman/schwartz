@@ -3,7 +3,7 @@
 namespace App;
 
 use DB;
-use ScoutElastic\Searchable;
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 class Guild extends Model
@@ -17,37 +17,6 @@ class Guild extends Model
 
     protected $hidden = [ 'server' ];
 
-    protected $indexConfigurator = Search\Indexes\GuildIndexConfigurator::class;
-
-    protected $searchRules = [
-        Search\Rules\WildcardSearchRule::class,
-    ];
-
-    protected $mapping = [
-        'properties' => [
-            'guild_id' => [
-                'type' => 'text',
-                'fields' => [
-                    'raw' => [
-                        'type' => 'keyword',
-                    ],
-                ]
-            ],
-            'name' => [
-                'type' => 'text',
-                'fields' => [
-                    'raw' => [
-                        'type' => 'keyword',
-                    ],
-                    'english' => [
-                      'type' => 'text',
-                      'analyzer' => 'english',
-                    ],
-                ]
-            ],
-        ]
-    ];
-
     public function members() {
         return $this->hasMany(Member::class);
     }
@@ -58,6 +27,23 @@ class Guild extends Model
 
     public function server() {
         return $this->hasOne(Server::class, 'server_id', 'server_id')->withDefault();
+    }
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        unset($array['gp']);
+        unset($array['schwartz']);
+        unset($array['icon']);
+        unset($array['colors']);
+        unset($array['server_id']);
+        unset($array['admin_channel']);
+        unset($array['officer_role_regex']);
+        unset($array['member_role_regex']);
+        unset($array['created_at']);
+        unset($array['updated_at']);
+
+        return $array;
     }
 
     public function getServerNameAttribute() {

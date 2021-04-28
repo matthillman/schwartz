@@ -3,7 +3,7 @@
 namespace App;
 
 use DB;
-use ScoutElastic\Searchable;
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use NotificationChannels\Discord\Discord;
@@ -25,7 +25,7 @@ class Member extends Model
         'guild_name',
         'profile_url',
         'gear_12', 'gear_13',
-        'relic_5', 'relic_6', 'relic_7', 'relic_5_plus',
+        'relic_3', 'relic_5', 'relic_6', 'relic_7', 'relic_8', 'relic_5_plus',
         'speed_10', 'speed_15', 'speed_20', 'speed_25',
         'offense_100',
     ];
@@ -35,37 +35,6 @@ class Member extends Model
     ];
     protected $hidden = [
         'raw',
-    ];
-
-    protected $indexConfigurator = Search\Indexes\MemberIndexConfigurator::class;
-
-    protected $searchRules = [
-        Search\Rules\WildcardSearchRule::class,
-    ];
-
-    protected $mapping = [
-        'properties' => [
-            'ally_code' => [
-                'type' => 'text',
-                'fields' => [
-                    'raw' => [
-                        'type' => 'keyword',
-                    ],
-                ]
-            ],
-            'player' => [
-                'type' => 'text',
-                'fields' => [
-                    'raw' => [
-                        'type' => 'keyword',
-                    ],
-                    'english' => [
-                      'type' => 'text',
-                      'analyzer' => 'english',
-                    ],
-                ]
-            ],
-        ]
     ];
 
     public function discord() {
@@ -111,6 +80,40 @@ class Member extends Model
 
     public function guild() {
         return $this->belongsTo(Guild::class)->withDefault();
+    }
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        unset($array['gp']);
+        unset($array['character_gp']);
+        unset($array['ship_gp']);
+        unset($array['arena']);
+        unset($array['level']);
+        unset($array['title']);
+        unset($array['portrait']);
+        unset($array['player_id']);
+        unset($array['member_level']);
+        unset($array['profile_url']);
+        unset($array['gear_12']);
+        unset($array['gear_13']);
+        unset($array['relic_3']);
+        unset($array['relic_5']);
+        unset($array['relic_6']);
+        unset($array['relic_7']);
+        unset($array['relic_8']);
+        unset($array['relic_5_plus']);
+        unset($array['speed_10']);
+        unset($array['speed_15']);
+        unset($array['speed_20']);
+        unset($array['speed_25']);
+        unset($array['offense_100']);
+        unset($array['guild']);
+        unset($array['stats']);
+        unset($array['created_at']);
+        unset($array['updated_at']);
+
+        return $array;
     }
 
     public function getCompareDataBaseAttribute() {
@@ -160,6 +163,11 @@ class Member extends Model
     public function getHasGlKyloAttribute() {
         $rey = $this->characters()->where('unit_name', 'SUPREMELEADERKYLOREN');
         return $rey->exists() ? ($rey->first()->has_ultimate_ability ? 'U' : 1) : 0;
+    }
+
+    public function getGear11Attribute() {
+        if (is_null($this->stats->data)) { return 0; }
+        return $this->stats->data->get('gear_eleven');
     }
 
     public function getGear12Attribute() {
@@ -239,6 +247,10 @@ class Member extends Model
         $compareData = collect($this->compare_data_base)
             ->merge($this->stats->data)
             ->merge([
+                'relic_five_plus' => array_sum([$this->relic_8, $this->relic_7, $this->relic_6, $this->relic_5]),
+                'relic_three_plus' => array_sum([$this->relic_8, $this->relic_7, $this->relic_6, $this->relic_5, $this->relic_4, $this->relic_3]),
+                'relic_total' => array_sum([$this->relic_8, $this->relic_7, $this->relic_6, $this->relic_5, $this->relic_4, $this->relic_3, $this->relic_2, $this->relic_1]),
+                'gear_eleven_plus' => array_sum([$this->gear_11, $this->gear_12, $this->gear_13]),
                 'zetas' => $this->zetas->count(),
             ]);
         if (empty($unitList)) {
