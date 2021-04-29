@@ -13,12 +13,12 @@ class SearchController extends Controller
     public function searchGuilds(Request $request) {
         if (strlen($request->search)) {
             return Guild::search($request->search)
-                ->where('schwartz', false)
+                ->where('schwartz', 'false')
                 ->orderBy('gp', 'desc')
                 ->paginate(config('view.page_size'));
         }
 
-        return Guild::where('schwartz', false)
+        return Guild::where('schwartz', 'false')
                 ->orderBy('gp', 'desc')
                 ->paginate(config('view.page_size'));
     }

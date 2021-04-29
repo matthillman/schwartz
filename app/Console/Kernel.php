@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('swgoh:game-data')->daily();
 
-        Guild::where('schwartz', true)->each(function($guild, $index) use ($schedule) {
+        Guild::where('schwartz', 'true')->each(function($guild, $index) use ($schedule) {
             $schedule->job(new ProcessGuild($guild->guild_id))->dailyAt('06:0' . (5 + $index));
         });
     }

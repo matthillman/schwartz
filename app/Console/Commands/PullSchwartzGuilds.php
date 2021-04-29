@@ -29,7 +29,7 @@ class PullSchwartzGuilds extends Command {
      */
     public function handle()
     {
-        Guild::where('schwartz', true)->each(function($guild) {
+        Guild::where('schwartz', 'true')->each(function($guild) {
             ProcessGuild::dispatch($guild->guild_id);
         });
     }
