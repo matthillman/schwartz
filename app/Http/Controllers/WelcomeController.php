@@ -23,7 +23,7 @@ class WelcomeController extends Controller
 
     private function schwartzGuilds() {
         $sheetData = new SchwartzSheetData;
-        return Guild::where('schwartz', 1)->orderBy('gp', 'desc')->get()->map(function($guild) use ($sheetData) {
+        return Guild::where('schwartz', true)->orderBy('gp', 'desc')->get()->map(function($guild) use ($sheetData) {
             $guildData = $sheetData->data($guild->guild_id);
             $guild->tb = $guildData->get('tb');
             $guild->stars = $guildData->get('stars');

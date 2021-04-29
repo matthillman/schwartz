@@ -172,7 +172,7 @@ class GuildController extends Controller
     }
 
     public function schwartzGuilds() {
-        $guilds = Guild::where('schwartz', 1)->orderBy('gp', 'desc')->get();
+        $guilds = Guild::where('schwartz', true)->orderBy('gp', 'desc')->get();
         return view('gp', [
             'guilds' => $guilds,
             'members' => $guilds->first()->members,
@@ -180,14 +180,14 @@ class GuildController extends Controller
     }
 
     public function schwartzGuildsImportList() {
-        $guilds = Guild::where('schwartz', 1)->orderBy('gp', 'desc')->get();
+        $guilds = Guild::where('schwartz', true)->orderBy('gp', 'desc')->get();
         return view('import-list', [
             'guilds' => $guilds,
         ]);
     }
 
     public function schwartzGuildMods() {
-        $guilds = Guild::where('schwartz', 1)->orderBy('gp', 'desc')->get();
+        $guilds = Guild::where('schwartz', true)->orderBy('gp', 'desc')->get();
         return view('member-mods', [
             'guilds' => $guilds,
             'mods' => $guilds->first()->mod_data,
@@ -251,7 +251,7 @@ class GuildController extends Controller
     }
 
     public function listGP($guild = null) {
-        $guild = is_null($guild) ? Guild::where('schwartz', '1') : Guild::findOrFail($guild);
+        $guild = is_null($guild) ? Guild::where('schwartz', true) : Guild::findOrFail($guild);
 
         return response()->json($guild->members);
     }
