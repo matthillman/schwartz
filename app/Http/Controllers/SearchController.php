@@ -48,11 +48,11 @@ class SearchController extends Controller
     public function searchCategories(Request $request) {
         if (strlen($request->search)) {
             return Category::search($request->search)
-                ->where('visible', true)
+                ->where('visible', 'true')
                 ->paginate(50);
         }
 
-        return Category::where('visible', true)
+        return Category::where('visible', 'true')
                 ->orderBy('category_id')
                 ->orderBy('description')
                 ->paginate(50);

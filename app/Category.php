@@ -24,7 +24,7 @@ class Category extends Model
     }
 
     public static function visibleCategories() {
-        return static::where('visible', true)->get()->groupBy('partition');
+        return static::where('visible', 'true')->get()->groupBy('partition');
     }
 
     public function toSearchableArray()

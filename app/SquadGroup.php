@@ -19,12 +19,12 @@ class SquadGroup extends Model
     }
 
     public function scopeGlobal($query) {
-        return $query->where('guild_id', 0)->where('publish', true);
+        return $query->where('guild_id', 0)->where('publish', 'true');
     }
     public function scopeForGuild($query, $guild) {
         if (!($guild instanceof Guild)) {
             $guild = Guild::findOrFail($guild);
         }
-        return $query->where('guild_id', $guild->id)->where('publish', true);
+        return $query->where('guild_id', $guild->id)->where('publish', 'true');
     }
 }

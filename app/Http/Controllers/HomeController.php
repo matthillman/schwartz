@@ -29,7 +29,7 @@ class HomeController extends Controller
     public function index()
     {
         if (auth('admin')->check()) {
-            $users = User::where('active', false)->get();
+            $users = User::where('active', 'false')->get();
             $recruits = Recruit::all();
         } else {
             $users = [];
