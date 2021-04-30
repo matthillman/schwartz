@@ -37,7 +37,6 @@ class SearchController extends Controller
     public function searchUnits(Request $request) {
         if (strlen($request->search)) {
             return Unit::search($request->search)
-                ->whereExists('category_list')
                 ->paginate(50);
         }
 

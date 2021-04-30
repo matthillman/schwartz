@@ -37,6 +37,10 @@ class Unit extends Model
         return $array;
     }
 
+    public function shouldBeSearchable() {
+        return count($this->category_list) > 0;
+    }
+
     public function preference() {
         return $this->hasOne(UnitModPreference::class, 'unit_id', 'base_id');
     }
