@@ -3,8 +3,9 @@
 namespace App\Providers;
 
 use Horizon;
-use App\Database\UpsertBuilder;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Connection;
+use App\Database\PostgresConnection;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Database\Query\Builder;
@@ -117,6 +118,10 @@ class AppServiceProvider extends ServiceProvider
             $client = $this->getClient($config);
 
             return new Google_Service_Sheets($client);
+        });
+
+        Connection::resolverFor('pgsql', function ($connection, $database, $prefix, $config) {
+            return new PostgresConnection($connection, $database, $prefix, $config);
         });
     }
 

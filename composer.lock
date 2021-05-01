@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "528d533263eefd893ed9a494cc337595",
+    "content-hash": "ecb9be6f4695f186c92a7d6231e6f1e0",
     "packages": [
         {
             "name": "andig/php-shunting-yard",
