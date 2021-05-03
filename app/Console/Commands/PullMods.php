@@ -61,7 +61,7 @@ class PullMods extends Command
             $profile = shitty_bot()->getPlayer($fetchId);
             $profile['updated'] = isset($profile['LastUpdated']) ? Carbon::createFromTimestamp($profile['LastUpdated'] / 1000) : Carbon::now();
 
-            $user = ModUser::firstOrNew(['name' => $profile['allyCode']]);
+            $user = ModUser::firstOrNew(['name' => (string) $profile['allyCode']]);
         } else {
             $this->info('Using api.swgoh.help');
             $profile = swgoh()->getPlayer($user->name)
