@@ -16,7 +16,7 @@ class PostgresConnection extends BaseConnection {
             // We need to transform all instances of DateTimeInterface into the actual
             // date string. Each query grammar maintains its own date string format
             // so we'll just ask the grammar for the format to get from the date.
-            if ($value instanceof DateTimeInterface) {
+            if ($value instanceof DateTimeInterface || is_a($value, 'DateTimeInterface')) {
                 $bindings[$key] = $value->format($grammar->getDateFormat());
             } elseif (is_bool($value)) {
                 $bindings[$key] = (string) (int) $value;
