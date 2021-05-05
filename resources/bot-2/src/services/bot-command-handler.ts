@@ -47,7 +47,7 @@ export class BotCommandHandler {
                             }
                             members = members.map(m => guild.members.resolve(m));
                         } else {
-                            members = [...members.members.values()];
+                            members = [...guild.members.cache.values()];
                         }
                         for (const member of members as GuildMember[]) {
                             if (!role || role && member.roles.cache.has(role.id)) {
