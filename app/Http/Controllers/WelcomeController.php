@@ -25,12 +25,19 @@ class WelcomeController extends Controller
         $sheetData = new SchwartzSheetData;
         return Guild::where('schwartz', 'true')->orderBy('gp', 'desc')->get()->map(function($guild) use ($sheetData) {
             $guildData = $sheetData->data($guild->guild_id);
+            if (is_null($guildData)) {
+                return null;
+            }
             $guild->tb = $guildData->get('tb');
             $guild->stars = $guildData->get('stars');
             $guild->kam = $guildData->get('kam');
             $guild->focus = $guildData->get('focus');
             $guild->raids = $guildData->get('raids');
+            $guild->crancor = $guildData->get('crancor');
             return $guild;
+        })
+        ->reject(function($v) {
+            return is_null($v);
         });
     }
 

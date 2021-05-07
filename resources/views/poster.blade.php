@@ -20,6 +20,7 @@
                 <th><div>GP</div></th>
                 <th><div>TB•Stars</div></th>
                 <th><div>KAM</div></th>
+                <th><div>CRancor</div></th>
                 <th><div>Focus</div></th>
                 <th><div>Raids</div></th>
             </tr>
@@ -31,6 +32,7 @@
                 <td><div>{{ intval(floor($guild->gp / 1000000)) }}M</div></td>
                 <td><div>{{ $guild->tb }}•{{ $guild->stars }}</div></td>
                 <td><div>{{ $guild->kam }}</div></td>
+                <td><div>{{ $guild->crancor }}</div></td>
                 <td><div>{{ $guild->focus }}</div></td>
                 <td><div>{{ $guild->raids }}</div></td>
             </tr>
