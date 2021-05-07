@@ -18,7 +18,7 @@
             <tr>
                 <th><div>Guild</div></th>
                 <th><div>GP</div></th>
-                <th><div>TB•Stars</div></th>
+                <th><div>TB•Stars (DS/LS)</div></th>
                 <th><div>KAM</div></th>
                 <th><div>CRancor</div></th>
                 <th><div>Focus</div></th>
