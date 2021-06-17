@@ -165,7 +165,7 @@ class PullGameData extends Command
                             if (!$downloadedSkillsImages->contains("$skill.png")) {
                                 $this->info("Fetching ability image from swgoh.gg ($skill)");
                                 try {
-                                    guzzle()->get("https://swgoh.gg/game-asset/a/$skill/", [
+                                    guzzle()->get("https://swgoh.gg/game-asset/a/$skill.png", [
                                         'sink' => base_path("public/images/units/skills/$skill.png"),
                                     ]);
                                 } catch (ClientException $e) {
