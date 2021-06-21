@@ -138,7 +138,7 @@
                         <h2>Key Characters</h2>
 
                         @include('shared.unit_table', [
-                            'characters' => ['GRANDMASTERLUKE', 'SITHPALPATINE', 'GLREY', 'SUPREMELEADERKYLOREN']
+                            'characters' => ['JEDIMASTERKENOBI', 'GRANDMASTERLUKE', 'SITHPALPATINE', 'GLREY', 'SUPREMELEADERKYLOREN']
                         ])
                         @include('shared.unit_table', [
                             'characters' => ['JEDIKNIGHTLUKE', 'GENERALSKYWALKER', 'PADMEAMIDALA', 'C3POLEGENDARY', 'JEDIKNIGHTREVAN', 'ANAKINKNIGHT']

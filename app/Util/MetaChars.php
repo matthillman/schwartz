@@ -12,6 +12,7 @@ trait MetaChars {
     public static function getCompareCharacters() {
         return Cache::store('game-data')->remember('meta:compare-chars', null, function() {
             $chars = collect([
+                'JEDIMASTERKENOBI' =>    'JM Kenobi',
                 'GRANDMASTERLUKE' =>     'JM Luke',
                 'SITHPALPATINE' =>       'SEE Palp',
                 'GLREY' =>               'Rey',

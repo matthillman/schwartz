@@ -29,18 +29,18 @@
                         <table class="gear-table">
                             <tbody>
                                 <tr>
-                                    <th>Ally Code</td>
+                                    <th>Ally Code</th>
                                     <td colspan="2">{{ preg_replace('/^(\d{3})(\d{3})(\d{3})$/', '${1}-${2}-${3}', $member['ally_code']) }}</td>
                                 </tr>
                             </tbody>
 
                             <tbody>
                                 <tr>
-                                    <th>Guild</td>
+                                    <th>Guild</th>
                                     <td colspan="2">{{ $member['guild_name'] }}</td>
                                 </tr>
                                 <tr>
-                                    <th {{ $winner['guild_gp']->contains($id) ? 'winner' : '' }}>Guild GP</td>
+                                    <th {{ $winner['guild_gp']->contains($id) ? 'winner' : '' }}>Guild GP</th>
                                     <td colspan="2" {{ $winner['guild_gp']->contains($id) ? 'winner' : '' }}>{{ number_format($member['guild_gp']) }}</td>
                                 </tr>
                             </tbody>
