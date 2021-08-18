@@ -147,7 +147,7 @@
                             'characters' => ['DARTHREVAN', 'DARTHMALAK', 'WATTAMBOR', 'GRIEVOUS', 'GEONOSIANBROODALPHA', 'DARTHTRAYA']
                         ])
                         @include('shared.unit_table', [
-                            'characters' => ['CAPITALNEGOTIATOR', 'CAPITALMALEVOLENCE', 'CAPITALFINALIZER', 'CAPITALRADDUS', 'MILLENNIUMFALCON']
+                            'characters' => ['CAPITALEXECUTOR', 'CAPITALNEGOTIATOR', 'CAPITALMALEVOLENCE', 'CAPITALFINALIZER', 'CAPITALRADDUS', 'MILLENNIUMFALCON']
                         ])
 
                         @bot

@@ -2,6 +2,7 @@
 
 namespace App\Database;
 
+use DateTimeInterface;
 use Staudenmeir\LaravelCte\Connections\PostgresConnection as BaseConnection;
 
 class PostgresConnection extends BaseConnection {

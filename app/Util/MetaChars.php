@@ -63,6 +63,7 @@ trait MetaChars {
     public static function getKeyShips() {
         return Cache::store('game-data')->remember('meta:key-ships', null, function() {
             $chars = collect([
+                'CAPITALEXECUTOR' =>    'Executor',
                 'CAPITALNEGOTIATOR' =>  'Negotiator',
                 'CAPITALMALEVOLENCE' => 'Malevolence',
                 'MILLENNIUMFALCON' =>   'HMF',
