@@ -22,7 +22,7 @@
                                         <div class="row no-margin justify-content-between align-items-center pilot-wrapper left glass-back">
                                             <div class="ability-wrapper {{ $crew['character']->alignment }}">
                                                 <tooltip>
-                                                    <img class="ability" src="/images/units/skills/{{ $crew['id'] }}.png">
+                                                    <img class="ability" src="/images/units/skills/{{ $crew['iconKey'] }}.png">
                                                     @isset($crew['image'])
                                                         <img class="ability-flair" src="/images/units/abilities/{{ $crew['image'] }}.png">
                                                     @elseif($crew['tier'] >= 0)
@@ -70,7 +70,7 @@
                                             ])
                                             <div class="ability-wrapper {{ $crew['character']->alignment }}">
                                                 <tooltip>
-                                                    <img class="ability" src="/images/units/skills/{{ $crew['id'] }}.png">
+                                                    <img class="ability" src="/images/units/skills/{{ $crew['iconKey'] }}.png">
                                                     @isset($crew['image'])
                                                         <img class="ability-flair" src="/images/units/abilities/{{ $crew['image'] }}.png">
                                                     @elseif($crew['tier'] >= 0)
@@ -93,7 +93,7 @@
                                     <div class="ability-wrapper {{ $character->alignment }}{{ array_get($skill, 'ultimate', false) ? ' ultimate' : '' }}">
                                         <tooltip>
                                             <div class="ability{{ $skill['tier'] == -1 ? ' locked' : '' }}">
-                                                <img class="ability" src="/images/units/skills/{{ $skill['id'] }}.png">
+                                                <img class="ability" src="/images/units/skills/{{ $skill['iconKey'] }}.png">
                                             </div>
                                             @isset($skill['image'])
                                                 <img class="ability-flair" src="/images/units/abilities/{{ $skill['image'] }}.png">

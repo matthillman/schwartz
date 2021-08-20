@@ -158,21 +158,21 @@ class PullGameData extends Command
                             }
                         }
 
-                        $downloadedSkillsImages = collect(Storage::disk('images')->files('units/skills'))->map(function($f) {
-                            return basename($f);
-                        });
-                        foreach ($unit->skills->concat($unit->crew_list->pluck('skillReferenceList')->flatten(1))->pluck('skillId') as $skill) {
-                            if (!$downloadedSkillsImages->contains("$skill.png")) {
-                                $this->info("Fetching ability image from swgoh.gg ($skill)");
-                                try {
-                                    guzzle()->get("https://swgoh.gg/game-asset/a/$skill.png", [
-                                        'sink' => base_path("public/images/units/skills/$skill.png"),
-                                    ]);
-                                } catch (ClientException $e) {
-                                    $this->error("Image not fetched [{$skill}] " . $e->getMessage());
-                                }
-                            }
-                        }
+                        // $downloadedSkillsImages = collect(Storage::disk('images')->files('units/skills'))->map(function($f) {
+                        //     return basename($f);
+                        // });
+                        // foreach ($unit->skills->concat($unit->crew_list->pluck('skillReferenceList')->flatten(1))->pluck('skillId') as $skill) {
+                        //     if (!$downloadedSkillsImages->contains("$skill.png")) {
+                        //         $this->info("Fetching skill image from swgoh.gg ($skill)");
+                        //         try {
+                        //             guzzle()->get("https://game-assets.swgoh.gg/$skill.png", [
+                        //                 'sink' => base_path("public/images/units/skills/$skill.png"),
+                        //             ]);
+                        //         } catch (ClientException $e) {
+                        //             $this->error("Image not fetched [{$skill}] " . $e->getMessage());
+                        //         }
+                        //     }
+                        // }
 
                         $unitSkills[] = ['baseId' => $data['baseId'], 'skills' => collect($data['skillReferenceList'])->pluck('skillId')];
                     }
@@ -188,22 +188,21 @@ class PullGameData extends Command
                 if (isset($data['effectReferenceList'])) {
                     $abilityNames[$data['id']] = $data['nameKey'];
 
-                    if (($data['ultimateChargeRequired'] ?: 0) > 0) {
-                        $downloadedSkillsImages = collect(Storage::disk('images')->files('units/skills'))->map(function($f) {
-                            return basename($f);
-                        });
-                        $icon = $data['icon'];
-                        if (!$downloadedSkillsImages->contains($data['id'] . ".png")) {
-                            $this->info("Fetching ability image from swgoh.gg ($icon)");
-                            try {
-                                guzzle()->get("https://game-assets.swgoh.gg/$icon.png", [
-                                    'sink' => base_path("public/images/units/skills/{$data['id']}.png"),
-                                ]);
-                            } catch (ClientException $e) {
-                                $this->error("Image not fetched [{$icon}] " . $e->getMessage());
-                            }
+                    $downloadedSkillsImages = collect(Storage::disk('images')->files('units/skills'))->map(function($f) {
+                        return basename($f);
+                    });
+                    $icon = $data['icon'];
+                    if (!$downloadedSkillsImages->contains($data['id'] . ".png")) {
+                        $this->info("Fetching ability image from swgoh.gg ($icon) to {$data['id']}");
+                        try {
+                            guzzle()->get("https://game-assets.swgoh.gg/$icon.png", [
+                                'sink' => base_path("public/images/units/skills/{$data['id']}.png"),
+                            ]);
+                        } catch (ClientException $e) {
+                            $this->error("Image not fetched [{$icon}] " . $e->getMessage());
                         }
                     }
+
                     return true;
                 }
                 return false;

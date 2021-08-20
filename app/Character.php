@@ -317,6 +317,7 @@ class Character extends Model
         $skill['description'] = preg_replace('/\[-\]\[\/c\]/', '</span>',
             preg_replace('/\[c\]\[([0-9A-Fa-f]{6})\]/', '<span :style="{color: `#$1`}">', __('messages.' . $ability['descKey']))
         );
+        $skill['iconKey'] = $ability['id'];
 
         if ($skill->get('tier') >= 0) {
             $tier = $skillDef['tierList'][$skill->get('tier')];
